@@ -1,0 +1,17 @@
+[package]
+name = "nexus-network"
+description = "P2P networking layer for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+
+tokio.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+tracing.workspace = true
+libp2p.workspace = true

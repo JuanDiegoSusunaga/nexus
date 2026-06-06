@@ -1,0 +1,25 @@
+[package]
+name = "nexus-node"
+description = "Full node implementation for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+nexus-crypto = { path = "../nexus-crypto" }
+nexus-anchor = { path = "../nexus-anchor" }
+nexus-active = { path = "../nexus-active" }
+nexus-sentinel = { path = "../nexus-sentinel" }
+nexus-zk = { path = "../nexus-zk" }
+nexus-network = { path = "../nexus-network" }
+
+tokio.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+config.workspace = true

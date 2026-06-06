@@ -1,0 +1,25 @@
+[package]
+name = "nexus-cli"
+description = "Command-line interface for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "nexus"
+path = "src/main.rs"
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+nexus-crypto = { path = "../nexus-crypto" }
+nexus-node = { path = "../nexus-node" }
+
+tokio.workspace = true
+clap.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+hex.workspace = true
+rand.workspace = true

@@ -1,0 +1,25 @@
+[package]
+name = "nexus-zk"
+description = "Zero-Knowledge proof system integration for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+
+# ZK Libraries (arkworks ecosystem)
+ark-ff.workspace = true
+ark-ec.workspace = true
+ark-serialize.workspace = true
+ark-std.workspace = true
+ark-bn254.workspace = true
+ark-groth16.workspace = true
+ark-snark.workspace = true
+ark-relations.workspace = true
+
+thiserror.workspace = true
+serde.workspace = true
+rand.workspace = true
+bincode.workspace = true

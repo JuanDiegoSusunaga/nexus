@@ -1,0 +1,17 @@
+[package]
+name = "nexus-sentinel"
+description = "Security monitoring and key rotation for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+nexus-crypto = { path = "../nexus-crypto" }
+
+tokio.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+tracing.workspace = true

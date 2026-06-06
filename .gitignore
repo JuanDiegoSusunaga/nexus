@@ -1,0 +1,13 @@
+# Artefactos de compilación de Rust (no versionar)
+target/
+
+# Logs de compilación locales
+build_log*.txt
+check_log.txt
+*.log
+
+# Sistema operativo / editores
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/

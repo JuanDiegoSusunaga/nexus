@@ -1,0 +1,29 @@
+[package]
+name = "nexus-active"
+description = "Active Layer (L2) - Sequencer, Execution, and Nitro Verifier for NEXUS blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nexus-core = { path = "../nexus-core" }
+nexus-crypto = { path = "../nexus-crypto" }
+nexus-zk = { path = "../nexus-zk" }
+
+# Async runtime
+tokio.workspace = true
+async-trait.workspace = true
+
+# Utilities
+thiserror.workspace = true
+serde.workspace = true
+bincode.workspace = true
+tracing.workspace = true
+chrono.workspace = true
+rand.workspace = true
+parking_lot.workspace = true
+dashmap.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util", "macros"] }
