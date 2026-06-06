@@ -46,29 +46,29 @@ El aporte central es el **diseño formal** de un sistema *Dual-Chain* —**Ancho
 
 Para distinguir con honestidad lo construido de lo modelado, cada componente se etiqueta así:
 
-| Símbolo | Significado |
+| Estado | Significado |
 |:---:|---|
-| ✅ **Implementado** | Lógica funcional y verificada con pruebas; usa bibliotecas auditadas donde aplica. |
-| 🟡 **Modelado** | Especificado a nivel de tipos/interfaces/algoritmo como abstracción del diseño; **no** es un mecanismo de seguridad operativo completo. |
-| 🔭 **Trabajo futuro** | Declarado en el diseño pero **no** implementado (o implementado como *placeholder*). |
+| **Implementado** | Lógica funcional y verificada con pruebas; usa bibliotecas auditadas donde aplica. |
+| **Modelado** | Especificado a nivel de tipos/interfaces/algoritmo como abstracción del diseño; **no** es un mecanismo de seguridad operativo completo. |
+| **Trabajo futuro** | Declarado en el diseño pero **no** implementado (o implementado como *placeholder*). |
 
 | Componente | Crate / archivo | Estado |
 |---|---|:---:|
-| Firmas post-cuánticas (CRYSTALS-Dilithium 2/3/5) | `nexus-crypto/dilithium.rs`, `signer.rs` | ✅ Implementado |
-| Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | ✅ Implementado |
-| Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | ✅ Implementado |
-| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/entropy.rs` | 🟡 rotación ✅; métrica a reformular (v2) |
-| Núcleo de finalidad por voto ponderado (≥2/3) y *fork-choice* | `nexus-anchor/finality.rs` | 🟡 Modelado (sin verificación de firma de voto) |
-| Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | ✅ Implementado |
-| Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | 🟡 Modelado (sin separación de dominio hoja/nodo) |
-| Generación **determinística** de claves desde semilla (KDF) | `nexus-crypto/dilithium.rs`, `keypair.rs` | 🔭 Trabajo futuro |
-| ~~Extractor Difuso / biometría~~ | `nexus-crypto/fuzzy_extractor.rs` | ❌ **Eliminado del alcance (v2)** — módulo desconectado del build (archivo inerte) |
-| Consenso PoS-BFT operativo (verificación de votos, *slashing*, rondas en red) | `nexus-anchor/consensus.rs` | 🔭 Trabajo futuro (andamiaje de referencia) |
-| Disponibilidad de datos (erasure coding, DAS, compromiso polinómico) | `nexus-anchor/data_availability.rs` | 🔭 Trabajo futuro |
-| Verificación ZK / Nitro Verifier (Groth16) | `nexus-zk/*`, `nexus-active/verifier.rs` | 🔭 Trabajo futuro |
-| Red P2P (libp2p: gossipsub, kad, noise) | `nexus-network/*` | 🔭 Trabajo futuro (interfaz modelada) |
-| Nodo ejecutable / servidor RPC | `nexus-node/*` | 🔭 Trabajo futuro |
-| CLI (`keygen`, `bench crypto`) | `nexus-cli/main.rs` | ✅ Implementado (parcial) |
+| Firmas post-cuánticas (CRYSTALS-Dilithium 2/3/5) | `nexus-crypto/dilithium.rs`, `signer.rs` | Implementado |
+| Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | Implementado |
+| Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | Implementado |
+| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/entropy.rs` | Parcial — rotación implementada; métrica a reformular (v2) |
+| Núcleo de finalidad por voto ponderado (≥2/3) y *fork-choice* | `nexus-anchor/finality.rs` | Modelado (sin verificación de firma de voto) |
+| Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | Implementado |
+| Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | Modelado (sin separación de dominio hoja/nodo) |
+| Generación **determinística** de claves desde semilla (KDF) | `nexus-crypto/dilithium.rs`, `keypair.rs` | Trabajo futuro |
+| ~~Extractor Difuso / biometría~~ | `nexus-crypto/fuzzy_extractor.rs` | **Eliminado del alcance (v2)** — módulo desconectado del build (archivo inerte) |
+| Consenso PoS-BFT operativo (verificación de votos, *slashing*, rondas en red) | `nexus-anchor/consensus.rs` | Trabajo futuro (andamiaje de referencia) |
+| Disponibilidad de datos (erasure coding, DAS, compromiso polinómico) | `nexus-anchor/data_availability.rs` | Trabajo futuro |
+| Verificación ZK / Nitro Verifier (Groth16) | `nexus-zk/*`, `nexus-active/verifier.rs` | Trabajo futuro |
+| Red P2P (libp2p: gossipsub, kad, noise) | `nexus-network/*` | Trabajo futuro (interfaz modelada) |
+| Nodo ejecutable / servidor RPC | `nexus-node/*` | Trabajo futuro |
+| CLI (`keygen`, `bench crypto`) | `nexus-cli/main.rs` | Implementado (parcial) |
 
 > **Estado de compilación (junio 2026).** El *workspace* **compila por completo** (`cargo check --workspace`) y **los 70 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 14). Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
 
@@ -76,52 +76,38 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 
 ## Arquitectura General (diseño objetivo)
 
-> El siguiente diagrama representa el **diseño objetivo** del sistema. Las anotaciones de estado (✅/🟡/🔭) indican el grado de realización en el prototipo actual.
+> El siguiente diagrama representa el **diseño objetivo** del sistema. Las anotaciones de estado (Implementado / Modelado / Trabajo futuro) indican el grado de realización en el prototipo actual.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           NEXUS DUAL-CHAIN (diseño objetivo)                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                      ACTIVE LAYER (L2)                                │  │
-│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────┐   │  │
-│  │  │  NEXUS          │  │  NITRO          │  │  EXECUTION          │   │  │
-│  │  │  SEQUENCER  🟡  │  │  VERIFIER   🔭  │  │  ENGINE   ✅(transf.)│   │  │
-│  │  │ • Mempool       │  │ • Pruebas ZK    │  │ • Procesamiento TX  │   │  │
-│  │  │ • Ordenamiento  │  │ • Fraud Proofs  │  │ • Estado / Receipts │   │  │
-│  │  └────────┬────────┘  └────────┬────────┘  └──────────┬──────────┘   │  │
-│  │           └────────────────────┼──────────────────────┘              │  │
-│  │                    ┌───────────▼───────────┐                         │  │
-│  │                    │  BATCH BUILDER    🟡   │  (compresión 🔭)        │  │
-│  │                    └───────────┬───────────┘                         │  │
-│  └────────────────────────────────┼─────────────────────────────────────┘  │
-│                                   │ State Commitment / DA Publication  🔭   │
-│                                   ▼                                         │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                      ANCHOR LAYER (L1)                                │  │
-│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────┐   │  │
-│  │  │  CONSENSUS   🔭 │  │  DATA           │  │  FINALITY      🟡    │   │  │
-│  │  │  ENGINE         │  │  AVAILABILITY🔭 │  │  GADGET             │   │  │
-│  │  │ • PoS BFT       │  │ • Erasure Code  │  │ • Voto ponderado    │   │  │
-│  │  │ • Validadores 🟡│  │ • DAS Sampling  │  │ • Fork Choice       │   │  │
-│  │  └─────────────────┘  └─────────────────┘  └─────────────────────┘   │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                         SECURITY LAYER                                       │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────────┐  │
-│  │ SENTINEL-SEED ✅│  │ ELIMINADO  (v2) │  │      KEY MANAGER        🟡   │  │
-│  │ • min-entropía  │  │  (biometría ❌) │  │ • Rotación automática    ✅  │  │
-│  └─────────────────┘  └─────────────────┘  └─────────────────────────────┘  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                      CRYPTOGRAPHIC CORE                                      │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │             CRYSTALS-DILITHIUM (PQC)   ✅                            │   │
-│  │      Nivel 2 (128-bit) │ Nivel 3 (192-bit) │ Nivel 5 (256-bit)      │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────────┐  │
-│  │  SHA3-256   ✅   │  │  BLAKE3      ✅  │  │  ZK-SNARKs (Groth16) 🔭  │  │
-│  └──────────────────┘  └──────────────────┘  └──────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                            NEXUS DUAL-CHAIN (diseño objetivo)                            │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ACTIVE LAYER (L2)                                                                       │
+│    • Nexus Sequencer                          →  Modelado                                │
+│    • Nitro Verifier                           →  Trabajo futuro                          │
+│    • Execution Engine                         →  Implementado (transferencias)           │
+│    • Batch Builder                            →  Modelado  (compresión: Trabajo futuro)  │
+│    · State Commitment / DA Publication        →  Trabajo futuro                          │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  ANCHOR LAYER (L1)                                                                       │
+│    • Consensus Engine (PoS-BFT)               →  Trabajo futuro                          │
+│    • Data Availability (erasure, DAS)         →  Trabajo futuro                          │
+│    • Finality Gadget (voto ponderado)         →  Modelado                                │
+│    • Validadores                              →  Modelado                                │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  SECURITY LAYER                                                                          │
+│    • Sentinel-Seed (min-entropía)             →  Implementado                            │
+│    • Key Manager (rotación automática)        →  Modelado (rotación: Implementado)       │
+│    • Biometría / Fuzzy Extractor              →  Eliminado del alcance (v2)              │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  CRYPTOGRAPHIC CORE                                                                      │
+│    • CRYSTALS-Dilithium (PQC, niveles 2/3/5)  →  Implementado                            │
+│    • SHA3-256                                 →  Implementado                            │
+│    • BLAKE3                                   →  Implementado                            │
+│    • ZK-SNARKs (Groth16)                      →  Trabajo futuro                          │
+│                                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -132,10 +118,10 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 
 | Componente | Función (diseño) | Archivo | Estado |
 |------------|---------|---------|:---:|
-| Consensus Engine | PoS-BFT estilo Tendermint con firmas PQC | `nexus-anchor/src/consensus.rs` | 🔭 |
-| Validator Set | Validadores, *staking*, *slashing* | `nexus-anchor/src/validator.rs` | 🟡 |
-| Data Availability | DA con *erasure coding* | `nexus-anchor/src/data_availability.rs` | 🔭 |
-| Finality Gadget | Finalidad por voto ponderado (estilo GRANDPA) | `nexus-anchor/src/finality.rs` | 🟡 |
+| Consensus Engine | PoS-BFT estilo Tendermint con firmas PQC | `nexus-anchor/src/consensus.rs` | Trabajo futuro |
+| Validator Set | Validadores, *staking*, *slashing* | `nexus-anchor/src/validator.rs` | Modelado |
+| Data Availability | DA con *erasure coding* | `nexus-anchor/src/data_availability.rs` | Trabajo futuro |
+| Finality Gadget | Finalidad por voto ponderado (estilo GRANDPA) | `nexus-anchor/src/finality.rs` | Modelado |
 
 > **Nota de honestidad sobre el consenso.** El módulo actual modela el vocabulario y la máquina de estados (Proposal → Prevote → Precommit → Commit), pero **no** constituye aún un protocolo BFT operativo: los votos entrantes no se verifican criptográficamente, no hay deduplicación por validador, el quórum se cuenta por número de votos (no ponderado por *stake*) y no hay difusión en red. Se presenta como **especificación de referencia**; su realización completa es trabajo futuro.
 
@@ -143,10 +129,10 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 
 | Componente | Función (diseño) | Archivo | Estado |
 |------------|---------|---------|:---:|
-| Nexus Sequencer | Ordenamiento y *batching* | `nexus-active/src/sequencer.rs` | 🟡 |
-| Nitro Verifier | Verificación de transición de estado (ZK / *fraud proofs*) | `nexus-active/src/verifier.rs` | 🔭 |
-| Execution Engine | Procesamiento de transacciones | `nexus-active/src/execution.rs` | ✅ (transferencias) |
-| Batch Builder | Construcción de *batches* | `nexus-active/src/batch.rs` | 🟡 |
+| Nexus Sequencer | Ordenamiento y *batching* | `nexus-active/src/sequencer.rs` | Modelado |
+| Nitro Verifier | Verificación de transición de estado (ZK / *fraud proofs*) | `nexus-active/src/verifier.rs` | Trabajo futuro |
+| Execution Engine | Procesamiento de transacciones | `nexus-active/src/execution.rs` | Implementado (transferencias) |
+| Batch Builder | Construcción de *batches* | `nexus-active/src/batch.rs` | Modelado |
 
 > El **Nitro Verifier** actualmente acepta toda prueba bien formada (es un *placeholder*); la verificación ZK/fraud-proof real es trabajo futuro. La **ejecución de transferencias nativas** sí es real: verifica la firma Dilithium, el *nonce* y el saldo, y aplica el débito/crédito.
 
@@ -154,15 +140,15 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 
 | Componente | Función (diseño) | Archivo | Estado |
 |------------|---------|---------|:---:|
-| Sentinel-Seed | Monitoreo de entropía y rotación | `nexus-crypto/src/entropy.rs` | ✅ |
-| ~~Fuzzy Extractor~~ | Biometría — **eliminada del alcance (v2)** | `nexus-crypto/src/fuzzy_extractor.rs` | ❌ |
-| Key Manager | Gestión unificada de claves | `nexus-crypto/src/keypair.rs` | 🟡 |
+| Sentinel-Seed | Monitoreo de entropía y rotación | `nexus-crypto/src/entropy.rs` | Implementado |
+| ~~Fuzzy Extractor~~ | Biometría — **eliminada del alcance (v2)** | `nexus-crypto/src/fuzzy_extractor.rs` | Eliminado |
+| Key Manager | Gestión unificada de claves | `nexus-crypto/src/keypair.rs` | Modelado |
 
 ---
 
 ## Criptografía Post-Cuántica
 
-### CRYSTALS-Dilithium (✅ implementado)
+### CRYSTALS-Dilithium (implementado)
 
 NEXUS utiliza CRYSTALS-Dilithium / ML-DSA (NIST FIPS 204) como esquema de firma. La implementación delega en la biblioteca auditada [`fips204`](https://crates.io/crates/fips204) (ML-DSA puro en Rust, *constant-time*): generación de claves (incluida la **`KeyGen` determinística desde semilla**), firma y verificación son llamadas reales a la biblioteca, la verificación propaga el resultado real, y las claves secretas se borran de memoria (`zeroize`).
 
@@ -182,7 +168,7 @@ NEXUS utiliza CRYSTALS-Dilithium / ML-DSA (NIST FIPS 204) como esquema de firma.
 
 Dilithium se basa en los problemas **Module-LWE** y **Module-SIS** sobre el anillo $R_q = \mathbb{Z}_q[X]/(X^n+1)$, con $n=256$ y $q=8\,380\,417$. La dureza se reduce, vía reducciones *worst-case → average-case*, a problemas reticulares de peor caso (Mod-SIVP) que se creen difíciles incluso para adversarios cuánticos. El desarrollo formal está en el **[Capítulo de Validación Formal (Obj. 4)](#fundamentos-teóricos-y-validación-formal)**.
 
-### Extractor Difuso / biometría — ❌ eliminado del alcance (v2)
+### Extractor Difuso / biometría — eliminado del alcance (v2)
 
 La autenticación biométrica (extractor difuso) **se eliminó del alcance** en la versión v2: un biométrico no es revocable —basar en él una clave de firma es un diseño cuestionable— y el código corrector de errores nunca se implementó. La derivación determinística de claves se hace ahora **desde una semilla de alta entropía vía KDF** (ver Obj. 2), sin biometría. El archivo `nexus-crypto/fuzzy_extractor.rs` permanece pendiente de remover (Plan Maestro, Fase B).
 
@@ -249,7 +235,7 @@ cargo run --bin nexus -- bench --bench-type crypto         # benchmarks de cript
 cargo run --bin nexus -- info
 ```
 
-### Ejemplo: crear y firmar una transacción (✅ funcional)
+### Ejemplo: crear y firmar una transacción (funcional)
 ```rust
 use nexus_core::{Transaction, ChainId, Nonce, Address, Amount, SignatureScheme};
 use nexus_crypto::{DilithiumKeypair, Signer};
@@ -301,10 +287,10 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 | Objetivo | Entregable | Estado | Ubicación |
 |----------|------------|:---:|-----------|
-| **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | 🟡 Modelado | `nexus-anchor/`, `nexus-active/` |
-| **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | ✅ | `nexus-crypto/dilithium.rs`, `keypair.rs` |
-| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Rotación **implementada**; métrica a reformular | 🟡 Parcial | `nexus-crypto/entropy.rs` |
-| **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | 📄 Documento | *Cap. 4 — Validación Formal* |
+| **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | Modelado | `nexus-anchor/`, `nexus-active/` |
+| **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | Implementado | `nexus-crypto/dilithium.rs`, `keypair.rs` |
+| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Rotación **implementada**; métrica a reformular | Parcial | `nexus-crypto/entropy.rs` |
+| **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 4 — Validación Formal* |
 
 > **Corrección importante respecto a versiones previas de este README:** el Objetivo 4 **no** se satisface con "tests + benchmarks". Una reducción de dureza y un análisis de complejidad son artefactos matemáticos demostrativos; los benchmarks son evidencia empírica *complementaria*. Ver el Capítulo de Validación Formal.
 
