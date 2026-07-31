@@ -271,17 +271,32 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 ## Rendimiento
 
-**Valores medidos** (`cargo bench -p nexus-crypto`, harness Criterion, 100 muestras/punto, **medianas**). *Hardware:* Intel Kaby Lake (Familia 6 Modelo 142), 4 hilos lógicos, Windows 11; perfil `release`.
+**Valores medidos** (`cargo bench -p nexus-crypto`, harness Criterion, 100 muestras/punto, **medianas**; ejecución 2026-07-31, rustc 1.97.1). *Hardware:* Intel Kaby Lake (Familia 6 Modelo 142), 4 hilos lógicos, Windows 11; perfil `release`.
 
 | Operación | Dilithium2 | Dilithium3 | Dilithium5 |
 |-----------|----------:|----------:|----------:|
-| Generación de claves | 321 µs | 503 µs | 725 µs |
-| Firma | 727 µs | 1,21 ms | 1,34 ms |
-| Verificación | 166 µs | 279 µs | 436 µs |
+| Generación de claves | 234 µs | 413 µs | 564 µs |
+| Firma | 497 µs | 790 µs | 979 µs |
+| Verificación | 141 µs | 232 µs | 390 µs |
+| Firma + verificación | 647 µs | 1,05 ms | 1,35 ms |
 
 **Tamaños (exactos, FIPS 204):** clave pública 1.952 B · firma 3.309 B (Dilithium3 / ML-DSA-65). *Backend:* `fips204` (Rust puro).
 
 **Lecturas clave:** (i) la **verificación tarda cientos de µs** — el cuello de botella post-cuántico es el *tamaño*, no el cómputo; (ii) generación y verificación **escalan con $k\ell$** (consistente con $O(k\ell\,n\log n)$); (iii) la firma es **no monótona** por la varianza del *rejection sampling*. Cifras de un portátil modesto; lo relevante es el orden de magnitud y la forma del escalado. Análisis en el Capítulo de Validación Formal (§6.6).
+
+### PoC STARK — verificación succinta (medido)
+
+`cargo run -p nexus-zk --example stark_demo --release` (ejecución 2026-07-31; blowup 8, 40 consultas, desafíos en $\mathbb{F}_{p^2}$, *grinding* $2^{20}$ — ~100 bits de *soundness*; mismo hardware):
+
+| Pasos de traza | Prueba | Verificar |
+|---:|---:|---:|
+| 16 | 129 KB | 4,5 ms |
+| 64 | 190 KB | 6,0 ms |
+| 256 | 262 KB | 7,5 ms |
+| 1.024 | 343 KB | 9,4 ms |
+| 4.096 | 434 KB | 11,4 ms |
+
+**Lectura clave:** al crecer la traza **256×** (16 → 4.096 pasos), la prueba solo crece **~3,4×** y la verificación **~2,6×** — el comportamiento **polilogarítmico** que motiva delegar la carga post-cuántica a la L2 y anclar en L1 una prueba compacta. (Los tiempos de *generación* de prueba son medidas de una sola pasada, no Criterion, y presentan varianza alta.)
 
 ---
 
