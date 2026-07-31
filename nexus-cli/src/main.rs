@@ -155,13 +155,13 @@ fn show_info() {
     println!("Cryptography:");
     println!("  - Signatures: CRYSTALS-Dilithium (PQC)");
     println!("  - Hashing: SHA3-256, BLAKE3");
-    println!("  - ZK Proofs: Groth16 (arkworks)");
+    println!("  - Validity Proofs: hash-based STARK (FRI, post-quantum)");
     println!();
     println!("Security Features:");
     println!("  - Post-Quantum resistant");
     println!("  - Entropy monitoring (Sentinel-Seed)");
     println!("  - Automatic key rotation");
-    println!("  - Fuzzy Extractor for biometric keys");
+    println!("  - NIST SP 800-90B health tests (RCT/APT)");
 }
 
 fn run_benchmarks(bench_type: &str) -> Result<(), Box<dyn std::error::Error>> {

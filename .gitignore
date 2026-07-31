@@ -5,6 +5,10 @@ target/
 build_log*.txt
 check_log.txt
 *.log
+logs/
+
+# Versión antigua del monorepo (histórica, no versionar)
+nexus-monorepo/
 
 # Sistema operativo / editores
 Thumbs.db

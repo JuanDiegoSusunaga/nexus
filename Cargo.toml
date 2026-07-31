@@ -17,7 +17,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Juan Diego Susunaga Velasquez"]
 license = "MIT"
-repository = "https://github.com/juandiego/nexus-blockchain"
+repository = "https://github.com/JuanDiegoSusunaga/nexus"
 description = "NEXUS Dual-Chain: Post-Quantum Secure Banking Blockchain Architecture"
 
 [workspace.dependencies]

@@ -57,20 +57,21 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 | Firmas post-cuánticas (CRYSTALS-Dilithium 2/3/5) | `nexus-crypto/dilithium.rs`, `signer.rs` | Implementado |
 | Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | Implementado |
 | Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | Implementado |
-| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/entropy.rs` | Parcial — rotación implementada; métrica a reformular (v2) |
+| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/entropy.rs` | Implementado (min-entropía + RCT/APT + rotación con secrecia hacia adelante) |
 | Núcleo de finalidad por voto ponderado (≥2/3) y *fork-choice* | `nexus-anchor/finality.rs` | Modelado (sin verificación de firma de voto) |
 | Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | Implementado |
 | Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | Modelado (sin separación de dominio hoja/nodo) |
 | Generación **determinística** de claves desde semilla (KDF) | `nexus-crypto/dilithium.rs`, `keypair.rs` | Trabajo futuro |
-| ~~Extractor Difuso / biometría~~ | `nexus-crypto/fuzzy_extractor.rs` | **Eliminado del alcance (v2)** — módulo desconectado del build (archivo inerte) |
+| ~~Extractor Difuso / biometría~~ | — | **Eliminado del alcance (v2)** — módulo removido del código |
 | Consenso PoS-BFT operativo (verificación de votos, *slashing*, rondas en red) | `nexus-anchor/consensus.rs` | Trabajo futuro (andamiaje de referencia) |
 | Disponibilidad de datos (erasure coding, DAS, compromiso polinómico) | `nexus-anchor/data_availability.rs` | Trabajo futuro |
-| Verificación ZK / Nitro Verifier (Groth16) | `nexus-zk/*`, `nexus-active/verifier.rs` | Trabajo futuro |
+| Verificación de validez post-cuántica (STARK hash-based: FRI + AIR) | `nexus-zk/src/stark/*`, `nexus-active/pq_verifier.rs`, `verifier.rs` | Implementado (PoC — AIR demostrativo) |
+| Verificación ZK Groth16 (arkworks) | `nexus-zk/prover.rs`, `verifier.rs` | Trabajo futuro (andamiaje sin uso) |
 | Red P2P (libp2p: gossipsub, kad, noise) | `nexus-network/*` | Trabajo futuro (interfaz modelada) |
 | Nodo ejecutable / servidor RPC | `nexus-node/*` | Trabajo futuro |
 | CLI (`keygen`, `bench crypto`) | `nexus-cli/main.rs` | Implementado (parcial) |
 
-> **Estado de compilación (junio 2026).** El *workspace* **compila por completo** (`cargo check --workspace`) y **los 70 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 14). Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
+> **Estado de compilación (julio 2026, última ejecución verificada: 2026-07-31, rustc 1.97.1).** El *workspace* **compila por completo** y **los 110 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 20, zk 34), incluyendo los del PoC STARK (`nexus-zk::stark`) y los del verificador post-cuántico de `nexus-active`. Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
 
 ---
 
@@ -85,7 +86,7 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 │                                                                                          │
 │  ACTIVE LAYER (L2)                                                                       │
 │    • Nexus Sequencer                          →  Modelado                                │
-│    • Nitro Verifier                           →  Trabajo futuro                          │
+│    • Nitro Verifier                           →  Implementado (PoC STARK)                │
 │    • Execution Engine                         →  Implementado (transferencias)           │
 │    • Batch Builder                            →  Modelado  (compresión: Trabajo futuro)  │
 │    · State Commitment / DA Publication        →  Trabajo futuro                          │
@@ -105,6 +106,7 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 │    • CRYSTALS-Dilithium (PQC, niveles 2/3/5)  →  Implementado                            │
 │    • SHA3-256                                 →  Implementado                            │
 │    • BLAKE3                                   →  Implementado                            │
+│    • STARK hash-based (FRI, post-cuántico)    →  Implementado (PoC)                      │
 │    • ZK-SNARKs (Groth16)                      →  Trabajo futuro                          │
 │                                                                                          │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
@@ -130,18 +132,18 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 | Componente | Función (diseño) | Archivo | Estado |
 |------------|---------|---------|:---:|
 | Nexus Sequencer | Ordenamiento y *batching* | `nexus-active/src/sequencer.rs` | Modelado |
-| Nitro Verifier | Verificación de transición de estado (ZK / *fraud proofs*) | `nexus-active/src/verifier.rs` | Trabajo futuro |
+| Nitro Verifier | Verificación de transición de estado (ZK / *fraud proofs*) | `nexus-active/src/verifier.rs`, `pq_verifier.rs` | Implementado (PoC STARK) |
 | Execution Engine | Procesamiento de transacciones | `nexus-active/src/execution.rs` | Implementado (transferencias) |
 | Batch Builder | Construcción de *batches* | `nexus-active/src/batch.rs` | Modelado |
 
-> El **Nitro Verifier** actualmente acepta toda prueba bien formada (es un *placeholder*); la verificación ZK/fraud-proof real es trabajo futuro. La **ejecución de transferencias nativas** sí es real: verifica la firma Dilithium, el *nonce* y el saldo, y aplica el débito/crédito.
+> El **Nitro Verifier** verifica pruebas de validez **STARK hash-based reales** (PoC): `verify_zk` deserializa una `PqValidityProof` (`nexus-active/pq_verifier.rs`), verifica la prueba FRI + restricciones del AIR y **liga las raíces de estado pre/post** a la prueba; solo hashes y aritmética de cuerpo finito — sin emparejamientos ni ECC, por lo que Shor no aplica. Limitación honesta: el AIR del PoC es una transición demostrativa (Fibonacci-square), no la semántica de ejecución real del L2; existe además una ruta heredada de compatibilidad para pruebas sin STARK serializado. La **ejecución de transferencias nativas** sí es real: verifica la firma Dilithium, el *nonce* y el saldo, y aplica el débito/crédito.
 
 ### 3. Security Layer
 
 | Componente | Función (diseño) | Archivo | Estado |
 |------------|---------|---------|:---:|
 | Sentinel-Seed | Monitoreo de entropía y rotación | `nexus-crypto/src/entropy.rs` | Implementado |
-| ~~Fuzzy Extractor~~ | Biometría — **eliminada del alcance (v2)** | `nexus-crypto/src/fuzzy_extractor.rs` | Eliminado |
+| ~~Fuzzy Extractor~~ | Biometría — **eliminada del alcance (v2)** | — (removido) | Eliminado |
 | Key Manager | Gestión unificada de claves | `nexus-crypto/src/keypair.rs` | Modelado |
 
 ---
@@ -170,7 +172,7 @@ Dilithium se basa en los problemas **Module-LWE** y **Module-SIS** sobre el anil
 
 ### Extractor Difuso / biometría — eliminado del alcance (v2)
 
-La autenticación biométrica (extractor difuso) **se eliminó del alcance** en la versión v2: un biométrico no es revocable —basar en él una clave de firma es un diseño cuestionable— y el código corrector de errores nunca se implementó. La derivación determinística de claves se hace ahora **desde una semilla de alta entropía vía KDF** (ver Obj. 2), sin biometría. El archivo `nexus-crypto/fuzzy_extractor.rs` permanece pendiente de remover (Plan Maestro, Fase B).
+La autenticación biométrica (extractor difuso) **se eliminó del alcance** en la versión v2: un biométrico no es revocable —basar en él una clave de firma es un diseño cuestionable— y el código corrector de errores nunca se implementó. La derivación determinística de claves se hace ahora **desde una semilla de alta entropía vía KDF** (ver Obj. 2), sin biometría. El módulo `fuzzy_extractor.rs` fue removido del código (2026-07-31).
 
 ### Sentinel-Seed: salud de la fuente de entropía (Obj. 3)
 
@@ -180,7 +182,7 @@ La métrica de seguridad **no** es la entropía de Shannon de la semilla (que no
 - **pruebas de salud en línea** conforme a **NIST SP 800-90B** (*Repetition Count Test* y *Adaptive Proportion Test*) para detectar degradación del generador;
 - **rotación con secrecia hacia adelante** por política (uso > 100.000 derivaciones, antigüedad > 24 h, o **fallo de las pruebas de salud**), con bloqueo de la derivación ante degradación de la fuente.
 
-> **Estado.** La rotación está implementada; la métrica de Shannon del prototipo actual debe **reformularse** a min-entropía + SP 800-90B (Plan Maestro, Fase B). El desarrollo formal de esta distinción está en el **Capítulo de Validación Formal (Obj. 4)**.
+> **Estado.** Implementado en `nexus-crypto/src/entropy.rs`: estimación de min-entropía de la fuente, pruebas de salud en línea RCT y APT (SP 800-90B §4.4) con bloqueo de la derivación ante fallo, y rotación con secrecia hacia adelante; todo cubierto por tests unitarios. La función de entropía de Shannon se conserva **solo con fines de diagnóstico** (no es métrica de seguridad ni dispara rotación). Pendiente: parametrización final de ventana/corte del APT según la fuente TRNG/PRNG objetivo y el registro auditable de eventos de rotación en el *Key Registry*. El desarrollo formal de esta distinción está en el **Capítulo de Validación Formal (Obj. 4)**.
 
 ---
 
@@ -190,11 +192,11 @@ La métrica de seguridad **no** es la entropía de Shannon de la semilla (que no
 nexus/
 ├── Cargo.toml                    # Workspace
 ├── nexus-core/                   # Tipos, traits, bloque, transacción, estado, merkle
-├── nexus-crypto/                 # Dilithium, fuzzy extractor, entropía, keypair, signer
+├── nexus-crypto/                 # Dilithium, entropía (Sentinel-Seed), keypair, signer
 ├── nexus-anchor/                 # L1: consensus, validator, data_availability, finality, chain
 ├── nexus-active/                 # L2: sequencer, verifier, execution, batch, chain
 ├── nexus-sentinel/               # Monitoreo de seguridad (re-exporta primitivas de crypto)
-├── nexus-zk/                     # Interfaz ZK (Groth16) — placeholder
+├── nexus-zk/                     # STARK hash-based (field, NTT, Merkle, FRI, AIR) + interfaz Groth16 (sin uso)
 ├── nexus-network/                # Interfaz P2P (libp2p) — modelada
 ├── nexus-node/                   # Nodo (esqueleto)
 └── nexus-cli/                    # CLI (keygen, bench crypto)
@@ -289,7 +291,7 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 |----------|------------|:---:|-----------|
 | **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | Modelado | `nexus-anchor/`, `nexus-active/` |
 | **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | Implementado | `nexus-crypto/dilithium.rs`, `keypair.rs` |
-| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Rotación **implementada**; métrica a reformular | Parcial | `nexus-crypto/entropy.rs` |
+| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Min-entropía, pruebas RCT/APT y rotación con secrecia hacia adelante **implementadas**; registro auditable de rotación pendiente | Implementado (parcial) | `nexus-crypto/entropy.rs` |
 | **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 4 — Validación Formal* |
 
 > **Corrección importante respecto a versiones previas de este README:** el Objetivo 4 **no** se satisface con "tests + benchmarks". Una reducción de dureza y un análisis de complejidad son artefactos matemáticos demostrativos; los benchmarks son evidencia empírica *complementaria*. Ver el Capítulo de Validación Formal.
@@ -300,13 +302,12 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 Esta sección lista de forma transparente lo que el prototipo **no** hace todavía, para que el alcance quede inequívoco:
 
-- **Compilación**: requiere las dos correcciones indicadas arriba antes de construir/ejecutar.
-- **Generación determinística de claves**: la API `from_seed` ignora actualmente la semilla (la biblioteca PQC usa su propio RNG). Solución prevista: KDF (SHAKE256) → generación determinística parametrizada por la semilla.
-- **Biometría / Extractor Difuso**: **eliminado del alcance (v2)**; `fuzzy_extractor.rs` pendiente de remover.
+- **Sentinel-Seed**: los parámetros de ventana ($W$) y corte ($C$) del APT usan valores por defecto razonables; falta fijarlos según la fuente TRNG/PRNG objetivo, y añadir el registro auditable de eventos de rotación en el *Key Registry*.
+- **Biometría / Extractor Difuso**: **eliminado del alcance (v2)**; el módulo fue removido del código.
 - **Consenso BFT**: falta verificación de firmas de voto, deduplicación por validador, quórum ponderado por *stake* ($\lfloor 2N/3\rfloor+1$), detección de equivocación + *slashing*, y difusión en red.
 - **Finalidad**: el núcleo de conteo de votos es real, pero falta verificación de firma del voto y enlace de ascendencia (*ancestry*) entre bloques finalizados.
 - **Disponibilidad de datos**: el "erasure coding" actual duplica *chunks* (no es Reed-Solomon); el muestreo DAS y el "compromiso polinómico" son simplificaciones — pendientes de implementación real (código MDS + compromiso KZG/Merkle + muestreo de pares remotos).
-- **Capa ZK / Nitro Verifier**: *placeholders* (el verificador acepta toda prueba no vacía; el *prover* devuelve bytes fijos). Pendiente: circuitos R1CS reales con `ark-groth16`, *trusted setup* y verificación por emparejamientos.
+- **Capa ZK / Nitro Verifier**: el PoC STARK (`nexus-zk::stark`) es real (Goldilocks, NTT radix-2, compromisos Merkle/SHA3, Fiat-Shamir, FRI, AIR con enlace traza↔polinomio de composición), pero su AIR modela una transición demostrativa (Fibonacci-square), no la semántica de ejecución del L2; el *prover* aún no está integrado al pipeline de *batches* y persiste una ruta heredada de compatibilidad en `verify_zk`. El andamiaje Groth16/arkworks (`prover.rs`, `verifier.rs` de `nexus-zk`) permanece sin uso. Demo: `cargo run -p nexus-zk --example stark_demo --release`.
 - **Red P2P**: `libp2p` está declarado pero no integrado; la capa es un registro de pares en memoria.
 - **Nodo/RPC**: el nodo no ejecuta un bucle de eventos ni expone RPC.
 - **Merkle**: añadir separación de dominio hoja/nodo (RFC 6962) y revisar el *padding* por duplicación de última hoja.
