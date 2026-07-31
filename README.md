@@ -284,6 +284,21 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 **Lecturas clave:** (i) la **verificación tarda cientos de µs** — el cuello de botella post-cuántico es el *tamaño*, no el cómputo; (ii) generación y verificación **escalan con $k\ell$** (consistente con $O(k\ell\,n\log n)$); (iii) la firma es **no monótona** por la varianza del *rejection sampling*. Cifras de un portátil modesto; lo relevante es el orden de magnitud y la forma del escalado. Análisis en el Capítulo de Validación Formal (§6.6).
 
+### Comparativa con líneas base clásicas (medido)
+
+`cargo bench -p nexus-crypto --bench classical_baseline` (ejecución 2026-07-31; mismo hardware y condiciones; implementaciones **Rust puro** en todos los casos — `p256` y `rsa` de RustCrypto vs. `fips204` — para una comparación homogénea sin aceleración en ensamblador):
+
+| Esquema | Keygen | Firma | Verificación | Firma (B) | Clave pública (B) |
+|---|--:|--:|--:|--:|--:|
+| ECDSA P-256 | 137 µs | 173 µs | 301 µs | 64 | 33 |
+| RSA-2048 | 227 **ms** | 1,75 ms | 218 µs | 256 | ~270 |
+| RSA-3072 | — (†) | 5,14 ms | 453 µs | 384 | ~398 |
+| **Dilithium3 (ML-DSA-65)** | **413 µs** | **790 µs** | **232 µs** | **3.309** | **1.952** |
+
+(†) El keygen de RSA-3072 (segundos por clave) se excluye del harness por tiempo de ejecución; no está en ninguna ruta caliente.
+
+**Lecturas clave:** (i) **Dilithium3 verifica más rápido que ECDSA P-256** (232 vs 301 µs) y a la par de RSA-2048 — computacionalmente la migración post-cuántica es *gratis* en verificación, la operación dominante en un validador; (ii) en firma, Dilithium3 es ~2× más rápido que RSA-2048 y ~4,6× más lento que ECDSA; (iii) el sobrecosto real es el **tamaño**: la firma Dilithium3 es **~52×** la de ECDSA y **~13×** la de RSA-2048 — exactamente el problema de datos que la arquitectura dual + STARK traslada fuera de la L1.
+
 ### PoC STARK — verificación succinta (medido)
 
 `cargo run -p nexus-zk --example stark_demo --release` (ejecución 2026-07-31; blowup 8, 40 consultas, desafíos en $\mathbb{F}_{p^2}$, *grinding* $2^{20}$ — ~100 bits de *soundness*; mismo hardware):
