@@ -322,7 +322,7 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 | **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | Modelado | `nexus-anchor/`, `nexus-active/` |
 | **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | Implementado | `nexus-crypto/dilithium.rs`, `keypair.rs` |
 | **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Min-entropía, pruebas RCT/APT y rotación con secrecia hacia adelante **implementadas**; registro auditable de rotación pendiente | Implementado (parcial) | `nexus-crypto/entropy.rs` |
-| **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 4 — Validación Formal* |
+| **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 6 — Validación Formal* |
 
 > **Corrección importante respecto a versiones previas de este README:** el Objetivo 4 **no** se satisface con "tests + benchmarks". Una reducción de dureza y un análisis de complejidad son artefactos matemáticos demostrativos; los benchmarks son evidencia empírica *complementaria*. Ver el Capítulo de Validación Formal.
 
@@ -366,6 +366,6 @@ MIT License — Ver [LICENSE](LICENSE).
 ## Autor
 
 **Juan Diego Susunaga Velasquez** — Universidad del Rosario, Escuela de Ciencias e Ingeniería.
-Director: **Leonardo Huertas Calle**.
+Director: **Pedro Mario Wightman Rojas**.
 
 *Parte del trabajo de grado "Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Bancarios Seguros y Resilientes Post-Cuántico".*
