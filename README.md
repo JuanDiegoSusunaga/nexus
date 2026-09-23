@@ -1,15 +1,60 @@
 # NEXUS Dual-Chain — Modelo de Referencia
 
-**Arquitectura Blockchain Dual Post-Cuántica para Sistemas Bancarios Seguros y Resilientes — Modelo Matemático-Computacional y Prototipo de Referencia**
+**Navegación y versión TG2:** [mapa del código e instrucciones de reproducción](REPRODUCIBILIDAD_TG2.md). El repositorio documental identifica el commit de código que acompaña a la edición y conserva fuentes, logs y resultados por etapa.
+
+## Estado vigente — auditoría Merkle/Fiat–Shamir
+
+23 de septiembre de 2026: check/build y **197 pruebas** repetidos correctamente. La auditoría independiente con Python/hashlib reconstruye 14 certificados, 560 consultas y 18.880 aperturas Merkle; calcula el sesgo de campo bajo salidas frescas y delimita las obligaciones por ronda y ROM/QROM. La garantía del ejecutable sigue pendiente. Rust, corpus y benchmarks se conservan. [Informe y evidencia](../Documentos/04-Administrativo-TG2/Avances/R4-Merkle-Fiat-Shamir-2026-09-23.md) · [Paquete de revisión matemática preparado](../Documentos/04-Administrativo-TG2/Avances/Revision-Matematica-S1-S3-2026-09-23.md).
+
+## Registro de cota interactiva ideal
+
+22 de septiembre de 2026: se deriva una cota conservadora de composición para la variante vinculada bajo oráculos y retos ideales, con candidato único fijado antes del AIR y tratamiento del campo de extensión. Su transferencia a Merkle/Fiat–Shamir y ROM/QROM sigue pendiente, al igual que la revisión matemática; no acredita 100 bits. Se verificaron las cuentas en nueve perfiles y se repitieron check, las **197 pruebas** del workspace y build. Rust, corpus y mediciones se conservan; los diez casos release corresponden a la ejecución anterior. [Derivación, hipótesis y evidencia](../Documentos/04-Administrativo-TG2/Avances/R4-Cota-Interactiva-2026-09-22.md).
+
+## Registro de FRI de traza vinculada al AIR
+
+22 de septiembre de 2026: **197 pruebas** del workspace pasan en desarrollo y diez nuevas también en release; check de todos los targets y build correctos. La variante experimental comparte raíz entre las aperturas AIR y el primer compromiso FRI de traza, añade FRI de composición y transcripción propia, y verifica sin recibir el LDE completo. Acepta los cuatro tamaños honestos ensayados y rechaza pruebas nuevas sobre los tres oráculos alejados conservados. Se preservan 14 certificados públicos y sus tamaños comprobados. Las fuentes STARK de producción permanecen intactas; la cota global de solidez, las pérdidas Fiat–Shamir/QROM y la revisión matemática siguen pendientes. No acredita conocimiento cero ni ahorro de bytes en los tamaños medidos. [Informe de implementación, formato y evidencia](../Documentos/04-Administrativo-TG2/Avances/R4-FRI-Vinculado-2026-09-22.md).
+
+## Registro del contraejemplo de proximidad de traza
+
+22 de septiembre de 2026: **187 pruebas** del workspace pasan en desarrollo y siete nuevas también en release; check/build correctos. El verificador heredado acepta tres pruebas con trazas a distancia exacta 7/8 del código de grado < T, con transcripción real y enunciados válidos. Se refuta la premisa de proximidad propuesta, sin falsificar enunciados. El control exhaustivo experimental exige todo el LDE, rechaza esos casos por grado y acepta la traza honesta; no es sucinto ni se integra en producción. [Informe de esa etapa y corpus público](../Documentos/04-Administrativo-TG2/Avances/R4-Proximidad-Traza-2026-09-22.md).
+
+## Registro del argumento algebraico AIR/FRI
+
+22 de septiembre de 2026: **180 pruebas** del workspace pasan en desarrollo; los siete casos algebraicos nuevos pasan también en release. Check de todos los targets y build correctos. El oráculo de referencia de TG2 contrasta divisibilidad, cancelación, grados y correspondencia con aperturas del probador. El argumento escrito requiere una traza fija de grado menor que T o un oráculo próximo a ella; la proximidad de la traza comprometida aún debe justificarse. No acredita solidez global ni 100 bits. [Informe de esa etapa y evidencia](../Documentos/04-Administrativo-TG2/Avances/R4-Algebra-AIR-FRI-2026-09-22.md).
+
+## Registro de auditoría de solidez STARK
+
+22 de septiembre de 2026: **173 pruebas** del workspace pasan en desarrollo; siete casos STARK nuevos también pasan en release. Check/build correctos. Se caracterizaron consultas, transcripción, grinding, muestreo y proximidad. El presupuesto heredado no acredita 100 bits. El ensayo de palabra cercana no constituye una transición AIR falsa aceptada. Las obligaciones de composición se detallan en el [informe STARK](../Documentos/04-Administrativo-TG2/Avances/R4-Solidez-STARK-2026-09-22.md). Las fuentes de producción STARK conservan sus comentarios históricos; el análisis de esta etapa se conserva en ese informe y se complementa con el avance algebraico anterior.
+
+## Registro de correspondencia R1
+
+22 de septiembre de 2026: **166 pruebas pasan**, check/build correctos. Tres casos R1 comprueban correspondencia del envoltorio con fips204 0.4.6 en los tres niveles, contexto y separación de HashML-DSA. La ruta ordinaria usa ML-DSA puro, hedged y contexto vacío; reconstruir claves desde semilla no hace determinista la firma. La revisión formal documenta condiciones incumplidas y obligaciones pendientes; estas pruebas comparten backend y no certifican seguridad. [Informe R1](../Documentos/04-Administrativo-TG2/Avances/R1-Correspondencia-Formal-2026-09-22.md).
+
+## Registro R5 y complemento R4
+
+22 de septiembre de 2026: **163 pruebas pasan**, check/build correctos. Tres casos R5 comprueban representaciones y reconstrucción de firma desde semilla. El gestor conserva claves entre operaciones; la política de reexpansión vive en el benchmark. Los tamaños serializados no miden toda la RAM ni el borrado físico.
+
+Tras el cambio de Smart App Control por el autor, terminaron los dos benchmarks pendientes. R4 y complemento preservan 29 casos Criterion, 40 mediciones STARK y 40 repeticiones multinúcleo. ML-DSA-65: 84,61 µs por verificación; mediana de 136.390 verificaciones/s con 24 hilos. Fuentes y configuración identificadas por serie; los fallos anteriores permanecen como historia. [Informe de esa revisión](../Documentos/04-Administrativo-TG2/Avances/R5-Residencia-y-Custodia-2026-09-22.md).
+
+
+
+## Registro de la primera validación R4, 22 de septiembre de 2026
+
+Check/build correctos y **160 pruebas** del workspace pasan, 18 nuevas en R4. La variante `nexus-active/experiments/tg2_canonical_verifier.rs` exige STARK y contexto coherente, restringidos a escalares canónicos. El verificador heredado conserva aceptación sin prueba y enlace parcial de raíces; se caracteriza mediante pruebas sin modificar sus fuentes de TG1. El ejemplo de 16 filas permite recuperar el testigo desde las aperturas: el PoC no acredita conocimiento cero, raíces arbitrarias de 256 bits ni 100 bits de soundness.
+
+Se midieron 17 casos Criterion (clásicos/residencia) y 40 STARK con dispersión. Windows bloqueó dos ejecutables optimizados: `dilithium_bench` y `tg2_throughput` (error 4551). El nuevo ensayo multinúcleo corrige el reloj común y el conteo, pero no tiene una cifra optimizada medida. Los rendimientos históricos siguientes conservan sus fechas y límites; no representan esta serie. [Informe R4](../Documentos/04-Administrativo-TG2/Avances/R4-Verificador-y-Evidencia-2026-09-22.md).
+
+
+**Arquitectura Blockchain Dual Post-Cuántica para Sistemas Seguros y Resilientes — Modelo Matemático-Computacional y Prototipo de Referencia**
 
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](Cargo.toml)
 [![PQC](https://img.shields.io/badge/crypto-Post--Quantum-green.svg)](https://csrc.nist.gov/projects/post-quantum-cryptography)
 [![Estado](https://img.shields.io/badge/estado-prototipo%20de%20investigaci%C3%B3n-yellow.svg)]()
 
 ---
 
-> **Naturaleza de este trabajo.** Este repositorio acompaña al trabajo de grado *"Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Bancarios Seguros y Resilientes Post-Cuántico"*. Su objetivo, según la propuesta aprobada, es **diseñar, modelar y validar formalmente** una arquitectura — **no** entregar un sistema de producción listo para despliegue. En consecuencia, el código es un **prototipo de referencia**: algunos componentes están implementados y verificados, otros están **especificados/modelados** a nivel de tipos e interfaces, y otros se documentan explícitamente como **trabajo futuro**. La sección [Estado de implementación](#estado-de-implementación) detalla con precisión qué es qué, para evitar cualquier sobre-afirmación.
+> **Naturaleza de este trabajo.** Este repositorio acompaña al trabajo de grado *"Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Seguros y Resilientes Post-Cuántico"*. Su objetivo, según la propuesta aprobada, es **diseñar, modelar y validar formalmente** una arquitectura — **no** entregar un sistema de producción listo para despliegue. En consecuencia, el código es un **prototipo de referencia**: algunos componentes están implementados y verificados, otros están **especificados/modelados** a nivel de tipos e interfaces, y otros se documentan explícitamente como **trabajo futuro**. La sección [Estado de implementación](#estado-de-implementación) detalla con precisión qué es qué, para evitar cualquier sobre-afirmación.
 
 ---
 
@@ -32,7 +77,7 @@
 
 ## Introducción
 
-NEXUS es un **modelo de arquitectura blockchain de doble capa** diseñado para proteger infraestructura financiera frente a la amenaza de la computación cuántica. El trabajo aborda tres problemas:
+NEXUS es un **modelo de arquitectura blockchain de doble capa** diseñado para proteger la autenticación de operaciones y los registros de sistemas de distintos dominios frente a la amenaza de la computación cuántica. El trabajo aborda tres problemas:
 
 1. **El Trilema de la Blockchain**: escalabilidad, seguridad y descentralización.
 2. **La amenaza HNDL** (*Harvest Now, Decrypt Later*): datos cifrados hoy con criptografía clásica podrían descifrarse con un computador cuántico futuro.
@@ -57,7 +102,7 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 | Firmas post-cuánticas (CRYSTALS-Dilithium 2/3/5) | `nexus-crypto/dilithium.rs`, `signer.rs` | Implementado |
 | Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | Implementado |
 | Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | Implementado |
-| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/entropy.rs` | Implementado (min-entropía + RCT/APT + rotación con secrecia hacia adelante) |
+| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/{entropy,keypair,registry}.rs` | Monitor, gestor y registro local R2–R3 probados; custodia durable e integración L2/L1 pendientes |
 | Núcleo de finalidad por voto ponderado (≥2/3) y *fork-choice* | `nexus-anchor/finality.rs` | Modelado (sin verificación de firma de voto) |
 | Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | Implementado |
 | Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | Modelado (sin separación de dominio hoja/nodo) |
@@ -71,7 +116,7 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 | Nodo ejecutable / servidor RPC | `nexus-node/*` | Trabajo futuro |
 | CLI (`keygen`, `bench crypto`) | `nexus-cli/main.rs` | Implementado (parcial) |
 
-> **Estado de compilación (julio 2026, última ejecución verificada: 2026-07-31, rustc 1.97.1).** El *workspace* **compila por completo** y **los 110 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 20, zk 34), incluyendo los del PoC STARK (`nexus-zk::stark`) y los del verificador post-cuántico de `nexus-active`. Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
+> **Registro histórico de compilación (julio 2026; sustituido como estado vigente por R3, abajo).** El *workspace* **compila por completo** y **los 110 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 20, zk 34), incluyendo los del PoC STARK (`nexus-zk::stark`) y los del verificador post-cuántico de `nexus-active`. Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
 
 ---
 
@@ -182,7 +227,30 @@ La métrica de seguridad **no** es la entropía de Shannon de la semilla (que no
 - **pruebas de salud en línea** conforme a **NIST SP 800-90B** (*Repetition Count Test* y *Adaptive Proportion Test*) para detectar degradación del generador;
 - **rotación con secrecia hacia adelante** por política (uso > 100.000 derivaciones, antigüedad > 24 h, o **fallo de las pruebas de salud**), con bloqueo de la derivación ante degradación de la fuente.
 
-> **Estado.** Implementado en `nexus-crypto/src/entropy.rs`: estimación de min-entropía de la fuente, pruebas de salud en línea RCT y APT (SP 800-90B §4.4) con bloqueo de la derivación ante fallo, y rotación con secrecia hacia adelante; todo cubierto por tests unitarios. La función de entropía de Shannon se conserva **solo con fines de diagnóstico** (no es métrica de seguridad ni dispara rotación). Pendiente: parametrización final de ventana/corte del APT según la fuente TRNG/PRNG objetivo y el registro auditable de eventos de rotación en el *Key Registry*. El desarrollo formal de esta distinción está en el **Capítulo de Validación Formal (Obj. 4)**.
+> **Registro de la etapa R2, anterior a R3, 22 de septiembre de 2026.** El monitor usa corte APT binomial (W=512, C=16), RCT C=4 y lotes de 65.536 muestras para la frecuencia máxima empírica. El arranque bloquea la derivación hasta evaluar un lote; un fallo exige `begin_source_recovery`, otro lote completo y renovación de semilla. Rotar conserva los monitores y el historial. Las 123 pruebas del workspace pasan, incluidas 13 nuevas; `cargo check` y `cargo build` también terminan correctamente. Los benchmarks de otras secciones conservan sus fechas históricas.
+
+**Uso de la API:** `SentinelSeed::new()` y `from_bytes()` parten sin evaluación. La aplicación entrega muestras mediante `ingest_source`; `source_status` permite consultar el estado. `rotate()` ahora devuelve `Result` y rechaza una fuente sin evaluación o degradada. `derive_key_unchecked` es interno. `KeyManager` expone ingestión, consulta y comienzo de recuperación para el Sentinel que contiene.
+
+### Rotación efectiva y registro público (R3)
+
+**Estado del 22 de septiembre de 2026:** `cargo check --workspace --all-targets`, `cargo test --workspace` y `cargo build --workspace` pasan: **142 pruebas**, incluidas 19 nuevas. `KeyManager::rotate_sentinel` cambia todas las claves y la semilla en una transición atómica en memoria. Mantiene las identidades lógicas, actualiza metadatos y registra una autorización de todas las claves salientes y una prueba de posesión de todas las entrantes.
+
+`sign` y `sign_default` devuelven `EpochSignature`, que autentica identidad y época. La salud, edad y cupo de derivaciones bloquean la firma. `get_key` y `default_key` ofrecen únicamente vistas públicas; `key_metadata` expone metadatos. `add_key` es falible; `remove_key` registra el retiro y descarta el secreto sin devolverlo. Estas firmas de API sustituyen las anteriores dentro del gestor.
+
+`KeyRegistry::verify_current` rechaza épocas retiradas. `verify_historical` comprueba su validez criptográfica, sin acreditar fecha de emisión. `verify_at_record` comprueba vigencia respecto de una posición que la aplicación debe obtener de evidencia confiable. La aplicación también debe prevenir repeticiones dentro de una época.
+
+`to_bytes` exporta el historial público; `from_bytes` lo verifica y exige un checkpoint confiable de longitud/cabecera. Este punto debe custodiarse por separado y actualizarse para detectar retrocesos. La recuperación probada es del registro público: no persiste secretos ni restablece el firmador tras una caída. El formato heredado de transacciones y el sequencer no consumen todavía esta API, y el registro no está anclado en L1. El archivo se limita a 64 MiB; no hay poda.
+
+Demostración desde la raíz de este repositorio:
+
+```powershell
+$env:CARGO_TARGET_DIR = 'C:\tmp\nexus-target'
+cargo run -p nexus-crypto --example rotation_demo --locked --offline
+```
+
+Para dos identidades ML-DSA-65, la demostración produce un archivo público de 28.416 B y un evento de rotación de 17.498 B. No es un benchmark de latencia. [Informe, límites y pruebas R3](../Documentos/04-Administrativo-TG2/Avances/R3-Rotacion-y-Registro-2026-09-22.md).
+
+**Límite del resultado:** la entrada observada es un flujo de bytes aportado por la aplicación; el material de la semilla procede del generador del sistema operativo. El prototipo no acredita acceso a su ruido físico ni vincula automáticamente ambas fuentes. La evaluación por frecuencia máxima es puntual y no incluye el intervalo de confianza del MCV completo de SP 800-90B. Deben justificarse la fuente, su independencia y el margen de calificación en el despliegue. R3 implementa el registro local y la renovación de claves del gestor; la integración durable y L2/L1 sigue pendiente.
 
 ---
 
@@ -301,7 +369,7 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 ### PoC STARK — verificación succinta (medido)
 
-`cargo run -p nexus-zk --example stark_demo --release` (ejecución 2026-07-31; blowup 8, 40 consultas, desafíos en $\mathbb{F}_{p^2}$, *grinding* $2^{20}$ — ~100 bits de *soundness*; mismo hardware):
+`cargo run -p nexus-zk --example stark_demo --release` (ejecución 2026-07-31; blowup 8, 40 consultas, desafíos en $\mathbb{F}_{p^2}$, *grinding* $2^{20}$ — la atribución histórica de ~100 bits no está acreditada, véase la auditoría TG2; mismo hardware):
 
 | Pasos de traza | Prueba | Verificar |
 |---:|---:|---:|
@@ -321,7 +389,7 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 |----------|------------|:---:|-----------|
 | **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | Modelado | `nexus-anchor/`, `nexus-active/` |
 | **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | Implementado | `nexus-crypto/dilithium.rs`, `keypair.rs` |
-| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Min-entropía, pruebas RCT/APT y rotación con secrecia hacia adelante **implementadas**; registro auditable de rotación pendiente | Implementado (parcial) | `nexus-crypto/entropy.rs` |
+| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Monitor, rotación efectiva y registro local autenticado probados; fuente concreta, custodia durable y L2/L1 pendientes | Prototipo R2–R3 verificado | `nexus-crypto/{entropy,keypair,registry}.rs` |
 | **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 4 — Validación Formal* |
 
 > **Corrección importante respecto a versiones previas de este README:** el Objetivo 4 **no** se satisface con "tests + benchmarks". Una reducción de dureza y un análisis de complejidad son artefactos matemáticos demostrativos; los benchmarks son evidencia empírica *complementaria*. Ver el Capítulo de Validación Formal.
@@ -332,7 +400,7 @@ El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equi
 
 Esta sección lista de forma transparente lo que el prototipo **no** hace todavía, para que el alcance quede inequívoco:
 
-- **Sentinel-Seed**: los parámetros de ventana ($W$) y corte ($C$) del APT usan valores por defecto razonables; falta fijarlos según la fuente TRNG/PRNG objetivo, y añadir el registro auditable de eventos de rotación en el *Key Registry*.
+- **Sentinel-Seed y registro**: R2–R3 integran monitor, rotación de claves y registro local con checkpoints. Falta vincular y calificar una fuente concreta, integrar custodia durable y aplicar la política de épocas en L2 con anclaje externo validado.
 - **Biometría / Extractor Difuso**: **eliminado del alcance (v2)**; el módulo fue removido del código.
 - **Consenso BFT**: falta verificación de firmas de voto, deduplicación por validador, quórum ponderado por *stake* ($\lfloor 2N/3\rfloor+1$), detección de equivocación + *slashing*, y difusión en red.
 - **Finalidad**: el núcleo de conteo de votos es real, pero falta verificación de firma del voto y enlace de ascendencia (*ancestry*) entre bloques finalizados.
@@ -368,4 +436,4 @@ MIT License — Ver [LICENSE](LICENSE).
 **Juan Diego Susunaga Velasquez** — Universidad del Rosario, Escuela de Ciencias e Ingeniería.
 Director: **Leonardo Huertas Calle**.
 
-*Parte del trabajo de grado "Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Bancarios Seguros y Resilientes Post-Cuántico".*
+*Parte del trabajo de grado "Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Seguros y Resilientes Post-Cuántico".*

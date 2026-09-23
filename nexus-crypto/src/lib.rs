@@ -15,11 +15,13 @@
 pub mod dilithium;
 pub mod entropy;
 pub mod keypair;
+pub mod registry;
 pub mod signer;
 
 pub use dilithium::{DilithiumKeypair, DilithiumPublicKey, DilithiumSecretKey, DilithiumSignature};
 pub use entropy::{EntropyMonitor, SentinelSeed};
 pub use keypair::{NexusKeypair, KeyManager};
+pub use registry::{EpochSignature, KeyRegistry, RegistryCheckpoint};
 pub use signer::{Signer, Verifier, verify_signed_transaction};
 
 /// Minimum acceptable entropy level (Shannon entropy)

@@ -19,7 +19,7 @@ fn main() {
     );
     println!("{}", "-".repeat(64));
 
-    for &steps in &[16usize, 64, 256, 1024, 4096] {
+    for &steps in &[16usize, 64, 256, 1024, 4096, 16384, 65536, 262144] {
         // Generación.
         let t0 = Instant::now();
         let (stmt, proof) = prove_state_transition(Felt::new(3), Felt::new(5), steps);

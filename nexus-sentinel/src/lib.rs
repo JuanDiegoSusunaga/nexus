@@ -8,6 +8,7 @@ pub use nexus_crypto::entropy::{
     EntropyMonitor, EntropyAnalysis, EntropyQuality,
     SentinelSeed, SentinelConfig, RotationReason, RotationResult,
     MIN_ENTROPY_BITS, MAX_ENTROPY_BITS,
+    SourceStatus, SOURCE_ASSESSMENT_SAMPLES,
 };
 
 use nexus_core::{Address, Hash256, NexusError, Timestamp};
