@@ -64,7 +64,7 @@ pub enum BatchStatus {
     Ready,
     /// Submitted to L1
     Submitted,
-    /// Confirmed on L1
+    /// Included in a trusted local L1 processor; distinct from BFT finality
     Confirmed,
     /// Finalized (past challenge period)
     Finalized,
@@ -255,7 +255,7 @@ pub struct BatchSubmitter {
     /// Submitted batches awaiting confirmation
     submitted: Vec<SubmittedBatch>,
     /// Confirmed batches
-    confirmed: Vec<L2Batch>,
+    confirmed: Vec<ConfirmedBatch>,
     /// Submission retry count
     max_retries: u32,
 }
@@ -267,6 +267,15 @@ pub struct SubmittedBatch {
     pub l1_tx_hash: Hash256,
     pub submitted_at: Timestamp,
     pub retries: u32,
+}
+
+/// Local inclusion observation, without promoting an L2 root or claiming BFT finality.
+#[derive(Debug, Clone)]
+pub struct ConfirmedBatch {
+    pub batch: L2Batch,
+    pub l1_tx_hash: Hash256,
+    pub l1_block_hash: Hash256,
+    pub l1_height: BlockHeight,
 }
 
 impl BatchSubmitter {
@@ -301,14 +310,20 @@ impl BatchSubmitter {
         });
     }
 
-    /// Mark batch as confirmed
-    pub fn mark_confirmed(&mut self, batch_index: u64) -> Option<L2Batch> {
-        if let Some(pos) = self.submitted.iter().position(|b| b.batch.index == batch_index) {
+    /// Internal bookkeeping after ActiveChain checks the trusted L1 instance.
+    pub(crate) fn mark_confirmed(&mut self, batch_index: u64, l1_tx_hash: Hash256,
+        l1_block_hash: Hash256, l1_height: BlockHeight) -> Option<ConfirmedBatch> {
+        if let Some(pos) = self.submitted.iter().position(|b| b.batch.index == batch_index && b.l1_tx_hash == l1_tx_hash) {
             let submitted = self.submitted.remove(pos);
-            self.confirmed.push(submitted.batch.clone());
-            return Some(submitted.batch);
+            let confirmed = ConfirmedBatch { batch: submitted.batch, l1_tx_hash, l1_block_hash, l1_height };
+            self.confirmed.push(confirmed.clone());
+            return Some(confirmed);
         }
         None
+    }
+
+    pub(crate) fn get_confirmation(&self, batch_index: u64) -> Option<ConfirmedBatch> {
+        self.confirmed.iter().find(|entry| entry.batch.index == batch_index).cloned()
     }
 
     /// Get pending count
@@ -396,7 +411,7 @@ mod tests {
         submitter.mark_submitted(to_submit, Hash256::hash(b"l1_tx"));
         assert_eq!(submitter.submitted_count(), 1);
 
-        submitter.mark_confirmed(0);
+        submitter.mark_confirmed(0, Hash256::hash(b"l1_tx"), Hash256::hash(b"local L1 block"), BlockHeight(1));
         assert_eq!(submitter.confirmed_count(), 1);
     }
 

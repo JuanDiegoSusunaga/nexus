@@ -44,7 +44,9 @@ fn lote_local_sin_certificado_valido_no_se_envia_y_un_rechazo_no_muta_el_estado(
         assert_eq!(chain.state_root(), before);
         assert!(chain.verified_state_root(block.height()).is_none());
         assert!(chain.get_known_batch(batch.index).is_some());
-        assert!(chain.mark_batch_confirmed(batch.index).is_none());
+        let l1 = nexus_anchor::AnchorChain::new(Default::default(),
+            DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        assert!(chain.mark_batch_confirmed(batch.index, &l1).is_err());
     }
 }
 
@@ -60,7 +62,10 @@ fn modo_optimista_permanece_provisional_y_no_admite_envios_duplicados() {
     assert!(chain.verified_state_root(batch.block_range.1).is_none());
     assert!(chain.mark_batch_submitted(batch.clone(), Hash256::hash(b"duplicado")).is_err());
     assert_eq!(chain.stats().submitted_batches, 1);
-    assert!(chain.mark_batch_confirmed(batch.index).is_some());
+    let l1 = nexus_anchor::AnchorChain::new(Default::default(),
+        DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+    assert!(chain.mark_batch_confirmed(batch.index, &l1).is_err());
+    assert_eq!(chain.stats().confirmed_batches, 0);
     assert!(chain.verified_state_root(batch.block_range.1).is_none());
     assert!(chain.mark_batch_submitted(batch, Hash256::hash(b"reenvio confirmado")).is_err());
 }

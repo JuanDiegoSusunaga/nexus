@@ -2551,6 +2551,7 @@ dependencies = [
  "bincode",
  "chrono",
  "dashmap",
+ "nexus-anchor",
  "nexus-core",
  "nexus-crypto",
  "nexus-zk",

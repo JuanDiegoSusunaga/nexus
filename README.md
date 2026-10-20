@@ -2,7 +2,7 @@
 
 **Navegación y versión TG2:** [mapa del código e instrucciones de reproducción](REPRODUCIBILIDAD_TG2.md). El repositorio documental identifica el commit de código que acompaña a la edición y conserva fuentes, logs y resultados por etapa.
 
-## Estado local vigente — contrato L1, dominios L1/L2 y almacenamiento local DA
+## Estado local vigente — procesamiento, dominios y confirmación local
 
 20 de octubre de 2026: el procesador L1 recalcula la raíz de cuentas después de ejecutar las transacciones y acreditar la recompensa, y rechaza cabeceras que no coinciden sin publicar efectos parciales. `prepare_block` construye candidatos locales sin alterar el estado. Los costos, nonces y vencimientos se rigen por un contrato explícito; no se implementan comisiones ni recibos L1 completos. Las correcciones de firmas, quórum ponderado, secuenciación y rechazo de fraude no autenticado se conservan en este corte. [Contrato, reproducción y límites](REPRODUCIBILIDAD_TG2.md).
 
@@ -11,6 +11,8 @@ La configuración L1 exige ahora el `chain_id` firmado esperado y limita la suma
 En L2, `SequencerConfig::chain_id` fija el dominio esperado tanto para admisión como para ejecución en `ActiveChain`. Los motores independientes también lo comprueban y permiten fijarlo al crear o restaurar el estado. El valor por defecto sigue siendo `LOCAL`; los identificadores, el génesis y los votos no incorporan una separación adicional por capa.
 
 El registro local DA conserva por separado los envíos a una misma altura y permite recuperar cada lote por su índice. Sus recibos versionados distinguen el hash del contenido de la raíz de fragmentos; las pruebas comprueban índices, tamaño y rutas canónicas. Esto acredita almacenamiento e inclusión locales: Reed–Solomon, muestreo remoto y anclaje de esos recibos al consenso siguen pendientes.
+
+La confirmación de un lote L2 exige ahora consultar una instancia L1 confiable: el hash registrado debe pertenecer a un `BatchSubmit` procesado, publicado por el secuenciador y con raíz, cantidad y bytes coincidentes. Se conserva la procedencia del bloque L1 y cada hash de envío solo puede asignarse una vez dentro de la instancia L2. Esta observación local mantiene separados inclusión, finalidad BFT y validez de ejecución.
 
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
@@ -115,7 +117,7 @@ Para distinguir con honestidad lo construido de lo modelado, cada componente se 
 | Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | Implementado |
 | Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | Implementado |
 | `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/{entropy,keypair,registry}.rs` | Monitor, gestor y registro local R2–R3 probados; custodia durable e integración L2/L1 pendientes |
-| Núcleo de finalidad por voto ponderado (≥2/3) y *fork-choice* | `nexus-anchor/finality.rs` | Modelado (sin verificación de firma de voto) |
+| Núcleo local de finalidad por voto autenticado y peso >2/3 | `nexus-anchor/finality.rs` | Firmas, instantánea confiable y ascendencia comprobadas; protocolo BFT completo pendiente |
 | Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | Implementado |
 | Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | Modelado (sin separación de dominio hoja/nodo) |
 | Generación **determinística** de claves desde semilla (KDF) | `nexus-crypto/dilithium.rs`, `keypair.rs` | Trabajo futuro |
@@ -288,6 +290,7 @@ nexus/
 nexus-cli → nexus-node → {nexus-anchor, nexus-active, nexus-network, nexus-zk, nexus-sentinel}
                               ↓               ↓
                          nexus-crypto → nexus-core
+nexus-active → nexus-anchor (consulta de inclusión en el procesador local)
 ```
 
 ---

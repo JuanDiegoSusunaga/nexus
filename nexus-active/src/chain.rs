@@ -2,7 +2,7 @@
 //! El contrato Lean escalar no acredita transacciones ni raíces SHA3 generales.
 
 use crate::{
-    batch::{BatchBuilder, BatchSubmitter, L2Batch},
+    batch::{BatchBuilder, BatchSubmitter, ConfirmedBatch, L2Batch},
     execution::{ExecutionEngine, ExecutionResult},
     linked_verifier::{ExpectedTransition, public_inputs},
     sequencer::{NexusSequencer, SequencerConfig},
@@ -13,6 +13,7 @@ use nexus_core::{
     SignedTransaction, StateRoot, Timestamp, Address, InMemoryState,
 };
 use nexus_crypto::DilithiumKeypair;
+use nexus_anchor::AnchorChain;
 use nexus_zk::stark::{linked::{MIN_ROWS, MAX_ROWS, MAX_CERTIFICATE_BYTES}, params::POW_BITS_RUNTIME};
 use parking_lot::{Mutex, RwLock};
 use std::collections::HashMap;
@@ -42,7 +43,7 @@ impl Default for LinkedValidityProfile {
 /// Instantánea de un lote construido localmente; solo la prueba se aporta después.
 struct KnownBatch {
     batch: L2Batch,
-    submitted: bool,
+    l1_tx_hash: Option<Hash256>,
 }
 
 /// Active Chain configuration
@@ -287,7 +288,7 @@ impl ActiveChain {
         if known.contains_key(&batch.index) {
             return Err(NexusError::StateError("Índice local de lote repetido".into()));
         }
-        known.insert(batch.index, KnownBatch { batch: batch.clone(), submitted: false });
+        known.insert(batch.index, KnownBatch { batch: batch.clone(), l1_tx_hash: None });
         self.batch_submitter.write().queue(batch);
         Ok(())
     }
@@ -341,9 +342,12 @@ impl ActiveChain {
     pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) -> Result<(), NexusError> {
         let mut known = self.known_batches.write();
         Self::check_known_batch(&batch, &known)?;
+        if l1_tx_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hash == Some(l1_tx_hash)) {
+            return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
+        }
         let entry = known.get_mut(&batch.index)
             .ok_or_else(|| NexusError::StateError("Se perdió el contexto local del lote".into()))?;
-        if entry.submitted {
+        if entry.l1_tx_hash.is_some() {
             return Err(NexusError::SecurityViolation("El lote ya fue enviado".into()));
         }
         let expected = self.expected_for_local_batch(&entry.batch);
@@ -355,13 +359,31 @@ impl ActiveChain {
         };
         if !result.valid { return Err(NexusError::ProofVerificationFailed); }
         self.batch_submitter.write().mark_submitted(batch, l1_tx_hash);
-        entry.submitted = true;
+        entry.l1_tx_hash = Some(l1_tx_hash);
         Ok(())
     }
 
-    /// Mark batch as confirmed
-    pub fn mark_batch_confirmed(&self, batch_index: u64) -> Option<L2Batch> {
-        self.batch_submitter.write().mark_confirmed(batch_index)
+    /// Confirm local inclusion using a trusted L1 instance supplied by the integration.
+    /// This neither establishes BFT finality nor promotes an optimistic root to verified.
+    pub fn mark_batch_confirmed(&self, batch_index: u64, l1: &AnchorChain) -> Result<ConfirmedBatch, NexusError> {
+        let known = self.known_batches.read();
+        let entry = known.get(&batch_index)
+            .ok_or_else(|| NexusError::SecurityViolation("Unknown local batch".into()))?;
+        let tx_hash = entry.l1_tx_hash
+            .ok_or_else(|| NexusError::SecurityViolation("Batch has no recorded L1 submission".into()))?;
+        let inclusion = l1.get_processed_batch_inclusion(&tx_hash)?;
+        if inclusion.transaction_hash != tx_hash || inclusion.sender != self.sequencer.address()
+            || inclusion.batch_root != entry.batch.post_state_root
+            || usize::try_from(inclusion.batch_size).ok() != Some(entry.batch.tx_count)
+            || inclusion.data != entry.batch.compressed_data {
+            return Err(NexusError::SecurityViolation("L1 inclusion differs from the local batch or publisher".into()));
+        }
+        self.batch_submitter.write().mark_confirmed(batch_index, tx_hash, inclusion.block_hash, inclusion.block_height)
+            .ok_or_else(|| NexusError::SecurityViolation("Batch already confirmed or submission no longer pending".into()))
+    }
+
+    pub fn get_batch_confirmation(&self, batch_index: u64) -> Option<ConfirmedBatch> {
+        self.batch_submitter.read().get_confirmation(batch_index)
     }
 
     /// Construye el sobre desde la instantánea local, sin deducir política de la prueba.

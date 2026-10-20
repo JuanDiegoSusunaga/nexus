@@ -10,6 +10,7 @@ license.workspace = true
 nexus-core = { path = "../nexus-core" }
 nexus-crypto = { path = "../nexus-crypto" }
 nexus-zk = { path = "../nexus-zk" }
+nexus-anchor = { path = "../nexus-anchor" }
 
 # Async runtime
 tokio.workspace = true

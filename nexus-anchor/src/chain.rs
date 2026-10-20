@@ -64,6 +64,8 @@ pub struct AnchorChain {
 #[derive(Debug, Clone)]
 pub struct L2BatchRecord {
     pub index: u64,
+    /// Present only for a signed BatchSubmit in a successfully processed L1 block.
+    pub l1_tx_hash: Option<Hash256>,
     /// Payload position within this local L1 height, independent of the global batch index.
     pub da_batch_index: usize,
     pub pre_state_root: StateRoot,
@@ -71,6 +73,19 @@ pub struct L2BatchRecord {
     pub data_hash: Hash256,
     pub l1_height: BlockHeight,
     pub timestamp: Timestamp,
+}
+
+/// Inclusion observed in this trusted local processor; not a BFT finality certificate.
+#[derive(Debug, Clone)]
+pub struct L1BatchInclusion {
+    pub transaction_hash: Hash256,
+    pub block_hash: Hash256,
+    pub block_height: BlockHeight,
+    pub sender: Address,
+    pub batch_root: StateRoot,
+    pub batch_size: u32,
+    pub data_hash: Hash256,
+    pub data: Vec<u8>,
 }
 
 impl AnchorChain {
@@ -223,7 +238,7 @@ impl AnchorChain {
                 let da_batch_index = execution.da_layer.get_commitment(height).map_or(0, Vec::len);
                 let commitment = execution.da_layer.submit_data(height, compressed_data.clone())?;
                 execution.l2_batches.push(L2BatchRecord { index: execution.l2_batches.len() as u64,
-                    da_batch_index,
+                    l1_tx_hash: Some(tx.hash()), da_batch_index,
                     pre_state_root: StateRoot::EMPTY, post_state_root: StateRoot::new(*batch_root),
                     data_hash: commitment.commitment, l1_height: height, timestamp });
             }
@@ -242,7 +257,7 @@ impl AnchorChain {
         let da_batch_index = staged.da_layer.get_commitment(data.height).map_or(0, Vec::len);
         let commitment = staged.da_layer.submit_data(data.height, bytes)?;
         staged.l2_batches.push(L2BatchRecord { index: staged.l2_batches.len() as u64,
-            da_batch_index,
+            l1_tx_hash: None, da_batch_index,
             pre_state_root: StateRoot::EMPTY, post_state_root: batch_root,
             data_hash: commitment.commitment, l1_height: data.height, timestamp: Timestamp::now() });
         data.execution = staged;
@@ -261,6 +276,31 @@ impl AnchorChain {
             return Err(NexusError::StateError("L2 payload hash mismatch".into()));
         }
         Ok(bytes)
+    }
+
+    /// Reads canonical processed storage under one lock, excluding helper-only registrations.
+    pub fn get_processed_batch_inclusion(&self, tx_hash: &Hash256) -> Result<L1BatchInclusion, NexusError> {
+        let data = self.data.read();
+        let record = data.execution.l2_batches.iter().find(|record| record.l1_tx_hash == Some(*tx_hash))
+            .ok_or_else(|| NexusError::SecurityViolation("No processed L1 batch transaction".into()))?;
+        let block_hash = *data.blocks_by_height.get(&record.l1_height)
+            .ok_or(NexusError::BlockHeightNotFound(record.l1_height))?;
+        let block = data.blocks.get(&block_hash).ok_or(NexusError::BlockNotFound(block_hash))?;
+        let tx = block.body.transactions.iter().find(|tx| tx.hash() == *tx_hash)
+            .ok_or_else(|| NexusError::SecurityViolation("Batch transaction absent from canonical L1 block".into()))?;
+        let (batch_root, batch_size, payload) = match &tx.transaction.tx_type {
+            nexus_core::TransactionType::BatchSubmit { batch_root, batch_size, compressed_data } =>
+                (*batch_root, *batch_size, compressed_data),
+            _ => return Err(NexusError::SecurityViolation("L1 transaction is not a batch submission".into())),
+        };
+        let bytes = data.execution.da_layer.reconstruct_batch(record.l1_height, record.da_batch_index)?;
+        if bytes != *payload || Hash256::hash(&bytes) != record.data_hash
+            || record.post_state_root != StateRoot::new(batch_root) {
+            return Err(NexusError::SecurityViolation("L1 batch record differs from its transaction or DA data".into()));
+        }
+        Ok(L1BatchInclusion { transaction_hash: *tx_hash, block_hash, block_height: record.l1_height,
+            sender: tx.sender, batch_root: StateRoot::new(batch_root), batch_size,
+            data_hash: record.data_hash, data: bytes })
     }
     pub fn finalized_height(&self) -> BlockHeight { self.data.read().finality.last_finalized_height() }
     pub fn is_finalized(&self, hash: &Hash256) -> bool { self.data.read().finality.is_finalized(hash) }
