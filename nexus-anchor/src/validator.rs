@@ -111,7 +111,7 @@ pub enum ValidatorStatus {
 }
 
 /// Validator set management
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ValidatorSet {
     /// All validators by address
     validators: HashMap<Address, Validator>,
@@ -296,7 +296,7 @@ impl ValidatorSet {
 }
 
 /// Validator registry for on-chain management
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ValidatorRegistry {
     /// Current validator set
     validator_set: ValidatorSet,

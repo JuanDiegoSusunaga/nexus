@@ -170,7 +170,7 @@ impl From<Hash256> for StateRoot {
 }
 
 /// In-memory state for testing and quick operations
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct InMemoryState {
     accounts: HashMap<Address, AccountState>,
     code: HashMap<Hash256, Vec<u8>>,

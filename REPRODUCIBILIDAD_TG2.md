@@ -2,6 +2,28 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Ciclo local persistente y ejecución soportada — 20 de octubre de 2026
+
+`nexus_node::DurableNode` es un coordinador local que posee L1 y L2 de forma exclusiva. Las instancias directas de `ActiveChain` y `AnchorChain` mantienen su operación en memoria. El coordinador guarda una nueva generación completa antes de devolver éxito de admisión, producción, registro de envío, procesamiento L1, recuperación o confirmación. `prepare_l1_submission` y `prepare_l1_retry` preparan y registran juntos: los bytes exactos quedan guardados antes de devolver el paquete al llamante. No realizan transmisión de red.
+
+Los checkpoints conservan cuentas/código/storage, bloques e índices, pool y nonces confirmados, lote en construcción, contextos de lotes conocidos, cola, intentos con paquetes y fechas, confirmaciones, raíces verificadas y pruebas optimistas pendientes, DA y metadatos locales de validadores/finalidad. Se exportan bajo los bloqueos correspondientes; el coordinador no expone las cadenas mutables. El publicador entrega la misma clave al reabrir; no se serializa la clave privada. Identidad, configuración L1/L2 y asignación inicial deben coincidir con el contexto esperado. La restauración comprueba versión, límites, estructura de bloques, raíz de cuentas, pool y coherencia DA. Es restauración de estado local confiable, sin repetir la admisión al reloj actual de paquetes históricos.
+
+`ActiveChain::with_genesis_balances` permite una asignación experimental explícita y rechaza direcciones repetidas. Su raíz se incorpora al génesis L2 de esa instancia. No añade un método de emisión después del génesis ni cambia el génesis por defecto. La API no convierte esta configuración local en una identidad de red certificada.
+
+El almacenamiento admite un escritor mediante bloqueo de archivo del sistema operativo. Cada generación contiene cabecera/versionado `NEXUSCP1`, número, longitud y checksum SHA3. Los bytes se escriben a un archivo temporal nuevo, se sincronizan y después se publican mediante renombrado. Los temporales incompletos se ignoran al abrir; un último archivo comprometido corrupto se rechaza, sin volver silenciosamente a una generación anterior. Un error previo a la publicación revierte el estado en memoria; si la restauración falla, el nodo exige reapertura. Se conservan todas las generaciones. El payload máximo es 64 MiB; no hay migración automática de formato ni retención/poda implementada.
+
+El contrato de ejecución L2 rechaza `Call` y `Deploy` con resultado fallido, cero gas de ejecución y sin cambios, logs o retorno simulados, después de los controles normales de admisión. La transferencia soportada conserva su contrato de balances, nonce y reserva de costo. No se implementan comisiones ni intérprete de contratos. Se reprodujeron los dos éxitos ficticios antes de la corrección.
+
+Ejemplo ejecutable (directorio nuevo, clave mantenida por el ejemplo solo durante su ejecución):
+
+```powershell
+cargo run -p nexus-node --example local_cycle --locked --offline -- target/mi-ciclo-local
+```
+
+El ejemplo ejecuta una transferencia financiada en el génesis experimental, reabre tras ejecución, registro del paquete, inclusión y confirmación, contrasta raíz y bytes, y rechaza repetición y confirmación duplicada. Emite JSON sin secretos. Las pruebas adicionales usan cinco procesos independientes terminados sin ejecutar `Drop`, fuerzan fallos de escritura en cuatro fases y comprueban pool, lote parcial, límite de reintentos, claves/políticas incompatibles, corrupción, vencimiento histórico y un certificado escalar sintético. La [evidencia del ciclo local](../Documentos/06-Evidencia-TG2/2026-10-20/Ciclo-Local-Durable/verificacion.json) conserva comandos, resultados y ejemplo.
+
+**Límites:** directorio y checkpoints locales confiables; el checksum detecta corrupción, pero no autentica al escritor ni evita que alguien restaure maliciosamente archivos antiguos. Se ensaya recuperación ante salida de procesos; la durabilidad frente a corte eléctrico, metadatos del directorio y sistemas de archivos remotos requiere una política adicional. La custodia durable de claves sigue fuera de este componente. No se acredita finalidad BFT, disponibilidad remota, rendimiento de producción ni ejecución L2 mediante el AIR escalar. Las fuentes Lean, manuscrito, primitivas y núcleo/lector AIR-FRI se preservan; no se agrega un resultado matemático.
+
 ## Recuperación de un reintento omitido — 20 de octubre de 2026
 
 `recover_l1_retry(index, expected_hash, &transaction, &l1)` recupera el registro de un reemplazo que la instancia L1 confiable ya procesó. Exige que el lote tenga un envío pendiente cuyo hash vigente sea `expected_hash`, que el nuevo hash no esté reservado por ningún intento presente o histórico, y que quede capacidad dentro del límite común de tres reintentos. Compara publicador, raíz, cantidad y datos con el lote conocido y reutiliza la comprobación de envoltura completa e inclusión canónica de `validate_processed_batch_submission`. El nonce consumido y el vencimiento actual no invalidan esa inclusión histórica. `retry_l1_submission` conserva su admisión actual previa al procesamiento.

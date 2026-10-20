@@ -14,8 +14,9 @@ use nexus_core::{
 use nexus_crypto::{signer::verify_signed_transaction_at, DilithiumKeypair, Signer};
 use parking_lot::RwLock;
 use std::collections::HashMap;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnchorChainConfig {
     /// Expected signed transaction domain; shared by all replicas of this L1.
     pub chain_id: ChainId,
@@ -49,7 +50,7 @@ impl Default for L1SubmissionOptions {
     fn default() -> Self { Self { gas_limit: 21_000, gas_price: Amount::ZERO, expires_at: None } }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct ExecutionState {
     state: InMemoryState,
     validators: ValidatorRegistry,
@@ -57,6 +58,7 @@ struct ExecutionState {
     l2_batches: Vec<L2BatchRecord>,
 }
 
+#[derive(Serialize, Deserialize)]
 struct ChainData {
     execution: ExecutionState,
     blocks: HashMap<Hash256, Block>,
@@ -73,7 +75,7 @@ pub struct AnchorChain {
     genesis: Block,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct L2BatchRecord {
     pub index: u64,
     /// Present only for a signed BatchSubmit in a successfully processed L1 block.
@@ -100,7 +102,43 @@ pub struct L1BatchInclusion {
     pub data: Vec<u8>,
 }
 
+#[derive(Serialize, Deserialize)]
+struct AnchorCheckpoint {
+    version: u32,
+    config: AnchorChainConfig,
+    genesis: Block,
+    data: Vec<u8>,
+}
+
 impl AnchorChain {
+    /// Trusted local snapshot, including DA, validators and pending local finality metadata.
+    pub fn export_checkpoint(&self) -> Result<Vec<u8>, NexusError> {
+        use nexus_core::checkpoint::encode;
+        let data = self.data.read();
+        encode(&AnchorCheckpoint { version: 1, config: self.config.clone(),
+            genesis: self.genesis.clone(), data: encode(&*data)? })
+    }
+
+    pub fn restore_checkpoint(bytes: &[u8], expected: &AnchorChainConfig) -> Result<Self, NexusError> {
+        use nexus_core::checkpoint::{decode, encode, validate_blocks};
+        let snapshot: AnchorCheckpoint = decode(bytes)?;
+        if snapshot.version != 1 || encode(&snapshot.config)? != encode(expected)?
+            || encode(&snapshot.genesis)? != encode(&Block::genesis(Layer::Anchor))? {
+            return Err(NexusError::ConfigError("Checkpoint version, genesis or L1 policy differs".into()));
+        }
+        let data: ChainData = decode(&snapshot.data)?;
+        validate_blocks(&data.blocks, &data.blocks_by_height, data.height, &snapshot.genesis,
+            Layer::Anchor, data.execution.state.compute_root())?;
+        for (index, record) in data.execution.l2_batches.iter().enumerate() {
+            let payload = data.execution.da_layer.reconstruct_batch(record.l1_height, record.da_batch_index)?;
+            if record.index != index as u64 || Hash256::hash(&payload) != record.data_hash {
+                return Err(NexusError::StateError("Invalid checkpoint DA record".into()));
+            }
+            if let Some(hash) = record.l1_tx_hash { Self::processed_batch_inclusion(&data, &hash, None)?; }
+        }
+        Ok(Self { config: snapshot.config, data: RwLock::new(data), genesis: snapshot.genesis })
+    }
+
     pub fn new(config: AnchorChainConfig, _keypair: DilithiumKeypair) -> Self {
         let genesis = Block::genesis(Layer::Anchor);
         let hash = genesis.hash();

@@ -71,6 +71,7 @@ impl VerificationResult {
 }
 
 /// The Nitro Verifier
+#[derive(Serialize, Deserialize)]
 pub struct NitroVerifier {
     /// Verification mode
     mode: VerificationMode,
@@ -85,7 +86,7 @@ pub struct NitroVerifier {
 }
 
 /// Verification mode
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum VerificationMode {
     /// Full ZK verification (validity rollup)
     ZKValidity,
@@ -96,7 +97,7 @@ pub enum VerificationMode {
 }
 
 /// Pending proof for optimistic mode
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct PendingProof {
     proof: StateProof,
     submitted_at: nexus_core::Timestamp,

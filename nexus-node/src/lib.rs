@@ -12,6 +12,8 @@ use std::sync::Arc;
 
 pub mod config;
 pub mod rpc;
+pub mod durable;
+pub use durable::{DurableNode, DurableNodeConfig};
 
 /// Node role
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

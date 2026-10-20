@@ -73,6 +73,7 @@ pub enum BatchStatus {
 }
 
 /// Batch builder for creating L2 batches
+#[derive(Serialize, Deserialize)]
 pub struct BatchBuilder {
     /// Current batch index
     current_index: u64,
@@ -249,6 +250,7 @@ impl Default for BatchBuilder {
 }
 
 /// Batch submission manager
+#[derive(Serialize, Deserialize)]
 pub struct BatchSubmitter {
     /// Pending batches to submit
     pending: VecDeque<L2Batch>,
@@ -261,7 +263,7 @@ pub struct BatchSubmitter {
 }
 
 /// A submitted batch with metadata
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubmittedBatch {
     pub batch: L2Batch,
     /// Current attempt; earlier hashes remain reserved and eligible for inclusion.
@@ -271,7 +273,7 @@ pub struct SubmittedBatch {
     pub attempts: Vec<SubmissionAttempt>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SubmissionAttempt {
     pub l1_tx_hash: Hash256,
     pub recorded_at: Timestamp,
@@ -280,7 +282,7 @@ pub struct SubmissionAttempt {
 }
 
 /// Local inclusion observation, without promoting an L2 root or claiming BFT finality.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConfirmedBatch {
     pub batch: L2Batch,
     pub l1_tx_hash: Hash256,

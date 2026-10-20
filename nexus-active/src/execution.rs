@@ -8,7 +8,6 @@ use nexus_core::{
 };
 use nexus_crypto::verify_signed_transaction;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Result of transaction execution
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,6 +89,7 @@ pub struct ExecutionLog {
 }
 
 /// Execution engine for L2
+#[derive(Serialize, Deserialize)]
 pub struct ExecutionEngine {
     /// Trusted expected transaction domain, independent of incoming messages.
     chain_id: ChainId,
@@ -102,6 +102,15 @@ pub struct ExecutionEngine {
 }
 
 impl ExecutionEngine {
+    pub(crate) fn restore_checkpoint(bytes: &[u8], chain_id: ChainId) -> Result<Self, NexusError> {
+        let engine: Self = nexus_core::checkpoint::decode(bytes)?;
+        if engine.chain_id != chain_id || engine.min_gas_price != Amount(1_000_000_000)
+            || engine.block_gas_limit != 30_000_000 {
+            return Err(NexusError::StateError("Incompatible checkpoint execution policy".into()));
+        }
+        Ok(engine)
+    }
+
     /// Create a new execution engine
     pub fn new() -> Self {
         Self::for_chain(ChainId::LOCAL)
@@ -190,12 +199,8 @@ impl ExecutionEngine {
             TransactionType::Transfer { to, amount } => {
                 self.execute_transfer(&tx.sender, to, *amount, tx_hash)
             }
-            TransactionType::Call { contract, method, args, value } => {
-                self.execute_call(&tx.sender, contract, method, args, *value, tx_hash)
-            }
-            TransactionType::Deploy { code, init_data } => {
-                self.execute_deploy(&tx.sender, code, init_data, tx_hash)
-            }
+            TransactionType::Call { .. } | TransactionType::Deploy { .. } =>
+                Ok(ExecutionResult::failure(tx_hash, "Contract execution is not supported by this L2 profile".into(), 0)),
             _ => Ok(ExecutionResult::failure(
                 tx_hash,
                 "Unsupported transaction type".into(),
@@ -244,84 +249,6 @@ impl ExecutionEngine {
             }
             Err(e) => Ok(ExecutionResult::failure(tx_hash, e.to_string(), gas_used)),
         }
-    }
-
-    /// Execute a contract call
-    fn execute_call(
-        &mut self,
-        _caller: &Address,
-        contract: &Address,
-        method: &str,
-        _args: &[u8],
-        value: Amount,
-        tx_hash: Hash256,
-    ) -> Result<ExecutionResult, NexusError> {
-        // Check contract exists
-        let contract_state = self.state.get_account(contract);
-        if contract_state.is_none() || contract_state.unwrap().code_hash.is_none() {
-            return Ok(ExecutionResult::failure(
-                tx_hash,
-                "Contract not found".into(),
-                21000,
-            ));
-        }
-
-        // Simplified: just return success with base gas
-        // Full implementation would execute contract code
-        let gas_used = 50000; // Placeholder
-
-        let mut result = ExecutionResult::success(tx_hash, gas_used);
-        result.return_data = format!("Called {}()", method).into_bytes();
-
-        Ok(result)
-    }
-
-    /// Execute contract deployment
-    fn execute_deploy(
-        &mut self,
-        deployer: &Address,
-        code: &[u8],
-        _init_data: &[u8],
-        tx_hash: Hash256,
-    ) -> Result<ExecutionResult, NexusError> {
-        // Calculate contract address
-        let deployer_nonce = self
-            .state
-            .get_account(deployer)
-            .map(|a| a.nonce.0)
-            .unwrap_or(0);
-
-        let mut addr_input = Vec::new();
-        addr_input.extend_from_slice(deployer.as_bytes());
-        addr_input.extend_from_slice(&deployer_nonce.to_le_bytes());
-        let contract_address = Address::from_public_key(&Hash256::hash(&addr_input).0);
-
-        // Store code
-        let code_hash = self.state.set_code(code.to_vec());
-
-        // Create contract account
-        let contract_account = AccountState {
-            balance: Amount::ZERO,
-            nonce: nexus_core::Nonce::new(0),
-            code_hash: Some(code_hash),
-            storage_root: None,
-            key_epoch: 0,
-            stake: None,
-        };
-        self.state.set_account(contract_address, contract_account);
-
-        let gas_used = 21000 + (code.len() as u64 * 200); // Base + code cost
-
-        let mut result = ExecutionResult::success(tx_hash, gas_used);
-        result.return_data = contract_address.as_bytes().to_vec();
-        result.state_changes.push(StateChange {
-            address: contract_address,
-            change_type: ChangeType::CodeDeploy,
-            old_value: None,
-            new_value: code.to_vec(),
-        });
-
-        Ok(result)
     }
 
     /// Execute a batch of transactions

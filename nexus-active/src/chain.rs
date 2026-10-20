@@ -18,9 +18,10 @@ use nexus_zk::stark::{linked::{MIN_ROWS, MAX_ROWS, MAX_CERTIFICATE_BYTES}, param
 use parking_lot::{Mutex, RwLock};
 use std::collections::HashMap;
 use std::sync::Arc;
+use serde::{Serialize, Deserialize};
 
 /// Política local; jamás se extrae del certificado recibido.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct LinkedValidityProfile {
     steps: usize,
     pow_bits: u32,
@@ -41,6 +42,7 @@ impl Default for LinkedValidityProfile {
 }
 
 /// Instantánea de un lote construido localmente; solo la prueba se aporta después.
+#[derive(Clone, Serialize, Deserialize)]
 struct KnownBatch {
     batch: L2Batch,
     /// Every attempt stays reserved for this immutable local batch.
@@ -48,7 +50,7 @@ struct KnownBatch {
 }
 
 /// Active Chain configuration
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ActiveChainConfig {
     /// Sequencer configuration; its chain_id also fixes the execution domain.
     pub sequencer: SequencerConfig,
@@ -104,7 +106,82 @@ pub struct ActiveChain {
     genesis: Block,
 }
 
+#[derive(Serialize, Deserialize)]
+struct ActiveCheckpoint {
+    version: u32,
+    publisher: Address,
+    config: ActiveChainConfig,
+    execution: Vec<u8>,
+    sequencer: Vec<u8>,
+    verifier: Vec<u8>,
+    builder: Vec<u8>,
+    submitter: Vec<u8>,
+    known: HashMap<u64, KnownBatch>,
+    blocks: HashMap<Hash256, Block>,
+    heights: HashMap<BlockHeight, Hash256>,
+    height: BlockHeight,
+    l1_reference: BlockHeight,
+    genesis: Block,
+}
+
 impl ActiveChain {
+    /// Local genesis allocation for reproducible experiments; commits its account root in genesis.
+    pub fn with_genesis_balances(config: ActiveChainConfig, keypair: DilithiumKeypair,
+        balances: &[(Address, nexus_core::Amount)]) -> Result<Self, NexusError> {
+        let mut chain = Self::new(config, keypair);
+        for (address, balance) in balances {
+            let mut execution = chain.execution.write();
+            if execution.state().account_exists(address) {
+                return Err(NexusError::ConfigError("Duplicate genesis allocation".into()));
+            }
+            execution.state_mut().set_account(*address, nexus_core::AccountState::with_balance(*balance));
+        }
+        chain.genesis.header.state_root = chain.state_root().0;
+        *chain.blocks.write() = HashMap::from([(chain.genesis.hash(), chain.genesis.clone())]);
+        *chain.blocks_by_height.write() = HashMap::from([(BlockHeight::GENESIS, chain.genesis.hash())]);
+        Ok(chain)
+    }
+
+    /// Trusted local checkpoint only. No secret key or new proof/finality claim is serialized.
+    pub fn export_checkpoint(&self) -> Result<Vec<u8>, NexusError> {
+        use nexus_core::checkpoint::encode;
+        let _production = self.production.lock();
+        let known = self.known_batches.write();
+        let execution = self.execution.read();
+        let verifier = self.verifier.read();
+        let builder = self.batch_builder.read();
+        let submitter = self.batch_submitter.read();
+        let snapshot = ActiveCheckpoint { version: 1, publisher: self.sequencer.address(), config: self.config.clone(),
+            execution: encode(&*execution)?, sequencer: self.sequencer.checkpoint()?, verifier: encode(&*verifier)?,
+            builder: encode(&*builder)?, submitter: encode(&*submitter)?, known: known.clone(),
+            blocks: self.blocks.read().clone(), heights: self.blocks_by_height.read().clone(),
+            height: self.height(), l1_reference: *self.l1_reference.read(), genesis: self.genesis.clone() };
+        encode(&snapshot)
+    }
+
+    pub fn restore_checkpoint(bytes: &[u8], keypair: DilithiumKeypair,
+        expected: &ActiveChainConfig) -> Result<Self, NexusError> {
+        use nexus_core::checkpoint::{decode, encode};
+        let snapshot: ActiveCheckpoint = decode(bytes)?;
+        if snapshot.version != 1 || snapshot.publisher != keypair.address() || encode(&snapshot.config)? != encode(expected)? {
+            return Err(NexusError::ConfigError("Checkpoint identity, version or L2 policy differs".into()));
+        }
+        LinkedValidityProfile::new(expected.validity_profile.steps, expected.validity_profile.pow_bits)?;
+        if expected.batch_interval_blocks == 0 { return Err(NexusError::ConfigError("Invalid checkpoint batch interval".into())); }
+        let execution = ExecutionEngine::restore_checkpoint(&snapshot.execution, expected.sequencer.chain_id)?;
+        let sequencer = NexusSequencer::restore_checkpoint(&snapshot.sequencer, expected.sequencer.clone(), keypair, execution.state())?;
+        nexus_core::checkpoint::validate_blocks(&snapshot.blocks, &snapshot.heights, snapshot.height,
+            &snapshot.genesis, Layer::Active, execution.state_root())?;
+        Ok(Self { production: Mutex::new(()), known_batches: RwLock::new(snapshot.known), config: snapshot.config,
+            sequencer: Arc::new(sequencer), execution: Arc::new(RwLock::new(execution)),
+            verifier: Arc::new(RwLock::new(decode(&snapshot.verifier)?)),
+            batch_builder: Arc::new(RwLock::new(decode(&snapshot.builder)?)),
+            batch_submitter: Arc::new(RwLock::new(decode(&snapshot.submitter)?)),
+            blocks: Arc::new(RwLock::new(snapshot.blocks)), blocks_by_height: Arc::new(RwLock::new(snapshot.heights)),
+            height: Arc::new(RwLock::new(snapshot.height)), l1_reference: Arc::new(RwLock::new(snapshot.l1_reference)),
+            genesis: snapshot.genesis })
+    }
+
     /// Create a new Active Chain
     pub fn new(config: ActiveChainConfig, keypair: DilithiumKeypair) -> Self {
         let sequencer = Arc::new(NexusSequencer::new(config.sequencer.clone(), keypair));
@@ -595,6 +672,10 @@ impl ActiveChain {
         self.execution.read().state_root()
     }
 
+    pub fn get_account(&self, address: &Address) -> Option<nexus_core::AccountState> {
+        self.execution.read().get_account(address).cloned()
+    }
+
     /// Get execution results for a block
     pub fn get_execution_results(&self, _block_hash: &Hash256) -> Vec<ExecutionResult> {
         // Would be stored with block in production
@@ -722,6 +803,24 @@ mod tests {
         config.verification_mode = VerificationMode::ZKValidity;
         config.validity_profile = profile;
         ActiveChain::new(config, keypair)
+    }
+
+    #[tokio::test]
+    async fn local_checkpoint_preserves_an_accepted_scalar_certificate_and_verified_root() {
+        // Synthetic scalar context only; not an AIR proof of account execution.
+        let publisher = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let config = ActiveChainConfig { verification_mode: VerificationMode::ZKValidity, ..Default::default() };
+        let chain = ActiveChain::new(config.clone(), publisher.clone());
+        let local = scalar_fixture(); chain.queue_local_batch(local.clone()).unwrap();
+        let hash = Hash256::hash(b"checkpoint scalar attempt");
+        chain.mark_batch_submitted(local.clone(), hash).unwrap();
+        let bytes = chain.export_checkpoint().unwrap();
+        let restored = ActiveChain::restore_checkpoint(&bytes, publisher, &config).unwrap();
+        assert_eq!(restored.verified_state_root(local.block_range.1), Some(local.post_state_root));
+        assert_eq!(restored.get_batch_submission(local.index).unwrap().batch.validity_proof, local.validity_proof);
+        restored.retry_batch_submission(local.index, hash, Hash256::hash(b"next scalar attempt")).unwrap();
+        assert_eq!(restored.get_batch_submission(local.index).unwrap().attempts.len(), 2);
+        assert_eq!(restored.verified_state_root(local.block_range.1), Some(local.post_state_root));
     }
 
     #[tokio::test]

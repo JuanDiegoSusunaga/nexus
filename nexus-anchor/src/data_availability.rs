@@ -97,7 +97,7 @@ pub struct DASample {
     pub col_indices: Vec<u32>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct DataAvailabilityLayer {
     commitments: HashMap<BlockHeight, Vec<DACommitment>>,
     /// A payload index prevents submissions at one height overwriting each other.

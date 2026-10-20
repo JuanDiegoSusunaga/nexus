@@ -65,6 +65,7 @@ pub fn finality_signing_bytes(hash: Hash256, height: BlockHeight) -> Result<Vec<
 }
 
 /// Authenticated local certificates. Full BFT locking/liveness is outside this PoC.
+#[derive(Serialize, Deserialize)]
 pub struct FinalityGadget {
     last_finalized: Option<FinalizedBlock>,
     pending_votes: HashMap<Hash256, Vec<FinalityVote>>,

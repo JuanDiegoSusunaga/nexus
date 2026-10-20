@@ -58,7 +58,7 @@ pub enum SequencerMode {
 }
 
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct PendingTx {
     tx: SignedTransaction,
     received_at: Timestamp,
@@ -79,6 +79,7 @@ impl Ord for PendingTx {
     }
 }
 
+#[derive(Serialize, Deserialize)]
 struct Pool {
     pending: HashMap<Address, BTreeMap<u64, PendingTx>>,
     lookup: HashMap<Hash256, SignedTransaction>,
@@ -96,6 +97,43 @@ pub struct NexusSequencer {
 }
 
 impl NexusSequencer {
+    pub(crate) fn checkpoint(&self) -> Result<Vec<u8>, NexusError> {
+        let pool = self.pool.lock();
+        if !pool.in_flight.is_empty() {
+            return Err(NexusError::StateError("Cannot checkpoint externally reserved sequencer work".into()));
+        }
+        nexus_core::checkpoint::encode(&(*self.is_active.read(), &*pool))
+    }
+
+    pub(crate) fn restore_checkpoint(bytes: &[u8], config: SequencerConfig,
+        keypair: DilithiumKeypair, state: &nexus_core::InMemoryState) -> Result<Self, NexusError> {
+        let (active, pool): (bool, Pool) = nexus_core::checkpoint::decode(bytes)?;
+        let sequencer = Self::new(config, keypair);
+        sequencer.check_config()?;
+        if !pool.in_flight.is_empty() || pool.confirmed_nonces.iter().any(|(sender, nonce)|
+            state.get_account(sender).map_or(0, |a| a.nonce.0) != *nonce) {
+            return Err(NexusError::StateError("Inconsistent checkpoint sequencer nonces or reservations".into()));
+        }
+        let count: usize = pool.pending.values().map(BTreeMap::len).sum();
+        if count != pool.lookup.len() { return Err(NexusError::StateError("Inconsistent checkpoint pool".into())); }
+        for (sender, entries) in &pool.pending {
+            for (nonce, pending) in entries {
+                let tx = &pending.tx;
+                let stored = pool.lookup.get(&tx.hash()).ok_or_else(|| NexusError::StateError("Missing checkpoint transaction".into()))?;
+                if tx.sender != *sender || tx.transaction.nonce.0 != *nonce
+                    || *nonce < pool.confirmed_nonces.get(sender).copied().unwrap_or(0)
+                    || tx.transaction.chain_id != sequencer.config.chain_id
+                    || bincode::serialize(tx)? != bincode::serialize(stored)?
+                    || pending.size as u64 != bincode::serialized_size(tx)? {
+                    return Err(NexusError::StateError("Inconsistent checkpoint transaction".into()));
+                }
+            }
+        }
+        *sequencer.is_active.write() = active;
+        *sequencer.pool.lock() = pool;
+        Ok(sequencer)
+    }
+
     pub fn new(config: SequencerConfig, keypair: DilithiumKeypair) -> Self {
         Self { config, address: keypair.address(), is_active: RwLock::new(true),
             pool: Mutex::new(Pool { pending: HashMap::new(), lookup: HashMap::new(),

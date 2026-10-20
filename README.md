@@ -4,6 +4,10 @@
 
 ## Estado local vigente — procesamiento, dominios y confirmación local
 
+`DurableNode` incorpora un ciclo local persistente: admisión, ejecución de transferencias, lotes, paquetes L1, inclusión observada y confirmación se guardan antes de devolver éxito. Reabrir conserva saldos, nonces, trabajo pendiente e historial firmado. La clave del publicador la proporciona el llamante; no se guarda en los checkpoints. Se comprobó el ciclo con procesos separados y escrituras fallidas. Las instancias directas de `ActiveChain`/`AnchorChain` conservan su funcionamiento en memoria; la persistencia automática corresponde a este coordinador. [Contrato y ejemplo ejecutable](REPRODUCIBILIDAD_TG2.md).
+
+El perfil L2 admite transferencias. Las llamadas y despliegues de contratos se rechazan explícitamente: no existe un intérprete que permita acreditar su ejecución o inicialización. Se retiraron los éxitos simulados de esas rutas. Esta delimitación no amplía el AIR escalar ni los resultados Lean.
+
 20 de octubre de 2026: el procesador L1 recalcula la raíz de cuentas después de ejecutar las transacciones y acreditar la recompensa, y rechaza cabeceras que no coinciden sin publicar efectos parciales. `prepare_block` construye candidatos locales sin alterar el estado. Los costos, nonces y vencimientos se rigen por un contrato explícito; no se implementan comisiones ni recibos L1 completos. Las correcciones de firmas, quórum ponderado, secuenciación y rechazo de fraude no autenticado se conservan en este corte. [Contrato, reproducción y límites](REPRODUCIBILIDAD_TG2.md).
 
 La configuración L1 exige ahora el `chain_id` firmado esperado y limita la suma de reservas `gas_limit` del bloque. Los valores por defecto son `ChainId::LOCAL` y 30 000 000; un presupuesto cero permite únicamente bloques vacíos. Estas políticas se vuelven a comprobar al recibir un bloque y no modifican el AIR/FRI ni los resultados Lean.
