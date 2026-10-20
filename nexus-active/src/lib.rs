@@ -29,6 +29,7 @@
 pub mod sequencer;
 pub mod verifier;
 pub mod pq_verifier;
+pub mod linked_verifier;
 pub mod execution;
 pub mod batch;
 pub mod chain;
@@ -36,6 +37,7 @@ pub mod chain;
 pub use sequencer::{NexusSequencer, SequencerConfig, SequencerMode};
 pub use verifier::{NitroVerifier, VerificationResult, StateProof};
 pub use pq_verifier::PqValidityProof;
+pub use linked_verifier::{ExpectedTransition, LinkedValidityProof};
 pub use execution::{ExecutionEngine, ExecutionResult};
 pub use batch::{BatchBuilder, L2Batch, BatchStatus};
 pub use chain::{ActiveChain, ActiveChainConfig};

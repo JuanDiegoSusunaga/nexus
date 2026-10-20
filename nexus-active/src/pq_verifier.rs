@@ -1,4 +1,7 @@
-//! Puente post-cuántico del Nitro Verifier.
+//! Puente heredado del PoC, conservado para los ensayos históricos.
+//!
+//! No se utiliza en la aceptación del Nitro Verifier. El contrato adaptado
+//! al modelo Lean está en `linked_verifier`, con lectura estricta y doble FRI.
 //!
 //! Conecta el STARK hash-based de [`nexus_zk::stark`] con el flujo de validación
 //! de la capa de anclaje. Es el **sustituto post-cuántico** del andamiaje

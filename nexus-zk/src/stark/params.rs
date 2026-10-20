@@ -1,38 +1,28 @@
-//! Parámetros de soundness del STARK — **justificados, no mágicos**.
+//! Perfiles de trabajo y cálculo histórico del PoC.
 //!
-//! El objetivo es ~100 bits de soundness del *protocolo* (distinto de los 128
-//! bits del *campo* de desafíos `F_{p^2}`). La descomposición del error es
-//! `ε ≤ ε_α + ε_β + ε_consulta + 2^{-grind}`; el techo efectivo es el mínimo de
-//! los términos.
-//!
-//! - **ε_α, ε_β (combinación de restricciones y plegado FRI).** Al extraer `α`
-//!   y `β` de `F_{p^2}` (≈`2^128`), valen `~deg/2^128 < 2^{-100}`. En el campo
-//!   base (`2^64`) este techo caía a ~40-43 bits para trazas grandes y **no es
-//!   grindeable**: por eso el campo de extensión es el habilitador.
-//! - **ε_consulta.** A *rate* `ρ = 1/4`, cada consulta aporta `log2(1/ρ) = 2`
-//!   bits bajo *proximity gaps* [BSCIKS20] (conjetural) o `-log2((1+ρ)/2)≈0.678`
-//!   bits bajo decodificación única (cota provable, conservadora).
-//! - **grinding.** `POW_BITS` bits añadidos por proof-of-work (anula el
-//!   re-muestreo de Fiat–Shamir).
+//! `budget()` conserva una estimación idealizada para reproducir los ensayos;
+//! NO implementa la cota ROM de Lean ni acredita 100 bits del protocolo.
+//! No basta sumar consultas, tamaño de campo y trabajo: la cota formalizada
+//! depende del presupuesto adversario, de excepciones y del acoplamiento.
+//! La ruta `linked` usa únicamente los perfiles explícitos de 12 o 20 bits,
+//! y no consulta esta estimación para autorizar certificados.
 
 use super::air::BLOWUP;
 use super::fri::NUM_QUERIES;
 
-/// Objetivo de soundness del protocolo (bits).
+/// Objetivo histórico, no garantía demostrada del protocolo.
 pub const SECURITY_BITS_TARGET: u32 = 100;
-/// Bits de proof-of-work del **objetivo de producción** (entra en el presupuesto
-/// de soundness y en la afirmación de ~100 bits de la tesis).
+/// Perfil de trabajo del binario release del prototipo; no acredita 100 bits.
 pub const POW_BITS: u32 = 20;
 
 /// Bits de proof-of-work **usados en tiempo de ejecución**. En `release`
 /// coincide con [`POW_BITS`] (20). En `debug` se reduce para que la batería de
-/// tests no pague `2^20` hashes por prueba (la cifra de soundness reportada por
-/// [`budget`] sigue siendo la de producción, [`POW_BITS`]).
+/// tests no pague `2^20` hashes por prueba. `budget()` no certifica este perfil.
 pub const POW_BITS_RUNTIME: u32 = if cfg!(debug_assertions) { 12 } else { POW_BITS };
 
-/// Garantía en tiempo de compilación: un binario de **producción** (`release`,
+/// Invariante en tiempo de compilación: un binario `release`
 /// sin `debug_assertions`) usa siempre el grinding completo de [`POW_BITS`], de
-/// modo que la afirmación de soundness y la ejecución no puedan divergir.
+/// modo que el perfil ejecutado no dependa de los bytes recibidos.
 #[cfg(not(debug_assertions))]
 const _: () = assert!(
     POW_BITS_RUNTIME == POW_BITS,
@@ -41,7 +31,7 @@ const _: () = assert!(
 /// Grado del campo de extensión de desafíos (`F_{p^2}`).
 pub const FIELD_EXT_DEGREE: u32 = 2;
 
-/// Presupuesto de bits de soundness para los parámetros actuales.
+/// Estimación histórica idealizada; no representa la cota conservadora de Lean.
 #[derive(Debug, Clone, Copy)]
 pub struct SoundnessBudget {
     pub rate_inv: f64,
@@ -55,8 +45,7 @@ pub struct SoundnessBudget {
     pub bits_total_udr: f64,
 }
 
-/// Calcula el presupuesto a partir de `BLOWUP` y `NUM_QUERIES` (única fuente de
-/// verdad; la tabla de la tesis se genera de aquí para evitar divergencia).
+/// Reproduce la estimación histórica; no se usa como condición de aceptación.
 pub fn budget() -> SoundnessBudget {
     // CP tiene grado ≤ T y N = BLOWUP·T, degree_bound = 2T ⇒ ρ = 2/BLOWUP.
     let rho = 2.0 / BLOWUP as f64;

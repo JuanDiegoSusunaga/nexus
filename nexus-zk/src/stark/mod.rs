@@ -22,5 +22,7 @@ pub mod fri;
 pub mod merkle;
 pub mod ntt;
 pub mod params;
+pub mod linked;
+pub mod linked_codec;
 
 pub use air::{prove_state_transition, verify_state_transition, StarkProof, TransitionStatement};

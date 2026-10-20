@@ -23,12 +23,12 @@ fn fixture() -> (StateProof, ExpectedTransition) {
 }
 
 #[test]
-fn legacy_accepts_garbage_and_marks_root_verified() {
+fn active_rejects_garbage_without_marking_root_verified() {
     let (mut proof, expected) = fixture();
     proof.proof_data = vec![1, 2, 3, 4];
     let mut legacy = NitroVerifier::new(VerificationMode::ZKValidity);
-    assert!(legacy.verify(&proof).unwrap().valid);
-    assert!(legacy.is_verified(expected.height, expected.post));
+    assert!(!legacy.verify(&proof).unwrap().valid);
+    assert!(!legacy.is_verified(expected.height, expected.post));
     assert!(verify_canonical_transition(&proof, &expected).is_err());
 }
 
@@ -59,14 +59,14 @@ fn legacy_field_reduction_also_collides_within_first_eight_bytes() {
 }
 
 #[test]
-fn legacy_does_not_bind_height_type_or_outer_inputs_for_stark() {
+fn active_rejects_legacy_stark_without_trusted_context() {
     let (mut proof, _) = fixture();
     proof.height = BlockHeight(99);
     proof.proof_type = ProofType::FraudProof;
     proof.public_inputs = vec![255];
     let mut legacy = NitroVerifier::new(VerificationMode::ZKValidity);
-    assert!(legacy.verify(&proof).unwrap().valid);
-    assert!(legacy.is_verified(BlockHeight(99), proof.post_state_root));
+    assert!(!legacy.verify(&proof).unwrap().valid);
+    assert!(!legacy.is_verified(BlockHeight(99), proof.post_state_root));
 }
 
 #[test]

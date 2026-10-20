@@ -126,21 +126,15 @@ impl NitroVerifier {
         }
     }
 
-    /// Verify a state proof
+    /// La entrada sin contexto no acepta pruebas de validez ni modo híbrido.
+    /// Para esos modos debe usarse `verify_expected`; el modo optimista queda separado.
     pub fn verify(&mut self, proof: &StateProof) -> Result<VerificationResult, NexusError> {
         let start = std::time::Instant::now();
 
         let result = match self.mode {
-            VerificationMode::ZKValidity => self.verify_zk(proof),
+            VerificationMode::ZKValidity | VerificationMode::Hybrid { .. } =>
+                Ok(VerificationResult::invalid("Se requiere verify_expected con contexto confiable y certificado vinculado".into())),
             VerificationMode::Optimistic => self.verify_optimistic(proof),
-            VerificationMode::Hybrid { threshold } => {
-                // Use ZK for proofs with many transactions
-                if proof.proof_data.len() > threshold * 100 {
-                    self.verify_zk(proof)
-                } else {
-                    self.verify_optimistic(proof)
-                }
-            }
         };
 
         let elapsed = start.elapsed().as_millis() as u64;
@@ -148,45 +142,33 @@ impl NitroVerifier {
         match result {
             Ok(mut res) => {
                 res.verification_time_ms = elapsed;
-                if res.valid {
-                    self.verified_roots.insert(proof.height, proof.post_state_root);
-                }
+                // Una prueba optimista pendiente no es una raíz finalizada.
                 Ok(res)
             }
             Err(e) => Err(e),
         }
     }
 
-    /// Verify using a validity proof.
-    ///
-    /// Si `proof_data` contiene una prueba STARK post-cuántica serializada
-    /// ([`crate::pq_verifier::PqValidityProof`]), se verifica **de verdad**:
-    /// FRI sobre el polinomio de composición + enlace de la traza + atadura del
-    /// enunciado a los roots pre/post. Es la ruta post-cuántica (sin
-    /// emparejamientos) que sustituye al andamiaje Groth16/BN254.
-    fn verify_zk(&self, proof: &StateProof) -> Result<VerificationResult, NexusError> {
-        if proof.proof_data.is_empty() {
-            return Ok(VerificationResult::invalid("Empty proof data".into()));
+    /// Valida el perfil matemático antes de registrar la raíz del contexto.
+    /// No extrae contexto confiable del mensaje ni implementa una L2 completa.
+    pub fn verify_expected(&mut self, proof: &StateProof, expected: &crate::linked_verifier::ExpectedTransition)
+        -> Result<VerificationResult, NexusError> {
+        let start = std::time::Instant::now();
+        if self.mode == VerificationMode::Optimistic {
+            return Ok(VerificationResult::invalid("El modo optimista no valida el contrato de Lean".into()));
         }
-
-        // Ruta post-cuántica real (STARK hash-based).
-        if let Some(pq) = crate::pq_verifier::PqValidityProof::from_bytes(&proof.proof_data) {
-            return if pq.verify_bound(&proof.pre_state_root, &proof.post_state_root) {
-                Ok(VerificationResult::valid())
-            } else {
-                Ok(VerificationResult::invalid(
-                    "Prueba STARK post-cuántica inválida".into(),
-                ))
-            };
+        if let Some(root) = self.verified_roots.get(&expected.height) {
+            if *root != expected.post {
+                return Ok(VerificationResult::invalid("La altura ya tiene otra raíz verificada".into()));
+            }
         }
-
-        // Ruta heredada (compatibilidad): verifica el formato de las entradas
-        // públicas para pruebas que no portan un STARK serializado.
-        let expected_inputs = self.compute_public_inputs(proof);
-        if proof.public_inputs != expected_inputs {
-            return Ok(VerificationResult::invalid("Public inputs mismatch".into()));
+        if let Err(error) = crate::linked_verifier::verify_expected(proof, expected) {
+            return Ok(VerificationResult::invalid(error.to_string()));
         }
-        Ok(VerificationResult::valid())
+        self.verified_roots.insert(expected.height, expected.post);
+        let mut result = VerificationResult::valid();
+        result.verification_time_ms = start.elapsed().as_millis() as u64;
+        Ok(result)
     }
 
     /// Verify using optimistic approach
@@ -262,7 +244,8 @@ impl NitroVerifier {
         Ok(false)
     }
 
-    /// Compute public inputs for ZK verification
+    /// Entradas de las pruebas históricas; no habilitan aceptación por formato.
+    #[cfg(test)]
     fn compute_public_inputs(&self, proof: &StateProof) -> Vec<u8> {
         let mut inputs = Vec::new();
         inputs.extend_from_slice(proof.pre_state_root.0.as_bytes());
@@ -355,7 +338,7 @@ mod tests {
     }
 
     #[test]
-    fn test_zk_verification() {
+    fn test_zk_rejects_format_only_without_context() {
         let mut verifier = NitroVerifier::new(VerificationMode::ZKValidity);
 
         let proof = StateProof {
@@ -372,11 +355,11 @@ mod tests {
         proof.public_inputs = verifier.compute_public_inputs(&proof);
 
         let result = verifier.verify(&proof).unwrap();
-        assert!(result.valid);
+        assert!(!result.valid);
     }
 
     #[test]
-    fn test_real_stark_pq_verification() {
+    fn test_legacy_stark_requires_linked_contract_and_context() {
         use crate::pq_verifier::PqValidityProof;
 
         let mut verifier = NitroVerifier::new(VerificationMode::ZKValidity);
@@ -395,9 +378,9 @@ mod tests {
             public_inputs: vec![],
         };
 
-        // La verificación ejecuta FRI + restricciones + atadura de roots.
+        // El formato heredado no habilita la aceptación del verificador activo.
         let result = verifier.verify(&proof).unwrap();
-        assert!(result.valid, "una prueba STARK válida debe aceptarse");
+        assert!(!result.valid, "el STARK heredado no reemplaza el contrato vinculado ni el contexto confiable");
     }
 
     #[test]
