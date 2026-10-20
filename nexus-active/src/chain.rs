@@ -1,21 +1,49 @@
-//! Active Chain - Complete L2 Implementation
-//!
-//! Integrates sequencer, execution, verifier, and batching.
+//! Prototipo ActiveChain: ejecución, lotes y verificación con contexto local.
+//! El contrato Lean escalar no acredita transacciones ni raíces SHA3 generales.
 
 use crate::{
     batch::{BatchBuilder, BatchSubmitter, L2Batch},
     execution::{ExecutionEngine, ExecutionResult},
+    linked_verifier::{ExpectedTransition, public_inputs},
     sequencer::{NexusSequencer, SequencerConfig},
-    verifier::{NitroVerifier, VerificationMode, StateProof, ProofType},
+    verifier::{NitroVerifier, VerificationMode, StateProof, ProofType, VerificationResult},
 };
 use nexus_core::{
     Block, BlockHeader, BlockBody, BlockHeight, Hash256, Layer, NexusError,
     SignedTransaction, StateRoot, Timestamp, Address, InMemoryState,
 };
 use nexus_crypto::DilithiumKeypair;
-use parking_lot::RwLock;
+use nexus_zk::stark::{linked::{MIN_ROWS, MAX_ROWS, MAX_CERTIFICATE_BYTES}, params::POW_BITS_RUNTIME};
+use parking_lot::{Mutex, RwLock};
 use std::collections::HashMap;
 use std::sync::Arc;
+
+/// Política local; jamás se extrae del certificado recibido.
+#[derive(Debug, Clone, Copy)]
+pub struct LinkedValidityProfile {
+    steps: usize,
+    pow_bits: u32,
+}
+
+impl LinkedValidityProfile {
+    pub fn new(steps: usize, pow_bits: u32) -> Result<Self, NexusError> {
+        if !(MIN_ROWS..=MAX_ROWS).contains(&steps) || !steps.is_power_of_two()
+            || (pow_bits != 12 && pow_bits != 20) {
+            return Err(NexusError::ConfigError("Perfil fuera del contrato Lean".into()));
+        }
+        Ok(Self { steps, pow_bits })
+    }
+}
+
+impl Default for LinkedValidityProfile {
+    fn default() -> Self { Self { steps: MIN_ROWS, pow_bits: POW_BITS_RUNTIME } }
+}
+
+/// Instantánea de un lote construido localmente; solo la prueba se aporta después.
+struct KnownBatch {
+    batch: L2Batch,
+    submitted: bool,
+}
 
 /// Active Chain configuration
 #[derive(Debug, Clone)]
@@ -28,6 +56,8 @@ pub struct ActiveChainConfig {
     pub block_time_ms: u64,
     /// Batch submission interval (blocks)
     pub batch_interval_blocks: u64,
+    /// Perfil del AIR ilustrativo, independiente de los mensajes entrantes.
+    pub validity_profile: LinkedValidityProfile,
 }
 
 impl Default for ActiveChainConfig {
@@ -37,12 +67,17 @@ impl Default for ActiveChainConfig {
             verification_mode: VerificationMode::Optimistic,
             block_time_ms: 2000, // 2 seconds
             batch_interval_blocks: 100,
+            validity_profile: LinkedValidityProfile::default(),
         }
     }
 }
 
 /// The Active Chain (L2)
 pub struct ActiveChain {
+    /// Serializa ejecución, alturas y captura de raíces por bloque.
+    production: Mutex<()>,
+    /// Contextos locales inmutables y control de envío único por índice.
+    known_batches: RwLock<HashMap<u64, KnownBatch>>,
     /// Configuration
     config: ActiveChainConfig,
     /// Sequencer
@@ -83,11 +118,15 @@ impl ActiveChain {
         blocks_by_height.insert(BlockHeight::GENESIS, genesis_hash);
 
         Self {
+            production: Mutex::new(()),
+            known_batches: RwLock::new(HashMap::new()),
+            // El prefijo LE de longitud ocupa ocho bytes en el formato fijado.
+            batch_builder: Arc::new(RwLock::new(BatchBuilder::with_limits(
+                config.sequencer.max_batch_size, config.sequencer.max_batch_bytes.saturating_add(8)))),
             config,
             sequencer,
             execution: Arc::new(RwLock::new(ExecutionEngine::new())),
             verifier,
-            batch_builder: Arc::new(RwLock::new(BatchBuilder::new())),
             batch_submitter: Arc::new(RwLock::new(BatchSubmitter::new())),
             blocks: Arc::new(RwLock::new(blocks)),
             blocks_by_height: Arc::new(RwLock::new(blocks_by_height)),
@@ -130,6 +169,15 @@ impl ActiveChain {
 
     /// Produce a new block
     pub fn produce_block(&self) -> Result<Block, NexusError> {
+        let _production = self.production.lock();
+        if self.config.batch_interval_blocks == 0 {
+            return Err(NexusError::ConfigError("El intervalo de lotes debe ser positivo".into()));
+        }
+        let current = self.height();
+        let height = BlockHeight(current.0.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Se agotaron las alturas".into()))?);
+        let parent_hash = self.blocks_by_height.read().get(&current).copied()
+            .ok_or(NexusError::BlockHeightNotFound(current))?;
         // Build batch from sequencer
         let batch = self.sequencer.build_batch()?;
 
@@ -137,20 +185,17 @@ impl ActiveChain {
 
         if transactions.is_empty() {
             // Return empty block
-            return self.create_empty_block();
+            return self.create_empty_block(height, parent_hash);
         }
 
-        // Execute transactions
-        let results = self.execution.write().execute_batch(&transactions);
-
-        // Create block
-        let height = self.height.read().next();
-        let parent_hash = self
-            .blocks_by_height
-            .read()
-            .get(&*self.height.read())
-            .cloned()
-            .unwrap_or(Hash256::ZERO);
+        // Se captura la raíz anterior antes de ejecutar; el bloque entra entero al lote.
+        let pre_state = self.execution.read().state_root();
+        self.prepare_batch(&transactions, pre_state, height)?;
+        let (results, post_state) = {
+            let mut execution = self.execution.write();
+            let results = execution.execute_batch(&transactions);
+            (results, execution.state_root())
+        };
 
         let header = BlockHeader {
             version: nexus_core::PROTOCOL_VERSION,
@@ -158,7 +203,7 @@ impl ActiveChain {
             timestamp: Timestamp::now(),
             parent_hash,
             transactions_root: self.compute_tx_root(&transactions),
-            state_root: self.execution.read().state_root().0,
+            state_root: post_state.0,
             receipts_root: self.compute_receipts_root(&results),
             layer: Layer::Active,
             proposer: self.sequencer.address(),
@@ -172,27 +217,21 @@ impl ActiveChain {
         // Store block
         self.store_block(block.clone())?;
 
-        // Add to batch builder
-        self.add_to_batch(&block)?;
+        self.finish_batch_if_due(height, post_state)?;
 
         Ok(block)
     }
 
     /// Create empty block
-    fn create_empty_block(&self) -> Result<Block, NexusError> {
-        let height = self.height.read().next();
-        let parent_hash = self
-            .blocks_by_height
-            .read()
-            .get(&*self.height.read())
-            .cloned()
-            .unwrap_or(Hash256::ZERO);
-
-        let header = BlockHeader::new(height, parent_hash, self.sequencer.address(), Layer::Active);
+    fn create_empty_block(&self, height: BlockHeight, parent_hash: Hash256) -> Result<Block, NexusError> {
+        let state = self.execution.read().state_root();
+        let mut header = BlockHeader::new(height, parent_hash, self.sequencer.address(), Layer::Active);
+        header.state_root = state.0;
         let body = BlockBody::new(Vec::new());
         let block = Block::new(header, body);
 
         self.store_block(block.clone())?;
+        self.finish_batch_if_due(height, state)?;
         Ok(block)
     }
 
@@ -208,55 +247,111 @@ impl ActiveChain {
         Ok(())
     }
 
-    /// Add block to current batch
-    fn add_to_batch(&self, block: &Block) -> Result<(), NexusError> {
+    /// Reserva el bloque antes de ejecutarlo y rota únicamente entre bloques completos.
+    fn prepare_batch(&self, transactions: &[SignedTransaction], pre: StateRoot, height: BlockHeight)
+        -> Result<(), NexusError> {
         let mut builder = self.batch_builder.write();
-
-        // Start new batch if needed
+        builder.check_block_capacity(transactions)?;
         if builder.pending_count() == 0 {
-            builder.start_batch(
-                self.execution.read().state_root(),
-                block.height(),
-            );
+            builder.start_batch(pre, height);
         }
-
-        // Add transactions
-        for tx in &block.body.transactions {
-            if let Err(NexusError::BatchTooLarge) = builder.add_transaction(tx.clone()) {
-                // Finalize current batch and start new one
-                let batch = builder.finalize_batch(
-                    self.execution.read().state_root(),
-                    block.height(),
-                )?;
-                self.batch_submitter.write().queue(batch);
-
-                builder.start_batch(self.execution.read().state_root(), block.height());
-                builder.add_transaction(tx.clone())?;
+        match builder.add_transactions(transactions) {
+            Ok(()) => Ok(()),
+            Err(NexusError::BatchTooLarge) => {
+                let batch = builder.finalize_batch(pre, BlockHeight(height.0 - 1))?;
+                self.queue_local_batch(batch)?;
+                builder.start_batch(pre, height);
+                builder.add_transactions(transactions)
             }
+            Err(error) => Err(error),
         }
+    }
 
-        // Check if should submit batch
-        if block.height().0 % self.config.batch_interval_blocks == 0 {
-            if builder.pending_count() > 0 {
-                let batch = builder.finalize_batch(
-                    self.execution.read().state_root(),
-                    block.height(),
-                )?;
-                self.batch_submitter.write().queue(batch);
-            }
+    fn finish_batch_if_due(&self, height: BlockHeight, post: StateRoot) -> Result<(), NexusError> {
+        let mut builder = self.batch_builder.write();
+        if height.0 % self.config.batch_interval_blocks == 0 && builder.pending_count() > 0 {
+            let batch = builder.finalize_batch(post, height)?;
+            self.queue_local_batch(batch)?;
         }
-
         Ok(())
     }
 
-    /// Get next batch to submit to L1
+    /// Solo se registran aquí lotes construidos por la cadena, nunca mensajes externos.
+    fn queue_local_batch(&self, batch: L2Batch) -> Result<(), NexusError> {
+        let mut known = self.known_batches.write();
+        if known.contains_key(&batch.index) {
+            return Err(NexusError::StateError("Índice local de lote repetido".into()));
+        }
+        known.insert(batch.index, KnownBatch { batch: batch.clone(), submitted: false });
+        self.batch_submitter.write().queue(batch);
+        Ok(())
+    }
+
+    /// Obtiene trabajo para el probador; no autoriza envío ni acredita validez.
     pub fn get_next_batch(&self) -> Option<L2Batch> {
         self.batch_submitter.write().next_to_submit()
     }
 
-    /// Mark batch as submitted
-    pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) {
+    /// Recupera la instantánea local incluso después de un intento rechazado.
+    pub fn get_known_batch(&self, index: u64) -> Option<L2Batch> {
+        self.known_batches.read().get(&index).map(|known| known.batch.clone())
+    }
+
+    fn check_known_batch<'a>(batch: &L2Batch, known: &'a HashMap<u64, KnownBatch>)
+        -> Result<&'a KnownBatch, NexusError> {
+        let entry = known.get(&batch.index)
+            .ok_or_else(|| NexusError::SecurityViolation("Lote desconocido para esta cadena".into()))?;
+        let local = &entry.batch;
+        if batch.block_range != local.block_range || batch.tx_count != local.tx_count
+            || batch.pre_state_root != local.pre_state_root || batch.post_state_root != local.post_state_root
+            || batch.compressed_data != local.compressed_data || batch.batch_hash != local.batch_hash
+            || batch.created_at != local.created_at || batch.signature != local.signature {
+            return Err(NexusError::SecurityViolation("El lote difiere de la instantánea local".into()));
+        }
+        Ok(entry)
+    }
+
+    fn expected_for_local_batch(&self, batch: &L2Batch) -> ExpectedTransition {
+        ExpectedTransition { pre: batch.pre_state_root, post: batch.post_state_root,
+            height: batch.block_range.1, steps: self.config.validity_profile.steps,
+            pow_bits: self.config.validity_profile.pow_bits }
+    }
+
+    fn state_proof_with_context(&self, batch: &L2Batch, expected: &ExpectedTransition)
+        -> Result<StateProof, NexusError> {
+        let optimistic = self.config.verification_mode == VerificationMode::Optimistic;
+        let data = match &batch.validity_proof {
+            Some(bytes) if optimistic || bytes.len() <= MAX_CERTIFICATE_BYTES => bytes.clone(),
+            Some(_) => return Err(NexusError::InvalidProofFormat),
+            None if optimistic => Vec::new(),
+            None => return Err(NexusError::InvalidProofFormat),
+        };
+        Ok(StateProof { proof_type: if optimistic { ProofType::Optimistic } else { ProofType::ZKValidity },
+            pre_state_root: expected.pre, post_state_root: expected.post, height: expected.height,
+            proof_data: data, public_inputs: public_inputs(expected) })
+    }
+
+    /// Verifica antes de marcar el envío; rechazos y duplicados no alteran el registro.
+    /// El modo optimista mantiene su aceptación provisional, sin acreditar el contrato Lean.
+    pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) -> Result<(), NexusError> {
+        let mut known = self.known_batches.write();
+        Self::check_known_batch(&batch, &known)?;
+        let entry = known.get_mut(&batch.index)
+            .ok_or_else(|| NexusError::StateError("Se perdió el contexto local del lote".into()))?;
+        if entry.submitted {
+            return Err(NexusError::SecurityViolation("El lote ya fue enviado".into()));
+        }
+        let expected = self.expected_for_local_batch(&entry.batch);
+        let proof = self.state_proof_with_context(&batch, &expected)?;
+        let result = if self.config.verification_mode == VerificationMode::Optimistic {
+            self.verifier.write().verify(&proof)?
+        } else {
+            self.verifier.write().verify_expected(&proof, &expected)?
+        };
+        if !result.valid { return Err(NexusError::ProofVerificationFailed); }
         self.batch_submitter.write().mark_submitted(batch, l1_tx_hash);
+        entry.submitted = true;
+        Ok(())
     }
 
     /// Mark batch as confirmed
@@ -264,20 +359,24 @@ impl ActiveChain {
         self.batch_submitter.write().mark_confirmed(batch_index)
     }
 
-    /// Create state proof for batch
-    pub fn create_state_proof(&self, batch: &L2Batch) -> StateProof {
-        StateProof {
-            proof_type: match self.config.verification_mode {
-                VerificationMode::ZKValidity => ProofType::ZKValidity,
-                VerificationMode::Optimistic => ProofType::Optimistic,
-                VerificationMode::Hybrid { .. } => ProofType::ZKValidity,
-            },
-            pre_state_root: batch.pre_state_root,
-            post_state_root: batch.post_state_root,
-            height: batch.block_range.1,
-            proof_data: batch.validity_proof.clone().unwrap_or_default(),
-            public_inputs: Vec::new(),
-        }
+    /// Construye el sobre desde la instantánea local, sin deducir política de la prueba.
+    pub fn create_state_proof(&self, batch: &L2Batch) -> Result<StateProof, NexusError> {
+        let known = self.known_batches.read();
+        let entry = Self::check_known_batch(batch, &known)?;
+        self.state_proof_with_context(batch, &self.expected_for_local_batch(&entry.batch))
+    }
+
+    /// Ruta de validez/híbrido; el mensaje no proporciona el contexto confiable.
+    pub fn verify_state_proof(&self, batch: &L2Batch, proof: &StateProof)
+        -> Result<VerificationResult, NexusError> {
+        let known = self.known_batches.read();
+        let entry = Self::check_known_batch(batch, &known)?;
+        let expected = self.expected_for_local_batch(&entry.batch);
+        self.verifier.write().verify_expected(proof, &expected)
+    }
+
+    pub fn verified_state_root(&self, height: BlockHeight) -> Option<StateRoot> {
+        self.verifier.read().get_verified_root(height)
     }
 
     /// Compute transaction root
@@ -372,5 +471,122 @@ mod tests {
         let stats = chain.stats();
         assert_eq!(stats.height, BlockHeight::GENESIS);
         assert_eq!(stats.total_blocks, 1);
+    }
+
+    fn scalar_fixture() -> L2Batch {
+        use crate::linked_verifier::{LinkedValidityProof, scalar_root};
+        use nexus_zk::stark::field::Felt;
+        use std::sync::OnceLock;
+        static CASE: OnceLock<L2Batch> = OnceLock::new();
+        CASE.get_or_init(|| {
+            let pre = scalar_root(Felt::new(3));
+            let linked = LinkedValidityProof::prove(&pre, 5, 16).unwrap();
+            let mut batch = L2Batch { index: 9, block_range: (BlockHeight(40), BlockHeight(42)),
+                tx_count: 0, compressed_data: Vec::new(), pre_state_root: pre,
+                post_state_root: linked.post_root(), batch_hash: Hash256::ZERO,
+                created_at: Timestamp::from_millis(0), signature: None,
+                validity_proof: Some(linked.to_bytes().unwrap()) };
+            batch.batch_hash = batch.compute_hash();
+            batch
+        }).clone()
+    }
+
+    fn validity_chain(profile: LinkedValidityProfile) -> ActiveChain {
+        let keypair = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let mut config = ActiveChainConfig::default();
+        config.verification_mode = VerificationMode::ZKValidity;
+        config.validity_profile = profile;
+        ActiveChain::new(config, keypair)
+    }
+
+    #[test]
+    fn cableado_escalar_sintetico_verifica_antes_del_envio_y_no_confunde_indice_con_altura() {
+        // Solo ejercita el cableado: esta instantánea sintética no representa transacciones L2.
+        let batch = scalar_fixture();
+        let chain = validity_chain(LinkedValidityProfile::default());
+        chain.queue_local_batch(batch.clone()).unwrap();
+        let proof = chain.create_state_proof(&batch).unwrap();
+        assert_eq!(proof.public_inputs.len(), 72);
+        assert!(chain.verify_state_proof(&batch, &proof).unwrap().valid);
+        chain.mark_batch_submitted(batch.clone(), Hash256::hash(b"envio sintetico")).unwrap();
+        assert_eq!(chain.verified_state_root(BlockHeight(42)), Some(batch.post_state_root));
+        assert!(chain.mark_batch_submitted(batch, Hash256::hash(b"repeticion")).is_err());
+        assert_eq!(chain.stats().submitted_batches, 1);
+        assert_eq!(chain.stats().pending_batches, 0);
+    }
+
+    #[test]
+    fn la_cadena_fija_filas_y_trabajo_antes_de_recibir_el_certificado() {
+        let batch = scalar_fixture();
+        let opposite_bits = if POW_BITS_RUNTIME == 12 { 20 } else { 12 };
+        for profile in [LinkedValidityProfile::new(32, POW_BITS_RUNTIME).unwrap(),
+            LinkedValidityProfile::new(16, opposite_bits).unwrap()] {
+            let chain = validity_chain(profile);
+            chain.queue_local_batch(batch.clone()).unwrap();
+            let proof = chain.create_state_proof(&batch).unwrap();
+            assert!(!chain.verify_state_proof(&batch, &proof).unwrap().valid);
+            assert!(chain.mark_batch_submitted(batch.clone(), Hash256::ZERO).is_err());
+            assert!(chain.verified_state_root(BlockHeight(42)).is_none());
+            assert_eq!(chain.stats().submitted_batches, 0);
+        }
+        for (steps, bits) in [(0, 12), (15, 12), (17, 12), (8192, 12), (16, 0), (16, 11), (16, 21)] {
+            assert!(LinkedValidityProfile::new(steps, bits).is_err());
+        }
+    }
+
+    #[test]
+    fn un_certificado_valido_no_autoriza_lotes_desconocidos_ni_sobres_alterados() {
+        let batch = scalar_fixture();
+        let chain = validity_chain(LinkedValidityProfile::default());
+        assert!(chain.create_state_proof(&batch).is_err());
+        chain.queue_local_batch(batch.clone()).unwrap();
+        let proof = chain.create_state_proof(&batch).unwrap();
+        for case in 0..5 {
+            let mut changed = proof.clone();
+            match case {
+                0 => changed.height = BlockHeight(43),
+                1 => changed.pre_state_root = StateRoot::EMPTY,
+                2 => changed.post_state_root = StateRoot::EMPTY,
+                3 => changed.public_inputs[71] ^= 1,
+                _ => changed.proof_type = ProofType::Optimistic,
+            }
+            assert!(!chain.verify_state_proof(&batch, &changed).unwrap().valid);
+            assert!(chain.verified_state_root(BlockHeight(42)).is_none());
+        }
+    }
+
+    #[test]
+    fn certificados_truncados_o_con_sufijos_no_registran_ni_envian_el_lote() {
+        let original = scalar_fixture();
+        let data = original.validity_proof.as_ref().unwrap();
+        for bytes in [Vec::new(), vec![1, 2, 3], data[..40].to_vec(),
+            [data.as_slice(), &[0]].concat(), vec![0; MAX_CERTIFICATE_BYTES + 1]] {
+            let chain = validity_chain(LinkedValidityProfile::default());
+            chain.queue_local_batch(original.clone()).unwrap();
+            let mut batch = original.clone();
+            batch.validity_proof = Some(bytes);
+            assert!(chain.mark_batch_submitted(batch, Hash256::ZERO).is_err());
+            assert!(chain.verified_state_root(BlockHeight(42)).is_none());
+            assert_eq!(chain.stats().submitted_batches, 0);
+            assert!(chain.get_known_batch(original.index).is_some());
+        }
+    }
+
+    #[test]
+    fn envios_simultaneos_del_mismo_lote_solo_registran_un_envio() {
+        let chain = Arc::new(validity_chain(LinkedValidityProfile::default()));
+        let batch = scalar_fixture();
+        chain.queue_local_batch(batch.clone()).unwrap();
+        let workers: Vec<_> = (0..4).map(|index| {
+            let chain = Arc::clone(&chain);
+            let batch = batch.clone();
+            std::thread::spawn(move || chain.mark_batch_submitted(batch, Hash256::hash(&[index])).is_ok())
+        }).collect();
+        let accepted = workers.into_iter().map(|worker| worker.join().unwrap())
+            .filter(|accepted| *accepted).count();
+        assert_eq!(accepted, 1);
+        assert_eq!(chain.stats().submitted_batches, 1);
+        assert_eq!(chain.stats().pending_batches, 0);
+        assert!(chain.verified_state_root(BlockHeight(42)).is_some());
     }
 }

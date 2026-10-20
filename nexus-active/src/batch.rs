@@ -125,28 +125,44 @@ impl BatchBuilder {
 
     /// Add transaction to current batch
     pub fn add_transaction(&mut self, tx: SignedTransaction) -> Result<(), NexusError> {
-        if self.pending_txs.len() >= self.max_tx_count {
-            return Err(NexusError::BatchTooLarge);
-        }
+        self.add_transactions(std::slice::from_ref(&tx))
+    }
 
-        // Check data size
-        let tx_size = bincode::serialize(&tx).map(|b| b.len()).unwrap_or(0);
-        let current_size: usize = self
-            .pending_txs
-            .iter()
-            .map(|t| bincode::serialize(t).map(|b| b.len()).unwrap_or(0))
-            .sum();
+    /// Comprueba un bloque completo antes de alterar el lote o ejecutar su estado.
+    pub fn check_block_capacity(&self, transactions: &[SignedTransaction]) -> Result<(), NexusError> {
+        self.check_capacity(transactions, false)
+    }
 
-        if current_size + tx_size > self.max_data_size {
-            return Err(NexusError::BatchTooLarge);
-        }
+    fn check_capacity(&self, transactions: &[SignedTransaction], include_pending: bool) -> Result<(), NexusError> {
+        let mut candidates: Vec<&SignedTransaction> = Vec::new();
+        if include_pending { candidates.extend(self.pending_txs.iter()); }
+        candidates.extend(transactions.iter());
+        if candidates.len() > self.max_tx_count { return Err(NexusError::BatchTooLarge); }
+        let size = bincode::serialized_size(&candidates)
+            .map_err(|e| NexusError::SerializationError(e.to_string()))?;
+        if size > self.max_data_size as u64 { return Err(NexusError::BatchTooLarge); }
+        Ok(())
+    }
 
-        self.pending_txs.push(tx);
+    /// Añade todo el bloque o nada; nunca divide una transición a mitad de bloque.
+    pub fn add_transactions(&mut self, transactions: &[SignedTransaction]) -> Result<(), NexusError> {
+        self.check_capacity(transactions, true)?;
+        self.pending_txs.extend_from_slice(transactions);
         Ok(())
     }
 
     /// Finalize current batch
     pub fn finalize_batch(&mut self, post_state_root: StateRoot, end_height: BlockHeight) -> Result<L2Batch, NexusError> {
+        // Todos los pasos falibles preceden al consumo del contexto del lote.
+        let compressed_data = self.compress_transactions()?;
+        let next_index = self.current_index.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Se agotaron los índices de lote".into()))?;
+        if self.pre_state_root.is_none() || self.block_range.is_none() {
+            return Err(NexusError::StateError("No hay un lote iniciado".into()));
+        }
+        if self.block_range.as_ref().is_some_and(|(start, _)| *start > end_height) {
+            return Err(NexusError::StateError("Rango de lote invertido".into()));
+        }
         let pre_state_root = self
             .pre_state_root
             .take()
@@ -157,9 +173,6 @@ impl BatchBuilder {
             .take()
             .map(|(start, _)| (start, end_height))
             .ok_or(NexusError::StateError("No batch started".into()))?;
-
-        // Compress transactions
-        let compressed_data = self.compress_transactions()?;
 
         let batch = L2Batch {
             index: self.current_index,
@@ -178,7 +191,7 @@ impl BatchBuilder {
         let mut batch = batch;
         batch.batch_hash = batch.compute_hash();
 
-        self.current_index += 1;
+        self.current_index = next_index;
         self.pending_txs.clear();
 
         Ok(batch)
@@ -278,6 +291,8 @@ impl BatchSubmitter {
 
     /// Mark batch as submitted
     pub fn mark_submitted(&mut self, batch: L2Batch, l1_tx_hash: Hash256) {
+        // También puede enviarse desde una instantánea recuperada, sin extraer la cola.
+        self.pending.retain(|pending| pending.index != batch.index);
         self.submitted.push(SubmittedBatch {
             batch,
             l1_tx_hash,
@@ -383,5 +398,36 @@ mod tests {
 
         submitter.mark_confirmed(0);
         assert_eq!(submitter.confirmed_count(), 1);
+    }
+
+    #[test]
+    fn bloque_completo_se_agrega_atomicamente_y_cuenta_el_tamano_serializado() {
+        let tx = create_test_tx();
+        let mut builder = BatchBuilder::with_limits(2, usize::MAX);
+        builder.start_batch(StateRoot::EMPTY, BlockHeight(1));
+        builder.add_transaction(tx.clone()).unwrap();
+        assert!(matches!(builder.add_transactions(&[tx.clone(), tx.clone()]), Err(NexusError::BatchTooLarge)));
+        assert_eq!(builder.pending_count(), 1);
+        assert!(builder.check_block_capacity(&[tx.clone(), tx.clone()]).is_ok());
+        let size = bincode::serialized_size(&vec![tx.clone()]).unwrap() as usize;
+        let mut exact = BatchBuilder::with_limits(2, size);
+        exact.start_batch(StateRoot::EMPTY, BlockHeight(1));
+        exact.add_transaction(tx.clone()).unwrap();
+        assert!(exact.add_transaction(tx).is_err());
+        assert_eq!(exact.pending_count(), 1);
+        let batch = exact.finalize_batch(StateRoot::EMPTY, BlockHeight(1)).unwrap();
+        assert_eq!(batch.compressed_data.len(), size);
+    }
+
+    #[test]
+    fn finalizar_rango_invertido_no_consume_el_contexto_del_lote() {
+        let mut builder = BatchBuilder::new();
+        builder.start_batch(StateRoot::EMPTY, BlockHeight(2));
+        builder.add_transaction(create_test_tx()).unwrap();
+        assert!(builder.finalize_batch(StateRoot::EMPTY, BlockHeight(1)).is_err());
+        assert_eq!(builder.pending_count(), 1);
+        let batch = builder.finalize_batch(StateRoot::EMPTY, BlockHeight(3)).unwrap();
+        assert_eq!(batch.index, 0);
+        assert_eq!(batch.block_range, (BlockHeight(2), BlockHeight(3)));
     }
 }

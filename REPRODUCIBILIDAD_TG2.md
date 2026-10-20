@@ -2,6 +2,18 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Integración de ActiveChain — 20 de octubre de 2026
+
+`ActiveChain` obtiene el contexto de una instantánea privada del lote construido localmente, no del sobre recibido. `ActiveChainConfig::validity_profile` fija filas y trabajo mediante `LinkedValidityProfile`; no se leen como política del certificado. Solo se puede añadir la prueba al lote: cambiar índice, rango, raíces, transacciones, cantidad, fecha o firma respecto de la instantánea causa rechazo.
+
+`create_state_proof(&batch)` devuelve ahora `Result<StateProof, NexusError>` y completa las entradas públicas. En validez/híbrido exige prueba presente y de tamaño acotado. `verify_state_proof(&batch, &proof)` llama a `verify_expected` con contexto local; `mark_batch_submitted(batch, l1_hash)` devuelve `Result` y verifica antes de registrar el envío. El modo optimista mantiene aceptación provisional separada, sin acreditar el contrato Lean ni finalizar raíces al marcar confirmación L1. `get_next_batch` entrega trabajo al probador, no una autorización; `get_known_batch(index)` permite recuperar el lote después de un rechazo. El registro local impide envíos repetidos del mismo índice, incluso concurrentes; no es persistencia ni antirrepetición de consenso entre reinicios.
+
+Se captura la raíz inicial antes de ejecutar. Los bloques se incorporan completos o no se incorporan al lote; la rotación ocurre entre bloques y conserva la frontera de estado. Los límites del lote en `ActiveChain` usan los de su secuenciador y cuentan el prefijo de longitud serializado. Los bloques vacíos conservan la raíz y pueden cerrar un lote pendiente. Se serializa la producción para no reutilizar alturas en llamadas concurrentes.
+
+**Límite operativo:** el motor de transacciones usa raíces SHA3 generales y el AIR sigue siendo una recurrencia escalar. No se recortan hashes, no se genera una prueba de recurrencia para presentarla como prueba de transacciones y no se habilita fallback. Un lote con raíces fuera del modelo no puede registrarse como enviado en validez/híbrido; ampliar el AIR para validarlo no forma parte de esta integración. Los casos positivos de cableado usan instantáneas escalares sintéticas solo en pruebas internas. Esta conexión no convierte el PoC en una L2 completa.
+
+La evidencia de esta integración se conserva en `../Documentos/06-Evidencia-TG2/2026-10-20/ActiveChain/`. `integracion.json` conserva la instantánea previa al commit; `consolidacion.json` identifica el commit posterior y enlaza el check/build y las 55 pruebas aisladas (trece nuevas), sin repetirlos para consolidar. El commit `3e40e28` y su manifiesto quedan como antecedentes de la adaptación anterior; el manifiesto documental vigente identifica el commit de integración. Permanecen los límites operativos descritos arriba.
+
 ## Adaptación al contrato Lean — 20 de octubre de 2026
 
 La ruta de validez usa ahora `nexus-zk/src/stark/linked.rs` y `linked_codec.rs`: doble FRI vinculada, lector LE canónico con EOF estricto, 16–4096 filas, cuarenta consultas y corte de 512 extracciones del selector, incluidos duplicados. El perfil de trabajo esperado (12 o 20 bits) se entrega externamente; no se rebaja según el certificado. Se mantiene el formato del corpus histórico `(TransitionStatement, LinkedProof)`.

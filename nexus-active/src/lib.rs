@@ -7,6 +7,9 @@
 //! - **Execution Engine**: Processes transactions at high speed
 //! - **Batch Submission**: Commits state to Anchor Layer
 //!
+//! Alcance del contrato Lean: recurrencia escalar y comprobación con contexto local.
+//! No acredita firmas/transacciones en el AIR ni validez de raíces SHA3 generales.
+//!
 //! ## Architecture
 //!
 //! ```text
@@ -40,4 +43,4 @@ pub use pq_verifier::PqValidityProof;
 pub use linked_verifier::{ExpectedTransition, LinkedValidityProof};
 pub use execution::{ExecutionEngine, ExecutionResult};
 pub use batch::{BatchBuilder, L2Batch, BatchStatus};
-pub use chain::{ActiveChain, ActiveChainConfig};
+pub use chain::{ActiveChain, ActiveChainConfig, LinkedValidityProfile};
