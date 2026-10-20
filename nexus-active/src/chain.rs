@@ -386,6 +386,25 @@ impl ActiveChain {
         Ok(hash)
     }
 
+    /// Recover an omitted initial registration after the exact packet was processed by trusted L1.
+    /// Requires an existing local batch with no attempts; this is local inclusion, not BFT finality.
+    pub fn recover_l1_submission(&self, batch: L2Batch, transaction: &SignedTransaction,
+        l1: &AnchorChain) -> Result<ConfirmedBatch, NexusError> {
+        let mut known = self.known_batches.write();
+        let entry = Self::check_known_batch(&batch, &known)?;
+        self.check_l1_packet(&entry.batch, transaction)?;
+        let inclusion = l1.validate_processed_batch_submission(transaction)?;
+        let bytes = bincode::serialize(transaction)?;
+        let hash = transaction.hash();
+        self.verify_initial_submission(&batch, hash, &known)?;
+        // All fallible checks precede publishing the single confirmed record.
+        let index = batch.index;
+        let confirmed = self.batch_submitter.write().record_recovered(batch, hash, bytes,
+            inclusion.block_hash, inclusion.block_height);
+        known.get_mut(&index).expect("context held under write lock").l1_tx_hashes.push(hash);
+        Ok(confirmed)
+    }
+
     fn check_l1_packet(&self, batch: &L2Batch, transaction: &SignedTransaction) -> Result<(), NexusError> {
         let matches = match &transaction.transaction.tx_type {
             nexus_core::TransactionType::BatchSubmit { batch_root, batch_size, compressed_data } =>
@@ -401,25 +420,30 @@ impl ActiveChain {
 
     fn record_batch_submission(&self, batch: L2Batch, l1_tx_hash: Hash256,
         bytes: Option<Vec<u8>>, known: &mut HashMap<u64, KnownBatch>) -> Result<(), NexusError> {
-        Self::check_known_batch(&batch, known)?;
+        self.verify_initial_submission(&batch, l1_tx_hash, known)?;
+        let entry = known.get_mut(&batch.index).expect("context held under write lock");
+        self.batch_submitter.write().record_submitted(batch, l1_tx_hash, bytes);
+        entry.l1_tx_hashes.push(l1_tx_hash);
+        Ok(())
+    }
+
+    fn verify_initial_submission(&self, batch: &L2Batch, l1_tx_hash: Hash256,
+        known: &HashMap<u64, KnownBatch>) -> Result<(), NexusError> {
+        let entry = Self::check_known_batch(batch, known)?;
         if l1_tx_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hashes.contains(&l1_tx_hash)) {
             return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
         }
-        let entry = known.get_mut(&batch.index)
-            .ok_or_else(|| NexusError::StateError("Se perdió el contexto local del lote".into()))?;
         if !entry.l1_tx_hashes.is_empty() {
             return Err(NexusError::SecurityViolation("El lote ya fue enviado".into()));
         }
         let expected = self.expected_for_local_batch(&entry.batch);
-        let proof = self.state_proof_with_context(&batch, &expected)?;
+        let proof = self.state_proof_with_context(batch, &expected)?;
         let result = if self.config.verification_mode == VerificationMode::Optimistic {
             self.verifier.write().verify(&proof)?
         } else {
             self.verifier.write().verify_expected(&proof, &expected)?
         };
         if !result.valid { return Err(NexusError::ProofVerificationFailed); }
-        self.batch_submitter.write().record_submitted(batch, l1_tx_hash, bytes);
-        entry.l1_tx_hashes.push(l1_tx_hash);
         Ok(())
     }
 
@@ -674,6 +698,34 @@ mod tests {
         config.verification_mode = VerificationMode::ZKValidity;
         config.validity_profile = profile;
         ActiveChain::new(config, keypair)
+    }
+
+    #[tokio::test]
+    async fn processed_recovery_checks_l1_before_registering_a_valid_scalar_root() {
+        // Scalar fixture only: canonical inclusion does not authenticate DA as L2 execution.
+        let publisher = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let chain = ActiveChain::new(ActiveChainConfig { verification_mode: VerificationMode::ZKValidity,
+            ..Default::default() }, publisher.clone());
+        let mut local = scalar_fixture();
+        local.tx_count = 1; local.compressed_data = vec![1]; local.batch_hash = local.compute_hash();
+        chain.queue_local_batch(local.clone()).unwrap();
+        let l1 = AnchorChain::new(Default::default(), DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        let signed = chain.prepare_l1_submission(&local, &l1, &publisher, Default::default()).unwrap();
+        assert!(chain.recover_l1_submission(local.clone(), &signed, &l1).is_err());
+        assert!(chain.verified_state_root(local.block_range.1).is_none());
+        l1.process_block(l1.prepare_block(vec![signed.clone()], Address::ZERO).unwrap()).await.unwrap();
+        let mut forged = signed.clone(); forged.public_key[0] ^= 1;
+        assert!(chain.recover_l1_submission(local.clone(), &forged, &l1).is_err());
+        assert!(chain.verified_state_root(local.block_range.1).is_none());
+        let mut bad_certificate = local.clone(); bad_certificate.validity_proof = Some(vec![0; 4096]);
+        assert!(chain.recover_l1_submission(bad_certificate, &signed, &l1).is_err());
+        assert!(chain.verified_state_root(local.block_range.1).is_none());
+        assert!(chain.get_batch_confirmation(local.index).is_none());
+        assert!(chain.get_batch_submission(local.index).is_none());
+        let confirmed = chain.recover_l1_submission(local.clone(), &signed, &l1).unwrap();
+        assert_eq!(chain.verified_state_root(local.block_range.1), Some(local.post_state_root));
+        assert_eq!(confirmed.batch.validity_proof, local.validity_proof);
+        assert_eq!(chain.stats().confirmed_batches, 1);
     }
 
     #[test]

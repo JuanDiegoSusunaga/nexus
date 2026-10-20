@@ -20,6 +20,8 @@ Los envíos pendientes admiten tres reintentos explícitos, condicionados al has
 
 `register_l1_submission` y `retry_l1_submission` validan el paquete firmado contra L1 y el lote local antes de registrar su hash. Conservan sus bytes exactos en el historial para recuperarlos sin volver a firmar, incluso después de confirmar. Las API por hash siguen siendo intenciones locales sin comprobación del paquete L1.
 
+Si L1 procesó el paquete antes del primer registro local, `recover_l1_submission` permite registrar su inclusión y conservar sus bytes exactos. Exige un lote conocido sin intentos y compara la envoltura firmada completa con el almacenamiento canónico de la instancia L1 confiable; conserva las comprobaciones de certificado L2. Consulta la inclusión histórica sin exigir otra vez el nonce consumido o el vencimiento actual, y no sustituye historiales existentes ni restaura lotes desconocidos tras reiniciar.
+
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
 ## Antecedente — auditoría Merkle/Fiat–Shamir

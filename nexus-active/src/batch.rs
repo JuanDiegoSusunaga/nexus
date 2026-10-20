@@ -328,6 +328,17 @@ impl BatchSubmitter {
         });
     }
 
+    /// ActiveChain has checked initial registration, exact canonical inclusion and the L2 proof.
+    pub(crate) fn record_recovered(&mut self, batch: L2Batch, l1_tx_hash: Hash256,
+        transaction_bytes: Vec<u8>, l1_block_hash: Hash256, l1_height: BlockHeight) -> ConfirmedBatch {
+        self.pending.retain(|pending| pending.index != batch.index);
+        let confirmed = ConfirmedBatch { batch, l1_tx_hash, l1_block_hash, l1_height,
+            attempts: vec![SubmissionAttempt { l1_tx_hash, recorded_at: Timestamp::now(),
+                transaction_bytes: Some(transaction_bytes) }] };
+        self.confirmed.push(confirmed.clone());
+        confirmed
+    }
+
     /// ActiveChain checks global hash reservations while holding its context write lock.
     pub(crate) fn retry_submission(&mut self, batch_index: u64, expected_hash: Hash256,
         next_hash: Hash256, transaction_bytes: Option<Vec<u8>>) -> Result<(), NexusError> {

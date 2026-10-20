@@ -351,6 +351,19 @@ impl AnchorChain {
     /// Absence is distinct from inconsistent local storage; callers must propagate errors.
     pub fn find_processed_batch_inclusion(&self, tx_hash: &Hash256) -> Result<Option<L1BatchInclusion>, NexusError> {
         let data = self.data.read();
+        Self::processed_batch_inclusion(&data, tx_hash, None)
+    }
+
+    /// Match the entire signed envelope against canonical processed storage, not current admission.
+    /// Historical nonce and expiry were checked when the block was processed.
+    pub fn validate_processed_batch_submission(&self, signed: &SignedTransaction) -> Result<L1BatchInclusion, NexusError> {
+        let data = self.data.read();
+        Self::processed_batch_inclusion(&data, &signed.hash(), Some(signed))?
+            .ok_or_else(|| NexusError::SecurityViolation("No processed L1 batch transaction".into()))
+    }
+
+    fn processed_batch_inclusion(data: &ChainData, tx_hash: &Hash256,
+        expected: Option<&SignedTransaction>) -> Result<Option<L1BatchInclusion>, NexusError> {
         let Some(record) = data.execution.l2_batches.iter().find(|record| record.l1_tx_hash == Some(*tx_hash)) else {
             return Ok(None);
         };
@@ -359,6 +372,12 @@ impl AnchorChain {
         let block = data.blocks.get(&block_hash).ok_or(NexusError::BlockNotFound(block_hash))?;
         let tx = block.body.transactions.iter().find(|tx| tx.hash() == *tx_hash)
             .ok_or_else(|| NexusError::SecurityViolation("Batch transaction absent from canonical L1 block".into()))?;
+        // The transaction hash does not cover sender, public key or signature scheme.
+        if let Some(expected) = expected {
+            if bincode::serialize(expected)? != bincode::serialize(tx)? {
+                return Err(NexusError::SecurityViolation("Signed packet differs from the processed L1 envelope".into()));
+            }
+        }
         let (batch_root, batch_size, payload) = match &tx.transaction.tx_type {
             nexus_core::TransactionType::BatchSubmit { batch_root, batch_size, compressed_data } =>
                 (*batch_root, *batch_size, compressed_data),
@@ -400,6 +419,18 @@ pub struct ChainStats {
 mod tests {
     use super::*;
     use nexus_core::SignatureScheme;
+
+    #[tokio::test]
+    async fn processed_packet_validation_propagates_inconsistent_da_storage() {
+        let signer = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let chain = AnchorChain::new(Default::default(), signer.clone());
+        let signed = chain.prepare_batch_submission(&signer, StateRoot::EMPTY, 1, vec![9], Default::default()).unwrap();
+        chain.process_block(chain.prepare_block(vec![signed.clone()], Address::ZERO).unwrap()).await.unwrap();
+        assert!(chain.validate_processed_batch_submission(&signed).is_ok());
+        chain.data.write().execution.l2_batches[0].data_hash = Hash256::ZERO;
+        assert!(chain.find_processed_batch_inclusion(&signed.hash()).is_err());
+        assert!(chain.validate_processed_batch_submission(&signed).is_err());
+    }
 
     #[test]
     fn test_chain_creation() {
