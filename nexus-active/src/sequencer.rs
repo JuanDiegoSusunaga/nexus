@@ -2,7 +2,7 @@
 //! Building reserves work; confirmed nonces advance only from local execution.
 
 use crate::execution::ExecutionResult;
-use nexus_core::{Address, Amount, Hash256, NexusError, SignedTransaction, Timestamp};
+use nexus_core::{Address, Amount, ChainId, Hash256, NexusError, SignedTransaction, Timestamp};
 use nexus_crypto::{verify_signed_transaction, DilithiumKeypair};
 use parking_lot::{Mutex, RwLock};
 use serde::{Deserialize, Serialize};
@@ -12,6 +12,9 @@ use std::cmp::Ordering;
 /// Sequencer configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SequencerConfig {
+    /// Expected signed transaction domain, also used by ActiveChain execution.
+    #[serde(default)]
+    pub chain_id: ChainId,
     /// Maximum transactions per batch
     pub max_batch_size: usize,
     /// Maximum batch data size (bytes)
@@ -31,6 +34,7 @@ pub struct SequencerConfig {
 impl Default for SequencerConfig {
     fn default() -> Self {
         Self {
+            chain_id: ChainId::LOCAL,
             max_batch_size: 10_000,
             max_batch_bytes: 1_048_576, // 1 MB
             batch_interval_ms: 2_000,   // 2 seconds
@@ -112,6 +116,7 @@ impl NexusSequencer {
     pub fn submit_transaction(&self, tx: SignedTransaction) -> Result<Hash256, NexusError> {
         self.check_config()?;
         if !self.is_active() { return Err(NexusError::NotActiveSequencer); }
+        if tx.transaction.chain_id != self.config.chain_id { return Err(NexusError::InvalidChainId); }
         let size = usize::try_from(bincode::serialized_size(&tx)?)
             .map_err(|_| NexusError::BatchTooLarge)?;
         if size > self.config.max_batch_bytes { return Err(NexusError::BatchTooLarge); }

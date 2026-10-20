@@ -48,7 +48,7 @@ struct KnownBatch {
 /// Active Chain configuration
 #[derive(Debug, Clone)]
 pub struct ActiveChainConfig {
-    /// Sequencer configuration
+    /// Sequencer configuration; its chain_id also fixes the execution domain.
     pub sequencer: SequencerConfig,
     /// Verification mode
     pub verification_mode: VerificationMode,
@@ -106,6 +106,7 @@ impl ActiveChain {
     /// Create a new Active Chain
     pub fn new(config: ActiveChainConfig, keypair: DilithiumKeypair) -> Self {
         let sequencer = Arc::new(NexusSequencer::new(config.sequencer.clone(), keypair));
+        let execution = Arc::new(RwLock::new(ExecutionEngine::for_chain(config.sequencer.chain_id)));
         let verifier = Arc::new(RwLock::new(NitroVerifier::new(config.verification_mode)));
 
         let genesis = Block::genesis(Layer::Active);
@@ -125,7 +126,7 @@ impl ActiveChain {
                 config.sequencer.max_batch_size, config.sequencer.max_batch_bytes.saturating_add(8)))),
             config,
             sequencer,
-            execution: Arc::new(RwLock::new(ExecutionEngine::new())),
+            execution,
             verifier,
             batch_submitter: Arc::new(RwLock::new(BatchSubmitter::new())),
             blocks: Arc::new(RwLock::new(blocks)),
@@ -447,6 +448,45 @@ pub struct L2ChainStats {
 mod tests {
     use super::*;
     use nexus_core::SignatureScheme;
+
+    #[test]
+    fn configured_transaction_domain_is_shared_by_admission_and_block_execution() {
+        use nexus_core::{AccountState, Amount, ChainId, Nonce, Transaction};
+        use nexus_crypto::Signer;
+        let signer = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let config = ActiveChainConfig {
+            sequencer: SequencerConfig { chain_id: ChainId::TESTNET, ..Default::default() },
+            batch_interval_blocks: 1,
+            ..Default::default()
+        };
+        let chain = ActiveChain::new(config, DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        chain.execution.write().state_mut().set_account(signer.address(),
+            AccountState::with_balance(Amount::from_units(100)));
+        let receiver = Address::new([42; 32]);
+        let tx = |domain| signer.sign_transaction(Transaction::transfer(domain, Nonce(0), receiver,
+            Amount(7), 21000, Amount(1_000_000_000))).unwrap();
+        let before = chain.state_root();
+        assert!(matches!(chain.submit_transaction(tx(ChainId::LOCAL)), Err(NexusError::InvalidChainId)));
+        assert_eq!(chain.state_root(), before);
+        let honest = tx(ChainId::TESTNET);
+        chain.submit_transaction(honest.clone()).unwrap();
+        let block = chain.produce_block().unwrap();
+        let mut expected = InMemoryState::new();
+        let mut sender = AccountState::with_balance(Amount(Amount::from_units(100).0 - 7));
+        sender.nonce = Nonce(1);
+        expected.set_account(signer.address(), sender);
+        expected.set_account(receiver, AccountState::with_balance(Amount(7)));
+        assert_eq!(block.header.state_root, expected.compute_root().0);
+        assert_eq!(chain.state_root(), expected.compute_root());
+        assert_eq!(block.transaction_hashes(), vec![honest.hash()]);
+        assert_eq!(chain.height(), BlockHeight(1));
+        assert_eq!(chain.sequencer().pending_count(), 0);
+        assert!(matches!(chain.submit_transaction(honest), Err(NexusError::InvalidNonce { expected: 1, got: 0 })));
+        let batch = chain.get_known_batch(0).unwrap();
+        assert_eq!(batch.pre_state_root, before);
+        assert_eq!(batch.post_state_root, chain.state_root());
+        assert_eq!(batch.tx_count, 1);
+    }
 
     #[test]
     fn test_active_chain_creation() {

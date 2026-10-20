@@ -3,7 +3,7 @@
 //! Processes transactions and updates state at high throughput.
 
 use nexus_core::{
-    Address, Amount, Hash256, InMemoryState, NexusError, SignedTransaction,
+    Address, Amount, ChainId, Hash256, InMemoryState, NexusError, SignedTransaction,
     StateRoot, TransactionType, AccountState,
 };
 use nexus_crypto::verify_signed_transaction;
@@ -91,6 +91,8 @@ pub struct ExecutionLog {
 
 /// Execution engine for L2
 pub struct ExecutionEngine {
+    /// Trusted expected transaction domain, independent of incoming messages.
+    chain_id: ChainId,
     /// Current state
     state: InMemoryState,
     /// Gas price (minimum)
@@ -102,16 +104,23 @@ pub struct ExecutionEngine {
 impl ExecutionEngine {
     /// Create a new execution engine
     pub fn new() -> Self {
-        Self {
-            state: InMemoryState::new(),
-            min_gas_price: Amount(1_000_000_000), // 1 Gwei equivalent
-            block_gas_limit: 30_000_000,
-        }
+        Self::for_chain(ChainId::LOCAL)
+    }
+
+    /// Create an empty engine for an explicitly configured transaction domain.
+    pub fn for_chain(chain_id: ChainId) -> Self {
+        Self::with_state_for_chain(InMemoryState::new(), chain_id)
     }
 
     /// Create with initial state
     pub fn with_state(state: InMemoryState) -> Self {
+        Self::with_state_for_chain(state, ChainId::LOCAL)
+    }
+
+    /// Restore state under a trusted domain; the account root does not encode it.
+    pub fn with_state_for_chain(state: InMemoryState, chain_id: ChainId) -> Self {
         Self {
+            chain_id,
             state,
             min_gas_price: Amount(1_000_000_000),
             block_gas_limit: 30_000_000,
@@ -123,6 +132,9 @@ impl ExecutionEngine {
         &mut self,
         tx: &SignedTransaction,
     ) -> Result<ExecutionResult, NexusError> {
+        if tx.transaction.chain_id != self.chain_id {
+            return Err(NexusError::InvalidChainId);
+        }
         let tx_hash = tx.hash();
 
         // Verify signature

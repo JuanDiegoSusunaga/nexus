@@ -2,11 +2,21 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Dominio local de transacciones L2 — 20 de octubre de 2026
+
+`SequencerConfig::chain_id` fija el identificador firmado esperado (por defecto `ChainId::LOCAL`). El secuenciador rechaza otro identificador antes de reservar el nonce o añadirlo al pool. `ActiveChain` construye su motor con esa misma configuración, sin una segunda política que pueda divergir. El motor también comprueba el dominio en la ejecución directa; `execute_batch` convierte ese rechazo en un resultado fallido sin cambios de estado, consumo de gas ni avance del nonce para esa entrada. Las entradas válidas del lote continúan bajo las reglas existentes.
+
+`ExecutionEngine::new()` y `with_state(state)` conservan `LOCAL`. Para otro identificador se usan `for_chain(chain_id)` o `with_state_for_chain(state, chain_id)`. El identificador es política confiable del llamante: la raíz SHA3 de cuentas no lo codifica ni permite recuperarlo. Cambiar la etiqueta de una transacción firmada no sustituye su firma. La configuración deserializada por campos que omite `chain_id` usa el valor por defecto; no se promete compatibilidad binaria con configuraciones serializadas anteriores.
+
+Siete pruebas externas y una de producción integrada cubren rechazo en las tres entradas públicas, reserva de nonce, firma alterada, restauración con dominio explícito, lotes mixtos y operaciones de contrato de otra cadena. La prueba integrada configura `TESTNET`, ejecuta una transferencia con saldo de prueba, contrasta raíz y balances, comprueba el avance de nonce y el contexto del lote. Tres regresiones se reprodujeron antes de la corrección. La [evidencia de dominio L2](../Documentos/06-Evidencia-TG2/2026-10-20/Politicas-L2/verificacion.json) registra el corte y las comprobaciones.
+
+Esta política no modifica los bytes firmados, las cabeceras, el génesis, los votos ni el certificado AIR/FRI. Si L1 y L2 comparten identificador, esta comprobación no las separa por capa. Se conserva el alcance escalar Lean y no se acredita aislamiento completo entre redes, un nuevo teorema ni una prueba de ejecución general L2. El presupuesto de gas de L2 conserva su política previa, distinta de la reserva agregada de L1.
+
 ## Contrato local de estado L1 — 20 de octubre de 2026
 
 ### Políticas locales de dominio y gas
 
-`AnchorChainConfig::chain_id` fija el identificador esperado de las transacciones firmadas (por defecto `ChainId::LOCAL`). Firmar un identificador no basta: tanto `prepare_block` como `process_block` lo comparan con esta política. Cambiarlo exige una firma nueva. Esta comprobación se limita al dominio de transacciones L1: no añade un dominio de red al génesis, a las cabeceras, a los votos ni a L2, y no se presenta como aislamiento completo entre redes.
+`AnchorChainConfig::chain_id` fija el identificador esperado de las transacciones firmadas (por defecto `ChainId::LOCAL`). Firmar un identificador no basta: tanto `prepare_block` como `process_block` lo comparan con esta política. Cambiarlo exige una firma nueva. La corrección L1 no añade un dominio de red al génesis, a las cabeceras o a los votos; la extensión posterior a las transacciones L2 se describe arriba. No se presenta como aislamiento completo entre redes.
 
 `AnchorChainConfig::block_gas_limit` limita la suma de los `gas_limit` declarados, con 30 000 000 por defecto. Se resta cada reserva de un presupuesto restante después de comprobar que cabe; así se rechaza también una suma no representable en `u64`. La igualdad con el presupuesto es válida y un límite cero permite bloques vacíos. Se reserva el gas declarado, aunque el gas intrínseco sea menor o su precio sea cero. No se cobran comisiones y las réplicas deben compartir la misma política local.
 
