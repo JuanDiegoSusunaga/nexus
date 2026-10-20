@@ -8,7 +8,7 @@ use crate::{
     validator::{ValidatorRegistry, ValidatorSet},
 };
 use nexus_core::{
-    AccountState, Address, Amount, Block, BlockBody, BlockHeader, BlockHeight, Hash256, InMemoryState,
+    AccountState, Address, Amount, Block, BlockBody, BlockHeader, BlockHeight, ChainId, Hash256, InMemoryState,
     Layer, MerkleTree, NexusError, SignedTransaction, StateRoot, Timestamp,
 };
 use nexus_crypto::{signer::verify_signed_transaction_at, DilithiumKeypair};
@@ -17,6 +17,11 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct AnchorChainConfig {
+    /// Expected signed transaction domain; shared by all replicas of this L1.
+    pub chain_id: ChainId,
+    /// Sum of declared transaction gas limits, reserved before execution.
+    /// Zero permits only empty blocks; gas is not charged by this profile.
+    pub block_gas_limit: u64,
     pub consensus: ConsensusConfig,
     pub min_stake: Amount,
     pub block_reward: Amount,
@@ -26,7 +31,8 @@ pub struct AnchorChainConfig {
 
 impl Default for AnchorChainConfig {
     fn default() -> Self {
-        Self { consensus: ConsensusConfig::default(), min_stake: Amount::from_units(32),
+        Self { chain_id: ChainId::LOCAL, block_gas_limit: 30_000_000,
+            consensus: ConsensusConfig::default(), min_stake: Amount::from_units(32),
             block_reward: Amount::from_units(2), fee_percentage: 1 }
     }
 }
@@ -168,7 +174,16 @@ impl AnchorChain {
         if block.header.transactions_root != root {
             return Err(NexusError::InvalidBlock("Transaction root mismatch".into()));
         }
+        let mut remaining_gas = self.config.block_gas_limit;
         for tx in &block.body.transactions {
+            if tx.transaction.chain_id != self.config.chain_id {
+                return Err(NexusError::InvalidChainId);
+            }
+            if tx.transaction.gas_limit > remaining_gas {
+                return Err(NexusError::InvalidBlock("L1 declared block gas limit exceeded".into()));
+            }
+            // Subtraction after comparison avoids summation overflow, including u64::MAX.
+            remaining_gas -= tx.transaction.gas_limit;
             if tx.transaction.timestamp > block.header.timestamp {
                 return Err(NexusError::InvalidTransaction("Transaction created after block timestamp".into()));
             }

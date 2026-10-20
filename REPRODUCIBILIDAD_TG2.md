@@ -4,6 +4,16 @@
 
 ## Contrato local de estado L1 — 20 de octubre de 2026
 
+### Políticas locales de dominio y gas
+
+`AnchorChainConfig::chain_id` fija el identificador esperado de las transacciones firmadas (por defecto `ChainId::LOCAL`). Firmar un identificador no basta: tanto `prepare_block` como `process_block` lo comparan con esta política. Cambiarlo exige una firma nueva. Esta comprobación se limita al dominio de transacciones L1: no añade un dominio de red al génesis, a las cabeceras, a los votos ni a L2, y no se presenta como aislamiento completo entre redes.
+
+`AnchorChainConfig::block_gas_limit` limita la suma de los `gas_limit` declarados, con 30 000 000 por defecto. Se resta cada reserva de un presupuesto restante después de comprobar que cabe; así se rechaza también una suma no representable en `u64`. La igualdad con el presupuesto es válida y un límite cero permite bloques vacíos. Se reserva el gas declarado, aunque el gas intrínseco sea menor o su precio sea cero. No se cobran comisiones y las réplicas deben compartir la misma política local.
+
+Las ocho pruebas de `nexus-anchor/tests/block_policy.rs` cubren firmas válidas de otra cadena, cambios de etiqueta sin volver a firmar, recepción de bloques con raíz correcta pero política incompatible, rechazo sin efectos y reintento, presupuesto exacto, cero y `u64::MAX`. Dos regresiones se reprodujeron antes de corregir el procesador. La [evidencia de políticas L1](../Documentos/06-Evidencia-TG2/2026-10-20/Politicas-L1/verificacion.json) registra las comprobaciones de este corte; la evidencia de 264 pruebas enlazada más abajo corresponde al corte anterior.
+
+### Ejecución y raíz de cuentas
+
 `AnchorChain::process_block` vuelve a ejecutar el bloque sobre una copia del estado local y compara la raíz calculada con `header.state_root` antes de publicar cualquier efecto. Una diferencia devuelve `InvalidStateRoot` y conserva cuentas, nonces, validadores, DA, lotes, altura, almacenamiento de bloques y finalidad. No se acepta una raíz vacía como sustituto de la calculada.
 
 `prepare_block(transactions, proposer)` permite construir un candidato honesto desde el padre y la política locales. Calcula la raíz sin guardar el bloque ni aplicar sus efectos; al recibirlo, `process_block` ejecuta de nuevo la validación. Preparar un candidato no firma un certificado de consenso ni autoriza un envío L2.

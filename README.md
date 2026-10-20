@@ -2,9 +2,11 @@
 
 **Navegación y versión TG2:** [mapa del código e instrucciones de reproducción](REPRODUCIBILIDAD_TG2.md). El repositorio documental identifica el commit de código que acompaña a la edición y conserva fuentes, logs y resultados por etapa.
 
-## Estado local vigente — contrato de cuentas L1
+## Estado local vigente — contrato y políticas L1
 
 20 de octubre de 2026: el procesador L1 recalcula la raíz de cuentas después de ejecutar las transacciones y acreditar la recompensa, y rechaza cabeceras que no coinciden sin publicar efectos parciales. `prepare_block` construye candidatos locales sin alterar el estado. Los costos, nonces y vencimientos se rigen por un contrato explícito; no se implementan comisiones ni recibos L1 completos. Las correcciones de firmas, quórum ponderado, secuenciación y rechazo de fraude no autenticado se conservan en este corte. [Contrato, reproducción y límites](REPRODUCIBILIDAD_TG2.md).
+
+La configuración L1 exige ahora el `chain_id` firmado esperado y limita la suma de reservas `gas_limit` del bloque. Los valores por defecto son `ChainId::LOCAL` y 30 000 000; un presupuesto cero permite únicamente bloques vacíos. Estas políticas se vuelven a comprobar al recibir un bloque y no modifican el AIR/FRI ni los resultados Lean.
 
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
