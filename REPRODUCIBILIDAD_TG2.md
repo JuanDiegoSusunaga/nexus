@@ -2,6 +2,18 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Registro validado de transacciones firmadas — 20 de octubre de 2026
+
+`register_l1_submission(batch, &transaction, &l1)` deriva el hash del paquete firmado recibido. Exige coincidencia con el publicador, raíz posterior, cantidad y bytes del lote local, y llama a `AnchorChain::validate_batch_submission` para comprobar firma, cadena, nonce, fecha, vencimiento, gas, saldo y envoltura completa bajo la política L1. Después registra el lote mediante las mismas reglas de certificado, unicidad y estado del registro anterior. La validación de L1 y la serialización ocurren antes de registrar raíces o intentos.
+
+`retry_l1_submission(index, expected_hash, &transaction, &l1)` aplica la misma comprobación al reemplazo y conserva el control de hash vigente, las reservas históricas y el límite de tres reintentos. Un rechazo conserva contador, fechas, paquetes e historial. Ambas rutas usan los mismos pasos de contabilidad que las API por hash, con un único bloqueo del contexto local; evitan adquirir otra vez ese bloqueo dentro del registro.
+
+`SubmissionAttempt::transaction_bytes` contiene los bytes `bincode` exactos de la transacción firmada validada. `get_l1_submission_transaction(index, hash)` permite recuperarla sin generar otra firma y conserva su identidad antes y después de confirmar. Los bytes devueltos son una copia del registro. Los intentos creados mediante `mark_batch_submitted` o `retry_batch_submission` mantienen `None`: esas API solo registran intenciones por hash y no acreditan la validez del paquete L1. Es posible pasar de un intento por hash a un reintento validado sin perder esa distinción.
+
+La [evidencia de registro validado](../Documentos/06-Evidencia-TG2/2026-10-20/Registro-Firmado-L1/verificacion.json) registra ocho pruebas externas y una interna: recuperación exacta de paquetes, datos/remitente distintos con firmas válidas, envolturas y políticas inválidas, campos no incluidos en el hash alterados, reintentos, límite, intenciones por hash y concurrencia. El caso interno usa un certificado escalar sintético válido y comprueba que un rechazo de admisión L1 no registra su raíz; no se presenta como prueba de ejecución general L2.
+
+**Alcance:** es un registro previo al procesamiento contra la admisión actual de la instancia L1 confiable. No reserva el nonce ni garantiza que el estado posterior sea compatible; un paquete cuyo nonce ya fue consumido se rechaza por esta ruta. Guardar los bytes no realiza un envío de red ni acredita entrega, inclusión o finalidad BFT. El historial sigue en memoria. El formato firmado y el certificado AIR/FRI no cambian, y el perfil escalar no autentica los bytes DA como ejecución general. Lean, tesis y primitivas criptográficas quedan preservados.
+
 ## Preparación de transacciones L1 — 20 de octubre de 2026
 
 `ActiveChain::prepare_l1_submission(&batch, &l1, &publisher, options)` devuelve una transacción firmada `BatchSubmit` a partir de un lote conocido. Comprueba los campos de la instantánea local, la identidad del secuenciador y que el lote no esté confirmado. En validez/híbrido exige el certificado del perfil escalar con contexto local; usa un verificador temporal y conserva las raíces y pruebas pendientes del verificador de la cadena. El modo optimista mantiene su admisión provisional. La preparación no registra el envío ni consume la cola de trabajo.
@@ -12,7 +24,7 @@ El flujo local se puede expresar así:
 
 ```rust,ignore
 let tx = active.prepare_l1_submission(&batch, &l1, &publisher, L1SubmissionOptions::default())?;
-active.mark_batch_submitted(batch.clone(), tx.hash())?;
+active.register_l1_submission(batch.clone(), &tx, &l1)?;
 let block = l1.prepare_block(vec![tx], proposer)?;
 l1.process_block(block).await?;
 let confirmation = active.mark_batch_confirmed(batch.index, &l1)?;

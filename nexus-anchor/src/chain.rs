@@ -142,8 +142,6 @@ impl AnchorChain {
         let parent_hash = *data.blocks_by_height.get(&data.height)
             .ok_or(NexusError::BlockHeightNotFound(data.height))?;
         let parent = data.blocks.get(&parent_hash).ok_or(NexusError::BlockNotFound(parent_hash))?;
-        let height = BlockHeight(data.height.0.checked_add(1)
-            .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?);
         let timestamp = Timestamp::now().max(parent.header.timestamp);
         let nonce = data.execution.state.get_account(&signer.address()).map(|account| account.nonce).unwrap_or_default();
         let transaction = nexus_core::Transaction { chain_id: self.config.chain_id, nonce,
@@ -152,14 +150,36 @@ impl AnchorChain {
             timestamp, expires_at: options.expires_at };
         transaction.checked_max_cost()?;
         let signed = signer.sign_transaction(transaction)?;
+        self.preflight_batch_submission(&signed, &data, timestamp)?;
+        Ok(signed)
+    }
+
+    /// Validate a supplied signed transaction against current local admission state, without effects.
+    pub fn validate_batch_submission(&self, signed: &SignedTransaction) -> Result<(), NexusError> {
+        let data = self.data.read();
+        let parent_hash = *data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
+        let parent = data.blocks.get(&parent_hash).ok_or(NexusError::BlockNotFound(parent_hash))?;
+        self.preflight_batch_submission(signed, &data, Timestamp::now().max(parent.header.timestamp))
+    }
+
+    fn preflight_batch_submission(&self, signed: &SignedTransaction, data: &ChainData,
+        timestamp: Timestamp) -> Result<(), NexusError> {
+        if !matches!(&signed.transaction.tx_type, nexus_core::TransactionType::BatchSubmit { .. }) {
+            return Err(NexusError::InvalidTransaction("Expected an L1 batch submission".into()));
+        }
+        let height = BlockHeight(data.height.0.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?);
+        let parent_hash = *data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
         let mut header = BlockHeader::new(height, parent_hash, Address::ZERO, Layer::Anchor);
         header.timestamp = timestamp;
         header.transactions_root = MerkleTree::from_leaves(vec![signed.hash()]).root();
         let candidate = Block::new(header, BlockBody::new(vec![signed.clone()]));
-        self.validate_block(&candidate, &data)?;
+        self.validate_block(&candidate, data)?;
         let mut staged = data.execution.clone();
-        self.execute_transaction(&mut staged, &signed, height, timestamp)?;
-        Ok(signed)
+        self.execute_transaction(&mut staged, signed, height, timestamp)?;
+        Ok(())
     }
 
     /// Prepare a local candidate without publishing effects or certifying consensus.

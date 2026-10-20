@@ -366,11 +366,42 @@ impl ActiveChain {
             entry.batch.compressed_data.clone(), options)
     }
 
-    /// Verifica antes de marcar el envío; rechazos y duplicados no alteran el registro.
-    /// El modo optimista mantiene su aceptación provisional, sin acreditar el contrato Lean.
+    /// Hash-only local intent after L2 proof checks; this does not validate an L1 packet.
+    /// Prefer register_l1_submission for L1 preflight and exact signed packet retention.
     pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) -> Result<(), NexusError> {
         let mut known = self.known_batches.write();
-        Self::check_known_batch(&batch, &known)?;
+        self.record_batch_submission(batch, l1_tx_hash, None, &mut known)
+    }
+
+    /// Register the actual signed packet after L1 admission and local batch checks.
+    pub fn register_l1_submission(&self, batch: L2Batch, transaction: &SignedTransaction,
+        l1: &AnchorChain) -> Result<Hash256, NexusError> {
+        let mut known = self.known_batches.write();
+        let entry = Self::check_known_batch(&batch, &known)?;
+        self.check_l1_packet(&entry.batch, transaction)?;
+        l1.validate_batch_submission(transaction)?;
+        let bytes = bincode::serialize(transaction)?;
+        let hash = transaction.hash();
+        self.record_batch_submission(batch, hash, Some(bytes), &mut known)?;
+        Ok(hash)
+    }
+
+    fn check_l1_packet(&self, batch: &L2Batch, transaction: &SignedTransaction) -> Result<(), NexusError> {
+        let matches = match &transaction.transaction.tx_type {
+            nexus_core::TransactionType::BatchSubmit { batch_root, batch_size, compressed_data } =>
+                *batch_root == batch.post_state_root.0 && usize::try_from(*batch_size).ok() == Some(batch.tx_count)
+                    && compressed_data == &batch.compressed_data,
+            _ => false,
+        };
+        if transaction.sender != self.sequencer.address() || !matches {
+            return Err(NexusError::SecurityViolation("Signed L1 packet differs from the local batch or publisher".into()));
+        }
+        Ok(())
+    }
+
+    fn record_batch_submission(&self, batch: L2Batch, l1_tx_hash: Hash256,
+        bytes: Option<Vec<u8>>, known: &mut HashMap<u64, KnownBatch>) -> Result<(), NexusError> {
+        Self::check_known_batch(&batch, known)?;
         if l1_tx_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hashes.contains(&l1_tx_hash)) {
             return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
         }
@@ -387,16 +418,33 @@ impl ActiveChain {
             self.verifier.write().verify_expected(&proof, &expected)?
         };
         if !result.valid { return Err(NexusError::ProofVerificationFailed); }
-        self.batch_submitter.write().mark_submitted(batch, l1_tx_hash);
+        self.batch_submitter.write().record_submitted(batch, l1_tx_hash, bytes);
         entry.l1_tx_hashes.push(l1_tx_hash);
         Ok(())
     }
 
-    /// Record a replacement intent for the same submitted batch and certificate.
-    /// An expected current hash prevents stale callers from overwriting a newer retry.
+    /// Hash-only replacement intent; retry_l1_submission also validates and retains a signed packet.
     pub fn retry_batch_submission(&self, batch_index: u64, expected_hash: Hash256,
         next_hash: Hash256) -> Result<(), NexusError> {
         let mut known = self.known_batches.write();
+        self.record_retry(batch_index, expected_hash, next_hash, None, &mut known)
+    }
+
+    pub fn retry_l1_submission(&self, batch_index: u64, expected_hash: Hash256,
+        transaction: &SignedTransaction, l1: &AnchorChain) -> Result<Hash256, NexusError> {
+        let mut known = self.known_batches.write();
+        let entry = known.get(&batch_index)
+            .ok_or_else(|| NexusError::SecurityViolation("Unknown local batch".into()))?;
+        self.check_l1_packet(&entry.batch, transaction)?;
+        l1.validate_batch_submission(transaction)?;
+        let bytes = bincode::serialize(transaction)?;
+        let hash = transaction.hash();
+        self.record_retry(batch_index, expected_hash, hash, Some(bytes), &mut known)?;
+        Ok(hash)
+    }
+
+    fn record_retry(&self, batch_index: u64, expected_hash: Hash256, next_hash: Hash256,
+        bytes: Option<Vec<u8>>, known: &mut HashMap<u64, KnownBatch>) -> Result<(), NexusError> {
         let entry = known.get(&batch_index)
             .ok_or_else(|| NexusError::SecurityViolation("Unknown local batch".into()))?;
         if entry.l1_tx_hashes.last().copied() != Some(expected_hash) {
@@ -405,13 +453,20 @@ impl ActiveChain {
         if next_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hashes.contains(&next_hash)) {
             return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
         }
-        self.batch_submitter.write().retry_submission(batch_index, expected_hash, next_hash)?;
+        self.batch_submitter.write().retry_submission(batch_index, expected_hash, next_hash, bytes)?;
         known.get_mut(&batch_index).expect("context held under write lock").l1_tx_hashes.push(next_hash);
         Ok(())
     }
 
     pub fn get_batch_submission(&self, batch_index: u64) -> Option<SubmittedBatch> {
         self.batch_submitter.read().get_submission(batch_index)
+    }
+
+    /// Recover exact signed bytes without re-signing; current admissibility still requires validation.
+    pub fn get_l1_submission_transaction(&self, batch_index: u64, hash: Hash256) -> Result<SignedTransaction, NexusError> {
+        let bytes = self.batch_submitter.read().get_transaction_bytes(batch_index, hash)
+            .ok_or_else(|| NexusError::BatchSubmissionFailed("No signed packet recorded for this attempt".into()))?;
+        bincode::deserialize(&bytes).map_err(Into::into)
     }
 
     /// Confirm local inclusion using a trusted L1 instance supplied by the integration.
@@ -619,6 +674,28 @@ mod tests {
         config.verification_mode = VerificationMode::ZKValidity;
         config.validity_profile = profile;
         ActiveChain::new(config, keypair)
+    }
+
+    #[test]
+    fn l1_registration_failure_does_not_register_a_valid_scalar_root() {
+        // Synthetic scalar fixture only; opaque DA bytes are not execution authenticated by this AIR.
+        let publisher = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let chain = ActiveChain::new(ActiveChainConfig { verification_mode: VerificationMode::ZKValidity,
+            ..Default::default() }, publisher.clone());
+        let mut local = scalar_fixture();
+        local.tx_count = 1; local.compressed_data = vec![1]; local.batch_hash = local.compute_hash();
+        chain.queue_local_batch(local.clone()).unwrap();
+        let l1 = AnchorChain::new(Default::default(), DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        let signed = chain.prepare_l1_submission(&local, &l1, &publisher, Default::default()).unwrap();
+        let restrictive = AnchorChain::new(nexus_anchor::AnchorChainConfig { block_gas_limit: 0, ..Default::default() },
+            DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        assert!(chain.register_l1_submission(local.clone(), &signed, &restrictive).is_err());
+        assert!(chain.verified_state_root(local.block_range.1).is_none());
+        assert!(chain.get_batch_submission(local.index).is_none());
+        chain.register_l1_submission(local.clone(), &signed, &l1).unwrap();
+        assert_eq!(chain.verified_state_root(local.block_range.1), Some(local.post_state_root));
+        assert_eq!(bincode::serialize(&chain.get_l1_submission_transaction(local.index, signed.hash()).unwrap()).unwrap(),
+            bincode::serialize(&signed).unwrap());
     }
 
     #[test]

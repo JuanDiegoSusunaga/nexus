@@ -18,6 +18,8 @@ Los envíos pendientes admiten tres reintentos explícitos, condicionados al has
 
 `prepare_l1_submission` construye y firma el envío desde la instantánea local del lote y una instancia L1 confiable. Comprueba el certificado exigido por el modo, la identidad publicadora y la admisión local de la transacción, incluido el tamaño de su envoltura firmada. La preparación no reserva nonce ni registra envíos o raíces; L1 vuelve a validar al procesar el bloque.
 
+`register_l1_submission` y `retry_l1_submission` validan el paquete firmado contra L1 y el lote local antes de registrar su hash. Conservan sus bytes exactos en el historial para recuperarlos sin volver a firmar, incluso después de confirmar. Las API por hash siguen siendo intenciones locales sin comprobación del paquete L1.
+
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
 ## Antecedente — auditoría Merkle/Fiat–Shamir

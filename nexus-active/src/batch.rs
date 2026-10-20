@@ -275,6 +275,8 @@ pub struct SubmittedBatch {
 pub struct SubmissionAttempt {
     pub l1_tx_hash: Hash256,
     pub recorded_at: Timestamp,
+    /// Exact serialized signed packet for validated registrations; hash-only intents keep None.
+    pub transaction_bytes: Option<Vec<u8>>,
 }
 
 /// Local inclusion observation, without promoting an L2 root or claiming BFT finality.
@@ -309,6 +311,11 @@ impl BatchSubmitter {
 
     /// Mark batch as submitted
     pub fn mark_submitted(&mut self, batch: L2Batch, l1_tx_hash: Hash256) {
+        self.record_submitted(batch, l1_tx_hash, None);
+    }
+
+    pub(crate) fn record_submitted(&mut self, batch: L2Batch, l1_tx_hash: Hash256,
+        transaction_bytes: Option<Vec<u8>>) {
         // También puede enviarse desde una instantánea recuperada, sin extraer la cola.
         self.pending.retain(|pending| pending.index != batch.index);
         let now = Timestamp::now();
@@ -317,13 +324,13 @@ impl BatchSubmitter {
             l1_tx_hash,
             submitted_at: now,
             retries: 0,
-            attempts: vec![SubmissionAttempt { l1_tx_hash, recorded_at: now }],
+            attempts: vec![SubmissionAttempt { l1_tx_hash, recorded_at: now, transaction_bytes }],
         });
     }
 
     /// ActiveChain checks global hash reservations while holding its context write lock.
     pub(crate) fn retry_submission(&mut self, batch_index: u64, expected_hash: Hash256,
-        next_hash: Hash256) -> Result<(), NexusError> {
+        next_hash: Hash256, transaction_bytes: Option<Vec<u8>>) -> Result<(), NexusError> {
         let entry = self.submitted.iter_mut().find(|entry| entry.batch.index == batch_index)
             .ok_or_else(|| NexusError::BatchSubmissionFailed("No pending submission to retry".into()))?;
         if entry.l1_tx_hash != expected_hash {
@@ -335,7 +342,7 @@ impl BatchSubmitter {
         let retries = entry.retries.checked_add(1)
             .ok_or_else(|| NexusError::BatchSubmissionFailed("Submission retry count exhausted".into()))?;
         let now = Timestamp::now();
-        entry.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: now });
+        entry.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: now, transaction_bytes });
         entry.l1_tx_hash = next_hash;
         entry.submitted_at = now;
         entry.retries = retries;
@@ -344,6 +351,13 @@ impl BatchSubmitter {
 
     pub(crate) fn get_submission(&self, batch_index: u64) -> Option<SubmittedBatch> {
         self.submitted.iter().find(|entry| entry.batch.index == batch_index).cloned()
+    }
+
+    pub(crate) fn get_transaction_bytes(&self, batch_index: u64, hash: Hash256) -> Option<Vec<u8>> {
+        let attempts = self.submitted.iter().find(|entry| entry.batch.index == batch_index)
+            .map(|entry| &entry.attempts).or_else(|| self.confirmed.iter()
+                .find(|entry| entry.batch.index == batch_index).map(|entry| &entry.attempts))?;
+        attempts.iter().find(|attempt| attempt.l1_tx_hash == hash)?.transaction_bytes.clone()
     }
 
     /// Internal bookkeeping after ActiveChain checks the trusted L1 instance.
