@@ -1,283 +1,197 @@
-//! Data Availability Layer for Anchor Chain
-//!
-//! Ensures that L2 batch data is always available for reconstruction.
-//! Uses erasure coding and polynomial commitments.
+//! Bounded in-memory payload storage and authenticated chunk inclusion.
+//! This local profile implements neither erasure coding nor remote DAS.
 
-use nexus_core::{Hash256, NexusError, BlockHeight, Encodable};
+use nexus_core::{BlockHeight, Hash256, MerkleTree, NexusError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-/// Data Availability commitment (polynomial commitment)
+pub const DA_CHUNK_BYTES: usize = 256;
+pub const MAX_DA_DATA_SIZE: usize = nexus_core::MAX_BLOCK_SIZE;
+const LOCAL_DA_VERSION: u16 = 1;
+
+/// A trusted local receipt, distinct from consensus inclusion or an L2 proof.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DACommitment {
-    /// Commitment hash
+    pub encoding_version: u16,
+    /// SHA3 of the exact payload; preserves the existing payload identifier.
     pub commitment: Hash256,
-    /// Data size in bytes
+    /// Merkle root of ordered, domain-separated chunk leaves.
+    pub chunk_root: Hash256,
     pub data_size: u64,
-    /// Number of chunks
     pub chunk_count: u32,
-    /// Erasure coding parameters (k, n)
+    /// All original chunks are required, without parity: (chunk_count, chunk_count).
     pub coding_params: (u32, u32),
 }
 
 impl DACommitment {
-    /// Create a new commitment from data
-    pub fn from_data(data: &[u8], k: u32, n: u32) -> Self {
-        Self {
-            commitment: Hash256::hash(data),
-            data_size: data.len() as u64,
-            chunk_count: ((data.len() as u32) + 255) / 256, // 256-byte chunks
-            coding_params: (k, n),
+    pub fn from_data(data: &[u8]) -> Result<Self, NexusError> {
+        if data.is_empty() {
+            return Err(NexusError::InvalidTransaction("Empty local DA payload".into()));
         }
+        if data.len() > MAX_DA_DATA_SIZE { return Err(NexusError::BatchTooLarge); }
+        let count = u32::try_from(data.len().div_ceil(DA_CHUNK_BYTES)).map_err(|_| NexusError::BatchTooLarge)?;
+        let mut receipt = Self { encoding_version: LOCAL_DA_VERSION,
+            commitment: Hash256::hash(data), chunk_root: Hash256::ZERO,
+            data_size: data.len() as u64, chunk_count: count, coding_params: (count, count) };
+        let leaves = data.chunks(DA_CHUNK_BYTES).enumerate()
+            .map(|(index, chunk)| receipt.leaf_hash(index as u32, chunk)).collect();
+        receipt.chunk_root = MerkleTree::from_leaves(leaves).root();
+        Ok(receipt)
+    }
+
+    fn valid_metadata(&self) -> bool {
+        if self.encoding_version != LOCAL_DA_VERSION || self.data_size == 0
+            || self.data_size > MAX_DA_DATA_SIZE as u64 { return false; }
+        let count = self.data_size.div_ceil(DA_CHUNK_BYTES as u64) as u32;
+        self.chunk_count == count && self.coding_params == (count, count)
+    }
+
+    fn chunk_len(&self, index: u32) -> Option<usize> {
+        if !self.valid_metadata() || index >= self.chunk_count { return None; }
+        Some((self.data_size as usize - index as usize * DA_CHUNK_BYTES).min(DA_CHUNK_BYTES))
+    }
+
+    fn leaf_hash(&self, index: u32, chunk: &[u8]) -> Hash256 {
+        let mut input = b"NEXUS/LOCAL-DA/CHUNK/V1".to_vec();
+        input.extend_from_slice(self.commitment.as_bytes());
+        input.extend_from_slice(&self.data_size.to_le_bytes());
+        input.extend_from_slice(&self.chunk_count.to_le_bytes());
+        input.extend_from_slice(&index.to_le_bytes());
+        input.extend_from_slice(chunk);
+        Hash256::hash(&input)
     }
 }
 
-/// Proof that data is available
+/// Chunk inclusion under an externally trusted receipt, whose provenance is the caller's responsibility.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DAProof {
-    /// Merkle proof for the chunk
     pub merkle_proof: Vec<Hash256>,
-    /// Chunk index
     pub chunk_index: u32,
-    /// Chunk data
     pub chunk_data: Vec<u8>,
 }
 
 impl DAProof {
-    /// Verify the proof against a commitment
     pub fn verify(&self, commitment: &DACommitment) -> bool {
-        // Simplified verification: check merkle proof leads to commitment
-        let mut current = Hash256::hash(&self.chunk_data);
-
-        for (i, sibling) in self.merkle_proof.iter().enumerate() {
-            let is_right = (self.chunk_index >> i) & 1 == 1;
-            current = if is_right {
-                Hash256::hash(&[sibling.as_bytes().as_slice(), current.as_bytes().as_slice()].concat())
-            } else {
-                Hash256::hash(&[current.as_bytes().as_slice(), sibling.as_bytes().as_slice()].concat())
-            };
+        if commitment.chunk_len(self.chunk_index) != Some(self.chunk_data.len()) { return false; }
+        let depth = commitment.chunk_count.next_power_of_two().trailing_zeros() as usize;
+        if self.merkle_proof.len() != depth { return false; }
+        let mut current = commitment.leaf_hash(self.chunk_index, &self.chunk_data);
+        for (level, sibling) in self.merkle_proof.iter().enumerate() {
+            let (left, right) = if (self.chunk_index >> level) & 1 == 1 {
+                (sibling, &current)
+            } else { (&current, sibling) };
+            let mut pair = [0u8; 64];
+            pair[..32].copy_from_slice(left.as_bytes());
+            pair[32..].copy_from_slice(right.as_bytes());
+            current = Hash256::hash(&pair);
         }
-
-        current == commitment.commitment
+        current == commitment.chunk_root
     }
 }
 
-/// Data availability sample request
+/// Reserved request shape for the future remote sampling protocol.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DASample {
-    /// Block height
     pub height: BlockHeight,
-    /// Row indices to sample
     pub row_indices: Vec<u32>,
-    /// Column indices to sample
     pub col_indices: Vec<u32>,
 }
 
-/// Data Availability Layer
 #[derive(Clone)]
 pub struct DataAvailabilityLayer {
-    /// Stored commitments by block height
     commitments: HashMap<BlockHeight, Vec<DACommitment>>,
-    /// Stored data chunks
-    chunks: HashMap<(BlockHeight, u32), Vec<u8>>,
-    /// Erasure coding ratio (k of n)
-    coding_ratio: f64,
-    /// Sample count for DAS
-    sample_count: usize,
+    /// A payload index prevents submissions at one height overwriting each other.
+    chunks: HashMap<(BlockHeight, usize, u32), Vec<u8>>,
 }
 
 impl DataAvailabilityLayer {
-    /// Create a new DA layer
-    pub fn new() -> Self {
-        Self {
-            commitments: HashMap::new(),
-            chunks: HashMap::new(),
-            coding_ratio: 0.5, // 2x redundancy
-            sample_count: 75,  // 75 samples for 99.9% probability
+    pub fn new() -> Self { Self { commitments: HashMap::new(), chunks: HashMap::new() } }
+
+    pub fn submit_data(&mut self, height: BlockHeight, data: Vec<u8>) -> Result<DACommitment, NexusError> {
+        // Every fallible validation precedes publication of chunks and receipt.
+        let commitment = DACommitment::from_data(&data)?;
+        let batch_index = self.commitments.get(&height).map_or(0, Vec::len);
+        for (index, chunk) in data.chunks(DA_CHUNK_BYTES).enumerate() {
+            self.chunks.insert((height, batch_index, index as u32), chunk.to_vec());
         }
-    }
-
-    /// Submit data for a block
-    pub fn submit_data(
-        &mut self,
-        height: BlockHeight,
-        data: Vec<u8>,
-    ) -> Result<DACommitment, NexusError> {
-        // Create erasure-coded chunks
-        let chunks = self.erasure_encode(&data)?;
-        let k = (chunks.len() as f64 * self.coding_ratio) as u32;
-        let n = chunks.len() as u32;
-
-        // Create commitment
-        let commitment = DACommitment::from_data(&data, k, n);
-
-        // Store chunks
-        for (i, chunk) in chunks.into_iter().enumerate() {
-            self.chunks.insert((height, i as u32), chunk);
-        }
-
-        // Store commitment
-        self.commitments
-            .entry(height)
-            .or_default()
-            .push(commitment.clone());
-
+        self.commitments.entry(height).or_default().push(commitment.clone());
         Ok(commitment)
     }
 
-    /// Erasure encode data into chunks
-    fn erasure_encode(&self, data: &[u8]) -> Result<Vec<Vec<u8>>, NexusError> {
-        // Simplified: split into 256-byte chunks with padding
-        let chunk_size = 256;
-        let mut chunks = Vec::new();
-
-        for chunk in data.chunks(chunk_size) {
-            let mut padded = chunk.to_vec();
-            padded.resize(chunk_size, 0);
-            chunks.push(padded);
-        }
-
-        // In production: use Reed-Solomon coding to add parity chunks
-        // For now, duplicate chunks for redundancy
-        let original_count = chunks.len();
-        for i in 0..original_count {
-            chunks.push(chunks[i].clone());
-        }
-
-        Ok(chunks)
+    fn receipt(&self, height: BlockHeight, batch_index: usize) -> Result<&DACommitment, NexusError> {
+        self.commitments.get(&height).and_then(|receipts| receipts.get(batch_index))
+            .ok_or_else(|| NexusError::StateError("Local DA payload not found".into()))
     }
 
-    /// Generate proof for a chunk
-    pub fn generate_proof(
-        &self,
-        height: BlockHeight,
-        chunk_index: u32,
-    ) -> Result<DAProof, NexusError> {
-        let chunk = self
-            .chunks
-            .get(&(height, chunk_index))
-            .ok_or(NexusError::StateError("Chunk not found".into()))?;
-
-        // Generate merkle proof
-        let all_chunks: Vec<_> = self
-            .chunks
-            .iter()
-            .filter(|((h, _), _)| *h == height)
-            .map(|((_, i), c)| (*i, c.clone()))
-            .collect();
-
-        let merkle_proof = self.generate_merkle_proof(&all_chunks, chunk_index)?;
-
-        Ok(DAProof {
-            merkle_proof,
-            chunk_index,
-            chunk_data: chunk.clone(),
-        })
+    fn single_batch_index(&self, height: BlockHeight) -> Result<usize, NexusError> {
+        match self.commitments.get(&height) {
+            Some(receipts) if receipts.len() == 1 => Ok(0),
+            Some(_) => Err(NexusError::StateError("Ambiguous DA height; select a payload index".into())),
+            None => Err(NexusError::StateError("No local DA payloads for height".into())),
+        }
     }
 
-    /// Generate merkle proof for a chunk
-    fn generate_merkle_proof(
-        &self,
-        chunks: &[(u32, Vec<u8>)],
-        index: u32,
-    ) -> Result<Vec<Hash256>, NexusError> {
-        // Simplified merkle proof generation
-        let mut hashes: Vec<Hash256> = chunks
-            .iter()
-            .map(|(_, c)| Hash256::hash(c))
-            .collect();
-
-        let mut proof = Vec::new();
-        let mut idx = index as usize;
-
-        while hashes.len() > 1 {
-            let sibling_idx = if idx % 2 == 0 { idx + 1 } else { idx - 1 };
-            if sibling_idx < hashes.len() {
-                proof.push(hashes[sibling_idx]);
+    fn ordered_chunks(&self, height: BlockHeight, batch_index: usize,
+        commitment: &DACommitment) -> Result<Vec<&[u8]>, NexusError> {
+        if !commitment.valid_metadata() { return Err(NexusError::StateError("Invalid local DA metadata".into())); }
+        (0..commitment.chunk_count).map(|index| {
+            let chunk = self.chunks.get(&(height, batch_index, index))
+                .ok_or_else(|| NexusError::StateError("Missing local DA chunk".into()))?;
+            if commitment.chunk_len(index) != Some(chunk.len()) {
+                return Err(NexusError::StateError("Invalid local DA chunk length".into()));
             }
-
-            // Combine pairs
-            let mut new_hashes = Vec::new();
-            for pair in hashes.chunks(2) {
-                let combined = if pair.len() == 2 {
-                    Hash256::hash(&[pair[0].as_bytes().as_slice(), pair[1].as_bytes().as_slice()].concat())
-                } else {
-                    pair[0]
-                };
-                new_hashes.push(combined);
-            }
-            hashes = new_hashes;
-            idx /= 2;
-        }
-
-        Ok(proof)
+            Ok(chunk.as_slice())
+        }).collect()
     }
 
-    /// Perform Data Availability Sampling
+    /// Legacy convenience API: a height must identify exactly one payload.
+    pub fn generate_proof(&self, height: BlockHeight, chunk_index: u32) -> Result<DAProof, NexusError> {
+        self.generate_batch_proof(height, self.single_batch_index(height)?, chunk_index)
+    }
+
+    pub fn generate_batch_proof(&self, height: BlockHeight, batch_index: usize,
+        chunk_index: u32) -> Result<DAProof, NexusError> {
+        let commitment = self.receipt(height, batch_index)?;
+        if commitment.chunk_len(chunk_index).is_none() {
+            return Err(NexusError::StateError("Invalid local DA chunk index".into()));
+        }
+        let chunks = self.ordered_chunks(height, batch_index, commitment)?;
+        let leaves = chunks.iter().enumerate()
+            .map(|(index, chunk)| commitment.leaf_hash(index as u32, chunk)).collect();
+        let tree = MerkleTree::from_leaves(leaves);
+        if tree.root() != commitment.chunk_root { return Err(NexusError::StateError("Local DA chunk root mismatch".into())); }
+        let proof = tree.generate_proof(chunk_index as usize)
+            .ok_or_else(|| NexusError::StateError("Invalid local DA chunk index".into()))?;
+        Ok(DAProof { merkle_proof: proof.proof.into_iter().map(|node| node.hash).collect(),
+            chunk_index, chunk_data: chunks[chunk_index as usize].to_vec() })
+    }
+
+    /// Legacy name: checks all local payloads; it neither samples peers nor establishes network availability.
     pub fn sample(&self, height: BlockHeight) -> Result<bool, NexusError> {
-        let commitments = self
-            .commitments
-            .get(&height)
-            .ok_or(NexusError::StateError("No commitments for height".into()))?;
-
-        if commitments.is_empty() {
-            return Ok(true); // No data to sample
-        }
-
-        // Sample random chunks
-        for _ in 0..self.sample_count {
-            let chunk_count = commitments[0].chunk_count;
-            let random_index = rand::random::<u32>() % chunk_count;
-
-            if !self.chunks.contains_key(&(height, random_index)) {
-                return Ok(false); // Data not available
-            }
-        }
-
-        Ok(true)
+        let receipts = self.commitments.get(&height)
+            .ok_or_else(|| NexusError::StateError("No local DA payloads for height".into()))?;
+        Ok((0..receipts.len()).all(|index| self.reconstruct_batch(height, index).is_ok()))
     }
 
-    /// Get commitment for a block
-    pub fn get_commitment(&self, height: BlockHeight) -> Option<&Vec<DACommitment>> {
-        self.commitments.get(&height)
-    }
+    pub fn get_commitment(&self, height: BlockHeight) -> Option<&Vec<DACommitment>> { self.commitments.get(&height) }
 
-    /// Reconstruct data from chunks
+    /// Legacy convenience API: rejects a height containing multiple payloads.
     pub fn reconstruct_data(&self, height: BlockHeight) -> Result<Vec<u8>, NexusError> {
-        let commitments = self
-            .commitments
-            .get(&height)
-            .ok_or(NexusError::StateError("No commitments".into()))?;
+        self.reconstruct_batch(height, self.single_batch_index(height)?)
+    }
 
-        if commitments.is_empty() {
-            return Ok(Vec::new());
+    pub fn reconstruct_batch(&self, height: BlockHeight, batch_index: usize) -> Result<Vec<u8>, NexusError> {
+        let commitment = self.receipt(height, batch_index)?;
+        let chunks = self.ordered_chunks(height, batch_index, commitment)?;
+        let data: Vec<u8> = chunks.into_iter().flatten().copied().collect();
+        if DACommitment::from_data(&data)? != *commitment {
+            return Err(NexusError::StateError("Local DA payload commitment mismatch".into()));
         }
-
-        let commitment = &commitments[0];
-        let original_chunks = commitment.coding_params.0 as usize;
-
-        // Collect original chunks (not parity)
-        let mut data = Vec::new();
-        for i in 0..original_chunks {
-            let chunk = self
-                .chunks
-                .get(&(height, i as u32))
-                .ok_or(NexusError::StateError("Missing chunk".into()))?;
-            data.extend_from_slice(chunk);
-        }
-
-        // Trim to original size
-        data.truncate(commitment.data_size as usize);
-
         Ok(data)
     }
 }
 
-impl Default for DataAvailabilityLayer {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+impl Default for DataAvailabilityLayer { fn default() -> Self { Self::new() } }
 
 #[cfg(test)]
 mod tests {
@@ -287,34 +201,51 @@ mod tests {
     fn test_da_submit_and_reconstruct() {
         let mut da = DataAvailabilityLayer::new();
         let data = b"Hello, NEXUS Data Availability Layer!".to_vec();
-
-        let commitment = da.submit_data(BlockHeight::new(1), data.clone()).unwrap();
-        assert!(commitment.data_size > 0);
-
-        let reconstructed = da.reconstruct_data(BlockHeight::new(1)).unwrap();
-        assert_eq!(data, reconstructed);
+        let commitment = da.submit_data(BlockHeight(1), data.clone()).unwrap();
+        assert_eq!(commitment.commitment, Hash256::hash(&data));
+        assert_eq!(da.reconstruct_data(BlockHeight(1)).unwrap(), data);
     }
 
     #[test]
     fn test_da_sampling() {
         let mut da = DataAvailabilityLayer::new();
-        let data = vec![0u8; 1024]; // 1KB of data
-
-        da.submit_data(BlockHeight::new(1), data).unwrap();
-
-        let available = da.sample(BlockHeight::new(1)).unwrap();
-        assert!(available);
+        da.submit_data(BlockHeight(1), vec![0; 1024]).unwrap();
+        assert!(da.sample(BlockHeight(1)).unwrap());
     }
 
     #[test]
     fn test_da_proof_generation() {
         let mut da = DataAvailabilityLayer::new();
-        let data = vec![1u8; 512];
+        let commitment = da.submit_data(BlockHeight(1), vec![1; 512]).unwrap();
+        assert!(da.generate_proof(BlockHeight(1), 0).unwrap().verify(&commitment));
+    }
 
-        let commitment = da.submit_data(BlockHeight::new(1), data).unwrap();
-        let proof = da.generate_proof(BlockHeight::new(1), 0).unwrap();
+    #[test]
+    fn corrupt_or_missing_chunks_in_any_payload_fail_the_local_integrity_check() {
+        let mut da = DataAvailabilityLayer::new();
+        let height = BlockHeight(1);
+        da.submit_data(height, vec![1; 512]).unwrap();
+        da.submit_data(height, vec![2; 700]).unwrap();
+        da.chunks.get_mut(&(height, 1, 0)).unwrap()[0] ^= 1;
+        assert!(!da.sample(height).unwrap());
+        assert!(da.reconstruct_batch(height, 1).is_err());
+        assert!(da.generate_batch_proof(height, 1, 0).is_err());
+        assert_eq!(da.reconstruct_batch(height, 0).unwrap(), vec![1; 512]);
+        da.chunks.remove(&(height, 0, 1));
+        assert!(da.reconstruct_batch(height, 0).is_err());
+        assert!(da.generate_batch_proof(height, 0, 0).is_err());
+    }
 
-        // Note: Simplified verification may not pass with current implementation
-        // Full implementation would use proper merkle tree
+    #[test]
+    fn corrupted_receipt_metadata_is_rejected_without_allocating_from_it() {
+        let mut da = DataAvailabilityLayer::new();
+        let height = BlockHeight(1);
+        da.submit_data(height, vec![1; 10]).unwrap();
+        let receipt = &mut da.commitments.get_mut(&height).unwrap()[0];
+        receipt.data_size = u64::MAX;
+        receipt.chunk_count = u32::MAX;
+        assert!(!da.sample(height).unwrap());
+        assert!(da.reconstruct_batch(height, 0).is_err());
+        assert!(da.generate_batch_proof(height, 0, 0).is_err());
     }
 }

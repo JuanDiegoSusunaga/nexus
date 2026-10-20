@@ -64,6 +64,8 @@ pub struct AnchorChain {
 #[derive(Debug, Clone)]
 pub struct L2BatchRecord {
     pub index: u64,
+    /// Payload position within this local L1 height, independent of the global batch index.
+    pub da_batch_index: usize,
     pub pre_state_root: StateRoot,
     pub post_state_root: StateRoot,
     pub data_hash: Hash256,
@@ -218,10 +220,12 @@ impl AnchorChain {
                 execution.validators.register(tx.sender, public_key.clone(), *stake)?;
             }
             TransactionType::BatchSubmit { batch_root, compressed_data, .. } => {
-                execution.da_layer.submit_data(height, compressed_data.clone())?;
+                let da_batch_index = execution.da_layer.get_commitment(height).map_or(0, Vec::len);
+                let commitment = execution.da_layer.submit_data(height, compressed_data.clone())?;
                 execution.l2_batches.push(L2BatchRecord { index: execution.l2_batches.len() as u64,
+                    da_batch_index,
                     pre_state_root: StateRoot::EMPTY, post_state_root: StateRoot::new(*batch_root),
-                    data_hash: Hash256::hash(compressed_data), l1_height: height, timestamp });
+                    data_hash: commitment.commitment, l1_height: height, timestamp });
             }
             _ => return Err(NexusError::NotImplemented("L1 transaction type".into())),
         }
@@ -235,8 +239,10 @@ impl AnchorChain {
     pub fn submit_l2_batch(&self, batch_root: StateRoot, bytes: Vec<u8>) -> Result<Hash256, NexusError> {
         let mut data = self.data.write();
         let mut staged = data.execution.clone();
+        let da_batch_index = staged.da_layer.get_commitment(data.height).map_or(0, Vec::len);
         let commitment = staged.da_layer.submit_data(data.height, bytes)?;
         staged.l2_batches.push(L2BatchRecord { index: staged.l2_batches.len() as u64,
+            da_batch_index,
             pre_state_root: StateRoot::EMPTY, post_state_root: batch_root,
             data_hash: commitment.commitment, l1_height: data.height, timestamp: Timestamp::now() });
         data.execution = staged;
@@ -244,6 +250,17 @@ impl AnchorChain {
     }
     pub fn get_l2_batch(&self, index: u64) -> Option<L2BatchRecord> {
         self.data.read().execution.l2_batches.get(usize::try_from(index).ok()?).cloned()
+    }
+    /// Reconstruct an exact local payload; this does not authenticate an L2 state transition.
+    pub fn get_l2_batch_data(&self, index: u64) -> Result<Vec<u8>, NexusError> {
+        let data = self.data.read();
+        let record = usize::try_from(index).ok().and_then(|index| data.execution.l2_batches.get(index))
+            .ok_or_else(|| NexusError::StateError("L2 batch not found".into()))?;
+        let bytes = data.execution.da_layer.reconstruct_batch(record.l1_height, record.da_batch_index)?;
+        if Hash256::hash(&bytes) != record.data_hash {
+            return Err(NexusError::StateError("L2 payload hash mismatch".into()));
+        }
+        Ok(bytes)
     }
     pub fn finalized_height(&self) -> BlockHeight { self.data.read().finality.last_finalized_height() }
     pub fn is_finalized(&self, hash: &Hash256) -> bool { self.data.read().finality.is_finalized(hash) }

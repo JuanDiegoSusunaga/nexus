@@ -3,7 +3,7 @@
 //! The Anchor Layer provides the foundation for the NEXUS dual-chain architecture:
 //!
 //! - **Consensus**: Proof-of-Stake consensus with post-quantum signatures
-//! - **Data Availability**: Ensures L2 data can always be reconstructed
+//! - **Local data storage**: Bounded payloads and chunk inclusion; remote DA remains future work
 //! - **Settlement**: Final settlement layer for L2 state transitions
 //! - **Validator Management**: Registration, staking, and slashing
 //!

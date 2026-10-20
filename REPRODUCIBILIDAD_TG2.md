@@ -2,6 +2,20 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Almacenamiento local DA — 20 de octubre de 2026
+
+Se corrigen tres regresiones del registro de datos: los envíos a una misma altura sobrescribían fragmentos, se admitían datos vacíos que podían provocar módulo por cero al muestrear y las pruebas de fragmentos no correspondían al compromiso guardado. El perfil local conserva bytes opacos de entre 1 y `MAX_DA_DATA_SIZE` (1 MiB), divididos en fragmentos de 256 bytes; el último conserva su longitud exacta. No duplica fragmentos ni simula paridad. `coding_params = (chunk_count, chunk_count)` indica que se necesitan todos los originales.
+
+`DACommitment::from_data(data)` devuelve `Result` y construye un recibo local con `encoding_version = 1`. `commitment` conserva SHA3 de los bytes completos; `chunk_root` es otra raíz, construida con las hojas ordenadas `SHA3("NEXUS/LOCAL-DA/CHUNK/V1" || hash_contenido || tamaño_u64_LE || cantidad_u32_LE || índice_u32_LE || bytes_fragmento)`. El árbol reutiliza la construcción Merkle de `nexus-core`, incluida su extensión a potencia de dos repitiendo la última hoja. La prueba exige metadatos válidos, índice dentro del número original de hojas, longitud exacta y profundidad canónica, y vincula también el hash del contenido. Los recibos anteriores sin versión no son un formato admitido; no cambia el formato de transacciones firmadas ni el certificado AIR/FRI.
+
+Los fragmentos se guardan por `(altura, índice_local_de_lote, índice_de_fragmento)`. `reconstruct_batch` y `generate_batch_proof` reciben ese índice local; las API anteriores `reconstruct_data` y `generate_proof` solo aceptan alturas con un único lote y rechazan la ambigüedad. La reconstrucción contrasta bytes, metadatos, hash y raíz. El nombre heredado `sample` comprueba determinísticamente la integridad de todos los lotes locales de esa altura: no consulta pares ni acredita disponibilidad de red.
+
+`L2BatchRecord::da_batch_index` conserva la posición local, independiente del índice global del lote. `AnchorChain::get_l2_batch_data` recupera los bytes y vuelve a comprobar su hash. Las dos vías de registro —transacción L1 y helper local— usan ese selector; los efectos siguen sujetos al rechazo atómico del bloque. El hash retornado por el helper sigue siendo SHA3 de los bytes completos.
+
+La [evidencia del almacenamiento DA local](../Documentos/06-Evidencia-TG2/2026-10-20/DA-Local/verificacion.json) conserva tres reproducciones previas y trece pruebas nuevas: nueve externas de fragmentos, dos de integración L1 y dos internas de corrupción, además de reforzar la prueba anterior que generaba una ruta sin verificarla. Un oráculo independiente de dos hojas comprueba la raíz y el orden de hermanos.
+
+**Límite:** el recibo debe proceder de un contexto confiable; una raíz aportada por quien envía la prueba no se convierte por ello en un compromiso de consenso. Este perfil no prueba inclusión del recibo en L1, disponibilidad remota, Reed–Solomon, recuperación con fragmentos perdidos ni ejecución válida L2. La raíz de cuentas L1 sigue sin comprometer integralmente estas estructuras auxiliares. El formato de hojas DA es independiente del AIR escalar y de su modelo Lean; no se añade un teorema ni se amplía el resultado matemático. Se conservan las fuentes de la tesis y el núcleo/lector AIR-FRI.
+
 ## Dominio local de transacciones L2 — 20 de octubre de 2026
 
 `SequencerConfig::chain_id` fija el identificador firmado esperado (por defecto `ChainId::LOCAL`). El secuenciador rechaza otro identificador antes de reservar el nonce o añadirlo al pool. `ActiveChain` construye su motor con esa misma configuración, sin una segunda política que pueda divergir. El motor también comprueba el dominio en la ejecución directa; `execute_batch` convierte ese rechazo en un resultado fallido sin cambios de estado, consumo de gas ni avance del nonce para esa entrada. Las entradas válidas del lote continúan bajo las reglas existentes.
