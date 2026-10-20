@@ -14,6 +14,8 @@ El registro local DA conserva por separado los envíos a una misma altura y perm
 
 La confirmación de un lote L2 exige ahora consultar una instancia L1 confiable: el hash registrado debe pertenecer a un `BatchSubmit` procesado, publicado por el secuenciador y con raíz, cantidad y bytes coincidentes. Se conserva la procedencia del bloque L1 y cada hash de envío solo puede asignarse una vez dentro de la instancia L2. Esta observación local mantiene separados inclusión, finalidad BFT y validez de ejecución.
 
+Los envíos pendientes admiten tres reintentos explícitos, condicionados al hash vigente y conservando el lote y su certificado. El historial mantiene reservados los hashes anteriores y permite reconocer su inclusión tardía. La confirmación se registra una sola vez; esta contabilidad local no impide que varias transacciones lleguen a L1.
+
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
 ## Antecedente — auditoría Merkle/Fiat–Shamir

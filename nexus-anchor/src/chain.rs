@@ -280,9 +280,16 @@ impl AnchorChain {
 
     /// Reads canonical processed storage under one lock, excluding helper-only registrations.
     pub fn get_processed_batch_inclusion(&self, tx_hash: &Hash256) -> Result<L1BatchInclusion, NexusError> {
+        self.find_processed_batch_inclusion(tx_hash)?
+            .ok_or_else(|| NexusError::SecurityViolation("No processed L1 batch transaction".into()))
+    }
+
+    /// Absence is distinct from inconsistent local storage; callers must propagate errors.
+    pub fn find_processed_batch_inclusion(&self, tx_hash: &Hash256) -> Result<Option<L1BatchInclusion>, NexusError> {
         let data = self.data.read();
-        let record = data.execution.l2_batches.iter().find(|record| record.l1_tx_hash == Some(*tx_hash))
-            .ok_or_else(|| NexusError::SecurityViolation("No processed L1 batch transaction".into()))?;
+        let Some(record) = data.execution.l2_batches.iter().find(|record| record.l1_tx_hash == Some(*tx_hash)) else {
+            return Ok(None);
+        };
         let block_hash = *data.blocks_by_height.get(&record.l1_height)
             .ok_or(NexusError::BlockHeightNotFound(record.l1_height))?;
         let block = data.blocks.get(&block_hash).ok_or(NexusError::BlockNotFound(block_hash))?;
@@ -298,9 +305,9 @@ impl AnchorChain {
             || record.post_state_root != StateRoot::new(batch_root) {
             return Err(NexusError::SecurityViolation("L1 batch record differs from its transaction or DA data".into()));
         }
-        Ok(L1BatchInclusion { transaction_hash: *tx_hash, block_hash, block_height: record.l1_height,
+        Ok(Some(L1BatchInclusion { transaction_hash: *tx_hash, block_hash, block_height: record.l1_height,
             sender: tx.sender, batch_root: StateRoot::new(batch_root), batch_size,
-            data_hash: record.data_hash, data: bytes })
+            data_hash: record.data_hash, data: bytes }))
     }
     pub fn finalized_height(&self) -> BlockHeight { self.data.read().finality.last_finalized_height() }
     pub fn is_finalized(&self, hash: &Hash256) -> bool { self.data.read().finality.is_finalized(hash) }

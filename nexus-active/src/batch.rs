@@ -264,9 +264,17 @@ pub struct BatchSubmitter {
 #[derive(Debug, Clone)]
 pub struct SubmittedBatch {
     pub batch: L2Batch,
+    /// Current attempt; earlier hashes remain reserved and eligible for inclusion.
     pub l1_tx_hash: Hash256,
     pub submitted_at: Timestamp,
     pub retries: u32,
+    pub attempts: Vec<SubmissionAttempt>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SubmissionAttempt {
+    pub l1_tx_hash: Hash256,
+    pub recorded_at: Timestamp,
 }
 
 /// Local inclusion observation, without promoting an L2 root or claiming BFT finality.
@@ -276,6 +284,7 @@ pub struct ConfirmedBatch {
     pub l1_tx_hash: Hash256,
     pub l1_block_hash: Hash256,
     pub l1_height: BlockHeight,
+    pub attempts: Vec<SubmissionAttempt>,
 }
 
 impl BatchSubmitter {
@@ -302,20 +311,49 @@ impl BatchSubmitter {
     pub fn mark_submitted(&mut self, batch: L2Batch, l1_tx_hash: Hash256) {
         // También puede enviarse desde una instantánea recuperada, sin extraer la cola.
         self.pending.retain(|pending| pending.index != batch.index);
+        let now = Timestamp::now();
         self.submitted.push(SubmittedBatch {
             batch,
             l1_tx_hash,
-            submitted_at: Timestamp::now(),
+            submitted_at: now,
             retries: 0,
+            attempts: vec![SubmissionAttempt { l1_tx_hash, recorded_at: now }],
         });
+    }
+
+    /// ActiveChain checks global hash reservations while holding its context write lock.
+    pub(crate) fn retry_submission(&mut self, batch_index: u64, expected_hash: Hash256,
+        next_hash: Hash256) -> Result<(), NexusError> {
+        let entry = self.submitted.iter_mut().find(|entry| entry.batch.index == batch_index)
+            .ok_or_else(|| NexusError::BatchSubmissionFailed("No pending submission to retry".into()))?;
+        if entry.l1_tx_hash != expected_hash {
+            return Err(NexusError::BatchSubmissionFailed("Stale submission attempt".into()));
+        }
+        if entry.retries >= self.max_retries {
+            return Err(NexusError::BatchSubmissionFailed("Submission retry limit reached".into()));
+        }
+        let retries = entry.retries.checked_add(1)
+            .ok_or_else(|| NexusError::BatchSubmissionFailed("Submission retry count exhausted".into()))?;
+        let now = Timestamp::now();
+        entry.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: now });
+        entry.l1_tx_hash = next_hash;
+        entry.submitted_at = now;
+        entry.retries = retries;
+        Ok(())
+    }
+
+    pub(crate) fn get_submission(&self, batch_index: u64) -> Option<SubmittedBatch> {
+        self.submitted.iter().find(|entry| entry.batch.index == batch_index).cloned()
     }
 
     /// Internal bookkeeping after ActiveChain checks the trusted L1 instance.
     pub(crate) fn mark_confirmed(&mut self, batch_index: u64, l1_tx_hash: Hash256,
         l1_block_hash: Hash256, l1_height: BlockHeight) -> Option<ConfirmedBatch> {
-        if let Some(pos) = self.submitted.iter().position(|b| b.batch.index == batch_index && b.l1_tx_hash == l1_tx_hash) {
+        if let Some(pos) = self.submitted.iter().position(|b| b.batch.index == batch_index
+            && b.attempts.iter().any(|attempt| attempt.l1_tx_hash == l1_tx_hash)) {
             let submitted = self.submitted.remove(pos);
-            let confirmed = ConfirmedBatch { batch: submitted.batch, l1_tx_hash, l1_block_hash, l1_height };
+            let confirmed = ConfirmedBatch { batch: submitted.batch, l1_tx_hash, l1_block_hash, l1_height,
+                attempts: submitted.attempts };
             self.confirmed.push(confirmed.clone());
             return Some(confirmed);
         }

@@ -2,7 +2,7 @@
 //! El contrato Lean escalar no acredita transacciones ni raíces SHA3 generales.
 
 use crate::{
-    batch::{BatchBuilder, BatchSubmitter, ConfirmedBatch, L2Batch},
+    batch::{BatchBuilder, BatchSubmitter, ConfirmedBatch, L2Batch, SubmittedBatch},
     execution::{ExecutionEngine, ExecutionResult},
     linked_verifier::{ExpectedTransition, public_inputs},
     sequencer::{NexusSequencer, SequencerConfig},
@@ -43,7 +43,8 @@ impl Default for LinkedValidityProfile {
 /// Instantánea de un lote construido localmente; solo la prueba se aporta después.
 struct KnownBatch {
     batch: L2Batch,
-    l1_tx_hash: Option<Hash256>,
+    /// Every attempt stays reserved for this immutable local batch.
+    l1_tx_hashes: Vec<Hash256>,
 }
 
 /// Active Chain configuration
@@ -288,7 +289,7 @@ impl ActiveChain {
         if known.contains_key(&batch.index) {
             return Err(NexusError::StateError("Índice local de lote repetido".into()));
         }
-        known.insert(batch.index, KnownBatch { batch: batch.clone(), l1_tx_hash: None });
+        known.insert(batch.index, KnownBatch { batch: batch.clone(), l1_tx_hashes: Vec::new() });
         self.batch_submitter.write().queue(batch);
         Ok(())
     }
@@ -342,12 +343,12 @@ impl ActiveChain {
     pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) -> Result<(), NexusError> {
         let mut known = self.known_batches.write();
         Self::check_known_batch(&batch, &known)?;
-        if l1_tx_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hash == Some(l1_tx_hash)) {
+        if l1_tx_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hashes.contains(&l1_tx_hash)) {
             return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
         }
         let entry = known.get_mut(&batch.index)
             .ok_or_else(|| NexusError::StateError("Se perdió el contexto local del lote".into()))?;
-        if entry.l1_tx_hash.is_some() {
+        if !entry.l1_tx_hashes.is_empty() {
             return Err(NexusError::SecurityViolation("El lote ya fue enviado".into()));
         }
         let expected = self.expected_for_local_batch(&entry.batch);
@@ -359,8 +360,30 @@ impl ActiveChain {
         };
         if !result.valid { return Err(NexusError::ProofVerificationFailed); }
         self.batch_submitter.write().mark_submitted(batch, l1_tx_hash);
-        entry.l1_tx_hash = Some(l1_tx_hash);
+        entry.l1_tx_hashes.push(l1_tx_hash);
         Ok(())
+    }
+
+    /// Record a replacement intent for the same submitted batch and certificate.
+    /// An expected current hash prevents stale callers from overwriting a newer retry.
+    pub fn retry_batch_submission(&self, batch_index: u64, expected_hash: Hash256,
+        next_hash: Hash256) -> Result<(), NexusError> {
+        let mut known = self.known_batches.write();
+        let entry = known.get(&batch_index)
+            .ok_or_else(|| NexusError::SecurityViolation("Unknown local batch".into()))?;
+        if entry.l1_tx_hashes.last().copied() != Some(expected_hash) {
+            return Err(NexusError::BatchSubmissionFailed("Stale or absent submission attempt".into()));
+        }
+        if next_hash == Hash256::ZERO || known.values().any(|entry| entry.l1_tx_hashes.contains(&next_hash)) {
+            return Err(NexusError::SecurityViolation("Empty or already assigned L1 transaction hash".into()));
+        }
+        self.batch_submitter.write().retry_submission(batch_index, expected_hash, next_hash)?;
+        known.get_mut(&batch_index).expect("context held under write lock").l1_tx_hashes.push(next_hash);
+        Ok(())
+    }
+
+    pub fn get_batch_submission(&self, batch_index: u64) -> Option<SubmittedBatch> {
+        self.batch_submitter.read().get_submission(batch_index)
     }
 
     /// Confirm local inclusion using a trusted L1 instance supplied by the integration.
@@ -369,16 +392,21 @@ impl ActiveChain {
         let known = self.known_batches.read();
         let entry = known.get(&batch_index)
             .ok_or_else(|| NexusError::SecurityViolation("Unknown local batch".into()))?;
-        let tx_hash = entry.l1_tx_hash
-            .ok_or_else(|| NexusError::SecurityViolation("Batch has no recorded L1 submission".into()))?;
-        let inclusion = l1.get_processed_batch_inclusion(&tx_hash)?;
-        if inclusion.transaction_hash != tx_hash || inclusion.sender != self.sequencer.address()
-            || inclusion.batch_root != entry.batch.post_state_root
-            || usize::try_from(inclusion.batch_size).ok() != Some(entry.batch.tx_count)
-            || inclusion.data != entry.batch.compressed_data {
-            return Err(NexusError::SecurityViolation("L1 inclusion differs from the local batch or publisher".into()));
+        let mut matched = None;
+        // Prefer the earliest recorded matching inclusion, including delayed old attempts.
+        for tx_hash in &entry.l1_tx_hashes {
+            if let Some(inclusion) = l1.find_processed_batch_inclusion(tx_hash)? {
+                if inclusion.transaction_hash == *tx_hash && inclusion.sender == self.sequencer.address()
+                    && inclusion.batch_root == entry.batch.post_state_root
+                    && usize::try_from(inclusion.batch_size).ok() == Some(entry.batch.tx_count)
+                    && inclusion.data == entry.batch.compressed_data {
+                    matched = Some(inclusion);
+                    break;
+                }
+            }
         }
-        self.batch_submitter.write().mark_confirmed(batch_index, tx_hash, inclusion.block_hash, inclusion.block_height)
+        let inclusion = matched.ok_or_else(|| NexusError::SecurityViolation("No recorded attempt has matching processed L1 inclusion".into()))?;
+        self.batch_submitter.write().mark_confirmed(batch_index, inclusion.transaction_hash, inclusion.block_hash, inclusion.block_height)
             .ok_or_else(|| NexusError::SecurityViolation("Batch already confirmed or submission no longer pending".into()))
     }
 
@@ -563,6 +591,28 @@ mod tests {
         config.verification_mode = VerificationMode::ZKValidity;
         config.validity_profile = profile;
         ActiveChain::new(config, keypair)
+    }
+
+    #[test]
+    fn submission_retries_preserve_the_validity_certificate_and_local_context() {
+        let proved = scalar_fixture();
+        let mut local = proved.clone();
+        local.validity_proof = None;
+        let chain = validity_chain(LinkedValidityProfile::default());
+        chain.queue_local_batch(local.clone()).unwrap();
+        let initial = Hash256::hash(b"initial scalar intent");
+        let replacement = Hash256::hash(b"replacement scalar intent");
+        chain.mark_batch_submitted(proved.clone(), initial).unwrap();
+        chain.retry_batch_submission(proved.index, initial, replacement).unwrap();
+        let pending = chain.get_batch_submission(proved.index).unwrap();
+        assert_eq!(bincode::serialize(&pending.batch).unwrap(), bincode::serialize(&proved).unwrap());
+        assert_eq!(bincode::serialize(&chain.get_known_batch(proved.index).unwrap()).unwrap(),
+            bincode::serialize(&local).unwrap());
+        assert_eq!(chain.verified_state_root(proved.block_range.1), Some(proved.post_state_root));
+        assert_eq!(pending.attempts.len(), 2);
+        assert_eq!(pending.retries, 1);
+        assert_eq!(pending.l1_tx_hash, replacement);
+        assert_eq!(chain.stats().confirmed_batches, 0);
     }
 
     #[test]

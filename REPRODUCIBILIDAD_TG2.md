@@ -2,6 +2,18 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Recuperación de envíos pendientes — 20 de octubre de 2026
+
+El primer hash registrado dejaba bloqueado un lote si el envío no aparecía en L1: repetir `mark_batch_submitted` se rechazaba por duplicado y la confirmación seguía pendiente. Se conserva un escenario de referencia de esa limitación y se añade `retry_batch_submission(index, expected_hash, next_hash)`. Esta API registra una nueva intención sobre el mismo lote ya admitido, sin volver a ejecutar transacciones ni sustituir su certificado o contexto local.
+
+`expected_hash` debe coincidir con el intento vigente. El siguiente hash debe ser no vacío y no haber sido reservado por ningún lote de la instancia, incluyendo intentos anteriores y lotes confirmados. El gestor permite el envío inicial y tres reintentos; rechaza un cuarto, los cambios desactualizados, los lotes sin envío y los ya confirmados. Todo rechazo conserva el contador, las fechas, el historial y las reservas existentes. El bloqueo del contexto local serializa el reintento con otros reintentos y con la confirmación.
+
+`get_batch_submission(index)` devuelve el lote pendiente con su hash actual, contador e historial de `SubmissionAttempt`. Tras la confirmación, el historial queda en `ConfirmedBatch::attempts`, consultable por `get_batch_confirmation`. La confirmación recorre los intentos en orden de registro y usa la primera inclusión encontrada que coincide con el publicador y el lote. Esto admite un intento original incluido después de registrar un reemplazo; también permite saltar una transacción procesada cuyos campos no coincidan. `AnchorChain::find_processed_batch_inclusion` distingue ausencia (`Ok(None)`) de un error de integridad local, que se propaga.
+
+La [evidencia de recuperación](../Documentos/06-Evidencia-TG2/2026-10-20/Reintentos-L1/verificacion.json) incluye ocho pruebas externas y una interna: recuperación desde un hash erróneo, reservas históricas, cambios desactualizados, límite, inclusión tardía, varias inclusiones, campos incorrectos y carreras de reintento/confirmación. El caso interno usa un certificado escalar sintético válido para comprobar que permanecen idénticos el lote certificado y su contexto, sin presentarlo como prueba de ejecución general L2.
+
+**Alcance:** se registran intenciones locales; la integración sigue emitiendo las transacciones y seleccionando la instancia L1 confiable. Registrar un reemplazo no demuestra que un intento anterior haya sido cancelado ni evita varias inclusiones en L1. La garantía es una sola confirmación local del lote, con trazabilidad de sus intentos. No hay temporizadores, recuperación durable ni unicidad entre instancias o reinicios. Se preservan las fuentes Lean y de tesis, los formatos firmados y el núcleo/lector AIR-FRI; no se amplía el alcance matemático ni se acredita finalidad BFT o validez L2 general.
+
 ## Confirmación local de inclusión L1 — 20 de octubre de 2026
 
 `mark_batch_submitted(batch, l1_hash)` registra la intención de envío después de verificar el contrato local del lote. Rechaza el hash vacío y la asignación del mismo hash a otro lote, incluso después de confirmar el primero, dentro de esta instancia en memoria. La integración conserva la responsabilidad de emitir la transacción firmada.

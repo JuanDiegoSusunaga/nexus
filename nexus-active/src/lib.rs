@@ -42,5 +42,5 @@ pub use verifier::{NitroVerifier, VerificationResult, StateProof};
 pub use pq_verifier::PqValidityProof;
 pub use linked_verifier::{ExpectedTransition, LinkedValidityProof};
 pub use execution::{ExecutionEngine, ExecutionResult};
-pub use batch::{BatchBuilder, L2Batch, BatchStatus, ConfirmedBatch};
+pub use batch::{BatchBuilder, L2Batch, BatchStatus, ConfirmedBatch, SubmittedBatch, SubmissionAttempt};
 pub use chain::{ActiveChain, ActiveChainConfig, LinkedValidityProfile};
