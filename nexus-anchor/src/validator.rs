@@ -183,7 +183,7 @@ impl ValidatorSet {
             .collect();
 
         // Sort by stake (descending)
-        active.sort_by(|a, b| b.stake.0.cmp(&a.stake.0));
+        active.sort_by(|a, b| b.stake.0.cmp(&a.stake.0).then_with(|| a.address.0.cmp(&b.address.0)));
 
         // Limit to max validators
         active.truncate(self.max_validators);
@@ -296,6 +296,7 @@ impl ValidatorSet {
 }
 
 /// Validator registry for on-chain management
+#[derive(Clone)]
 pub struct ValidatorRegistry {
     /// Current validator set
     validator_set: ValidatorSet,

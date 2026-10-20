@@ -98,8 +98,13 @@ impl Verifier for DilithiumPublicKey {
 
 /// Verify a signed transaction
 pub fn verify_signed_transaction(tx: &SignedTransaction) -> Result<bool, NexusError> {
+    verify_signed_transaction_at(tx, nexus_core::Timestamp::now())
+}
+
+/// Same signing bytes and ML-DSA verification with caller-supplied application time.
+pub fn verify_signed_transaction_at(tx: &SignedTransaction, at: nexus_core::Timestamp) -> Result<bool, NexusError> {
     // Validate structure first
-    tx.validate_structure()?;
+    tx.validate_structure_at(at)?;
 
     // Recreate signing hash
     let signing_hash = tx.transaction.signing_hash();

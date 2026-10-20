@@ -1,359 +1,248 @@
-//! Anchor Chain - Complete L1 Implementation
-//!
-//! Integrates consensus, validators, DA, and finality into a cohesive chain.
+//! Local L1 reference processor; processing is distinct from BFT finalization.
+//! State and auxiliary effects are committed together after successful execution.
 
 use crate::{
-    consensus::{ConsensusConfig, ConsensusEngine, ProofOfStake},
+    consensus::ConsensusConfig,
     data_availability::DataAvailabilityLayer,
-    finality::{FinalityGadget, FinalizedBlock},
+    finality::FinalityGadget,
     validator::{ValidatorRegistry, ValidatorSet},
 };
 use nexus_core::{
-    Block, BlockHeight, Hash256, Layer, NexusError, SignedTransaction,
-    StateRoot, InMemoryState, AccountState, Address, Amount,
+    AccountState, Address, Amount, Block, BlockBody, BlockHeader, BlockHeight, Hash256, InMemoryState,
+    Layer, MerkleTree, NexusError, SignedTransaction, StateRoot, Timestamp,
 };
-use nexus_crypto::{DilithiumKeypair, Signer, verify_signed_transaction};
+use nexus_crypto::{signer::verify_signed_transaction_at, DilithiumKeypair};
 use parking_lot::RwLock;
 use std::collections::HashMap;
-use std::sync::Arc;
 
-/// Anchor Chain configuration
 #[derive(Debug, Clone)]
 pub struct AnchorChainConfig {
-    /// Consensus configuration
     pub consensus: ConsensusConfig,
-    /// Minimum validator stake
     pub min_stake: Amount,
-    /// Block reward
     pub block_reward: Amount,
-    /// Transaction fee percentage
+    /// Reserved metadata; this reference profile does not charge transaction fees.
     pub fee_percentage: u8,
 }
 
 impl Default for AnchorChainConfig {
     fn default() -> Self {
-        Self {
-            consensus: ConsensusConfig::default(),
-            min_stake: Amount::from_units(32),
-            block_reward: Amount::from_units(2),
-            fee_percentage: 1,
-        }
+        Self { consensus: ConsensusConfig::default(), min_stake: Amount::from_units(32),
+            block_reward: Amount::from_units(2), fee_percentage: 1 }
     }
 }
 
-/// The Anchor Chain (L1)
-pub struct AnchorChain {
-    /// Configuration
-    config: AnchorChainConfig,
-    /// Consensus engine
-    consensus: Arc<ProofOfStake>,
-    /// Validator registry
-    validators: Arc<RwLock<ValidatorRegistry>>,
-    /// Data availability layer
-    da_layer: Arc<RwLock<DataAvailabilityLayer>>,
-    /// Finality gadget
-    finality: Arc<RwLock<FinalityGadget>>,
-    /// Block storage (hash -> block)
-    blocks: Arc<RwLock<HashMap<Hash256, Block>>>,
-    /// Block by height
-    blocks_by_height: Arc<RwLock<HashMap<BlockHeight, Hash256>>>,
-    /// Current state
-    state: Arc<RwLock<InMemoryState>>,
-    /// Genesis block
-    genesis: Block,
-    /// L2 batch roots stored on L1
-    l2_batches: Arc<RwLock<Vec<L2BatchRecord>>>,
+#[derive(Clone)]
+struct ExecutionState {
+    state: InMemoryState,
+    validators: ValidatorRegistry,
+    da_layer: DataAvailabilityLayer,
+    l2_batches: Vec<L2BatchRecord>,
 }
 
-/// Record of an L2 batch stored on L1
+struct ChainData {
+    execution: ExecutionState,
+    blocks: HashMap<Hash256, Block>,
+    blocks_by_height: HashMap<BlockHeight, Hash256>,
+    height: BlockHeight,
+    finality: FinalityGadget,
+}
+
+/// One lock serializes validation, execution, and publication of a local block.
+/// This processor does not turn local acceptance into a consensus certificate.
+pub struct AnchorChain {
+    config: AnchorChainConfig,
+    data: RwLock<ChainData>,
+    genesis: Block,
+}
+
 #[derive(Debug, Clone)]
 pub struct L2BatchRecord {
-    /// Batch index
     pub index: u64,
-    /// State root before
     pub pre_state_root: StateRoot,
-    /// State root after
     pub post_state_root: StateRoot,
-    /// Batch data hash
     pub data_hash: Hash256,
-    /// L1 block height where stored
     pub l1_height: BlockHeight,
-    /// Timestamp
-    pub timestamp: nexus_core::Timestamp,
+    pub timestamp: Timestamp,
 }
 
 impl AnchorChain {
-    /// Create a new Anchor Chain
-    pub fn new(config: AnchorChainConfig, keypair: DilithiumKeypair) -> Self {
-        let validator_set = ValidatorSet::new();
-        let consensus = Arc::new(ProofOfStake::new(
-            config.consensus.clone(),
-            validator_set.clone(),
-            keypair,
-        ));
-
+    pub fn new(config: AnchorChainConfig, _keypair: DilithiumKeypair) -> Self {
         let genesis = Block::genesis(Layer::Anchor);
-        let genesis_hash = genesis.hash();
-
-        let mut blocks = HashMap::new();
-        blocks.insert(genesis_hash, genesis.clone());
-
-        let mut blocks_by_height = HashMap::new();
-        blocks_by_height.insert(BlockHeight::GENESIS, genesis_hash);
-
-        Self {
-            config: config.clone(),
-            consensus,
-            validators: Arc::new(RwLock::new(ValidatorRegistry::new(config.min_stake))),
-            da_layer: Arc::new(RwLock::new(DataAvailabilityLayer::new())),
-            finality: Arc::new(RwLock::new(FinalityGadget::new())),
-            blocks: Arc::new(RwLock::new(blocks)),
-            blocks_by_height: Arc::new(RwLock::new(blocks_by_height)),
-            state: Arc::new(RwLock::new(InMemoryState::new())),
-            genesis,
-            l2_batches: Arc::new(RwLock::new(Vec::new())),
-        }
+        let hash = genesis.hash();
+        let execution = ExecutionState { state: InMemoryState::new(),
+            validators: ValidatorRegistry::new(config.min_stake),
+            da_layer: DataAvailabilityLayer::new(), l2_batches: Vec::new() };
+        Self { config, data: RwLock::new(ChainData { execution,
+            blocks: HashMap::from([(hash, genesis.clone())]),
+            blocks_by_height: HashMap::from([(BlockHeight::GENESIS, hash)]),
+            height: BlockHeight::GENESIS, finality: FinalityGadget::new() }), genesis }
     }
 
-    /// Get genesis block
-    pub fn genesis(&self) -> &Block {
-        &self.genesis
-    }
-
-    /// Get current height
-    pub fn height(&self) -> BlockHeight {
-        self.consensus.current_height()
-    }
-
-    /// Get block by hash
+    pub fn genesis(&self) -> &Block { &self.genesis }
+    pub fn height(&self) -> BlockHeight { self.data.read().height }
     pub fn get_block(&self, hash: &Hash256) -> Option<Block> {
-        self.blocks.read().get(hash).cloned()
+        self.data.read().blocks.get(hash).cloned()
     }
-
-    /// Get block by height
     pub fn get_block_by_height(&self, height: BlockHeight) -> Option<Block> {
-        let hash = self.blocks_by_height.read().get(&height).cloned()?;
-        self.get_block(&hash)
+        let data = self.data.read();
+        data.blocks.get(data.blocks_by_height.get(&height)?).cloned()
     }
-
-    /// Get latest block
     pub fn latest_block(&self) -> Option<Block> {
-        let height = self.height();
-        self.get_block_by_height(height)
+        let data = self.data.read();
+        data.blocks.get(data.blocks_by_height.get(&data.height)?).cloned()
     }
-
-    /// Get account state
     pub fn get_account(&self, address: &Address) -> Option<AccountState> {
-        self.state.read().get_account(address).cloned()
+        self.data.read().execution.state.get_account(address).cloned()
     }
 
-    /// Process a new block
+    /// Prepare a local candidate without publishing effects or certifying consensus.
+    /// The root includes all successful transactions and the final block reward.
+    pub fn prepare_block(&self, transactions: Vec<SignedTransaction>, proposer: Address) -> Result<Block, NexusError> {
+        let data = self.data.read();
+        let height = BlockHeight(data.height.0.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?);
+        let parent = data.blocks.get(data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
+        let mut header = BlockHeader::new(height, parent.hash(), proposer, Layer::Anchor);
+        header.timestamp = Timestamp::now().max(parent.header.timestamp);
+        header.transactions_root = MerkleTree::from_leaves(transactions.iter().map(|tx| tx.hash()).collect()).root();
+        let mut block = Block::new(header, BlockBody::new(transactions));
+        block.header.state_root = self.stage_block(&block, &data)?.state.compute_root().0;
+        Ok(block)
+    }
+
+    fn stage_block(&self, block: &Block, data: &ChainData) -> Result<ExecutionState, NexusError> {
+        self.validate_block(block, data)?;
+        // Stage every fallible effect, including registry, DA, and L2 records.
+        let mut staged = data.execution.clone();
+        for tx in &block.body.transactions {
+            self.execute_transaction(&mut staged, tx, block.height(), block.header.timestamp)?;
+        }
+        staged.state.get_or_create_account(&block.header.proposer).credit(self.config.block_reward)?;
+        Ok(staged)
+    }
+
     pub async fn process_block(&self, block: Block) -> Result<(), NexusError> {
-        // Validate block
-        self.validate_block(&block).await?;
-
-        // Execute transactions
-        self.execute_block(&block)?;
-
-        // Store block
-        let hash = block.hash();
-        let height = block.height();
-
-        self.blocks.write().insert(hash, block.clone());
-        self.blocks_by_height.write().insert(height, hash);
-
-        // Add to finality gadget
-        self.finality.write().add_block(block);
-
+        let mut data = self.data.write();
+        let staged = self.stage_block(&block, &data)?;
+        let expected = staged.state.compute_root().0;
+        if block.header.state_root != expected {
+            return Err(NexusError::InvalidStateRoot { expected, got: block.header.state_root });
+        }
+        let validators_before_block = data.execution.validators.validator_set().clone();
+        data.finality.set_validator_set(validators_before_block);
+        data.execution = staged;
+        data.height = block.height();
+        data.blocks_by_height.insert(block.height(), block.hash());
+        data.blocks.insert(block.hash(), block.clone());
+        data.finality.add_block(block);
         Ok(())
     }
 
-    /// Validate a block
-    async fn validate_block(&self, block: &Block) -> Result<(), NexusError> {
-        // Structure validation
+    fn validate_block(&self, block: &Block, data: &ChainData) -> Result<(), NexusError> {
         block.validate_structure()?;
-
-        // Verify it builds on current chain
-        let expected_height = self.height().next();
-        if block.height() != expected_height {
-            return Err(NexusError::InvalidBlock(format!(
-                "Expected height {}, got {}",
-                expected_height.0, block.height().0
-            )));
+        if data.blocks.contains_key(&block.hash()) {
+            return Err(NexusError::InvalidBlock("Block already processed".into()));
         }
-
-        // Verify parent
-        let expected_parent = self
-            .blocks_by_height
-            .read()
-            .get(&self.height())
-            .cloned()
-            .unwrap_or(Hash256::ZERO);
-
-        if block.parent_hash() != expected_parent {
-            return Err(NexusError::InvalidParentBlock {
-                expected: expected_parent,
-                got: block.parent_hash(),
-            });
+        let expected = data.height.0.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?;
+        if block.height().0 != expected || block.header.layer != Layer::Anchor
+            || block.header.version != nexus_core::PROTOCOL_VERSION {
+            return Err(NexusError::InvalidBlock("Unexpected L1 height, layer or version".into()));
         }
-
-        // Validate all transactions
+        let parent = *data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
+        if block.parent_hash() != parent {
+            return Err(NexusError::InvalidParentBlock { expected: parent, got: block.parent_hash() });
+        }
+        if block.header.timestamp < data.blocks.get(&parent)
+            .ok_or(NexusError::BlockNotFound(parent))?.header.timestamp {
+            return Err(NexusError::InvalidBlockTimestamp);
+        }
+        // No L1 receipt interpreter is implemented by this profile yet.
+        if block.header.receipts_root != Hash256::ZERO {
+            return Err(NexusError::InvalidBlock("L1 receipts root is not supported".into()));
+        }
+        let root = MerkleTree::from_leaves(block.transaction_hashes()).root();
+        if block.header.transactions_root != root {
+            return Err(NexusError::InvalidBlock("Transaction root mismatch".into()));
+        }
         for tx in &block.body.transactions {
-            verify_signed_transaction(tx)?;
+            if tx.transaction.timestamp > block.header.timestamp {
+                return Err(NexusError::InvalidTransaction("Transaction created after block timestamp".into()));
+            }
+            if !verify_signed_transaction_at(tx, block.header.timestamp)? {
+                return Err(NexusError::SignatureVerificationFailed(tx.sender));
+            }
+            if tx.transaction.intrinsic_gas()? > tx.transaction.gas_limit {
+                return Err(NexusError::InvalidTransaction("Transaction gas limit exceeded".into()));
+            }
         }
-
         Ok(())
     }
 
-    /// Execute block transactions
-    fn execute_block(&self, block: &Block) -> Result<(), NexusError> {
-        let mut state = self.state.write();
-
-        for tx in &block.body.transactions {
-            self.execute_transaction(&mut state, tx)?;
-        }
-
-        // Reward block proposer
-        let proposer = state.get_or_create_account(&block.header.proposer);
-        proposer.credit(self.config.block_reward)?;
-
-        Ok(())
-    }
-
-    /// Execute a single transaction
-    fn execute_transaction(
-        &self,
-        state: &mut InMemoryState,
-        tx: &SignedTransaction,
-    ) -> Result<(), NexusError> {
+    fn execute_transaction(&self, execution: &mut ExecutionState, tx: &SignedTransaction,
+        height: BlockHeight, timestamp: Timestamp) -> Result<(), NexusError> {
         use nexus_core::TransactionType;
-
-        // Verify nonce
-        let sender_state = state.get_or_create_account(&tx.sender);
-        if tx.transaction.nonce.0 != sender_state.nonce.0 {
-            return Err(NexusError::InvalidNonce {
-                expected: sender_state.nonce.0,
-                got: tx.transaction.nonce.0,
-            });
+        let sender = execution.state.get_account(&tx.sender).cloned().unwrap_or_default();
+        if tx.transaction.nonce != sender.nonce {
+            return Err(NexusError::InvalidNonce { expected: sender.nonce.0, got: tx.transaction.nonce.0 });
         }
-
-        // Check balance for max cost
-        let max_cost = tx.transaction.max_cost();
-        if sender_state.balance.0 < max_cost.0 {
-            return Err(NexusError::InsufficientBalance {
-                required: max_cost.0,
-                available: sender_state.balance.0,
-            });
+        let max_cost = tx.transaction.checked_max_cost()?;
+        if sender.balance < max_cost {
+            return Err(NexusError::InsufficientBalance { required: max_cost.0, available: sender.balance.0 });
         }
-
-        // Execute based on type
         match &tx.transaction.tx_type {
-            TransactionType::Transfer { to, amount } => {
-                state.transfer(&tx.sender, to, *amount)?;
-            }
+            TransactionType::Transfer { to, amount } => execution.state.transfer(&tx.sender, to, *amount)?,
             TransactionType::ValidatorRegister { public_key, stake } => {
-                // Deduct stake from sender
-                let sender = state.get_or_create_account(&tx.sender);
-                sender.debit(*stake)?;
-
-                // Register validator
-                self.validators.write().register(
-                    tx.sender,
-                    public_key.clone(),
-                    *stake,
-                )?;
+                if public_key != &tx.public_key {
+                    return Err(NexusError::InvalidPublicKey("Registration key differs from sender key".into()));
+                }
+                execution.state.get_or_create_account(&tx.sender).debit(*stake)?;
+                execution.validators.register(tx.sender, public_key.clone(), *stake)?;
             }
-            TransactionType::BatchSubmit { batch_root, batch_size, compressed_data } => {
-                // Store L2 batch
-                let record = L2BatchRecord {
-                    index: self.l2_batches.read().len() as u64,
-                    pre_state_root: StateRoot::EMPTY, // Would come from batch
-                    post_state_root: StateRoot::new(*batch_root),
-                    data_hash: Hash256::hash(compressed_data),
-                    l1_height: self.height(),
-                    timestamp: nexus_core::Timestamp::now(),
-                };
-                self.l2_batches.write().push(record);
-
-                // Store in DA layer
-                self.da_layer.write().submit_data(
-                    self.height(),
-                    compressed_data.clone(),
-                )?;
+            TransactionType::BatchSubmit { batch_root, compressed_data, .. } => {
+                execution.da_layer.submit_data(height, compressed_data.clone())?;
+                execution.l2_batches.push(L2BatchRecord { index: execution.l2_batches.len() as u64,
+                    pre_state_root: StateRoot::EMPTY, post_state_root: StateRoot::new(*batch_root),
+                    data_hash: Hash256::hash(compressed_data), l1_height: height, timestamp });
             }
-            _ => {
-                // Other transaction types not yet implemented
-            }
+            _ => return Err(NexusError::NotImplemented("L1 transaction type".into())),
         }
-
-        // Increment nonce
-        let sender = state.get_or_create_account(&tx.sender);
-        sender.increment_nonce();
-
+        let next = sender.nonce.0.checked_add(1)
+            .ok_or_else(|| NexusError::InvalidTransaction("Transaction nonce exhausted".into()))?;
+        execution.state.get_or_create_account(&tx.sender).nonce = nexus_core::Nonce(next);
         Ok(())
     }
 
-    /// Submit L2 batch data
-    pub fn submit_l2_batch(
-        &self,
-        batch_root: StateRoot,
-        data: Vec<u8>,
-    ) -> Result<Hash256, NexusError> {
-        let commitment = self.da_layer.write().submit_data(self.height(), data)?;
-
-        let record = L2BatchRecord {
-            index: self.l2_batches.read().len() as u64,
-            pre_state_root: StateRoot::EMPTY,
-            post_state_root: batch_root,
-            data_hash: commitment.commitment,
-            l1_height: self.height(),
-            timestamp: nexus_core::Timestamp::now(),
-        };
-
-        self.l2_batches.write().push(record);
-
+    /// Local DA registration, distinct from verifying an L2 validity certificate.
+    pub fn submit_l2_batch(&self, batch_root: StateRoot, bytes: Vec<u8>) -> Result<Hash256, NexusError> {
+        let mut data = self.data.write();
+        let mut staged = data.execution.clone();
+        let commitment = staged.da_layer.submit_data(data.height, bytes)?;
+        staged.l2_batches.push(L2BatchRecord { index: staged.l2_batches.len() as u64,
+            pre_state_root: StateRoot::EMPTY, post_state_root: batch_root,
+            data_hash: commitment.commitment, l1_height: data.height, timestamp: Timestamp::now() });
+        data.execution = staged;
         Ok(commitment.commitment)
     }
-
-    /// Get L2 batch by index
     pub fn get_l2_batch(&self, index: u64) -> Option<L2BatchRecord> {
-        self.l2_batches.read().get(index as usize).cloned()
+        self.data.read().execution.l2_batches.get(usize::try_from(index).ok()?).cloned()
     }
-
-    /// Get finalized height
-    pub fn finalized_height(&self) -> BlockHeight {
-        self.finality.read().last_finalized_height()
-    }
-
-    /// Check if block is finalized
-    pub fn is_finalized(&self, hash: &Hash256) -> bool {
-        self.finality.read().is_finalized(hash)
-    }
-
-    /// Get validator set
-    pub fn validator_set(&self) -> ValidatorSet {
-        self.validators.read().validator_set().clone()
-    }
-
-    /// Get state root
-    pub fn state_root(&self) -> StateRoot {
-        self.state.read().compute_root()
-    }
-
-    /// Get statistics
+    pub fn finalized_height(&self) -> BlockHeight { self.data.read().finality.last_finalized_height() }
+    pub fn is_finalized(&self, hash: &Hash256) -> bool { self.data.read().finality.is_finalized(hash) }
+    pub fn validator_set(&self) -> ValidatorSet { self.data.read().execution.validators.validator_set().clone() }
+    pub fn state_root(&self) -> StateRoot { self.data.read().execution.state.compute_root() }
     pub fn stats(&self) -> ChainStats {
-        ChainStats {
-            height: self.height(),
-            finalized_height: self.finalized_height(),
-            block_count: self.blocks.read().len(),
-            account_count: self.state.read().account_count(),
-            validator_count: self.validators.read().validator_set().active_count(),
-            l2_batch_count: self.l2_batches.read().len(),
-        }
+        let data = self.data.read();
+        ChainStats { height: data.height, finalized_height: data.finality.last_finalized_height(),
+            block_count: data.blocks.len(), account_count: data.execution.state.account_count(),
+            validator_count: data.execution.validators.validator_set().active_count(),
+            l2_batch_count: data.execution.l2_batches.len() }
     }
 }
 
-/// Chain statistics
 #[derive(Debug, Clone)]
 pub struct ChainStats {
     pub height: BlockHeight,

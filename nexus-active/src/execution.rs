@@ -143,8 +143,13 @@ impl ExecutionEngine {
             ));
         }
 
-        // Get sender account
-        let sender = self.state.get_or_create_account(&tx.sender);
+        let required_gas = tx.transaction.intrinsic_gas()?;
+        if required_gas > tx.transaction.gas_limit {
+            return Ok(ExecutionResult::failure(tx_hash, "Transaction gas limit exceeded".into(), 0));
+        }
+
+        // Validation must not create accounts for rejected transactions.
+        let sender = self.state.get_account(&tx.sender).cloned().unwrap_or_default();
 
         // Check nonce
         if tx.transaction.nonce.0 != sender.nonce.0 {
@@ -159,7 +164,7 @@ impl ExecutionEngine {
         }
 
         // Check balance
-        let max_cost = tx.transaction.max_cost();
+        let max_cost = tx.transaction.checked_max_cost()?;
         if sender.balance.0 < max_cost.0 {
             return Ok(ExecutionResult::failure(
                 tx_hash,
@@ -317,7 +322,7 @@ impl ExecutionEngine {
 
         for tx in transactions {
             // Check block gas limit
-            if total_gas + tx.transaction.gas_limit > self.block_gas_limit {
+            if tx.transaction.gas_limit > self.block_gas_limit.saturating_sub(total_gas) {
                 results.push(ExecutionResult::failure(
                     tx.hash(),
                     "Block gas limit exceeded".into(),

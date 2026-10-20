@@ -2,7 +2,44 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Contrato local de estado L1 — 20 de octubre de 2026
+
+`AnchorChain::process_block` vuelve a ejecutar el bloque sobre una copia del estado local y compara la raíz calculada con `header.state_root` antes de publicar cualquier efecto. Una diferencia devuelve `InvalidStateRoot` y conserva cuentas, nonces, validadores, DA, lotes, altura, almacenamiento de bloques y finalidad. No se acepta una raíz vacía como sustituto de la calculada.
+
+`prepare_block(transactions, proposer)` permite construir un candidato honesto desde el padre y la política locales. Calcula la raíz sin guardar el bloque ni aplicar sus efectos; al recibirlo, `process_block` ejecuta de nuevo la validación. Preparar un candidato no firma un certificado de consenso ni autoriza un envío L2.
+
+El perfil conserva las siguientes reglas de ejecución:
+
+- Cada transacción debe tener firma ML-DSA válida, nonce igual al de su cuenta, gas suficiente y saldo que cubra `gas_limit * gas_price + valor` (o el depósito para un alta de validador), con aritmética comprobada. En este perfil el gas es una reserva de admisión: no se debita una comisión y `fee_percentage` continúa como metadato reservado.
+- Se aplican las transferencias en orden, manteniendo el saldo en las autotransferencias; las altas descuentan el depósito y registran su clave autorizada; los envíos de lotes actualizan el registro y la DA locales. Cada operación aceptada incrementa exactamente una vez el nonce del remitente. Los tipos L1 no implementados se rechazan.
+- La recompensa fija del proponente se acredita después de todas las transacciones y antes de calcular la raíz. Para un bloque de solo transferencias, la suma de saldos aumenta únicamente en esa recompensa. Si cualquier operación o la recompensa desborda, se rechaza todo el bloque.
+- La raíz conserva el formato de `InMemoryState`: SHA3-256 de las cuentas ordenadas por dirección y su codificación `bincode`; el conjunto vacío usa la raíz vacía canónica. Esta raíz de cuentas no se presenta como un compromiso integral del registro de validadores, la DA o el almacenamiento de contratos.
+- Los vencimientos se comprueban con la fecha de la cabecera: una transacción creada después de esa fecha o vencida antes de ella se rechaza. La fecha del bloque no puede retroceder respecto del padre. El constructor usa el reloj para proponer una fecha; la verificación de la transición usa el contexto explícito del bloque.
+- Se exigen versión, capa, padre y raíz de transacciones coherentes. El perfil aún no implementa recibos L1 y solo admite `receipts_root = ZERO`, sin certificar recibos ficticios.
+
+`nexus-anchor/tests/state_root_contract.rs` contrasta las raíces con balances y nonces calculados por un oráculo de prueba independiente del constructor. Cubre bloques honestos, recompensas, autotransferencias, replay histórico, políticas locales distintas y rechazo de raíces alteradas con efectos auxiliares válidos preparados. Se conservan las nueve regresiones de este contrato junto con las correcciones anteriores.
+
+Esta validación de una raíz SHA3 de cuentas no aplica a ella la relación escalar AIR/FRI de la sección 6.7.9 ni el teorema de intersección de quórums. Las fuentes Lean y el formato del certificado vinculado se conservan; el refinamiento universal y una L1/L2 operativa completa mantienen sus límites.
+
+[Evidencia y consolidación del contrato L1](../Documentos/06-Evidencia-TG2/2026-10-20/Estado-L1/verificacion.json): pasan 264 pruebas globales, check/build del workspace y catorce casos dirigidos en release. El manifiesto documental identifica el commit local y conserva el corte anterior.
+
 ## Integración de ActiveChain — 20 de octubre de 2026
+
+### Correcciones de autenticidad, estado y quórum — revisión posterior
+
+La revisión Rust posterior a `637e77c` corrige el rechazo explícito de firmas falsas en L1, el registro único de bloques y la publicación atómica del estado, registro de validadores, disponibilidad local y lotes. La altura del procesador L1 representa el último bloque procesado. Este procesamiento local se distingue de un certificado de consenso y no demuestra la implementación operativa completa descrita como trabajo futuro en la tesis.
+
+La política de votos sigue `Nexus.Modelos.Quorum.quorum_estricto_interseca_honestos`, en `formalizacion/Nexus/Modelos/QuorumIncentivos.lean`, y las secciones 3.9–3.10 del manuscrito: peso estrictamente mayor que dos tercios del conjunto confiable. Se autentican claves, firmas, fase, altura, ronda y objetivo; cada identidad contribuye una sola vez. Se usan sumas enteras comprobadas y el umbral `W - floor((W-1)/3)` para `W>0`, sin cocientes flotantes. El campo heredado `bft_threshold` admite los valores de compatibilidad 0.667 o 2/3; cualquier otra política se rechaza. Esto aplica el requisito de quórum, sin demostrar por sí solo seguridad y vivacidad BFT ni las reglas completas de bloqueo y comunicación.
+
+El gadget de finalidad requiere una instantánea de validadores suministrada por el llamante confiable y fijada al añadir cada bloque. Comprueba firmas, peso y ascendencia hasta el ancla. `FinalityVote.weight`, `FinalityJustification.total_weight` y `threshold` usan `u128` en unidades mínimas; el total aportado al verificar debe coincidir con la instantánea. `vote_signing_bytes` y `finality_signing_bytes` separan sus dominios. Las propuestas de consenso incluyen la firma del proponente sobre la cabecera. Estos formatos de aplicación se distinguen del certificado AIR/FRI conservado.
+
+El secuenciador autentica antes de reservar nonces, rechaza transacciones que no caben en un lote vacío y prioriza por gas solo entre las cabezas ejecutables de cada remitente. Construir un lote reserva trabajo; únicamente los resultados de ejecución local en `ActiveChain` avanzan el nonce confirmado. Los fallos liberan el nonce y conservan las dependencias futuras pendientes. Un rechazo por saldo o gas no crea cuentas ni altera la raíz. Los costos y nonces agotados se rechazan con aritmética comprobada; `max_cost` conserva una estimación saturada para compatibilidad y `checked_max_cost` se usa en validación.
+
+El verificador de fraude optimista aún carece de preestado autenticado, inclusión y reejecución vinculados. Por ello devuelve rechazo ante trazas aportadas y `finalize_proof` devuelve `NotImplemented` al agotarse el plazo: no se promueve una raíz optimista a verificada. La aceptación provisional y la confirmación local de un envío permanecen separadas. No se presenta esa carencia como una prueba de fraude implementada.
+
+Las fuentes Lean, los capítulos de la tesis, el núcleo AIR/FRI, su lector, los perfiles 12/20, las cuarenta consultas y el corte 512 se conservan. Las nuevas pruebas en `nexus-core/tests/state_safety.rs`, `nexus-active/tests/execution_safety.rs` y `nexus-anchor/tests/` cubren los contraejemplos, ejecuciones válidas y fronteras del quórum. No se deduce de ellas refinamiento universal Rust/Lean, validez de raíces SHA3 dentro del AIR escalar ni cierre de los pendientes matemáticos externos.
+
+[Evidencia de las correcciones y sus límites](../Documentos/06-Evidencia-TG2/2026-10-20/Correcciones-Rust/verification.json): 255 pruebas globales, check de todos los targets y cuatro regresiones numéricas en release. Las fuentes protegidas se cotejan por SHA-256, sin recompilar Lean ni regenerar el manuscrito.
 
 `ActiveChain` obtiene el contexto de una instantánea privada del lote construido localmente, no del sobre recibido. `ActiveChainConfig::validity_profile` fija filas y trabajo mediante `LinkedValidityProfile`; no se leen como política del certificado. Solo se puede añadir la prueba al lote: cambiar índice, rango, raíces, transacciones, cantidad, fecha o firma respecto de la instantánea causa rechazo.
 

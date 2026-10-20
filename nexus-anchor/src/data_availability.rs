@@ -74,6 +74,7 @@ pub struct DASample {
 }
 
 /// Data Availability Layer
+#[derive(Clone)]
 pub struct DataAvailabilityLayer {
     /// Stored commitments by block height
     commitments: HashMap<BlockHeight, Vec<DACommitment>>,

@@ -225,22 +225,11 @@ impl NitroVerifier {
     /// Verify a fraud proof
     fn verify_fraud_proof(
         &self,
-        fraud_proof: &FraudProof,
-        original: &StateProof,
+        _fraud_proof: &FraudProof,
+        _original: &StateProof,
     ) -> Result<bool, NexusError> {
-        // Re-execute the disputed transaction
-        // Compare result with claimed post-state
-        // If different, fraud is proven
-
-        // Simplified implementation
-        if fraud_proof.disputed_tx_index < fraud_proof.execution_trace.len() {
-            // Check if re-execution produces different result
-            let trace = &fraud_proof.execution_trace[fraud_proof.disputed_tx_index];
-            if trace.computed_root != fraud_proof.claimed_root {
-                return Ok(true); // Fraud proven
-            }
-        }
-
+        // There is no authenticated prestate/inclusion/re-execution contract yet.
+        // Untrusted traces cannot certify fraud (thesis sections 3.5 and 6.7.9).
         Ok(false)
     }
 
@@ -266,14 +255,9 @@ impl NitroVerifier {
             return Ok(false); // Challenge period not over
         }
 
-        // No successful challenge, finalize
-        let height = pending.proof.height;
-        let root = pending.proof.post_state_root;
-
-        self.verified_roots.insert(height, root);
-        self.pending_proofs.remove(&proof_hash);
-
-        Ok(true)
+        // A timeout cannot replace the missing fraud-verification contract.
+        // Optimistic acceptance stays provisional until that contract exists.
+        Err(NexusError::NotImplemented("Authenticated optimistic finalization".into()))
     }
 
     /// Get verified state root at height

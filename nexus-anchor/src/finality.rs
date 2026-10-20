@@ -4,7 +4,9 @@
 
 use nexus_core::{Block, BlockHeight, Hash256, NexusError, Timestamp, Address};
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
+use crate::validator::ValidatorSet;
+use crate::consensus::{strict_quorum_threshold, verify_validator_signature};
 
 /// A finalized block with finality proof
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -31,7 +33,7 @@ impl FinalizedBlock {
     }
 }
 
-/// Justification for finality (proof that 2/3+ validators agreed)
+/// Local certificate with authenticated stake strictly greater than 2/3.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FinalityJustification {
     /// Target block hash
@@ -41,9 +43,9 @@ pub struct FinalityJustification {
     /// Validator signatures
     pub signatures: Vec<FinalityVote>,
     /// Total voting power that signed
-    pub total_weight: u64,
+    pub total_weight: u128,
     /// Threshold required
-    pub threshold: u64,
+    pub threshold: u128,
 }
 
 /// Individual finality vote
@@ -53,193 +55,119 @@ pub struct FinalityVote {
     pub validator: Address,
     /// Signature on (target_hash, target_height)
     pub signature: Vec<u8>,
-    /// Validator's voting weight
-    pub weight: u64,
+    /// Exact stake in smallest units; must match the trusted block snapshot.
+    pub weight: u128,
 }
 
-/// Finality gadget inspired by GRANDPA
+/// Domain and target are authenticated; weights come from the local snapshot.
+pub fn finality_signing_bytes(hash: Hash256, height: BlockHeight) -> Result<Vec<u8>, NexusError> {
+    Ok(bincode::serialize(&(b"NEXUS-FINALITY-VOTE-v1".as_slice(), nexus_core::Layer::Anchor, hash, height))?)
+}
+
+/// Authenticated local certificates. Full BFT locking/liveness is outside this PoC.
 pub struct FinalityGadget {
-    /// Last finalized block
     last_finalized: Option<FinalizedBlock>,
-    /// Pending finality votes
     pending_votes: HashMap<Hash256, Vec<FinalityVote>>,
-    /// Blocks pending finalization
     pending_blocks: HashMap<Hash256, Block>,
-    /// Finalization threshold (2/3 of total voting power)
-    threshold_ratio: f64,
-    /// Minimum blocks before finalization
-    min_blocks_to_finality: u64,
+    validators: ValidatorSet,
+    snapshots: HashMap<Hash256, ValidatorSet>,
+    ancestry: HashMap<Hash256, (BlockHeight, Hash256)>,
 }
 
 impl FinalityGadget {
-    /// Create a new finality gadget
-    pub fn new() -> Self {
-        Self {
-            last_finalized: None,
-            pending_votes: HashMap::new(),
-            pending_blocks: HashMap::new(),
-            threshold_ratio: 0.667, // 2/3
-            min_blocks_to_finality: 2,
-        }
+    pub fn new() -> Self { Self::with_validator_set(ValidatorSet::new()) }
+    pub fn with_validator_set(validators: ValidatorSet) -> Self {
+        Self { last_finalized: None, pending_votes: HashMap::new(), pending_blocks: HashMap::new(),
+            validators, snapshots: HashMap::new(), ancestry: HashMap::new() }
     }
-
-    /// Get last finalized block
-    pub fn last_finalized(&self) -> Option<&FinalizedBlock> {
-        self.last_finalized.as_ref()
-    }
-
-    /// Get last finalized height
+    /// Trusted caller policy for subsequently added blocks; earlier snapshots stay fixed.
+    pub fn set_validator_set(&mut self, validators: ValidatorSet) { self.validators = validators; }
+    pub fn last_finalized(&self) -> Option<&FinalizedBlock> { self.last_finalized.as_ref() }
     pub fn last_finalized_height(&self) -> BlockHeight {
-        self.last_finalized
-            .as_ref()
-            .map(|b| b.height())
-            .unwrap_or(BlockHeight::GENESIS)
+        self.last_finalized.as_ref().map(|b| b.height()).unwrap_or(BlockHeight::GENESIS)
     }
-
-    /// Add a block to pending finalization
     pub fn add_block(&mut self, block: Block) {
         let hash = block.hash();
-        self.pending_blocks.insert(hash, block);
+        if block.header.layer != nexus_core::Layer::Anchor || block.validate_structure().is_err()
+            || block.header.transactions_root != nexus_core::MerkleTree::from_leaves(block.transaction_hashes()).root() {
+            return;
+        }
+        self.ancestry.entry(hash).or_insert((block.height(), block.parent_hash()));
+        // Re-adding a block cannot replace its authority snapshot or existing votes.
+        self.snapshots.entry(hash).or_insert_with(|| self.validators.clone());
+        self.pending_blocks.entry(hash).or_insert(block);
         self.pending_votes.entry(hash).or_default();
     }
-
-    /// Add a finality vote
-    pub fn add_vote(&mut self, vote: FinalityVote, block_hash: Hash256) -> Result<bool, NexusError> {
-        // Check if block exists
-        if !self.pending_blocks.contains_key(&block_hash) {
-            return Err(NexusError::BlockNotFound(block_hash));
-        }
-
-        // Add vote
-        let votes = self.pending_votes.entry(block_hash).or_default();
-
-        // Check for duplicate
-        if votes.iter().any(|v| v.validator == vote.validator) {
-            return Ok(false); // Already voted
-        }
-
+    pub fn add_vote(&mut self, vote: FinalityVote, hash: Hash256) -> Result<bool, NexusError> {
+        let block = self.pending_blocks.get(&hash).ok_or(NexusError::BlockNotFound(hash))?;
+        let set = self.snapshots.get(&hash).ok_or(NexusError::NotValidator)?;
+        verify_validator_signature(set, vote.validator,
+            &finality_signing_bytes(hash, block.height())?, &vote.signature)?;
+        let trusted = set.get_validator(&vote.validator).ok_or(NexusError::NotValidator)?.stake.0;
+        if vote.weight != trusted { return Err(NexusError::InvalidValidatorSignature); }
+        let votes = self.pending_votes.entry(hash).or_default();
+        if votes.iter().any(|previous| previous.validator == vote.validator) { return Ok(false); }
         votes.push(vote);
-
         Ok(true)
     }
-
-    /// Check if a block has enough votes for finalization
-    pub fn check_finalization(
-        &self,
-        block_hash: &Hash256,
-        total_voting_power: u64,
-    ) -> Option<FinalityJustification> {
-        let votes = self.pending_votes.get(block_hash)?;
-        let block = self.pending_blocks.get(block_hash)?;
-
-        let total_weight: u64 = votes.iter().map(|v| v.weight).sum();
-        let threshold = (total_voting_power as f64 * self.threshold_ratio) as u64;
-
-        if total_weight >= threshold {
-            Some(FinalityJustification {
-                target_hash: *block_hash,
-                target_height: block.height(),
-                signatures: votes.clone(),
-                total_weight,
-                threshold,
-            })
-        } else {
-            None
+    fn descends_from_anchor(&self, hash: Hash256, height: BlockHeight) -> bool {
+        let genesis = Block::genesis(nexus_core::Layer::Anchor);
+        let target = self.last_finalized.as_ref().map(|b| (b.hash(), b.height()))
+            .unwrap_or((genesis.hash(), BlockHeight::GENESIS));
+        let (mut current, mut current_height) = (hash, height);
+        while current_height > target.1 {
+            let Some((stored_height, parent)) = self.ancestry.get(&current) else { return false; };
+            if *stored_height != current_height { return false; }
+            let parent_height = if *parent == genesis.hash() { BlockHeight::GENESIS }
+                else if let Some((parent_height, _)) = self.ancestry.get(parent) { *parent_height }
+                else { return false; };
+            if parent_height.0.checked_add(1) != Some(current_height.0) { return false; }
+            current = *parent;
+            current_height = parent_height;
         }
+        current == target.0 && current_height == target.1
     }
-
-    /// Try to finalize a block
-    pub fn try_finalize(
-        &mut self,
-        block_hash: Hash256,
-        total_voting_power: u64,
-    ) -> Result<Option<FinalizedBlock>, NexusError> {
-        // Check if already finalized
-        if let Some(ref last) = self.last_finalized {
-            let block = self.pending_blocks.get(&block_hash);
-            if let Some(b) = block {
-                if b.height().0 <= last.height().0 {
-                    return Ok(None); // Already past this height
-                }
-            }
-        }
-
-        // Check for justification
-        if let Some(justification) = self.check_finalization(&block_hash, total_voting_power) {
-            let block = self
-                .pending_blocks
-                .remove(&block_hash)
-                .ok_or(NexusError::BlockNotFound(block_hash))?;
-
-            let finalized = FinalizedBlock {
-                block: block.clone(),
-                finalized_at: block.height(),
-                finalized_time: Timestamp::now(),
-                justification,
-            };
-
-            // Clean up older pending blocks
-            self.cleanup_finalized(block.height());
-
-            self.last_finalized = Some(finalized.clone());
-            self.pending_votes.remove(&block_hash);
-
-            Ok(Some(finalized))
-        } else {
-            Ok(None)
-        }
+    pub fn check_finalization(&self, hash: &Hash256, claimed_total: u128) -> Option<FinalityJustification> {
+        let votes = self.pending_votes.get(hash)?;
+        let block = self.pending_blocks.get(hash)?;
+        if !self.descends_from_anchor(*hash, block.height()) { return None; }
+        let total = self.snapshots.get(hash)?.active_validators().iter()
+            .try_fold(0u128, |sum, validator| sum.checked_add(validator.stake.0))?;
+        if claimed_total != total { return None; }
+        let threshold = strict_quorum_threshold(total)?;
+        let total_weight = votes.iter().try_fold(0u128, |sum, vote| sum.checked_add(vote.weight))?;
+        if total_weight < threshold { return None; }
+        Some(FinalityJustification { target_hash: *hash, target_height: block.height(),
+            signatures: votes.clone(), total_weight, threshold })
     }
-
-    /// Clean up blocks that are now finalized
-    fn cleanup_finalized(&mut self, finalized_height: BlockHeight) {
-        let to_remove: Vec<Hash256> = self
-            .pending_blocks
-            .iter()
-            .filter(|(_, b)| b.height().0 <= finalized_height.0)
-            .map(|(h, _)| *h)
-            .collect();
-
-        for hash in to_remove {
+    pub fn try_finalize(&mut self, hash: Hash256, total: u128) -> Result<Option<FinalizedBlock>, NexusError> {
+        let Some(block) = self.pending_blocks.get(&hash) else { return Ok(None); };
+        if self.last_finalized.as_ref().is_some_and(|last| block.height() <= last.height()) { return Ok(None); }
+        let Some(justification) = self.check_finalization(&hash, total) else { return Ok(None); };
+        let block = self.pending_blocks.remove(&hash).ok_or(NexusError::BlockNotFound(hash))?;
+        let finalized = FinalizedBlock { finalized_at: block.height(), block,
+            finalized_time: Timestamp::now(), justification };
+        let height = finalized.height();
+        let old: Vec<_> = self.pending_blocks.iter().filter(|(_, b)| b.height() <= height)
+            .map(|(hash, _)| *hash).chain(std::iter::once(hash)).collect();
+        for hash in old {
             self.pending_blocks.remove(&hash);
             self.pending_votes.remove(&hash);
+            self.snapshots.remove(&hash);
         }
+        self.last_finalized = Some(finalized.clone());
+        Ok(Some(finalized))
     }
-
-    /// Check if a block is finalized
-    pub fn is_finalized(&self, block_hash: &Hash256) -> bool {
-        self.last_finalized
-            .as_ref()
-            .map(|f| f.hash() == *block_hash)
-            .unwrap_or(false)
+    pub fn is_finalized(&self, hash: &Hash256) -> bool {
+        self.last_finalized.as_ref().is_some_and(|f| f.hash() == *hash)
     }
-
-    /// Check if a height is finalized
     pub fn is_height_finalized(&self, height: BlockHeight) -> bool {
-        self.last_finalized
-            .as_ref()
-            .map(|f| f.height().0 >= height.0)
-            .unwrap_or(false)
+        self.last_finalized.as_ref().is_some_and(|f| f.height() >= height)
     }
-
-    /// Get pending block count
-    pub fn pending_count(&self) -> usize {
-        self.pending_blocks.len()
-    }
-
-    /// Get vote count for a block
-    pub fn vote_count(&self, block_hash: &Hash256) -> usize {
-        self.pending_votes
-            .get(block_hash)
-            .map(|v| v.len())
-            .unwrap_or(0)
-    }
+    pub fn pending_count(&self) -> usize { self.pending_blocks.len() }
+    pub fn vote_count(&self, hash: &Hash256) -> usize { self.pending_votes.get(hash).map(Vec::len).unwrap_or(0) }
 }
-
-impl Default for FinalityGadget {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+impl Default for FinalityGadget { fn default() -> Self { Self::new() } }
 
 /// Fork choice rule for selecting the best chain
 pub struct ForkChoice {
@@ -341,26 +269,22 @@ mod tests {
 
     #[test]
     fn test_finalization() {
-        let mut gadget = FinalityGadget::new();
+        use nexus_crypto::DilithiumKeypair;
+        use nexus_core::{Amount, SignatureScheme};
+        use crate::validator::Validator;
+        let signer = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let mut set = ValidatorSet::new();
+        set.add_validator(Validator::new(signer.address(), signer.public_key().as_bytes().to_vec(), Amount(100))).unwrap();
+        set.activate_validator(&signer.address()).unwrap();
+        let mut gadget = FinalityGadget::with_validator_set(set);
         let block = Block::genesis(Layer::Anchor);
-        let block_hash = block.hash();
-
+        let hash = block.hash();
+        let signature = signer.sign(&finality_signing_bytes(hash, block.height()).unwrap()).unwrap();
         gadget.add_block(block);
-
-        // Add enough votes
-        for i in 0..10 {
-            let vote = FinalityVote {
-                validator: Address::new([i as u8; 32]),
-                signature: vec![],
-                weight: 10,
-            };
-            gadget.add_vote(vote, block_hash).unwrap();
-        }
-
-        // Total power 100, threshold 67, we have 100
-        let result = gadget.try_finalize(block_hash, 100).unwrap();
+        gadget.add_vote(FinalityVote { validator: signer.address(), signature: signature.as_bytes().to_vec(), weight: 100 }, hash).unwrap();
+        let result = gadget.try_finalize(hash, 100).unwrap();
         assert!(result.is_some());
-        assert!(gadget.is_finalized(&block_hash));
+        assert!(gadget.is_finalized(&hash));
     }
 
     #[test]

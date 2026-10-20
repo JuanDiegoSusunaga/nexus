@@ -22,7 +22,7 @@ fn submit_transaction(chain: &ActiveChain) {
 }
 
 #[test]
-fn lote_real_con_raices_sha3_no_se_acepta_como_recurrencia_escalar() {
+fn lote_local_sin_certificado_valido_no_se_envia_y_un_rechazo_no_muta_el_estado() {
     for mode in [VerificationMode::ZKValidity, VerificationMode::Hybrid { threshold: usize::MAX }] {
         let chain = chain(mode, 1, 10);
         let pre = chain.state_root();
@@ -31,7 +31,8 @@ fn lote_real_con_raices_sha3_no_se_acepta_como_recurrencia_escalar() {
         let mut batch = chain.get_next_batch().unwrap();
         assert_eq!(batch.pre_state_root, pre);
         assert_eq!(batch.post_state_root.0, block.header.state_root);
-        assert_ne!(batch.pre_state_root, batch.post_state_root);
+        // Insufficient balance must leave the state untouched.
+        assert_eq!(batch.pre_state_root, batch.post_state_root);
         assert!(chain.create_state_proof(&batch).is_err());
         batch.validity_proof = Some(vec![0; 4096]);
         let proof = chain.create_state_proof(&batch).unwrap();

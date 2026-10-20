@@ -1,20 +1,12 @@
-//! Nexus Sequencer - Transaction Ordering and Batching
-//!
-//! The sequencer is responsible for:
-//! - Receiving transactions from users
-//! - Ordering transactions fairly
-//! - Building batches for L1 submission
-//! - Maintaining liveness guarantees
+//! Authenticated transaction pool with per-sender nonce dependencies.
+//! Building reserves work; confirmed nonces advance only from local execution.
 
-use nexus_core::{
-    Address, Amount, BlockHeight, Hash256, NexusError, SignedTransaction,
-    Timestamp, TransactionType,
-};
-use nexus_crypto::{DilithiumKeypair, Signer};
-use parking_lot::RwLock;
+use crate::execution::ExecutionResult;
+use nexus_core::{Address, Amount, Hash256, NexusError, SignedTransaction, Timestamp};
+use nexus_crypto::{verify_signed_transaction, DilithiumKeypair};
+use parking_lot::{Mutex, RwLock};
 use serde::{Deserialize, Serialize};
-use std::collections::{BinaryHeap, HashMap, VecDeque};
-use std::sync::Arc;
+use std::collections::{BTreeMap, BinaryHeap, HashMap, HashSet};
 use std::cmp::Ordering;
 
 /// Sequencer configuration
@@ -61,246 +53,206 @@ pub enum SequencerMode {
     SharedSequencing,
 }
 
-/// Pending transaction with priority
+
 #[derive(Clone)]
 struct PendingTx {
-    /// The transaction
     tx: SignedTransaction,
-    /// Received timestamp
     received_at: Timestamp,
-    /// Gas price (for priority)
-    gas_price: Amount,
+    size: usize,
 }
-
 impl PartialEq for PendingTx {
-    fn eq(&self, other: &Self) -> bool {
-        self.tx.hash() == other.tx.hash()
-    }
+    fn eq(&self, other: &Self) -> bool { self.tx.hash() == other.tx.hash() }
 }
-
 impl Eq for PendingTx {}
-
 impl PartialOrd for PendingTx {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> { Some(self.cmp(other)) }
 }
-
 impl Ord for PendingTx {
     fn cmp(&self, other: &Self) -> Ordering {
-        // Higher gas price = higher priority
-        self.gas_price.0.cmp(&other.gas_price.0)
+        self.tx.transaction.gas_price.cmp(&other.tx.transaction.gas_price)
+            .then_with(|| other.received_at.cmp(&self.received_at))
+            .then_with(|| other.tx.hash().0.cmp(&self.tx.hash().0))
     }
 }
 
-/// The Nexus Sequencer
+struct Pool {
+    pending: HashMap<Address, BTreeMap<u64, PendingTx>>,
+    lookup: HashMap<Hash256, SignedTransaction>,
+    in_flight: HashMap<Hash256, PendingTx>,
+    confirmed_nonces: HashMap<Address, u64>,
+    last_batch_time: Timestamp,
+    batch_counter: u64,
+}
+
 pub struct NexusSequencer {
-    /// Configuration
     config: SequencerConfig,
-    /// Sequencer keypair
-    keypair: Arc<DilithiumKeypair>,
-    /// Pending transactions (priority queue)
-    pending: Arc<RwLock<BinaryHeap<PendingTx>>>,
-    /// Transaction lookup (hash -> pending)
-    tx_lookup: Arc<RwLock<HashMap<Hash256, SignedTransaction>>>,
-    /// Current batch being built
-    current_batch: Arc<RwLock<Vec<SignedTransaction>>>,
-    /// Last batch submission time
-    last_batch_time: Arc<RwLock<Timestamp>>,
-    /// Batch counter
-    batch_counter: Arc<RwLock<u64>>,
-    /// Sequencer address
     address: Address,
-    /// Whether sequencer is active
-    is_active: Arc<RwLock<bool>>,
-    /// Nonce tracker per sender
-    nonces: Arc<RwLock<HashMap<Address, u64>>>,
+    is_active: RwLock<bool>,
+    pool: Mutex<Pool>,
 }
 
 impl NexusSequencer {
-    /// Create a new sequencer
     pub fn new(config: SequencerConfig, keypair: DilithiumKeypair) -> Self {
-        let address = keypair.address();
+        Self { config, address: keypair.address(), is_active: RwLock::new(true),
+            pool: Mutex::new(Pool { pending: HashMap::new(), lookup: HashMap::new(),
+                in_flight: HashMap::new(), confirmed_nonces: HashMap::new(),
+                last_batch_time: Timestamp::now(), batch_counter: 0 }) }
+    }
 
-        Self {
-            config,
-            keypair: Arc::new(keypair),
-            pending: Arc::new(RwLock::new(BinaryHeap::new())),
-            tx_lookup: Arc::new(RwLock::new(HashMap::new())),
-            current_batch: Arc::new(RwLock::new(Vec::new())),
-            last_batch_time: Arc::new(RwLock::new(Timestamp::now())),
-            batch_counter: Arc::new(RwLock::new(0)),
-            address,
-            is_active: Arc::new(RwLock::new(true)),
-            nonces: Arc::new(RwLock::new(HashMap::new())),
+    fn check_config(&self) -> Result<(), NexusError> {
+        if self.config.max_batch_size == 0 || self.config.min_batch_size == 0
+            || self.config.min_batch_size > self.config.max_batch_size || self.config.max_batch_bytes == 0 {
+            return Err(NexusError::ConfigError("Invalid sequencer batch limits".into()));
         }
+        Ok(())
     }
+    pub fn address(&self) -> Address { self.address }
+    pub fn is_active(&self) -> bool { *self.is_active.read() }
 
-    /// Get sequencer address
-    pub fn address(&self) -> Address {
-        self.address
-    }
-
-    /// Check if sequencer is active
-    pub fn is_active(&self) -> bool {
-        *self.is_active.read()
-    }
-
-    /// Submit a transaction to the sequencer
     pub fn submit_transaction(&self, tx: SignedTransaction) -> Result<Hash256, NexusError> {
-        if !self.is_active() {
-            return Err(NexusError::NotActiveSequencer);
+        self.check_config()?;
+        if !self.is_active() { return Err(NexusError::NotActiveSequencer); }
+        let size = usize::try_from(bincode::serialized_size(&tx)?)
+            .map_err(|_| NexusError::BatchTooLarge)?;
+        if size > self.config.max_batch_bytes { return Err(NexusError::BatchTooLarge); }
+        if !verify_signed_transaction(&tx)? {
+            return Err(NexusError::SignatureVerificationFailed(tx.sender));
         }
-
-        // Validate transaction
-        tx.validate_structure()?;
-
         let hash = tx.hash();
-
-        // Check for duplicate
-        if self.tx_lookup.read().contains_key(&hash) {
-            return Err(NexusError::DuplicateTransaction(hash));
+        let mut pool = self.pool.lock();
+        if pool.lookup.contains_key(&hash) { return Err(NexusError::DuplicateTransaction(hash)); }
+        let expected = pool.confirmed_nonces.get(&tx.sender).copied().unwrap_or(0);
+        if tx.transaction.nonce.0 < expected {
+            return Err(NexusError::InvalidNonce { expected, got: tx.transaction.nonce.0 });
         }
-
-        // Check nonce
-        let expected_nonce = self.nonces.read().get(&tx.sender).copied().unwrap_or(0);
-        if tx.transaction.nonce.0 < expected_nonce {
-            return Err(NexusError::InvalidNonce {
-                expected: expected_nonce,
-                got: tx.transaction.nonce.0,
-            });
+        if pool.pending.get(&tx.sender).is_some_and(|txs| txs.contains_key(&tx.transaction.nonce.0))
+            || pool.in_flight.values().any(|p| p.tx.sender == tx.sender && p.tx.transaction.nonce == tx.transaction.nonce) {
+            return Err(NexusError::InvalidTransaction("Sender nonce already reserved".into()));
         }
-
-        // Add to pending
-        let pending_tx = PendingTx {
-            gas_price: tx.transaction.gas_price,
-            received_at: Timestamp::now(),
-            tx: tx.clone(),
-        };
-
-        self.pending.write().push(pending_tx);
-        self.tx_lookup.write().insert(hash, tx);
-
-        tracing::debug!("Transaction submitted: {}", hash);
-
+        pool.pending.entry(tx.sender).or_default().insert(tx.transaction.nonce.0,
+            PendingTx { tx: tx.clone(), received_at: Timestamp::now(), size });
+        pool.lookup.insert(hash, tx);
         Ok(hash)
     }
 
-    /// Get pending transaction count
     pub fn pending_count(&self) -> usize {
-        self.pending.read().len()
+        self.pool.lock().pending.values().map(BTreeMap::len).sum()
     }
 
-    /// Build the next batch
     pub fn build_batch(&self) -> Result<Option<SequencerBatch>, NexusError> {
-        if !self.is_active() {
-            return Err(NexusError::NotActiveSequencer);
+        self.check_config()?;
+        if !self.is_active() { return Err(NexusError::NotActiveSequencer); }
+        let mut pool = self.pool.lock();
+        let now = Timestamp::now();
+        let mut expired = Vec::new();
+        for transactions in pool.pending.values_mut() {
+            transactions.retain(|_, p| {
+                let keep = now.elapsed_since(p.received_at) <= self.config.tx_timeout_ms
+                    && !p.tx.transaction.is_expired();
+                if !keep { expired.push(p.tx.hash()); }
+                keep
+            });
         }
+        for hash in expired { pool.lookup.remove(&hash); }
+        pool.pending.retain(|_, transactions| !transactions.is_empty());
 
-        let mut pending = self.pending.write();
-        let mut batch_txs = Vec::new();
-        let mut batch_size = 0usize;
-
-        // Collect transactions for batch
-        while let Some(pending_tx) = pending.pop() {
-            // Check timeout
-            let age = Timestamp::now().elapsed_since(pending_tx.received_at);
-            if age > self.config.tx_timeout_ms {
-                // Transaction expired, remove from lookup
-                self.tx_lookup.write().remove(&pending_tx.tx.hash());
+        // Only the next executable nonce of each available sender competes on gas.
+        let busy: HashSet<_> = pool.in_flight.values().map(|p| p.tx.sender).collect();
+        let mut heads = BinaryHeap::new();
+        for (sender, transactions) in &pool.pending {
+            if busy.contains(sender) { continue; }
+            let nonce = pool.confirmed_nonces.get(sender).copied().unwrap_or(0);
+            if let Some(head) = transactions.get(&nonce) { heads.push(head.clone()); }
+        }
+        let mut selected = Vec::new();
+        let mut bytes = 0usize;
+        while selected.len() < self.config.max_batch_size {
+            let Some(head) = heads.pop() else { break; };
+            if head.size > self.config.max_batch_bytes.saturating_sub(bytes) {
+                // Other sender heads can still fit; do not block the entire pool.
                 continue;
             }
-
-            // Check batch limits
-            let tx_size = bincode::serialize(&pending_tx.tx)
-                .map(|b| b.len())
-                .unwrap_or(0);
-
-            if batch_txs.len() >= self.config.max_batch_size {
-                // Put back and break
-                pending.push(pending_tx);
-                break;
+            bytes += head.size;
+            if let Some(next) = head.tx.transaction.nonce.0.checked_add(1)
+                .and_then(|nonce| pool.pending.get(&head.tx.sender)?.get(&nonce)) {
+                heads.push(next.clone());
             }
-
-            if batch_size + tx_size > self.config.max_batch_bytes {
-                pending.push(pending_tx);
-                break;
+            selected.push(head);
+        }
+        if selected.len() < self.config.min_batch_size { return Ok(None); }
+        let next_index = pool.batch_counter.checked_add(1)
+            .ok_or_else(|| NexusError::SequencerError("Batch counter exhausted".into()))?;
+        let batch = SequencerBatch { index: pool.batch_counter,
+            transactions: selected.iter().map(|p| p.tx.clone()).collect(),
+            sequencer: self.address, timestamp: now, signature: vec![] };
+        for pending in selected {
+            if let Some(txs) = pool.pending.get_mut(&pending.tx.sender) {
+                txs.remove(&pending.tx.transaction.nonce.0);
             }
-
-            batch_txs.push(pending_tx.tx.clone());
-            batch_size += tx_size;
-
-            // Update nonce tracker
-            self.nonces.write().insert(
-                pending_tx.tx.sender,
-                pending_tx.tx.transaction.nonce.0 + 1,
-            );
+            pool.in_flight.insert(pending.tx.hash(), pending);
         }
-
-        // Check minimum batch size
-        if batch_txs.len() < self.config.min_batch_size {
-            // Put transactions back
-            for tx in batch_txs {
-                pending.push(PendingTx {
-                    gas_price: tx.transaction.gas_price,
-                    received_at: Timestamp::now(),
-                    tx,
-                });
-            }
-            return Ok(None);
-        }
-
-        // Create batch
-        let batch_index = {
-            let mut counter = self.batch_counter.write();
-            let idx = *counter;
-            *counter += 1;
-            idx
-        };
-
-        let batch = SequencerBatch {
-            index: batch_index,
-            transactions: batch_txs,
-            sequencer: self.address,
-            timestamp: Timestamp::now(),
-            signature: vec![], // Would be signed
-        };
-
-        *self.last_batch_time.write() = Timestamp::now();
-
-        // Remove from lookup
-        for tx in &batch.transactions {
-            self.tx_lookup.write().remove(&tx.hash());
-        }
-
+        pool.pending.retain(|_, transactions| !transactions.is_empty());
+        pool.batch_counter = next_index;
+        pool.last_batch_time = now;
         Ok(Some(batch))
     }
 
-    /// Check if batch should be submitted (time-based)
+    /// Called only by local ActiveChain execution, never from a received envelope.
+    pub(crate) fn complete_execution(&self, transactions: &[SignedTransaction], results: &[ExecutionResult])
+        -> Result<(), NexusError> {
+        let mut pool = self.pool.lock();
+        if transactions.len() != results.len() || transactions.iter().zip(results).any(|(tx, res)|
+            tx.hash() != res.tx_hash || !pool.in_flight.contains_key(&tx.hash())) {
+            return Err(NexusError::StateError("Execution does not match reserved transactions".into()));
+        }
+        let mut confirmed = pool.confirmed_nonces.clone();
+        for (tx, result) in transactions.iter().zip(results) {
+            let expected = confirmed.get(&tx.sender).copied().unwrap_or(0);
+            if result.success {
+                if tx.transaction.nonce.0 != expected {
+                    return Err(NexusError::StateError("Successful execution has unexpected nonce".into()));
+                }
+                confirmed.insert(tx.sender, expected.checked_add(1)
+                    .ok_or_else(|| NexusError::StateError("Nonce exhausted".into()))?);
+            }
+        }
+        pool.confirmed_nonces = confirmed;
+        for (tx, result) in transactions.iter().zip(results) {
+            let pending = pool.in_flight.remove(&tx.hash()).expect("reservation checked under lock");
+            let expected = pool.confirmed_nonces.get(&tx.sender).copied().unwrap_or(0);
+            if !result.success && tx.transaction.nonce.0 > expected {
+                pool.pending.entry(tx.sender).or_default().insert(tx.transaction.nonce.0, pending);
+            } else {
+                pool.lookup.remove(&tx.hash());
+            }
+        }
+        Ok(())
+    }
+
+    pub(crate) fn release_transactions(&self, transactions: &[SignedTransaction]) {
+        let mut pool = self.pool.lock();
+        for tx in transactions {
+            if let Some(pending) = pool.in_flight.remove(&tx.hash()) {
+                pool.pending.entry(tx.sender).or_default().insert(tx.transaction.nonce.0, pending);
+            }
+        }
+    }
+
     pub fn should_submit_batch(&self) -> bool {
-        let elapsed = Timestamp::now().elapsed_since(*self.last_batch_time.read());
-        elapsed >= self.config.batch_interval_ms && self.pending_count() >= self.config.min_batch_size
+        let pool = self.pool.lock();
+        Timestamp::now().elapsed_since(pool.last_batch_time) >= self.config.batch_interval_ms
+            && pool.pending.values().map(BTreeMap::len).sum::<usize>() >= self.config.min_batch_size
     }
-
-    /// Get transaction by hash
-    pub fn get_transaction(&self, hash: &Hash256) -> Option<SignedTransaction> {
-        self.tx_lookup.read().get(hash).cloned()
-    }
-
-    /// Remove transaction (e.g., after inclusion)
+    pub fn get_transaction(&self, hash: &Hash256) -> Option<SignedTransaction> { self.pool.lock().lookup.get(hash).cloned() }
     pub fn remove_transaction(&self, hash: &Hash256) -> Option<SignedTransaction> {
-        self.tx_lookup.write().remove(hash)
+        let mut pool = self.pool.lock();
+        if pool.in_flight.contains_key(hash) { return None; }
+        let tx = pool.lookup.remove(hash)?;
+        if let Some(txs) = pool.pending.get_mut(&tx.sender) { txs.remove(&tx.transaction.nonce.0); }
+        Some(tx)
     }
-
-    /// Activate/deactivate sequencer
-    pub fn set_active(&self, active: bool) {
-        *self.is_active.write() = active;
-    }
-
-    /// Get batch counter
-    pub fn batch_count(&self) -> u64 {
-        *self.batch_counter.read()
-    }
+    pub fn set_active(&self, active: bool) { *self.is_active.write() = active; }
+    pub fn batch_count(&self) -> u64 { self.pool.lock().batch_counter }
 }
 
 /// A batch produced by the sequencer
@@ -339,6 +291,7 @@ impl SequencerBatch {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use nexus_crypto::Signer;
     use nexus_core::{ChainId, Nonce, SignatureScheme, Transaction};
 
     fn create_test_tx(nonce: u64) -> SignedTransaction {
@@ -385,8 +338,8 @@ mod tests {
         let sequencer = NexusSequencer::new(config, keypair);
 
         // Submit transactions
-        for i in 0..5 {
-            let tx = create_test_tx(i);
+        for _ in 0..5 {
+            let tx = create_test_tx(0);
             sequencer.submit_transaction(tx).unwrap();
         }
 
@@ -405,5 +358,70 @@ mod tests {
 
         let result = sequencer.submit_transaction(tx);
         assert!(matches!(result, Err(NexusError::DuplicateTransaction(_))));
+    }
+
+    #[test]
+    fn failed_execution_releases_current_nonce_and_preserves_future_dependencies() {
+        use crate::execution::ExecutionEngine;
+        use nexus_core::AccountState;
+        let sequencer = NexusSequencer::new(SequencerConfig::default(),
+            DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        let signer = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let tx = |nonce| signer.sign_transaction(Transaction::transfer(ChainId::LOCAL,
+            Nonce(nonce), Address::ZERO, Amount(1), 21000, Amount(1_000_000_000))).unwrap();
+        let first = tx(0);
+        sequencer.submit_transaction(first.clone()).unwrap();
+        sequencer.submit_transaction(tx(1)).unwrap();
+        let mut engine = ExecutionEngine::new();
+        let batch = sequencer.build_batch().unwrap().unwrap();
+        let results = engine.execute_batch(&batch.transactions);
+        assert!(results.iter().all(|result| !result.success));
+        sequencer.complete_execution(&batch.transactions, &results).unwrap();
+        assert_eq!(sequencer.pending_count(), 1);
+        assert!(sequencer.build_batch().unwrap().is_none());
+        engine.state_mut().set_account(signer.address(), AccountState::with_balance(Amount::from_units(1)));
+        sequencer.submit_transaction(first.clone()).unwrap();
+        let retry = sequencer.build_batch().unwrap().unwrap();
+        assert_eq!(retry.transactions.iter().map(|tx| tx.transaction.nonce.0).collect::<Vec<_>>(), vec![0, 1]);
+        let results = engine.execute_batch(&retry.transactions);
+        assert!(results.iter().all(|result| result.success));
+        sequencer.complete_execution(&retry.transactions, &results).unwrap();
+        assert!(matches!(sequencer.submit_transaction(first), Err(NexusError::InvalidNonce { expected: 2, .. })));
+        sequencer.submit_transaction(tx(2)).unwrap();
+        assert_eq!(sequencer.build_batch().unwrap().unwrap().transactions[0].transaction.nonce, Nonce(2));
+    }
+
+    #[test]
+    fn incomplete_batches_and_cancelled_reservations_do_not_advance_nonces() {
+        let config = SequencerConfig { min_batch_size: 2, ..Default::default() };
+        let sequencer = NexusSequencer::new(config,
+            DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        let first = create_test_tx(0);
+        sequencer.submit_transaction(first.clone()).unwrap();
+        assert!(sequencer.build_batch().unwrap().is_none());
+        assert_eq!(sequencer.pending_count(), 1);
+        sequencer.submit_transaction(create_test_tx(0)).unwrap();
+        let batch = sequencer.build_batch().unwrap().unwrap();
+        assert_eq!(sequencer.pending_count(), 0);
+        assert!(sequencer.remove_transaction(&first.hash()).is_none());
+        sequencer.release_transactions(&batch.transactions);
+        assert_eq!(sequencer.pending_count(), 2);
+        assert_eq!(sequencer.build_batch().unwrap().unwrap().tx_count(), 2);
+    }
+
+    #[test]
+    fn concurrent_duplicate_admission_has_a_single_winner() {
+        let sequencer = std::sync::Arc::new(NexusSequencer::new(SequencerConfig::default(),
+            DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap()));
+        let transaction = create_test_tx(0);
+        let barrier = std::sync::Arc::new(std::sync::Barrier::new(4));
+        let workers: Vec<_> = (0..4).map(|_| {
+            let sequencer = sequencer.clone();
+            let barrier = barrier.clone();
+            let transaction = transaction.clone();
+            std::thread::spawn(move || { barrier.wait(); sequencer.submit_transaction(transaction).is_ok() })
+        }).collect();
+        assert_eq!(workers.into_iter().map(|worker| usize::from(worker.join().unwrap())).sum::<usize>(), 1);
+        assert_eq!(sequencer.pending_count(), 1);
     }
 }

@@ -256,14 +256,16 @@ impl InMemoryState {
         to: &Address,
         amount: Amount,
     ) -> Result<(), NexusError> {
-        // Debit from sender
-        let sender = self.get_or_create_account(from);
+        // Validate both sides on copies; an error must leave the state unchanged.
+        let mut sender = self.get_account(from).cloned().unwrap_or_default();
         sender.debit(amount)?;
-
-        // Credit to receiver
-        let receiver = self.get_or_create_account(to);
+        if from == to {
+            return Ok(());
+        }
+        let mut receiver = self.get_account(to).cloned().unwrap_or_default();
         receiver.credit(amount)?;
-
+        self.set_account(*from, sender);
+        self.set_account(*to, receiver);
         Ok(())
     }
 

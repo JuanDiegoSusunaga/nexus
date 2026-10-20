@@ -190,12 +190,16 @@ impl ActiveChain {
 
         // Se captura la raíz anterior antes de ejecutar; el bloque entra entero al lote.
         let pre_state = self.execution.read().state_root();
-        self.prepare_batch(&transactions, pre_state, height)?;
+        if let Err(error) = self.prepare_batch(&transactions, pre_state, height) {
+            self.sequencer.release_transactions(&transactions);
+            return Err(error);
+        }
         let (results, post_state) = {
             let mut execution = self.execution.write();
             let results = execution.execute_batch(&transactions);
             (results, execution.state_root())
         };
+        self.sequencer.complete_execution(&transactions, &results)?;
 
         let header = BlockHeader {
             version: nexus_core::PROTOCOL_VERSION,

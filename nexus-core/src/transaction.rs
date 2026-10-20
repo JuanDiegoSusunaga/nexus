@@ -138,14 +138,33 @@ impl Transaction {
 
     /// Calculate the maximum cost of this transaction
     pub fn max_cost(&self) -> Amount {
-        let gas_cost = Amount(self.gas_limit as u128 * self.gas_price.0);
+        self.checked_max_cost().unwrap_or(Amount::MAX)
+    }
+
+    /// Reject unrepresentable costs before admission or state changes.
+    pub fn checked_max_cost(&self) -> Result<Amount, NexusError> {
+        let gas_cost = (self.gas_limit as u128).checked_mul(self.gas_price.0)
+            .ok_or_else(|| NexusError::InvalidTransaction("Gas cost overflow".into()))?;
         let value = match &self.tx_type {
             TransactionType::Transfer { amount, .. } => *amount,
             TransactionType::Call { value, .. } => *value,
             TransactionType::ValidatorRegister { stake, .. } => *stake,
             _ => Amount::ZERO,
         };
-        gas_cost.saturating_add(value)
+        gas_cost.checked_add(value.0).map(Amount)
+            .ok_or_else(|| NexusError::InvalidTransaction("Transaction cost overflow".into()))
+    }
+
+    /// Cost of the operations implemented by the reference execution engine.
+    pub fn intrinsic_gas(&self) -> Result<u64, NexusError> {
+        match &self.tx_type {
+            TransactionType::Deploy { code, .. } => u64::try_from(code.len()).ok()
+                .and_then(|size| size.checked_mul(200))
+                .and_then(|cost| cost.checked_add(21_000))
+                .ok_or_else(|| NexusError::InvalidTransaction("Deployment gas overflow".into())),
+            TransactionType::Call { .. } => Ok(50_000),
+            _ => Ok(21_000),
+        }
     }
 }
 
@@ -199,8 +218,17 @@ impl SignedTransaction {
 
     /// Validate transaction structure (not signature)
     pub fn validate_structure(&self) -> Result<(), NexusError> {
+        self.validate_structure_at(Timestamp::now())
+    }
+
+    /// Validate against an explicit application time (e.g. the L1 block time).
+    pub fn validate_structure_at(&self, at: Timestamp) -> Result<(), NexusError> {
+        self.transaction.checked_max_cost()?;
+        if self.transaction.nonce.0 == u64::MAX {
+            return Err(NexusError::InvalidTransaction("Transaction nonce exhausted".into()));
+        }
         // Check if expired
-        if self.transaction.is_expired() {
+        if self.transaction.expires_at.is_some_and(|expires| at > expires) {
             return Err(NexusError::TransactionExpired);
         }
 

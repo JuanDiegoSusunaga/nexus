@@ -2,7 +2,13 @@
 
 **Navegación y versión TG2:** [mapa del código e instrucciones de reproducción](REPRODUCIBILIDAD_TG2.md). El repositorio documental identifica el commit de código que acompaña a la edición y conserva fuentes, logs y resultados por etapa.
 
-## Estado vigente — auditoría Merkle/Fiat–Shamir
+## Estado local vigente — contrato de cuentas L1
+
+20 de octubre de 2026: el procesador L1 recalcula la raíz de cuentas después de ejecutar las transacciones y acreditar la recompensa, y rechaza cabeceras que no coinciden sin publicar efectos parciales. `prepare_block` construye candidatos locales sin alterar el estado. Los costos, nonces y vencimientos se rigen por un contrato explícito; no se implementan comisiones ni recibos L1 completos. Las correcciones de firmas, quórum ponderado, secuenciación y rechazo de fraude no autenticado se conservan en este corte. [Contrato, reproducción y límites](REPRODUCIBILIDAD_TG2.md).
+
+El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
+
+## Antecedente — auditoría Merkle/Fiat–Shamir
 
 23 de septiembre de 2026: check/build y **197 pruebas** repetidos correctamente. La auditoría independiente con Python/hashlib reconstruye 14 certificados, 560 consultas y 18.880 aperturas Merkle; calcula el sesgo de campo bajo salidas frescas y delimita las obligaciones por ronda y ROM/QROM. La garantía del ejecutable sigue pendiente. Rust, corpus y benchmarks se conservan. [Informe y evidencia](../Documentos/04-Administrativo-TG2/Avances/R4-Merkle-Fiat-Shamir-2026-09-23.md) · [Paquete de revisión matemática preparado](../Documentos/04-Administrativo-TG2/Avances/Revision-Matematica-S1-S3-2026-09-23.md).
 
