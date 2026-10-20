@@ -44,3 +44,4 @@ pub use linked_verifier::{ExpectedTransition, LinkedValidityProof};
 pub use execution::{ExecutionEngine, ExecutionResult};
 pub use batch::{BatchBuilder, L2Batch, BatchStatus, ConfirmedBatch, SubmittedBatch, SubmissionAttempt};
 pub use chain::{ActiveChain, ActiveChainConfig, LinkedValidityProfile};
+pub use nexus_anchor::L1SubmissionOptions;

@@ -13,7 +13,7 @@ use nexus_core::{
     SignedTransaction, StateRoot, Timestamp, Address, InMemoryState,
 };
 use nexus_crypto::DilithiumKeypair;
-use nexus_anchor::AnchorChain;
+use nexus_anchor::{AnchorChain, L1SubmissionOptions};
 use nexus_zk::stark::{linked::{MIN_ROWS, MAX_ROWS, MAX_CERTIFICATE_BYTES}, params::POW_BITS_RUNTIME};
 use parking_lot::{Mutex, RwLock};
 use std::collections::HashMap;
@@ -338,6 +338,34 @@ impl ActiveChain {
             proof_data: data, public_inputs: public_inputs(expected) })
     }
 
+    /// Prepare a signed L1 transaction from immutable local batch context.
+    /// A scratch verifier checks admissibility without registering proof or submission effects.
+    pub fn prepare_l1_submission(&self, batch: &L2Batch, l1: &AnchorChain,
+        signer: &DilithiumKeypair, options: L1SubmissionOptions) -> Result<SignedTransaction, NexusError> {
+        let known = self.known_batches.read();
+        let entry = Self::check_known_batch(batch, &known)?;
+        if self.batch_submitter.read().get_confirmation(batch.index).is_some() {
+            return Err(NexusError::SecurityViolation("Local batch is already confirmed".into()));
+        }
+        if signer.address() != self.sequencer.address() {
+            return Err(NexusError::SecurityViolation("L1 publisher differs from the local sequencer".into()));
+        }
+        let expected = self.expected_for_local_batch(&entry.batch);
+        if self.verifier.read().get_verified_root(expected.height).is_some_and(|root| root != expected.post) {
+            return Err(NexusError::SecurityViolation("Conflicting verified root at the local batch height".into()));
+        }
+        let proof = self.state_proof_with_context(batch, &expected)?;
+        let mut checker = NitroVerifier::new(self.config.verification_mode);
+        let result = if self.config.verification_mode == VerificationMode::Optimistic {
+            checker.verify(&proof)?
+        } else { checker.verify_expected(&proof, &expected)? };
+        if !result.valid { return Err(NexusError::ProofVerificationFailed); }
+        let count = u32::try_from(entry.batch.tx_count)
+            .map_err(|_| NexusError::BatchTooLarge)?;
+        l1.prepare_batch_submission(signer, entry.batch.post_state_root, count,
+            entry.batch.compressed_data.clone(), options)
+    }
+
     /// Verifica antes de marcar el envío; rechazos y duplicados no alteran el registro.
     /// El modo optimista mantiene su aceptación provisional, sin acreditar el contrato Lean.
     pub fn mark_batch_submitted(&self, batch: L2Batch, l1_tx_hash: Hash256) -> Result<(), NexusError> {
@@ -591,6 +619,28 @@ mod tests {
         config.verification_mode = VerificationMode::ZKValidity;
         config.validity_profile = profile;
         ActiveChain::new(config, keypair)
+    }
+
+    #[test]
+    fn preparing_a_valid_scalar_fixture_does_not_register_its_root_or_submission() {
+        // Synthetic caller context only: the scalar AIR does not authenticate these opaque bytes.
+        let publisher = DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap();
+        let chain = ActiveChain::new(ActiveChainConfig { verification_mode: VerificationMode::ZKValidity,
+            ..Default::default() }, publisher.clone());
+        let mut local = scalar_fixture();
+        local.compressed_data = vec![1];
+        local.tx_count = 1;
+        local.batch_hash = local.compute_hash();
+        chain.queue_local_batch(local.clone()).unwrap();
+        let l1 = AnchorChain::new(Default::default(), DilithiumKeypair::generate(SignatureScheme::Dilithium3).unwrap());
+        let prepared = chain.prepare_l1_submission(&local, &l1, &publisher, Default::default()).unwrap();
+        assert!(chain.verified_state_root(local.block_range.1).is_none());
+        assert!(chain.get_batch_submission(local.index).is_none());
+        assert_eq!(chain.stats().pending_batches, 1);
+        assert_eq!(l1.height(), BlockHeight::GENESIS);
+        assert!(l1.get_account(&publisher.address()).is_none());
+        chain.mark_batch_submitted(local.clone(), prepared.hash()).unwrap();
+        assert_eq!(chain.verified_state_root(local.block_range.1), Some(local.post_state_root));
     }
 
     #[test]

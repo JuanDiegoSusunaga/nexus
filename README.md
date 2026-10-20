@@ -16,6 +16,8 @@ La confirmación de un lote L2 exige ahora consultar una instancia L1 confiable:
 
 Los envíos pendientes admiten tres reintentos explícitos, condicionados al hash vigente y conservando el lote y su certificado. El historial mantiene reservados los hashes anteriores y permite reconocer su inclusión tardía. La confirmación se registra una sola vez; esta contabilidad local no impide que varias transacciones lleguen a L1.
 
+`prepare_l1_submission` construye y firma el envío desde la instantánea local del lote y una instancia L1 confiable. Comprueba el certificado exigido por el modo, la identidad publicadora y la admisión local de la transacción, incluido el tamaño de su envoltura firmada. La preparación no reserva nonce ni registra envíos o raíces; L1 vuelve a validar al procesar el bloque.
+
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
 ## Antecedente — auditoría Merkle/Fiat–Shamir

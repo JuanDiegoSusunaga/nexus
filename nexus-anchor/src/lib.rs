@@ -34,4 +34,4 @@ pub use consensus::{ConsensusEngine, ProofOfStake, ConsensusConfig};
 pub use validator::{Validator, ValidatorSet, ValidatorRegistry};
 pub use data_availability::{DataAvailabilityLayer, DAProof, DACommitment};
 pub use finality::{FinalityGadget, FinalizedBlock};
-pub use chain::{AnchorChain, AnchorChainConfig, L1BatchInclusion};
+pub use chain::{AnchorChain, AnchorChainConfig, L1BatchInclusion, L1SubmissionOptions};

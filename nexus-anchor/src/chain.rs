@@ -11,7 +11,7 @@ use nexus_core::{
     AccountState, Address, Amount, Block, BlockBody, BlockHeader, BlockHeight, ChainId, Hash256, InMemoryState,
     Layer, MerkleTree, NexusError, SignedTransaction, StateRoot, Timestamp,
 };
-use nexus_crypto::{signer::verify_signed_transaction_at, DilithiumKeypair};
+use nexus_crypto::{signer::verify_signed_transaction_at, DilithiumKeypair, Signer};
 use parking_lot::RwLock;
 use std::collections::HashMap;
 
@@ -35,6 +35,18 @@ impl Default for AnchorChainConfig {
             consensus: ConsensusConfig::default(), min_stake: Amount::from_units(32),
             block_reward: Amount::from_units(2), fee_percentage: 1 }
     }
+}
+
+/// Local transaction policy only; sender nonce, chain and time come from L1.
+#[derive(Debug, Clone)]
+pub struct L1SubmissionOptions {
+    pub gas_limit: u64,
+    pub gas_price: Amount,
+    pub expires_at: Option<Timestamp>,
+}
+
+impl Default for L1SubmissionOptions {
+    fn default() -> Self { Self { gas_limit: 21_000, gas_price: Amount::ZERO, expires_at: None } }
 }
 
 #[derive(Clone)]
@@ -116,6 +128,38 @@ impl AnchorChain {
     }
     pub fn get_account(&self, address: &Address) -> Option<AccountState> {
         self.data.read().execution.state.get_account(address).cloned()
+    }
+
+    /// Sign and preflight a single batch transaction against one local L1 snapshot.
+    /// Does not reserve nonce, publish DA, reward a proposer, or process a block.
+    pub fn prepare_batch_submission(&self, signer: &DilithiumKeypair, batch_root: StateRoot,
+        batch_size: u32, bytes: Vec<u8>, options: L1SubmissionOptions) -> Result<SignedTransaction, NexusError> {
+        if bytes.is_empty() {
+            return Err(NexusError::InvalidTransaction("Empty local DA payload".into()));
+        }
+        if bytes.len() > crate::data_availability::MAX_DA_DATA_SIZE { return Err(NexusError::BatchTooLarge); }
+        let data = self.data.read();
+        let parent_hash = *data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
+        let parent = data.blocks.get(&parent_hash).ok_or(NexusError::BlockNotFound(parent_hash))?;
+        let height = BlockHeight(data.height.0.checked_add(1)
+            .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?);
+        let timestamp = Timestamp::now().max(parent.header.timestamp);
+        let nonce = data.execution.state.get_account(&signer.address()).map(|account| account.nonce).unwrap_or_default();
+        let transaction = nexus_core::Transaction { chain_id: self.config.chain_id, nonce,
+            gas_limit: options.gas_limit, gas_price: options.gas_price,
+            tx_type: nexus_core::TransactionType::BatchSubmit { batch_root: batch_root.0, batch_size, compressed_data: bytes },
+            timestamp, expires_at: options.expires_at };
+        transaction.checked_max_cost()?;
+        let signed = signer.sign_transaction(transaction)?;
+        let mut header = BlockHeader::new(height, parent_hash, Address::ZERO, Layer::Anchor);
+        header.timestamp = timestamp;
+        header.transactions_root = MerkleTree::from_leaves(vec![signed.hash()]).root();
+        let candidate = Block::new(header, BlockBody::new(vec![signed.clone()]));
+        self.validate_block(&candidate, &data)?;
+        let mut staged = data.execution.clone();
+        self.execute_transaction(&mut staged, &signed, height, timestamp)?;
+        Ok(signed)
     }
 
     /// Prepare a local candidate without publishing effects or certifying consensus.

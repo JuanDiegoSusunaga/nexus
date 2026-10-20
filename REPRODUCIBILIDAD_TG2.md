@@ -2,6 +2,28 @@
 
 **Organización:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
 
+## Preparación de transacciones L1 — 20 de octubre de 2026
+
+`ActiveChain::prepare_l1_submission(&batch, &l1, &publisher, options)` devuelve una transacción firmada `BatchSubmit` a partir de un lote conocido. Comprueba los campos de la instantánea local, la identidad del secuenciador y que el lote no esté confirmado. En validez/híbrido exige el certificado del perfil escalar con contexto local; usa un verificador temporal y conserva las raíces y pruebas pendientes del verificador de la cadena. El modo optimista mantiene su admisión provisional. La preparación no registra el envío ni consume la cola de trabajo.
+
+`L1SubmissionOptions` permite fijar gas, precio y vencimiento; por defecto usa 21 000, cero y ausencia de vencimiento. `AnchorChain::prepare_batch_submission` toma de una instantánea L1 la cadena configurada, el nonce del publicador y una fecha igual al máximo entre el reloj y la fecha del padre. Firma con la clave prestada por el llamante, comprueba costo representable y reutiliza validación y ejecución sobre una copia. Exige firma, gas, saldo, nonce, vencimiento y límites DA; contrasta el tamaño del candidato L1 completo con la transacción firmada. Un lote que cabe en el límite L2 puede exceder ese tamaño al añadir su envoltura L1 y se rechaza sin registrar efectos.
+
+El flujo local se puede expresar así:
+
+```rust,ignore
+let tx = active.prepare_l1_submission(&batch, &l1, &publisher, L1SubmissionOptions::default())?;
+active.mark_batch_submitted(batch.clone(), tx.hash())?;
+let block = l1.prepare_block(vec![tx], proposer)?;
+l1.process_block(block).await?;
+let confirmation = active.mark_batch_confirmed(batch.index, &l1)?;
+```
+
+Preparar conserva el nonce real, cuentas, DA, alturas, bloques, raíces verificadas e historial de intentos. Si otra transacción consume el nonce antes del procesamiento, L1 rechaza la preparación antigua y se puede construir otra para el reintento explícito. Se comprueba admisión individual en una envoltura L1 mínima; la recompensa del proponente, otras transacciones o metadatos añadidos al bloque pueden introducir nuevos rechazos. El método no reagrupa lotes ni ajusta el límite L2 automáticamente.
+
+La [evidencia del preparador](../Documentos/06-Evidencia-TG2/2026-10-20/Preparacion-L1/verificacion.json) registra ocho pruebas externas y una interna: flujo firmado hasta confirmación, dominios L1/L2 distintos, nonce y fecha derivados, rechazo de contexto/firmante, certificados inválidos, gas/costo/vencimiento/saldo, envoltura demasiado grande, preparación obsoleta y recompensa desbordada. El caso interno verifica que un certificado escalar sintético válido no registra una raíz por el mero hecho de preparar la transacción.
+
+**Alcance:** la instancia L1 y la clave publicadora proceden de la integración confiable; el método construye una transacción y la integración decide su emisión. No reserva nonces, no garantiza que el estado futuro mantenga su admisibilidad y no acredita finalidad BFT. La transacción L1 conserva el formato actual de raíz, cantidad y bytes; no transporta una prueba de ejecución general L2. El chequeo escalar permanece en L2 y no autentica esos bytes dentro del AIR. Se conservan fuentes Lean y de tesis, certificados, formatos firmados y núcleo/lector AIR-FRI, sin extender el resultado matemático.
+
 ## Recuperación de envíos pendientes — 20 de octubre de 2026
 
 El primer hash registrado dejaba bloqueado un lote si el envío no aparecía en L1: repetir `mark_batch_submitted` se rechazaba por duplicado y la confirmación seguía pendiente. Se conserva un escenario de referencia de esa limitación y se añade `retry_batch_submission(index, expected_hash, next_hash)`. Esta API registra una nueva intención sobre el mismo lote ya admitido, sin volver a ejecutar transacciones ni sustituir su certificado o contexto local.
