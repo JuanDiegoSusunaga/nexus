@@ -22,6 +22,8 @@ Los envíos pendientes admiten tres reintentos explícitos, condicionados al has
 
 Si L1 procesó el paquete antes del primer registro local, `recover_l1_submission` permite registrar su inclusión y conservar sus bytes exactos. Exige un lote conocido sin intentos y compara la envoltura firmada completa con el almacenamiento canónico de la instancia L1 confiable; conserva las comprobaciones de certificado L2. Consulta la inclusión histórica sin exigir otra vez el nonce consumido o el vencimiento actual, y no sustituye historiales existentes ni restaura lotes desconocidos tras reiniciar.
 
+`recover_l1_retry` recupera un reemplazo procesado cuyo reintento quedó sin registrar. Exige un envío pendiente, el hash vigente, un hash nuevo sin reservas y disponibilidad dentro de los tres reintentos. Conserva los intentos previos y el certificado aceptado, añade los bytes exactos y confirma la inclusión del reemplazo en una sola transición local. No vuelve a enviar la transacción ni agrega persistencia.
+
 El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
 
 ## Antecedente — auditoría Merkle/Fiat–Shamir

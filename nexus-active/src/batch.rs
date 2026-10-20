@@ -342,8 +342,34 @@ impl BatchSubmitter {
     /// ActiveChain checks global hash reservations while holding its context write lock.
     pub(crate) fn retry_submission(&mut self, batch_index: u64, expected_hash: Hash256,
         next_hash: Hash256, transaction_bytes: Option<Vec<u8>>) -> Result<(), NexusError> {
-        let entry = self.submitted.iter_mut().find(|entry| entry.batch.index == batch_index)
+        let (pos, retries) = self.checked_retry_position(batch_index, expected_hash)?;
+        let entry = &mut self.submitted[pos];
+        let now = Timestamp::now();
+        entry.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: now, transaction_bytes });
+        entry.l1_tx_hash = next_hash;
+        entry.submitted_at = now;
+        entry.retries = retries;
+        Ok(())
+    }
+
+    /// Validate before removing the pending record; append and confirm under the same write lock.
+    pub(crate) fn recover_retry(&mut self, batch_index: u64, expected_hash: Hash256,
+        next_hash: Hash256, transaction_bytes: Vec<u8>, l1_block_hash: Hash256,
+        l1_height: BlockHeight) -> Result<ConfirmedBatch, NexusError> {
+        let (pos, _) = self.checked_retry_position(batch_index, expected_hash)?;
+        let mut submitted = self.submitted.remove(pos);
+        submitted.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: Timestamp::now(),
+            transaction_bytes: Some(transaction_bytes) });
+        let confirmed = ConfirmedBatch { batch: submitted.batch, l1_tx_hash: next_hash,
+            l1_block_hash, l1_height, attempts: submitted.attempts };
+        self.confirmed.push(confirmed.clone());
+        Ok(confirmed)
+    }
+
+    fn checked_retry_position(&self, batch_index: u64, expected_hash: Hash256) -> Result<(usize, u32), NexusError> {
+        let pos = self.submitted.iter().position(|entry| entry.batch.index == batch_index)
             .ok_or_else(|| NexusError::BatchSubmissionFailed("No pending submission to retry".into()))?;
+        let entry = &self.submitted[pos];
         if entry.l1_tx_hash != expected_hash {
             return Err(NexusError::BatchSubmissionFailed("Stale submission attempt".into()));
         }
@@ -352,12 +378,7 @@ impl BatchSubmitter {
         }
         let retries = entry.retries.checked_add(1)
             .ok_or_else(|| NexusError::BatchSubmissionFailed("Submission retry count exhausted".into()))?;
-        let now = Timestamp::now();
-        entry.attempts.push(SubmissionAttempt { l1_tx_hash: next_hash, recorded_at: now, transaction_bytes });
-        entry.l1_tx_hash = next_hash;
-        entry.submitted_at = now;
-        entry.retries = retries;
-        Ok(())
+        Ok((pos, retries))
     }
 
     pub(crate) fn get_submission(&self, batch_index: u64) -> Option<SubmittedBatch> {
