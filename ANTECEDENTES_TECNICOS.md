@@ -1,0 +1,470 @@
+# Antecedentes técnicos de NEXUS
+
+Los registros siguientes conservan las descripciones y resultados de cada etapa. Para la entrada de revisión vigente, consultar el [README](README.md).
+
+**Navegación y versión TG2:** [mapa del código e instrucciones de reproducción](REPRODUCIBILIDAD_TG2.md). El repositorio documental identifica el commit de código que acompaña a la edición y conserva fuentes, logs y resultados por etapa.
+
+## Estado local vigente — procesamiento, dominios y confirmación local
+
+`DurableNode` incorpora un ciclo local persistente: admisión, ejecución de transferencias, lotes, paquetes L1, inclusión observada y confirmación se guardan antes de devolver éxito. Reabrir conserva saldos, nonces, trabajo pendiente e historial firmado. La clave del publicador la proporciona el llamante; no se guarda en los checkpoints. Se comprobó el ciclo con procesos separados y escrituras fallidas. Las instancias directas de `ActiveChain`/`AnchorChain` conservan su funcionamiento en memoria; la persistencia automática corresponde a este coordinador. [Contrato y ejemplo ejecutable](REPRODUCIBILIDAD_TG2.md).
+
+El perfil L2 admite transferencias. Las llamadas y despliegues de contratos se rechazan explícitamente: no existe un intérprete que permita acreditar su ejecución o inicialización. Se retiraron los éxitos simulados de esas rutas. Esta delimitación no amplía el AIR escalar ni los resultados Lean.
+
+20 de octubre de 2026: el procesador L1 recalcula la raíz de cuentas después de ejecutar las transacciones y acreditar la recompensa, y rechaza cabeceras que no coinciden sin publicar efectos parciales. `prepare_block` construye candidatos locales sin alterar el estado. Los costos, nonces y vencimientos se rigen por un contrato explícito; no se implementan comisiones ni recibos L1 completos. Las correcciones de firmas, quórum ponderado, secuenciación y rechazo de fraude no autenticado se conservan en este corte. [Contrato, reproducción y límites](REPRODUCIBILIDAD_TG2.md).
+
+La configuración L1 exige ahora el `chain_id` firmado esperado y limita la suma de reservas `gas_limit` del bloque. Los valores por defecto son `ChainId::LOCAL` y 30 000 000; un presupuesto cero permite únicamente bloques vacíos. Estas políticas se vuelven a comprobar al recibir un bloque y no modifican el AIR/FRI ni los resultados Lean.
+
+En L2, `SequencerConfig::chain_id` fija el dominio esperado tanto para admisión como para ejecución en `ActiveChain`. Los motores independientes también lo comprueban y permiten fijarlo al crear o restaurar el estado. El valor por defecto sigue siendo `LOCAL`; los identificadores, el génesis y los votos no incorporan una separación adicional por capa.
+
+El registro local DA conserva por separado los envíos a una misma altura y permite recuperar cada lote por su índice. Sus recibos versionados distinguen el hash del contenido de la raíz de fragmentos; las pruebas comprueban índices, tamaño y rutas canónicas. Esto acredita almacenamiento e inclusión locales: Reed–Solomon, muestreo remoto y anclaje de esos recibos al consenso siguen pendientes.
+
+La confirmación de un lote L2 exige ahora consultar una instancia L1 confiable: el hash registrado debe pertenecer a un `BatchSubmit` procesado, publicado por el secuenciador y con raíz, cantidad y bytes coincidentes. Se conserva la procedencia del bloque L1 y cada hash de envío solo puede asignarse una vez dentro de la instancia L2. Esta observación local mantiene separados inclusión, finalidad BFT y validez de ejecución.
+
+Los envíos pendientes admiten tres reintentos explícitos, condicionados al hash vigente y conservando el lote y su certificado. El historial mantiene reservados los hashes anteriores y permite reconocer su inclusión tardía. La confirmación se registra una sola vez; esta contabilidad local no impide que varias transacciones lleguen a L1.
+
+`prepare_l1_submission` construye y firma el envío desde la instantánea local del lote y una instancia L1 confiable. Comprueba el certificado exigido por el modo, la identidad publicadora y la admisión local de la transacción, incluido el tamaño de su envoltura firmada. La preparación no reserva nonce ni registra envíos o raíces; L1 vuelve a validar al procesar el bloque.
+
+`register_l1_submission` y `retry_l1_submission` validan el paquete firmado contra L1 y el lote local antes de registrar su hash. Conservan sus bytes exactos en el historial para recuperarlos sin volver a firmar, incluso después de confirmar. Las API por hash siguen siendo intenciones locales sin comprobación del paquete L1.
+
+Si L1 procesó el paquete antes del primer registro local, `recover_l1_submission` permite registrar su inclusión y conservar sus bytes exactos. Exige un lote conocido sin intentos y compara la envoltura firmada completa con el almacenamiento canónico de la instancia L1 confiable; conserva las comprobaciones de certificado L2. Consulta la inclusión histórica sin exigir otra vez el nonce consumido o el vencimiento actual, y no sustituye historiales existentes ni restaura lotes desconocidos tras reiniciar.
+
+`recover_l1_retry` recupera un reemplazo procesado cuyo reintento quedó sin registrar. Exige un envío pendiente, el hash vigente, un hash nuevo sin reservas y disponibilidad dentro de los tres reintentos. Conserva los intentos previos y el certificado aceptado, añade los bytes exactos y confirma la inclusión del reemplazo en una sola transición local. No vuelve a enviar la transacción ni agrega persistencia.
+
+El procesamiento local no constituye consenso BFT completo ni prueba de ejecución L2. El AIR/FRI activo sigue restringido a su relación escalar y contexto confiable; las referencias siguientes a rutas y conteos de etapas anteriores se conservan como antecedentes.
+
+## Antecedente — auditoría Merkle/Fiat–Shamir
+
+23 de septiembre de 2026: check/build y **197 pruebas** repetidos correctamente. La auditoría independiente con Python/hashlib reconstruye 14 certificados, 560 consultas y 18.880 aperturas Merkle; calcula el sesgo de campo bajo salidas frescas y delimita las obligaciones por ronda y ROM/QROM. La garantía del ejecutable sigue pendiente. Rust, corpus y benchmarks se conservan. [Informe y evidencia](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Merkle-Fiat-Shamir-2026-09-23.md) · [Paquete de revisión matemática preparado](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/Revision-Matematica-S1-S3-2026-09-23.md).
+
+## Registro de cota interactiva ideal
+
+22 de septiembre de 2026: se deriva una cota conservadora de composición para la variante vinculada bajo oráculos y retos ideales, con candidato único fijado antes del AIR y tratamiento del campo de extensión. Su transferencia a Merkle/Fiat–Shamir y ROM/QROM sigue pendiente, al igual que la revisión matemática; no acredita 100 bits. Se verificaron las cuentas en nueve perfiles y se repitieron check, las **197 pruebas** del workspace y build. Rust, corpus y mediciones se conservan; los diez casos release corresponden a la ejecución anterior. [Derivación, hipótesis y evidencia](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Cota-Interactiva-2026-09-22.md).
+
+## Registro de FRI de traza vinculada al AIR
+
+22 de septiembre de 2026: **197 pruebas** del workspace pasan en desarrollo y diez nuevas también en release; check de todos los targets y build correctos. La variante experimental comparte raíz entre las aperturas AIR y el primer compromiso FRI de traza, añade FRI de composición y transcripción propia, y verifica sin recibir el LDE completo. Acepta los cuatro tamaños honestos ensayados y rechaza pruebas nuevas sobre los tres oráculos alejados conservados. Se preservan 14 certificados públicos y sus tamaños comprobados. Las fuentes STARK de producción permanecen intactas; la cota global de solidez, las pérdidas Fiat–Shamir/QROM y la revisión matemática siguen pendientes. No acredita conocimiento cero ni ahorro de bytes en los tamaños medidos. [Informe de implementación, formato y evidencia](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-FRI-Vinculado-2026-09-22.md).
+
+## Registro del contraejemplo de proximidad de traza
+
+22 de septiembre de 2026: **187 pruebas** del workspace pasan en desarrollo y siete nuevas también en release; check/build correctos. El verificador heredado acepta tres pruebas con trazas a distancia exacta 7/8 del código de grado < T, con transcripción real y enunciados válidos. Se refuta la premisa de proximidad propuesta, sin falsificar enunciados. El control exhaustivo experimental exige todo el LDE, rechaza esos casos por grado y acepta la traza honesta; no es sucinto ni se integra en producción. [Informe de esa etapa y corpus público](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Proximidad-Traza-2026-09-22.md).
+
+## Registro del argumento algebraico AIR/FRI
+
+22 de septiembre de 2026: **180 pruebas** del workspace pasan en desarrollo; los siete casos algebraicos nuevos pasan también en release. Check de todos los targets y build correctos. El oráculo de referencia de TG2 contrasta divisibilidad, cancelación, grados y correspondencia con aperturas del probador. El argumento escrito requiere una traza fija de grado menor que T o un oráculo próximo a ella; la proximidad de la traza comprometida aún debe justificarse. No acredita solidez global ni 100 bits. [Informe de esa etapa y evidencia](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Algebra-AIR-FRI-2026-09-22.md).
+
+## Registro de auditoría de solidez STARK
+
+22 de septiembre de 2026: **173 pruebas** del workspace pasan en desarrollo; siete casos STARK nuevos también pasan en release. Check/build correctos. Se caracterizaron consultas, transcripción, grinding, muestreo y proximidad. El presupuesto heredado no acredita 100 bits. El ensayo de palabra cercana no constituye una transición AIR falsa aceptada. Las obligaciones de composición se detallan en el [informe STARK](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Solidez-STARK-2026-09-22.md). Las fuentes de producción STARK conservan sus comentarios históricos; el análisis de esta etapa se conserva en ese informe y se complementa con el avance algebraico anterior.
+
+## Registro de correspondencia R1
+
+22 de septiembre de 2026: **166 pruebas pasan**, check/build correctos. Tres casos R1 comprueban correspondencia del envoltorio con fips204 0.4.6 en los tres niveles, contexto y separación de HashML-DSA. La ruta ordinaria usa ML-DSA puro, hedged y contexto vacío; reconstruir claves desde semilla no hace determinista la firma. La revisión formal documenta condiciones incumplidas y obligaciones pendientes; estas pruebas comparten backend y no certifican seguridad. [Informe R1](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R1-Correspondencia-Formal-2026-09-22.md).
+
+## Registro R5 y complemento R4
+
+22 de septiembre de 2026: **163 pruebas pasan**, check/build correctos. Tres casos R5 comprueban representaciones y reconstrucción de firma desde semilla. El gestor conserva claves entre operaciones; la política de reexpansión vive en el benchmark. Los tamaños serializados no miden toda la RAM ni el borrado físico.
+
+Tras el cambio de Smart App Control por el autor, terminaron los dos benchmarks pendientes. R4 y complemento preservan 29 casos Criterion, 40 mediciones STARK y 40 repeticiones multinúcleo. ML-DSA-65: 84,61 µs por verificación; mediana de 136.390 verificaciones/s con 24 hilos. Fuentes y configuración identificadas por serie; los fallos anteriores permanecen como historia. [Informe de esa revisión](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R5-Residencia-y-Custodia-2026-09-22.md).
+
+
+
+## Registro de la primera validación R4, 22 de septiembre de 2026
+
+Check/build correctos y **160 pruebas** del workspace pasan, 18 nuevas en R4. La variante `nexus-active/experiments/tg2_canonical_verifier.rs` exige STARK y contexto coherente, restringidos a escalares canónicos. El verificador heredado conserva aceptación sin prueba y enlace parcial de raíces; se caracteriza mediante pruebas sin modificar sus fuentes de TG1. El ejemplo de 16 filas permite recuperar el testigo desde las aperturas: el PoC no acredita conocimiento cero, raíces arbitrarias de 256 bits ni 100 bits de soundness.
+
+Se midieron 17 casos Criterion (clásicos/residencia) y 40 STARK con dispersión. Windows bloqueó dos ejecutables optimizados: `dilithium_bench` y `tg2_throughput` (error 4551). El nuevo ensayo multinúcleo corrige el reloj común y el conteo, pero no tiene una cifra optimizada medida. Los rendimientos históricos siguientes conservan sus fechas y límites; no representan esta serie. [Informe R4](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R4-Verificador-y-Evidencia-2026-09-22.md).
+
+
+**Arquitectura Blockchain Dual Post-Cuántica para Sistemas Seguros y Resilientes — Modelo Matemático-Computacional y Prototipo de Referencia**
+
+[![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](Cargo.toml)
+[![PQC](https://img.shields.io/badge/crypto-Post--Quantum-green.svg)](https://csrc.nist.gov/projects/post-quantum-cryptography)
+[![Estado](https://img.shields.io/badge/estado-prototipo%20de%20investigaci%C3%B3n-yellow.svg)]()
+
+---
+
+> **Naturaleza de este trabajo.** Este repositorio acompaña al trabajo de grado *"Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Seguros y Resilientes Post-Cuántico"*. Su objetivo, según la propuesta aprobada, es **diseñar, modelar y validar formalmente** una arquitectura — **no** entregar un sistema de producción listo para despliegue. En consecuencia, el código es un **prototipo de referencia**: algunos componentes están implementados y verificados, otros están **especificados/modelados** a nivel de tipos e interfaces, y otros se documentan explícitamente como **trabajo futuro**. La sección [Estado de implementación](#estado-de-implementación) detalla con precisión qué es qué, para evitar cualquier sobre-afirmación.
+
+---
+
+## Tabla de Contenidos
+
+- [Introducción](#introducción)
+- [Estado de implementación](#estado-de-implementación)
+- [Arquitectura General (diseño objetivo)](#arquitectura-general-diseño-objetivo)
+- [Componentes del Sistema](#componentes-del-sistema)
+- [Criptografía Post-Cuántica](#criptografía-post-cuántica)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Compilación y Uso](#compilación-y-uso)
+- [Fundamentos Teóricos y Validación Formal](#fundamentos-teóricos-y-validación-formal)
+- [Rendimiento](#rendimiento)
+- [Correspondencia con los Objetivos de la Tesis](#correspondencia-con-los-objetivos-de-la-tesis)
+- [Limitaciones conocidas y trabajo futuro](#limitaciones-conocidas-y-trabajo-futuro)
+- [Referencias](#referencias)
+
+---
+
+## Introducción
+
+NEXUS es un **modelo de arquitectura blockchain de doble capa** diseñado para proteger la autenticación de operaciones y los registros de sistemas de distintos dominios frente a la amenaza de la computación cuántica. El trabajo aborda tres problemas:
+
+1. **El Trilema de la Blockchain**: escalabilidad, seguridad y descentralización.
+2. **La amenaza HNDL** (*Harvest Now, Decrypt Later*): datos cifrados hoy con criptografía clásica podrían descifrarse con un computador cuántico futuro.
+3. **La vulnerabilidad de RSA/ECC frente al algoritmo de Shor**: se adopta exclusivamente criptografía post-cuántica basada en retículos (NIST PQC).
+
+El aporte central es el **diseño formal** de un sistema *Dual-Chain* —**Anchor Layer (L1)** para consenso y disponibilidad de datos, **Active Layer (L2)** para ejecución verificable— junto con la **validación formal** de su núcleo criptográfico (ver [Validación Formal](#fundamentos-teóricos-y-validación-formal)).
+
+---
+
+## Estado de implementación
+
+Para distinguir con honestidad lo construido de lo modelado, cada componente se etiqueta así:
+
+| Estado | Significado |
+|:---:|---|
+| **Implementado** | Lógica funcional y verificada con pruebas; usa bibliotecas auditadas donde aplica. |
+| **Modelado** | Especificado a nivel de tipos/interfaces/algoritmo como abstracción del diseño; **no** es un mecanismo de seguridad operativo completo. |
+| **Trabajo futuro** | Declarado en el diseño pero **no** implementado (o implementado como *placeholder*). |
+
+| Componente | Crate / archivo | Estado |
+|---|---|:---:|
+| Firmas post-cuánticas (CRYSTALS-Dilithium 2/3/5) | `nexus-crypto/dilithium.rs`, `signer.rs` | Implementado |
+| Tipos núcleo, aritmética segura, estado de cuentas | `nexus-core/types.rs`, `state.rs` | Implementado |
+| Verificación de firma de transacción (en ejecución) | `nexus-active/execution.rs`, `nexus-anchor/chain.rs` | Implementado |
+| `Sentinel-Seed`: min-entropía + salud de la fuente (NIST SP 800-90B) + rotación | `nexus-crypto/{entropy,keypair,registry}.rs` | Monitor, gestor y registro local R2–R3 probados; custodia durable e integración L2/L1 pendientes |
+| Núcleo local de finalidad por voto autenticado y peso >2/3 | `nexus-anchor/finality.rs` | Firmas, instantánea confiable y ascendencia comprobadas; protocolo BFT completo pendiente |
+| Ejecución de transferencias nativas L2 | `nexus-active/execution.rs` | Implementado |
+| Árbol de Merkle binario (inclusión) | `nexus-core/merkle.rs` | Modelado (sin separación de dominio hoja/nodo) |
+| Generación **determinística** de claves desde semilla (KDF) | `nexus-crypto/dilithium.rs`, `keypair.rs` | Trabajo futuro |
+| ~~Extractor Difuso / biometría~~ | — | **Eliminado del alcance (v2)** — módulo removido del código |
+| Consenso PoS-BFT operativo (verificación de votos, *slashing*, rondas en red) | `nexus-anchor/consensus.rs` | Trabajo futuro (andamiaje de referencia) |
+| Disponibilidad de datos (erasure coding, DAS, compromiso polinómico) | `nexus-anchor/data_availability.rs` | Trabajo futuro |
+| Verificación de validez post-cuántica (STARK hash-based: FRI + AIR) | `nexus-zk/src/stark/*`, `nexus-active/pq_verifier.rs`, `verifier.rs` | Implementado (PoC — AIR demostrativo) |
+| Verificación ZK Groth16 (arkworks) | `nexus-zk/prover.rs`, `verifier.rs` | Trabajo futuro (andamiaje sin uso) |
+| Red P2P (libp2p: gossipsub, kad, noise) | `nexus-network/*` | Trabajo futuro (interfaz modelada) |
+| Nodo ejecutable / servidor RPC | `nexus-node/*` | Trabajo futuro |
+| CLI (`keygen`, `bench crypto`) | `nexus-cli/main.rs` | Implementado (parcial) |
+
+> **Registro histórico de compilación (julio 2026; sustituido como estado vigente por R3, abajo).** El *workspace* **compila por completo** y **los 110 tests unitarios pasan** (`cargo test --workspace`: core 15, crypto 25, anchor 16, active 20, zk 34), incluyendo los del PoC STARK (`nexus-zk::stark`) y los del verificador post-cuántico de `nexus-active`. Los benchmarks de Dilithium del [Rendimiento](#rendimiento) son **mediciones reales**. *(Si el directorio `target/` queda bloqueado por un editor o el antivirus, compilar con `CARGO_TARGET_DIR` apuntando a otra ruta.)*
+
+---
+
+## Arquitectura General (diseño objetivo)
+
+> El siguiente diagrama representa el **diseño objetivo** del sistema. Las anotaciones de estado (Implementado / Modelado / Trabajo futuro) indican el grado de realización en el prototipo actual.
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                            NEXUS DUAL-CHAIN (diseño objetivo)                            │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ACTIVE LAYER (L2)                                                                       │
+│    • Nexus Sequencer                          →  Modelado                                │
+│    • Nitro Verifier                           →  Implementado (PoC STARK)                │
+│    • Execution Engine                         →  Implementado (transferencias)           │
+│    • Batch Builder                            →  Modelado  (compresión: Trabajo futuro)  │
+│    · State Commitment / DA Publication        →  Trabajo futuro                          │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  ANCHOR LAYER (L1)                                                                       │
+│    • Consensus Engine (PoS-BFT)               →  Trabajo futuro                          │
+│    • Data Availability (erasure, DAS)         →  Trabajo futuro                          │
+│    • Finality Gadget (voto ponderado)         →  Modelado                                │
+│    • Validadores                              →  Modelado                                │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  SECURITY LAYER                                                                          │
+│    • Sentinel-Seed (min-entropía)             →  Implementado                            │
+│    • Key Manager (rotación automática)        →  Modelado (rotación: Implementado)       │
+│    • Biometría / Fuzzy Extractor              →  Eliminado del alcance (v2)              │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  CRYPTOGRAPHIC CORE                                                                      │
+│    • CRYSTALS-Dilithium (PQC, niveles 2/3/5)  →  Implementado                            │
+│    • SHA3-256                                 →  Implementado                            │
+│    • BLAKE3                                   →  Implementado                            │
+│    • STARK hash-based (FRI, post-cuántico)    →  Implementado (PoC)                      │
+│    • ZK-SNARKs (Groth16)                      →  Trabajo futuro                          │
+│                                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Componentes del Sistema
+
+### 1. Anchor Layer (L1)
+
+| Componente | Función (diseño) | Archivo | Estado |
+|------------|---------|---------|:---:|
+| Consensus Engine | PoS-BFT estilo Tendermint con firmas PQC | `nexus-anchor/src/consensus.rs` | Trabajo futuro |
+| Validator Set | Validadores, *staking*, *slashing* | `nexus-anchor/src/validator.rs` | Modelado |
+| Data Availability | DA con *erasure coding* | `nexus-anchor/src/data_availability.rs` | Trabajo futuro |
+| Finality Gadget | Finalidad por voto ponderado (estilo GRANDPA) | `nexus-anchor/src/finality.rs` | Modelado |
+
+> **Nota de honestidad sobre el consenso.** El módulo actual modela el vocabulario y la máquina de estados (Proposal → Prevote → Precommit → Commit), pero **no** constituye aún un protocolo BFT operativo: los votos entrantes no se verifican criptográficamente, no hay deduplicación por validador, el quórum se cuenta por número de votos (no ponderado por *stake*) y no hay difusión en red. Se presenta como **especificación de referencia**; su realización completa es trabajo futuro.
+
+### 2. Active Layer (L2)
+
+| Componente | Función (diseño) | Archivo | Estado |
+|------------|---------|---------|:---:|
+| Nexus Sequencer | Ordenamiento y *batching* | `nexus-active/src/sequencer.rs` | Modelado |
+| Nitro Verifier | Verificación de transición de estado (ZK / *fraud proofs*) | `nexus-active/src/verifier.rs`, `pq_verifier.rs` | Implementado (PoC STARK) |
+| Execution Engine | Procesamiento de transacciones | `nexus-active/src/execution.rs` | Implementado (transferencias) |
+| Batch Builder | Construcción de *batches* | `nexus-active/src/batch.rs` | Modelado |
+
+> El **Nitro Verifier** verifica pruebas de validez **STARK hash-based reales** (PoC): `verify_zk` deserializa una `PqValidityProof` (`nexus-active/pq_verifier.rs`), verifica la prueba FRI + restricciones del AIR y **liga las raíces de estado pre/post** a la prueba; solo hashes y aritmética de cuerpo finito — sin emparejamientos ni ECC, por lo que Shor no aplica. Limitación honesta: el AIR del PoC es una transición demostrativa (Fibonacci-square), no la semántica de ejecución real del L2; existe además una ruta heredada de compatibilidad para pruebas sin STARK serializado. La **ejecución de transferencias nativas** sí es real: verifica la firma Dilithium, el *nonce* y el saldo, y aplica el débito/crédito.
+
+### 3. Security Layer
+
+| Componente | Función (diseño) | Archivo | Estado |
+|------------|---------|---------|:---:|
+| Sentinel-Seed | Monitoreo de entropía y rotación | `nexus-crypto/src/entropy.rs` | Implementado |
+| ~~Fuzzy Extractor~~ | Biometría — **eliminada del alcance (v2)** | — (removido) | Eliminado |
+| Key Manager | Gestión unificada de claves | `nexus-crypto/src/keypair.rs` | Modelado |
+
+---
+
+## Criptografía Post-Cuántica
+
+### CRYSTALS-Dilithium (implementado)
+
+NEXUS utiliza CRYSTALS-Dilithium / ML-DSA (NIST FIPS 204) como esquema de firma. La implementación delega en la biblioteca auditada [`fips204`](https://crates.io/crates/fips204) (ML-DSA puro en Rust, *constant-time*): generación de claves (incluida la **`KeyGen` determinística desde semilla**), firma y verificación son llamadas reales a la biblioteca, la verificación propaga el resultado real, y las claves secretas se borran de memoria (`zeroize`).
+
+| Nivel | Seguridad Clásica | Seguridad Cuántica (cota conservadora) | Clave Pública | Firma |
+|-------|-------------------|--------------------|--------------:|------:|
+| 2 | 128-bit | ~64-bit | 1.312 bytes | 2.420 bytes |
+| **3** | **192-bit** | **~96-bit** | **1.952 bytes** | **3.309 bytes** |
+| 5 | 256-bit | ~128-bit | 2.592 bytes | 4.627 bytes |
+
+**Recomendado**: Dilithium3.
+
+> **Notas técnicas (importantes para la defensa):**
+> 1. **Columna de seguridad cuántica.** Las cifras "mitad de bits" son una **cota conservadora tipo Grover**, no la estimación *core-SVP* basada en *sieving* cuántico (que da una reducción mucho menor, ~0,91× la seguridad clásica). El [Capítulo de Validación Formal](#fundamentos-teóricos-y-validación-formal) reconcilia ambas; cítalas como lo que son.
+> 2. **Tamaños de firma.** Los valores son los de **FIPS 204 / ML-DSA** (3.309 B para Dilithium3 / ML-DSA-65; 4.627 B para Dilithium5 / ML-DSA-87), conforme a la biblioteca `fips204` que implementa el código.
+
+#### Fundamento matemático
+
+Dilithium se basa en los problemas **Module-LWE** y **Module-SIS** sobre el anillo $R_q = \mathbb{Z}_q[X]/(X^n+1)$, con $n=256$ y $q=8\,380\,417$. La dureza se reduce, vía reducciones *worst-case → average-case*, a problemas reticulares de peor caso (Mod-SIVP) que se creen difíciles incluso para adversarios cuánticos. El desarrollo formal está en el **[Capítulo de Validación Formal (Obj. 4)](#fundamentos-teóricos-y-validación-formal)**.
+
+### Extractor Difuso / biometría — eliminado del alcance (v2)
+
+La autenticación biométrica (extractor difuso) **se eliminó del alcance** en la versión v2: un biométrico no es revocable —basar en él una clave de firma es un diseño cuestionable— y el código corrector de errores nunca se implementó. La derivación determinística de claves se hace ahora **desde una semilla de alta entropía vía KDF** (ver Obj. 2), sin biometría. El módulo `fuzzy_extractor.rs` fue removido del código (2026-07-31).
+
+### Sentinel-Seed: salud de la fuente de entropía (Obj. 3)
+
+La métrica de seguridad **no** es la entropía de Shannon de la semilla (que no mide el secreto de una clave y es degenerada para 32 bytes). El modelo v2 usa:
+
+- **min-entropía de la fuente** $H_\infty(X) = -\log_2 \max_x \Pr[X{=}x]$ como medida pertinente del material de clave;
+- **pruebas de salud en línea** conforme a **NIST SP 800-90B** (*Repetition Count Test* y *Adaptive Proportion Test*) para detectar degradación del generador;
+- **rotación con secrecia hacia adelante** por política (uso > 100.000 derivaciones, antigüedad > 24 h, o **fallo de las pruebas de salud**), con bloqueo de la derivación ante degradación de la fuente.
+
+> **Registro de la etapa R2, anterior a R3, 22 de septiembre de 2026.** El monitor usa corte APT binomial (W=512, C=16), RCT C=4 y lotes de 65.536 muestras para la frecuencia máxima empírica. El arranque bloquea la derivación hasta evaluar un lote; un fallo exige `begin_source_recovery`, otro lote completo y renovación de semilla. Rotar conserva los monitores y el historial. Las 123 pruebas del workspace pasan, incluidas 13 nuevas; `cargo check` y `cargo build` también terminan correctamente. Los benchmarks de otras secciones conservan sus fechas históricas.
+
+**Uso de la API:** `SentinelSeed::new()` y `from_bytes()` parten sin evaluación. La aplicación entrega muestras mediante `ingest_source`; `source_status` permite consultar el estado. `rotate()` ahora devuelve `Result` y rechaza una fuente sin evaluación o degradada. `derive_key_unchecked` es interno. `KeyManager` expone ingestión, consulta y comienzo de recuperación para el Sentinel que contiene.
+
+### Rotación efectiva y registro público (R3)
+
+**Estado del 22 de septiembre de 2026:** `cargo check --workspace --all-targets`, `cargo test --workspace` y `cargo build --workspace` pasan: **142 pruebas**, incluidas 19 nuevas. `KeyManager::rotate_sentinel` cambia todas las claves y la semilla en una transición atómica en memoria. Mantiene las identidades lógicas, actualiza metadatos y registra una autorización de todas las claves salientes y una prueba de posesión de todas las entrantes.
+
+`sign` y `sign_default` devuelven `EpochSignature`, que autentica identidad y época. La salud, edad y cupo de derivaciones bloquean la firma. `get_key` y `default_key` ofrecen únicamente vistas públicas; `key_metadata` expone metadatos. `add_key` es falible; `remove_key` registra el retiro y descarta el secreto sin devolverlo. Estas firmas de API sustituyen las anteriores dentro del gestor.
+
+`KeyRegistry::verify_current` rechaza épocas retiradas. `verify_historical` comprueba su validez criptográfica, sin acreditar fecha de emisión. `verify_at_record` comprueba vigencia respecto de una posición que la aplicación debe obtener de evidencia confiable. La aplicación también debe prevenir repeticiones dentro de una época.
+
+`to_bytes` exporta el historial público; `from_bytes` lo verifica y exige un checkpoint confiable de longitud/cabecera. Este punto debe custodiarse por separado y actualizarse para detectar retrocesos. La recuperación probada es del registro público: no persiste secretos ni restablece el firmador tras una caída. El formato heredado de transacciones y el sequencer no consumen todavía esta API, y el registro no está anclado en L1. El archivo se limita a 64 MiB; no hay poda.
+
+Demostración desde la raíz de este repositorio:
+
+```powershell
+$env:CARGO_TARGET_DIR = 'C:\tmp\nexus-target'
+cargo run -p nexus-crypto --example rotation_demo --locked --offline
+```
+
+Para dos identidades ML-DSA-65, la demostración produce un archivo público de 28.416 B y un evento de rotación de 17.498 B. No es un benchmark de latencia. [Informe, límites y pruebas R3](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Avances/R3-Rotacion-y-Registro-2026-09-22.md).
+
+**Límite del resultado:** la entrada observada es un flujo de bytes aportado por la aplicación; el material de la semilla procede del generador del sistema operativo. El prototipo no acredita acceso a su ruido físico ni vincula automáticamente ambas fuentes. La evaluación por frecuencia máxima es puntual y no incluye el intervalo de confianza del MCV completo de SP 800-90B. Deben justificarse la fuente, su independencia y el margen de calificación en el despliegue. R3 implementa el registro local y la renovación de claves del gestor; la integración durable y L2/L1 sigue pendiente.
+
+---
+
+## Estructura del Proyecto
+
+```
+nexus/
+├── Cargo.toml                    # Workspace
+├── nexus-core/                   # Tipos, traits, bloque, transacción, estado, merkle
+├── nexus-crypto/                 # Dilithium, entropía (Sentinel-Seed), keypair, signer
+├── nexus-anchor/                 # L1: consensus, validator, data_availability, finality, chain
+├── nexus-active/                 # L2: sequencer, verifier, execution, batch, chain
+├── nexus-sentinel/               # Monitoreo de seguridad (re-exporta primitivas de crypto)
+├── nexus-zk/                     # STARK hash-based (field, NTT, Merkle, FRI, AIR) + interfaz Groth16 (sin uso)
+├── nexus-network/                # Interfaz P2P (libp2p) — modelada
+├── nexus-node/                   # Nodo (esqueleto)
+└── nexus-cli/                    # CLI (keygen, bench crypto)
+```
+
+### Dependencias entre Crates
+
+```
+nexus-cli → nexus-node → {nexus-anchor, nexus-active, nexus-network, nexus-zk, nexus-sentinel}
+                              ↓               ↓
+                         nexus-crypto → nexus-core
+nexus-active → nexus-anchor (consulta de inclusión en el procesador local)
+```
+
+---
+
+## Compilación y Uso
+
+### Requisitos
+- Rust 1.75 o superior, Cargo.
+- (Sin dependencias de C: `fips204` es puro Rust — no requiere OpenSSL ni toolchain de C.)
+
+### Estado del build
+El workspace **compila** y **los tests pasan**. *(Si el directorio `target/` queda bloqueado por un editor o antivirus, usar `CARGO_TARGET_DIR=<otra-ruta> cargo build`.)*
+
+### Compilación
+```bash
+cd nexus
+cargo build --release
+cargo test --workspace          # ejecuta la batería de pruebas unitarias
+cargo bench -p nexus-crypto     # benchmarks Criterion de Dilithium
+cargo doc --no-deps --open
+```
+
+### CLI
+```bash
+cargo run --bin nexus -- keygen -l 3 -o ~/.nexus/key.dat   # genera keypair Dilithium3
+cargo run --bin nexus -- bench --bench-type crypto         # benchmarks de criptografía
+cargo run --bin nexus -- info
+```
+
+### Ejemplo: crear y firmar una transacción (funcional)
+```rust
+use nexus_core::{Transaction, ChainId, Nonce, Address, Amount, SignatureScheme};
+use nexus_crypto::{DilithiumKeypair, Signer};
+
+let keypair = DilithiumKeypair::generate(SignatureScheme::Dilithium3)?;
+let tx = Transaction::transfer(
+    ChainId::MAINNET, Nonce::new(0),
+    Address::from_hex("...")?, Amount::from_units(100),
+    21_000, Amount(1_000_000),
+);
+let signed_tx = keypair.sign_transaction(tx)?;   // firma ligada al hash de la tx
+assert!(signed_tx.verify());                      // verificación Dilithium real
+```
+
+---
+
+## Fundamentos Teóricos y Validación Formal
+
+La validación formal de la seguridad (Objetivo 4 de la tesis) es un **resultado matemático escrito**, desarrollado en el **Capítulo de Validación Formal (Cap. 6 / Obj. 4)** del documento de grado. Comprende:
+
+1. **Prueba de dureza post-cuántica**: reducción de la in-forjabilidad (EUF/sUF-CMA) de Dilithium a **Module-LWE**, **SelfTargetMSIS** y **Module-SIS**, y de éstos —vía reducciones *worst-case → average-case*— a **Mod-SIVP**; con el argumento de no aplicabilidad del algoritmo de Shor.
+2. **Análisis de complejidad computacional (notación O)**: costo asintótico de `KeyGen`, `Sign` y `Verify` (dominado por la NTT, $O(n\log n)$ por multiplicación en $R_q$), y el *overhead* del esquema dual.
+3. **Validación empírica complementaria**: benchmarks que estiman las constantes ocultas del análisis asintótico (no lo sustituyen).
+
+> El código de este repositorio **ilustra computacionalmente** el modelo (p. ej., demuestra firmas Dilithium reales). La *validación formal* propiamente dicha reside en el capítulo escrito, no en pruebas/benchmarks de software.
+
+### Teoría de Juegos del Secuenciador (modelado, Objetivo 3)
+El comportamiento del secuenciador se modela con una matriz de pagos cuyo **Equilibrio de Nash** es la estrategia honesta (la deshonestidad conduce a *slashing* y pérdida de *stake*). El modelo es analítico; el mecanismo de *slashing* que lo haría operativo es trabajo futuro.
+
+---
+
+## Rendimiento
+
+**Valores medidos** (`cargo bench -p nexus-crypto`, harness Criterion, 100 muestras/punto, **medianas**; ejecución 2026-07-31, rustc 1.97.1). *Hardware:* Intel Kaby Lake (Familia 6 Modelo 142), 4 hilos lógicos, Windows 11; perfil `release`.
+
+| Operación | Dilithium2 | Dilithium3 | Dilithium5 |
+|-----------|----------:|----------:|----------:|
+| Generación de claves | 234 µs | 413 µs | 564 µs |
+| Firma | 497 µs | 790 µs | 979 µs |
+| Verificación | 141 µs | 232 µs | 390 µs |
+| Firma + verificación | 647 µs | 1,05 ms | 1,35 ms |
+
+**Tamaños (exactos, FIPS 204):** clave pública 1.952 B · firma 3.309 B (Dilithium3 / ML-DSA-65). *Backend:* `fips204` (Rust puro).
+
+**Lecturas clave:** (i) la **verificación tarda cientos de µs** — el cuello de botella post-cuántico es el *tamaño*, no el cómputo; (ii) generación y verificación **escalan con $k\ell$** (consistente con $O(k\ell\,n\log n)$); (iii) la firma es **no monótona** por la varianza del *rejection sampling*. Cifras de un portátil modesto; lo relevante es el orden de magnitud y la forma del escalado. Análisis en el Capítulo de Validación Formal (§6.6).
+
+### Comparativa con líneas base clásicas (medido)
+
+`cargo bench -p nexus-crypto --bench classical_baseline` (ejecución 2026-07-31; mismo hardware y condiciones; implementaciones **Rust puro** en todos los casos — `p256` y `rsa` de RustCrypto vs. `fips204` — para una comparación homogénea sin aceleración en ensamblador):
+
+| Esquema | Keygen | Firma | Verificación | Firma (B) | Clave pública (B) |
+|---|--:|--:|--:|--:|--:|
+| ECDSA P-256 | 137 µs | 173 µs | 301 µs | 64 | 33 |
+| RSA-2048 | 227 **ms** | 1,75 ms | 218 µs | 256 | ~270 |
+| RSA-3072 | — (†) | 5,14 ms | 453 µs | 384 | ~398 |
+| **Dilithium3 (ML-DSA-65)** | **413 µs** | **790 µs** | **232 µs** | **3.309** | **1.952** |
+
+(†) El keygen de RSA-3072 (segundos por clave) se excluye del harness por tiempo de ejecución; no está en ninguna ruta caliente.
+
+**Lecturas clave:** (i) **Dilithium3 verifica más rápido que ECDSA P-256** (232 vs 301 µs) y a la par de RSA-2048 — computacionalmente la migración post-cuántica es *gratis* en verificación, la operación dominante en un validador; (ii) en firma, Dilithium3 es ~2× más rápido que RSA-2048 y ~4,6× más lento que ECDSA; (iii) el sobrecosto real es el **tamaño**: la firma Dilithium3 es **~52×** la de ECDSA y **~13×** la de RSA-2048 — exactamente el problema de datos que la arquitectura dual + STARK traslada fuera de la L1.
+
+### PoC STARK — verificación succinta (medido)
+
+`cargo run -p nexus-zk --example stark_demo --release` (ejecución 2026-07-31; blowup 8, 40 consultas, desafíos en $\mathbb{F}_{p^2}$, *grinding* $2^{20}$ — la atribución histórica de ~100 bits no está acreditada, véase la auditoría TG2; mismo hardware):
+
+| Pasos de traza | Prueba | Verificar |
+|---:|---:|---:|
+| 16 | 129 KB | 4,5 ms |
+| 64 | 190 KB | 6,0 ms |
+| 256 | 262 KB | 7,5 ms |
+| 1.024 | 343 KB | 9,4 ms |
+| 4.096 | 434 KB | 11,4 ms |
+
+**Lectura clave:** al crecer la traza **256×** (16 → 4.096 pasos), la prueba solo crece **~3,4×** y la verificación **~2,6×** — el comportamiento **polilogarítmico** que motiva delegar la carga post-cuántica a la L2 y anclar en L1 una prueba compacta. (Los tiempos de *generación* de prueba son medidas de una sola pasada, no Criterion, y presentan varianza alta.)
+
+---
+
+## Correspondencia con los Objetivos de la Tesis
+
+| Objetivo | Entregable | Estado | Ubicación |
+|----------|------------|:---:|-----------|
+| **Obj 1** — Diseñar la arquitectura Dual-Chain (Nexus Sequencer, Nitro Verifier) | Especificación de capas, tipos, mensajes e interfaces | Modelado | `nexus-anchor/`, `nexus-active/` |
+| **Obj 2** — Core PQC: Dilithium + derivación determinística (KDF) | Dilithium **implementado**; **KeyGen determinística desde semilla implementada** (`fips204`); biometría **eliminada** | Implementado | `nexus-crypto/dilithium.rs`, `keypair.rs` |
+| **Obj 3** — Seguridad activa: min-entropía + salud (SP 800-90B) + rotación | Monitor, rotación efectiva y registro local autenticado probados; fuente concreta, custodia durable y L2/L1 pendientes | Prototipo R2–R3 verificado | `nexus-crypto/{entropy,keypair,registry}.rs` |
+| **Obj 4** — Validación formal: reducción a Module-LWE + análisis O() | **Capítulo matemático escrito** (no código); complementado con benchmarks | Documento | *Cap. 6 — Validación Formal* |
+
+> **Corrección importante respecto a versiones previas de este README:** el Objetivo 4 **no** se satisface con "tests + benchmarks". Una reducción de dureza y un análisis de complejidad son artefactos matemáticos demostrativos; los benchmarks son evidencia empírica *complementaria*. Ver el Capítulo de Validación Formal.
+
+---
+
+## Limitaciones conocidas y trabajo futuro
+
+Esta sección lista de forma transparente lo que el prototipo **no** hace todavía, para que el alcance quede inequívoco:
+
+- **Sentinel-Seed y registro**: R2–R3 integran monitor, rotación de claves y registro local con checkpoints. Falta vincular y calificar una fuente concreta, integrar custodia durable y aplicar la política de épocas en L2 con anclaje externo validado.
+- **Biometría / Extractor Difuso**: **eliminado del alcance (v2)**; el módulo fue removido del código.
+- **Consenso BFT**: falta verificación de firmas de voto, deduplicación por validador, quórum ponderado por *stake* ($\lfloor 2N/3\rfloor+1$), detección de equivocación + *slashing*, y difusión en red.
+- **Finalidad**: el núcleo de conteo de votos es real, pero falta verificación de firma del voto y enlace de ascendencia (*ancestry*) entre bloques finalizados.
+- **Disponibilidad de datos**: el "erasure coding" actual duplica *chunks* (no es Reed-Solomon); el muestreo DAS y el "compromiso polinómico" son simplificaciones — pendientes de implementación real (código MDS + compromiso KZG/Merkle + muestreo de pares remotos).
+- **Capa ZK / Nitro Verifier**: el PoC STARK (`nexus-zk::stark`) es real (Goldilocks, NTT radix-2, compromisos Merkle/SHA3, Fiat-Shamir, FRI, AIR con enlace traza↔polinomio de composición), pero su AIR modela una transición demostrativa (Fibonacci-square), no la semántica de ejecución del L2; el *prover* aún no está integrado al pipeline de *batches* y persiste una ruta heredada de compatibilidad en `verify_zk`. El andamiaje Groth16/arkworks (`prover.rs`, `verifier.rs` de `nexus-zk`) permanece sin uso. Demo: `cargo run -p nexus-zk --example stark_demo --release`.
+- **Red P2P**: `libp2p` está declarado pero no integrado; la capa es un registro de pares en memoria.
+- **Nodo/RPC**: el nodo no ejecuta un bucle de eventos ni expone RPC.
+- **Merkle**: añadir separación de dominio hoja/nodo (RFC 6962) y revisar el *padding* por duplicación de última hoja.
+- **`state.transfer`**: hacer la operación atómica (revertir el débito si el crédito falla).
+
+---
+
+## Referencias
+
+1. Ducas, L., Kiltz, E., Lepoint, T., Lyubashevsky, V., Schwabe, P., Seiler, G., Stehlé, D. (2018). *CRYSTALS-Dilithium: A Lattice-Based Digital Signature Scheme*. IACR ToCHES.
+2. NIST (2024). *FIPS 204: Module-Lattice-Based Digital Signature Standard (ML-DSA)*.
+3. Lyubashevsky, V. (2012). *Lattice Signatures without Trapdoors* (Fiat-Shamir with Aborts). EUROCRYPT.
+4. Langlois, A., Stehlé, D. (2015). *Worst-Case to Average-Case Reductions for Module Lattices*. Designs, Codes and Cryptography.
+5. Regev, O. (2009). *On Lattices, Learning with Errors, Random Linear Codes, and Cryptography*. J. ACM.
+6. Dodis, Y., Ostrovsky, R., Reyzin, L., Smith, A. (2008). *Fuzzy Extractors: How to Generate Strong Keys from Biometrics and Other Noisy Data*. SIAM J. Comput.
+7. Buterin, V. (2021). *An Incomplete Guide to Rollups*.
+8. Shannon, C. E. (1948). *A Mathematical Theory of Communication*.
+9. Mascelli, J., Rodden, M. (2025). *"Harvest Now Decrypt Later": Examining Post-Quantum Cryptography and the Data Privacy Risks for Distributed Ledger Networks*. Federal Reserve, FEDS 2025-093.
+
+---
+
+## Licencia
+
+La configuración del workspace declara la licencia MIT; consultar [Cargo.toml](Cargo.toml).
+
+## Autor
+
+**Juan Diego Susunaga Velasquez** — Universidad del Rosario, Escuela de Ciencias e Ingeniería.
+Director: **Pedro Mario Wightman Rojas**.
+
+*Parte del trabajo de grado "Arquitectura Blockchain Dual NEXUS: Un Modelo Matemático-Computacional para Sistemas Seguros y Resilientes Post-Cuántico".*
