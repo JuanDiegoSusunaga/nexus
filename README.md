@@ -33,7 +33,7 @@ El prototipo conserva límites explícitos: el AIR escalar comprueba su relació
 El acceso recomendado reúne todas las partes:
 
 ```powershell
-git clone https://github.com/JuanDiegoSusunaga/tesis-nexus.git
+git clone -c core.longpaths=true https://github.com/JuanDiegoSusunaga/tesis-nexus.git
 Set-Location tesis-nexus
 python scripts/verificar_version_tg2.py
 Set-Location nexus
