@@ -1,0 +1,1067 @@
+{
+  "date": "2026-10-30",
+  "captured_utc": "2026-10-30T17:25:19.589368+00:00",
+  "success": true,
+  "repository": "https://github.com/JuanDiegoSusunaga/nexus",
+  "exclusive_publication": true,
+  "protocol": 4,
+  "bft_journal": 2,
+  "public_url": "https://dreams-humanities-shelter-utilities.trycloudflare.com",
+  "scope": "Cuatro validadores en un computador; testnet experimental",
+  "genesis_hash": "fd0b8883c82078d6911b4eeb28dd5b3af59de27d0810c90f7ed3a6b364a0780a",
+  "genesis_file_sha256": "d5152429cc9642039795bd1ff8ea2df14ecc357c71750cf6fd9a96d3348c4f74",
+  "live_native_image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+  "gateway_image": "sha256:5bc3ebc6621fa47326e81c89ca9a6f2e8e73a58dff278d2e1d9f12175fca89ac",
+  "cloudflared_image": "cloudflare/cloudflared:2026.10.6@sha256:004d843fa5fdc3103983fd580ee19fab4a8fa98add31f87249c1659e848c98e0",
+  "downloaded_artifacts": {
+    "genesis.json": "d5152429cc9642039795bd1ff8ea2df14ecc357c71750cf6fd9a96d3348c4f74",
+    "nexus-linux-amd64": "0fc54744a574792092497b643f38f405c018a5f9db3455ba746eb08140767a40",
+    "home_connect.py": "093b8b46ed0c41a962790a086854784fb0e57a9f5dbb3de8b953ccd70a6f4479",
+    "home_transport.py": "fb05158183eacfe73f05649889f0cad2bb80eb727b1fe507ad00d329d5a6f18e"
+  },
+  "python_tests_passed": 17,
+  "standalone_rust_tests_passed": 436,
+  "standalone_build_image": "sha256:c9f591a7bb4692e7aaba633a2a7aa3ff565285985eb1fbd0805d3f18107579f8",
+  "production_rust_changed_this_increment": false,
+  "test_fixture_paths_changed": true,
+  "baseline": {
+    "path": "Documentos/06-Evidencia-TG2/2026-10-30/Perfil-512MiB/verification.json",
+    "sha256": "4387cadb9f505afcdefbd8bc85254a6bcd142e8b35d9a99cae9cf49ff7bf539f",
+    "checked_files": 160,
+    "packaging_changes": [
+      {
+        "path": ".dockerignore",
+        "before": "b1c78db1fb49baa544f15f025cb70e19bc010e7b0448b92798e16ea28aff4f09",
+        "after": "fdd37d2b56cf2222ea60c82dbec41fc3f653e3118ae863da54d04d9a5c19c240"
+      },
+      {
+        "path": ".gitignore",
+        "before": "e3fdb67ae0d2f2c8ecb2b36c5b52d2360b0ba7ab09c5e2858f095b341c9e0dea",
+        "after": "e74c844682e4054d751ed053758528ba0b4a6bc0f667ca0febf96f09dafebca5"
+      },
+      {
+        "path": "deploy/Dockerfile",
+        "before": "71bb3c2f5209d197ced571cfaf822886893effc967aad29e9d762897f13cccb6",
+        "after": "33ee2ef80b1272c4337c7effa0c3f2bc539f665b85197aac8dbc0486602e0c2e"
+      },
+      {
+        "path": "deploy/compose.build.yaml",
+        "before": "cc711b06229a96a3fdd5d55a236c13994eaa4dad2645a685e85d2d5054b3cb30",
+        "after": "609dde9b4fe5e180bfb99a92621ef0df8f07fe34db76527d8a12a03636f8f589"
+      },
+      {
+        "path": "nexus-zk/tests/lean_contract.rs",
+        "before": "e59186c000f56bd86d0989360437825af5a7985c07e98a63aac5c39ea5ed7e9b",
+        "after": "813e358856ac550c660e2672218d7af71c0eaccc716eb2d2559c8e4c05344570"
+      },
+      {
+        "path": "nexus-zk/tests/tg2_linked_trace_fri.rs",
+        "before": "1270fe7b2a8b843b038db6fa6803975a1448044df1693b86875c20942316707d",
+        "after": "f951259b0ffbcd263cb2695e0917937603d271d26a457bea3921a9618dad46d7"
+      }
+    ]
+  },
+  "source_files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "fdd37d2b56cf2222ea60c82dbec41fc3f653e3118ae863da54d04d9a5c19c240",
+      "repository_sha256": "f3dc8d55e189996ae7c17a8341a92238ee416c6a56eab5f547174ca4cf8104a6"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "b406e959aa161fc43a61780099743610e66bb8db1627ea091098256ac0a8564b",
+      "repository_sha256": "ae390a3ec1f70a8943f5b5d4785f990440f18c2a14dd5b618300c43b1a4fa64d"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "e74c844682e4054d751ed053758528ba0b4a6bc0f667ca0febf96f09dafebca5",
+      "repository_sha256": "761d8f0767d6d4e4842c2b3221d2c5d330754633c009ff3ce2e9d68d93c86f46"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "c79ab8c5f84257777c7cdc5aa30d1da56d5f7aed61f3b04e33181b12d4717566",
+      "repository_sha256": "a850375ff26ffd5e6d95775d95367a71e0708a550553feae0d73fadef0f8b1d4"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "a280d907c786c7c52094b9879490c1d81b1a37dd09e703a3389452477b20bbea",
+      "repository_sha256": "3452b0ee0da2c1db146824f7a967554aa5475e8fa87820c958db1124411d8dd4"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/honesto-16.bin",
+      "sha256": "305d9afdbf93719d2d60e1d94c4815bc9a4b88299d1e342d2460ad00ac3b6d37",
+      "repository_sha256": "305d9afdbf93719d2d60e1d94c4815bc9a4b88299d1e342d2460ad00ac3b6d37"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/honesto-256.bin",
+      "sha256": "aeb07f212fa949e4a626301c114bc6f7d8975cde0461a6a091c20f34efe4ed84",
+      "repository_sha256": "aeb07f212fa949e4a626301c114bc6f7d8975cde0461a6a091c20f34efe4ed84"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/honesto-4096.bin",
+      "sha256": "0de358d146e90bc21cc4bed44c4ec121732bf3167c6ba7f2af61eefb4b9a9073",
+      "repository_sha256": "0de358d146e90bc21cc4bed44c4ec121732bf3167c6ba7f2af61eefb4b9a9073"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/honesto-64.bin",
+      "sha256": "6cff2bc873ed4210d35ceccca81b7faf465cdd3df001ae91cbe2a8e1dd592644",
+      "repository_sha256": "6cff2bc873ed4210d35ceccca81b7faf465cdd3df001ae91cbe2a8e1dd592644"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/lejano-16.bin",
+      "sha256": "b0af7f9b7f64aa6cc3ad641c37ac71b22233943cfab149e6ad4bba1d4c18e9ba",
+      "repository_sha256": "b0af7f9b7f64aa6cc3ad641c37ac71b22233943cfab149e6ad4bba1d4c18e9ba"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/lejano-32.bin",
+      "sha256": "3ecd514ba6e9f7aa4e28ee18e769e3dd2e3172c28b8bd56a8e7c7c3e6fae3b9d",
+      "repository_sha256": "3ecd514ba6e9f7aa4e28ee18e769e3dd2e3172c28b8bd56a8e7c7c3e6fae3b9d"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-debug/lejano-64.bin",
+      "sha256": "c864fab01988f5d2d59dc8302a9b91443c92cb0fd86a4401a3367399e65a85a4",
+      "repository_sha256": "c864fab01988f5d2d59dc8302a9b91443c92cb0fd86a4401a3367399e65a85a4"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/honesto-16.bin",
+      "sha256": "b8e9a5bd1cb00320b6499397566ff78c18bd3bd3f04b231b04835e43b467687d",
+      "repository_sha256": "b8e9a5bd1cb00320b6499397566ff78c18bd3bd3f04b231b04835e43b467687d"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/honesto-256.bin",
+      "sha256": "3d1b622590dca8c625301e170820a8c38444f2261b1c8ea38e6c2b8d89b1fe87",
+      "repository_sha256": "3d1b622590dca8c625301e170820a8c38444f2261b1c8ea38e6c2b8d89b1fe87"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/honesto-4096.bin",
+      "sha256": "ed04343cb17d49ec4ccc2829230a9a7cc6ccf494e0af54d3b52822025791e8ac",
+      "repository_sha256": "ed04343cb17d49ec4ccc2829230a9a7cc6ccf494e0af54d3b52822025791e8ac"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/honesto-64.bin",
+      "sha256": "fd7028a250c2e0176c8fe3eaf6495921280137fa30d4849050d58faab5be88cb",
+      "repository_sha256": "fd7028a250c2e0176c8fe3eaf6495921280137fa30d4849050d58faab5be88cb"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/lejano-16.bin",
+      "sha256": "18e08e787ae364414003fafb6c3f6f1779a612d8042d30d2a8e8f76ffa6e8bb5",
+      "repository_sha256": "18e08e787ae364414003fafb6c3f6f1779a612d8042d30d2a8e8f76ffa6e8bb5"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/lejano-32.bin",
+      "sha256": "5a097bf26deb75b0d69b3757dbe170a80d1824db63090422bd8f6c4e43be4bb8",
+      "repository_sha256": "5a097bf26deb75b0d69b3757dbe170a80d1824db63090422bd8f6c4e43be4bb8"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-release/lejano-64.bin",
+      "sha256": "ae452860dfd422e6130602b5bede72600043e1e92c8a74ff913d86a2e4251412",
+      "repository_sha256": "ae452860dfd422e6130602b5bede72600043e1e92c8a74ff913d86a2e4251412"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-debug/traza-lejana-16.bin",
+      "sha256": "db046fdd7274740f16d134fb443df253c495130f622d1820ca9a55fb3a8e0eb5",
+      "repository_sha256": "db046fdd7274740f16d134fb443df253c495130f622d1820ca9a55fb3a8e0eb5"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-debug/traza-lejana-32.bin",
+      "sha256": "8a496f8c41662fdaf73a96e7d8dcd25c988774d2cee807539bb5b49871617a15",
+      "repository_sha256": "8a496f8c41662fdaf73a96e7d8dcd25c988774d2cee807539bb5b49871617a15"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-debug/traza-lejana-64.bin",
+      "sha256": "0c2ff42338a7cd95221b623bc2f5ac369f67807fa346e854a4ff7fcfd4c74f42",
+      "repository_sha256": "0c2ff42338a7cd95221b623bc2f5ac369f67807fa346e854a4ff7fcfd4c74f42"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-release/traza-lejana-16.bin",
+      "sha256": "1d2ee6f2aa11b81e70e2cb3531c3b90796c7fb6d7e89cc113774f3c5723ee8d7",
+      "repository_sha256": "1d2ee6f2aa11b81e70e2cb3531c3b90796c7fb6d7e89cc113774f3c5723ee8d7"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-release/traza-lejana-32.bin",
+      "sha256": "ce956e0fd08f7f8c6f2ca7c400ff3869da9a188f1bcc81a3af52fcd62257f75b",
+      "repository_sha256": "ce956e0fd08f7f8c6f2ca7c400ff3869da9a188f1bcc81a3af52fcd62257f75b"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-release/traza-lejana-64.bin",
+      "sha256": "e7ebd99896cf217068d48b8f77bfcf7f7889f6e007a2c28b7f6d7098b4bbca8f",
+      "repository_sha256": "e7ebd99896cf217068d48b8f77bfcf7f7889f6e007a2c28b7f6d7098b4bbca8f"
+    },
+    {
+      "path": "deploy/.dockerignore",
+      "sha256": "7db01e79fae05e868dbdd9878532a48882569f0d8cf533713a9f21b6ef0ba8c8",
+      "repository_sha256": "f5a18c3c48ebf31a971a30160a22f2d83961eb33cfe0dcc6e9bbed9193764938"
+    },
+    {
+      "path": "deploy/Dockerfile",
+      "sha256": "33ee2ef80b1272c4337c7effa0c3f2bc539f665b85197aac8dbc0486602e0c2e",
+      "repository_sha256": "985f36cd69730a965e61ba3894e66a094a57c69414cf1505c7188c9ab30052c9"
+    },
+    {
+      "path": "deploy/Dockerfile.gateway",
+      "sha256": "da3e4592b6d5a4626c39eff6219398abdf231c9c6b60671abdc8f76c73b92330",
+      "repository_sha256": "89e6b5e16a5d81ad188d8f6d53ab265f81a642e53fa4c193fc53dba1407101ba"
+    },
+    {
+      "path": "deploy/check_downloaded_client.py",
+      "sha256": "ee1a4dbe1da21bf27e95877d01c45507b7f50ff62db386a032869781552445fb",
+      "repository_sha256": "ee1a4dbe1da21bf27e95877d01c45507b7f50ff62db386a032869781552445fb"
+    },
+    {
+      "path": "deploy/check_home.py",
+      "sha256": "3a9e039aab9434067a691fcbc59c5fbba383a01e5c11ceb6dd8566ba49bdafb9",
+      "repository_sha256": "3a9e039aab9434067a691fcbc59c5fbba383a01e5c11ceb6dd8566ba49bdafb9"
+    },
+    {
+      "path": "deploy/compose.build.yaml",
+      "sha256": "609dde9b4fe5e180bfb99a92621ef0df8f07fe34db76527d8a12a03636f8f589",
+      "repository_sha256": "5a5eb7c5164319e19f9cddc1a732318287b84e2d4fcd89e58fa926e783bf8630"
+    },
+    {
+      "path": "deploy/compose.gateway-build.yaml",
+      "sha256": "f15497908cfaaf323008e8f92185bdf498cde5f58ec87ac9b65bb282f33c735e",
+      "repository_sha256": "d58723dec812b0f1d539ec8251dc273f4c348535a26b44a5502ceea34b706cea"
+    },
+    {
+      "path": "deploy/home.py",
+      "sha256": "00e28783c07d7fe0681d9d91f08d9ea194786523968feddddee6c1755d97fe7d",
+      "repository_sha256": "00e28783c07d7fe0681d9d91f08d9ea194786523968feddddee6c1755d97fe7d"
+    },
+    {
+      "path": "deploy/home_connect.py",
+      "sha256": "093b8b46ed0c41a962790a086854784fb0e57a9f5dbb3de8b953ccd70a6f4479",
+      "repository_sha256": "093b8b46ed0c41a962790a086854784fb0e57a9f5dbb3de8b953ccd70a6f4479"
+    },
+    {
+      "path": "deploy/home_gateway.py",
+      "sha256": "738047f309b4af3364347f79362f1c4b73f4ea3816357d03ce5a133887a9845c",
+      "repository_sha256": "738047f309b4af3364347f79362f1c4b73f4ea3816357d03ce5a133887a9845c"
+    },
+    {
+      "path": "deploy/home_transport.py",
+      "sha256": "fb05158183eacfe73f05649889f0cad2bb80eb727b1fe507ad00d329d5a6f18e",
+      "repository_sha256": "fb05158183eacfe73f05649889f0cad2bb80eb727b1fe507ad00d329d5a6f18e"
+    },
+    {
+      "path": "deploy/prepare.py",
+      "sha256": "fb56e1f6ba613fe448fc1038a2c9f2841697745d7f34fd71a73e66ebd66270d8",
+      "repository_sha256": "fb56e1f6ba613fe448fc1038a2c9f2841697745d7f34fd71a73e66ebd66270d8"
+    },
+    {
+      "path": "deploy/test_containers.py",
+      "sha256": "456862699ac46e7c6b98fe9afc64b2183c45b97d3f0be332497718891667b198",
+      "repository_sha256": "456862699ac46e7c6b98fe9afc64b2183c45b97d3f0be332497718891667b198"
+    },
+    {
+      "path": "deploy/test_home_gateway.py",
+      "sha256": "66fb5660d56c418a28d7a6b39bfbec2ca6123ea1bc9e31fb29e17c767ed720ec",
+      "repository_sha256": "66fb5660d56c418a28d7a6b39bfbec2ca6123ea1bc9e31fb29e17c767ed720ec"
+    },
+    {
+      "path": "deploy/test_prepare.py",
+      "sha256": "1be5d9d2f31869638e05734411d7403d7ec0ff5b7e51902c23adca61a54c856d",
+      "repository_sha256": "1be5d9d2f31869638e05734411d7403d7ec0ff5b7e51902c23adca61a54c856d"
+    },
+    {
+      "path": "deploy/verify_public.py",
+      "sha256": "a6ee0a0ae0568a18d7e23845bd61a17bd9575dced36bbc5c3b470b2d7f32770d",
+      "repository_sha256": "a6ee0a0ae0568a18d7e23845bd61a17bd9575dced36bbc5c3b470b2d7f32770d"
+    },
+    {
+      "path": "nexus-active/Cargo.toml",
+      "sha256": "f99f6541d228301a89fe1dd80f792fd8a6e0532acbae02b4a3480c5d4c9c58a9",
+      "repository_sha256": "ca2ad8df3165a871d4bd7c8accca47e10355e3403aef0b54e219c4ded75b520d"
+    },
+    {
+      "path": "nexus-active/experiments/tg2_canonical_verifier.rs",
+      "sha256": "bc543ed1dca51cca940a46bf05edfdc3459b95d2075c8267035b13261609447c",
+      "repository_sha256": "a81e025127525d7cef4e47e952f877576579aac804bf509c386f9e0da6efe7fa"
+    },
+    {
+      "path": "nexus-active/src/authorization.rs",
+      "sha256": "cb02951f676b0c2fa1cfd3c56b68fdf346753c6ad963c6cc35a5374b406ef3c2",
+      "repository_sha256": "1fc2952c0fd615bdec7e5d96d56c85841df07850285a45f105eaffa152241216"
+    },
+    {
+      "path": "nexus-active/src/batch.rs",
+      "sha256": "2dbbba71a6f1649d49ac82e7087327752fd343d3f3a323ad9d27714fd096c8d0",
+      "repository_sha256": "ddff233b5237a36b5363dda1591379494af48c9e0b49df02a8f9b910b116db0d"
+    },
+    {
+      "path": "nexus-active/src/chain.rs",
+      "sha256": "2328cfbfe17a8afd969bba410e09e0e52b61c47b43721c37dd34797325b1633f",
+      "repository_sha256": "2e24ff5274dbf43dcade62b299d19605223a08ffcfe0748dbb48119899edcd33"
+    },
+    {
+      "path": "nexus-active/src/execution.rs",
+      "sha256": "8d53fa9c517a007e2d625500d60d33f37f091b63a5c0d90b01f565869ecf3e9e",
+      "repository_sha256": "53ecb764f8e5cb0502f14c4c497a16647833b9ddd0a4f504a3a85e05e852f3d2"
+    },
+    {
+      "path": "nexus-active/src/lib.rs",
+      "sha256": "4a07a800dea10998e30150a59ecf04df1a13d717f7aa5ad6b72bef3790b5a3e3",
+      "repository_sha256": "3a6f78974dde75a19076128a5aa7ca2bd782b7db5186df16a0e7b25e3fb2473f"
+    },
+    {
+      "path": "nexus-active/src/linked_verifier.rs",
+      "sha256": "7e329070f59e4cbfcaad3e5eaede2a76ced123b77f5a1335caa004f93b19db23",
+      "repository_sha256": "a98b36c40bcf13592a3b582c4a3e24aa9aaf3e316a2c3b3f889faad4739e144a"
+    },
+    {
+      "path": "nexus-active/src/pq_verifier.rs",
+      "sha256": "98fcb4fdb5738e5aef9b53a2cb0514ec4dc29eb3cb64193ae8d14610d59930f4",
+      "repository_sha256": "9bfe94dfad184ee305b5254fa1fa3555ac2dbcabbdd11eb12c189bba8f69195f"
+    },
+    {
+      "path": "nexus-active/src/sequencer.rs",
+      "sha256": "cfbea42dccd055cff261950c41869953897b18834e2bb5265c9864fc9b815421",
+      "repository_sha256": "cfbea42dccd055cff261950c41869953897b18834e2bb5265c9864fc9b815421"
+    },
+    {
+      "path": "nexus-active/src/verifier.rs",
+      "sha256": "477b3510b809129a37db83861cadb3b6b94924d75e7ff11e7a3b8bf50349fdf7",
+      "repository_sha256": "2b1f57fba6a4febe013a329e34e0b0a4605c35bfe6987848cc5780dd3002e87a"
+    },
+    {
+      "path": "nexus-active/tests/active_chain_contract.rs",
+      "sha256": "6a3db189c218423c3f57a8f0dd060e6d4c85ccb2c699123270aa78d113a8bfe4",
+      "repository_sha256": "574ec14d6e157bd6e65fcdaf8beeb6bc295abe745ccfc6df3b4dc98a072fedca"
+    },
+    {
+      "path": "nexus-active/tests/batch_retry.rs",
+      "sha256": "5f7838961baaf7fef1fb05579ce509f7693aa1bbc68a16f0bbb2202be59644bc",
+      "repository_sha256": "f16b12f9c291f85b86456983946d58c0617ddf92798f47cb9470a3d6b7c84df6"
+    },
+    {
+      "path": "nexus-active/tests/chain_policy.rs",
+      "sha256": "39919e6f8178531d1a4d85151030b523fd2bd91406db9cba63bcf296f8b40daf",
+      "repository_sha256": "a8003b4886501fe6a019e0b6d8b3412f8f0a1c80d9981b3196806e639eb6fce7"
+    },
+    {
+      "path": "nexus-active/tests/emergency_freeze.rs",
+      "sha256": "2d04d197bbcb14b65766d5cf71541ebcfa83f9be04db10ecb932b2e35733292c",
+      "repository_sha256": "026e9abb3b795b20345af9002b67e1e6f26d8a43c2ee953759bdb8beb40d5d8e"
+    },
+    {
+      "path": "nexus-active/tests/execution_contract.rs",
+      "sha256": "2e87f52ab7c0a383aa0a5a477f38af233808be33b1bbc03dbd000b13ec361160",
+      "repository_sha256": "6fb652c4c1ac5bf6aa374f7fe6d381c42df55e42e0636cb74ac362f9a24189fe"
+    },
+    {
+      "path": "nexus-active/tests/execution_safety.rs",
+      "sha256": "050097fa8caf22a64863b8a8dbce989468629331c87ded08cc313db6f702f32e",
+      "repository_sha256": "050097fa8caf22a64863b8a8dbce989468629331c87ded08cc313db6f702f32e"
+    },
+    {
+      "path": "nexus-active/tests/key_authorization.rs",
+      "sha256": "e254f3ef00f743ca977f904105f28012afc51c399743a142f9be869b69ec83b4",
+      "repository_sha256": "ffd01ac772f183bdbbd4a1d7494f064fb6ae5cb10303166765aac953e0fc334e"
+    },
+    {
+      "path": "nexus-active/tests/l1_confirmation.rs",
+      "sha256": "328af27f811a8fcba5583ac391d27435d3a800a7cf5a2df25a2351c1135a31f0",
+      "repository_sha256": "b0e8e0e19c45de66fd91c457ce426d65b12bd29cae35fa3ec0666039004c4372"
+    },
+    {
+      "path": "nexus-active/tests/lean_contract.rs",
+      "sha256": "2ce2fd813115e2c27f61d6da8f3d958d4ab8f4235167525a67a4485eaf131639",
+      "repository_sha256": "da067e83d954c23af14c4cccc501007144c9c30256c132d7aa0c22ea2323d9e0"
+    },
+    {
+      "path": "nexus-active/tests/processed_recovery.rs",
+      "sha256": "117352d0cb9b4ff81a86a420febc1224924e889100f946592694975febd3cb75",
+      "repository_sha256": "a93986d99b359e46f768373637c90501cad561598901b9484e25af1112817b3a"
+    },
+    {
+      "path": "nexus-active/tests/processed_retry.rs",
+      "sha256": "e6a5cd8ed2eb0ef7c2225ba27179b562d39da0d689925a607c50aa8624e491c2",
+      "repository_sha256": "f18573e58658d0d2b1b5a95566594a7e6b3a06682550c33e56365658030d61eb"
+    },
+    {
+      "path": "nexus-active/tests/signed_registration.rs",
+      "sha256": "690f37ad89b868c1c08f00aafbec2336a603c0c5161661baf7c43a2aabaaceec",
+      "repository_sha256": "6443e5675d43cd5a49440910a11bc1295dadb7009eb2f347f6fc254474fcb045"
+    },
+    {
+      "path": "nexus-active/tests/submission_preparation.rs",
+      "sha256": "e8a36db758f45f0f978982a1b57f75e72500aba9d9b22deba649989c3c17cd0b",
+      "repository_sha256": "f5653b4842fcf9409e5ce17af1d6a187a52ee79fa84d8ccf6de5f1d0185c0a62"
+    },
+    {
+      "path": "nexus-active/tests/tg2_verification.rs",
+      "sha256": "6ceeb730ab48163a9ee2a59e505e57176151bcb2375ad2430d696af788875b47",
+      "repository_sha256": "2a972077bf33dbdeec91624d01fef05aee99da9c7d38bf3b8f76a6e761412124"
+    },
+    {
+      "path": "nexus-anchor/Cargo.toml",
+      "sha256": "37633d55fc91da6fea733961e84f3f8db1ec1b316689630ba98cbf0619860169",
+      "repository_sha256": "a9b34d95b76b901dc42e9eba4c9ab03c76093a67d517b6f8cae6c3827ab6b212"
+    },
+    {
+      "path": "nexus-anchor/src/bft.rs",
+      "sha256": "8b2eb5998714cea924604f924ed2519f33a154b4fd1a3a684cc88a0a327a9e06",
+      "repository_sha256": "297ded6ef01971af0e61905129a90c59ffd883596f74f3d2ab2858bed0fc2d09"
+    },
+    {
+      "path": "nexus-anchor/src/chain.rs",
+      "sha256": "d13611a619fb809fff51dcc5820a160ac737624319f6bd51b720d7ae6ae311b6",
+      "repository_sha256": "d13611a619fb809fff51dcc5820a160ac737624319f6bd51b720d7ae6ae311b6"
+    },
+    {
+      "path": "nexus-anchor/src/consensus.rs",
+      "sha256": "de14bb69efdb0432955818532b7dedd93c088214c8b4542ba7491de92a8b47a0",
+      "repository_sha256": "de14bb69efdb0432955818532b7dedd93c088214c8b4542ba7491de92a8b47a0"
+    },
+    {
+      "path": "nexus-anchor/src/data_availability.rs",
+      "sha256": "947c6426c6975eb3e063fbc816678ec68782e26d452d7791fe0eb2a4735dc84e",
+      "repository_sha256": "eef91dc01ae6ea45046a1f0b825110dcf20cd4b8bdc491ec5656e118b3f90d58"
+    },
+    {
+      "path": "nexus-anchor/src/finality.rs",
+      "sha256": "8366c72408b8a130a3d82d7913da8f660d8e151c09b9a76c8e6e608c4ff778e7",
+      "repository_sha256": "8366c72408b8a130a3d82d7913da8f660d8e151c09b9a76c8e6e608c4ff778e7"
+    },
+    {
+      "path": "nexus-anchor/src/lib.rs",
+      "sha256": "7b018a895e0167f6466ac8a976d85a3a1ff077dcd7b4f5a4d327961d0cf6bfc3",
+      "repository_sha256": "0df739a55ed27c1b7b295c7ee6c9e5365fd40034b33c00aa2715b7b30265994a"
+    },
+    {
+      "path": "nexus-anchor/src/monetary.rs",
+      "sha256": "fbfd78bbe94bed93266e9277cb61a184841128ad223a275d4f323c19adaaf5b2",
+      "repository_sha256": "4fc9e83387045ddbeb64019d73ba757a317b07da7072acdd333eab03b5e7ccb8"
+    },
+    {
+      "path": "nexus-anchor/src/validator.rs",
+      "sha256": "fde899b9e7fe7b3015e0f1f8045a9d1145e530286b576c9c34482bc12e368d4e",
+      "repository_sha256": "df299055c9ea6aa77584c1a4dc95b5bcaac6020ae58cbe5600e80972ad90e59d"
+    },
+    {
+      "path": "nexus-anchor/tests/bft_rounds.rs",
+      "sha256": "4b03c42ea08c1e45d6cc5414a61a3d408a855163dd72c32d7635b4e5aa967ad0",
+      "repository_sha256": "94c2099e087d2ba74acf67fe6ab34ada4eccd8194f5af491804359042cbb2114"
+    },
+    {
+      "path": "nexus-anchor/tests/block_policy.rs",
+      "sha256": "e54fbd4ade3e81aeccfcd1edc4a5d3d310c19016f368dec59eeb3cc9a6c8ef34",
+      "repository_sha256": "b1c29ff97696c381a88170d0a791d2c410e93cc8ce06ce803742aa01125747db"
+    },
+    {
+      "path": "nexus-anchor/tests/chain_safety.rs",
+      "sha256": "d74d7ba32d64dfc8a9ba0dd131dee60cba16e25fa0829d6916bc69a5486c45ce",
+      "repository_sha256": "d74d7ba32d64dfc8a9ba0dd131dee60cba16e25fa0829d6916bc69a5486c45ce"
+    },
+    {
+      "path": "nexus-anchor/tests/consensus_safety.rs",
+      "sha256": "034d9bf5a2e9e68e627be34b97edc14ba58ae4d0eb7883f0a443245876262251",
+      "repository_sha256": "f47220daca5a5f39594f2125c0612962f68ae4ab8f1a7c2c1689c9cd9592aeff"
+    },
+    {
+      "path": "nexus-anchor/tests/finality_safety.rs",
+      "sha256": "a97a74f2e3d9b457111d92ba682f2a2f10572360a1d9968c8f417b2f279021b7",
+      "repository_sha256": "828d6b7e53d45ac6dcd4ddcbd89294a7ddc5ee0cb7d1e848b05afd4a2f42aa75"
+    },
+    {
+      "path": "nexus-anchor/tests/local_da.rs",
+      "sha256": "705879a315a5f1091729ac37a433de15e853fa552e5e1ab30fc687b8ea1d1f61",
+      "repository_sha256": "41180bc056a2447ac934c8386384502e051ffdeb4f41ce40f340329622fcc45d"
+    },
+    {
+      "path": "nexus-anchor/tests/local_da_chain.rs",
+      "sha256": "3808ef7a9ef72453e0a8eaa07f7fd95e9622ac42490d712c3dfd803a21c2870b",
+      "repository_sha256": "37a484408b1c3e1353f9ac2531c725efc500962eebb12f3fb1d8e35220044dc5"
+    },
+    {
+      "path": "nexus-anchor/tests/monetary_profile.rs",
+      "sha256": "e78f53b1390d93b917a987884cd34a74aed1133213b97e967f957da4c7fe4cba",
+      "repository_sha256": "3ff2e419e72b70a11374193aae209b4498f54f411b479019d766e57bac22b69d"
+    },
+    {
+      "path": "nexus-anchor/tests/state_root_contract.rs",
+      "sha256": "6de0500cb94b615883ab0e545af3def8c47b55565444f74abc4637999ef47223",
+      "repository_sha256": "4e2434cc84fdb2eafcf176b7a06138ad10633d252abe92a21661afe6903502c9"
+    },
+    {
+      "path": "nexus-anchor/tests/validator_accounting.rs",
+      "sha256": "cbdfd557326f3ee9f5cd4a64ce90a1a9e8908032ed9e65c9be0fa52235c0a9ae",
+      "repository_sha256": "ddc18b3a3a86e0b91d78acbd0dbf9635aa2c35acd73ec948b5b5d3c5f8378bc9"
+    },
+    {
+      "path": "nexus-cli/Cargo.toml",
+      "sha256": "1d8b7dae278a9cdce43a2a0d960c765f34e04454c921af5458018614a3888100",
+      "repository_sha256": "3eb4eb8411953e05ab50e76bcc678cad77431e0d364cde5ed53abf1cd606995e"
+    },
+    {
+      "path": "nexus-cli/src/main.rs",
+      "sha256": "9f73c6b56a82eb70fc9f3d9a3dd2928ad901931ef02534a1b84e8331db437180",
+      "repository_sha256": "0f75278764ea4c783c5ec30f4d5b0c9ad3b542a40547d0c076318dcb983244d7"
+    },
+    {
+      "path": "nexus-cli/src/testnet.rs",
+      "sha256": "01e9de6fba22dc42e0e4a2cd1e9d6b2a6c29d4097e4503f71ab9a51e39392816",
+      "repository_sha256": "f1022b12f0951445dcd4469c2a6e9af84b4a4342ac8395126ef6d17ce0b0b482"
+    },
+    {
+      "path": "nexus-cli/tests/testnet_processes.rs",
+      "sha256": "e5982527feb5076714b15a7ce9bcb87d4aaba8b05442336cc4bd892eb6cafaff",
+      "repository_sha256": "96e6f58187a2083ddcf9c43b758631d6f50be91ab495de6e8c37dce78ce005dd"
+    },
+    {
+      "path": "nexus-core/Cargo.toml",
+      "sha256": "558196ee7e87423f33b976acc8a2b3114bcf5c229ff5c0699fb856acdfb12aae",
+      "repository_sha256": "865a4e4cbf2e32f4323e3013a2096eedf7db3b49133bdb845c30db376b38ce6a"
+    },
+    {
+      "path": "nexus-core/src/block.rs",
+      "sha256": "26e9eb963d1ac61a6714c0a9162dc70f6f1044a6014f690d5bd37aab892396fe",
+      "repository_sha256": "640e2e517e53db4ebd9e6cc07cbfc7f4cc1f7cdc36bbc4bdf1130121294f5b9a"
+    },
+    {
+      "path": "nexus-core/src/checkpoint.rs",
+      "sha256": "771b158711d92806b575bb85b8f3985fba603ebd4670d0741db22bba51389567",
+      "repository_sha256": "6cbaa379128b1cfeb80c4c385caf3f94917e006f59cb48dfe7884c8a97b199fe"
+    },
+    {
+      "path": "nexus-core/src/error.rs",
+      "sha256": "341ec5865031dd923fadafc84056d3e977f5863c858c379532a1a0a93ed73e71",
+      "repository_sha256": "a1ecd18e06cba878db50bc3226f613616aabdf54527a0a04324814c2c51c713d"
+    },
+    {
+      "path": "nexus-core/src/journal.rs",
+      "sha256": "0ceed6d7208d3e14ee7899628c2ac7e40bf4c4348c90f9b7b8252e710b62f846",
+      "repository_sha256": "50e6cff845eafba8f0376b187cf0c1be30878aa85955843abcd7b6cb479f8cd5"
+    },
+    {
+      "path": "nexus-core/src/lib.rs",
+      "sha256": "6029c8ef2859b7aa8b3994a00003d2b06c9293c4ea51a912740728845deaa256",
+      "repository_sha256": "ff6baf41a7a4c4156188ecaae33db5a0a6995dd982e8ddec7b8c7ecf46b8d756"
+    },
+    {
+      "path": "nexus-core/src/merkle.rs",
+      "sha256": "ff10d7594eeeacc4247e89bb24e79aaef1265949dbf93b7f04e4000ad854ebfb",
+      "repository_sha256": "8145c0bbfa7f4766220dd01a25f05b73e846af9f26fd30f45697d913e4f46c30"
+    },
+    {
+      "path": "nexus-core/src/state.rs",
+      "sha256": "96ea8d41c37fb64a70cfb92f80b4c5141a21d1ce9e93d306ddeda7a15959a80c",
+      "repository_sha256": "bf743a9d68969a9b4df32041d3d4fb04c7bf3f3bbbed56373dfeec19e63a0dd1"
+    },
+    {
+      "path": "nexus-core/src/traits.rs",
+      "sha256": "cf00fb6cf97654350aee9967df7a4292480b9bee64bbdc92b681f54c15e38e8d",
+      "repository_sha256": "886b3de3c58f2491bdccb50a0c704ed7c1492e7ef7afbd73454a4138621754dd"
+    },
+    {
+      "path": "nexus-core/src/transaction.rs",
+      "sha256": "895e1f3770688766d58b960754e98636e053fb6a1db786d53c43222db1925534",
+      "repository_sha256": "96c8dac96973400c7d6a02e13d456da9c4f393ffc519f2533aebc41dfe1a76cd"
+    },
+    {
+      "path": "nexus-core/src/types.rs",
+      "sha256": "d79165599498463a61f157b8dea11f5d6805a2395ace66f1e7fae2ee97e28492",
+      "repository_sha256": "9d837c0d153c125fd23c6c6a26f878b74dbc6325d9345b211e36a1a743f63ce3"
+    },
+    {
+      "path": "nexus-core/tests/journal.rs",
+      "sha256": "e60fbff7a7b0fc55681f3dbe84854a5af28c7c629cef2222925fb18c6ef6adcd",
+      "repository_sha256": "30f86b6e1ffb9d39657fa14f1ceffa91b7bd7ff6e4193e7ad6d2add85ca1c6a8"
+    },
+    {
+      "path": "nexus-core/tests/local_checkpoint.rs",
+      "sha256": "039e4115e4851682c33858a2944c595726f24e18454350fae1bbd03ce6df5f90",
+      "repository_sha256": "5035956894db58fd4225d72ef9408209c6501c78b182485774f4085c37da4448"
+    },
+    {
+      "path": "nexus-core/tests/merkle_position.rs",
+      "sha256": "2384f8a5b58a5c2ffd1f5571cc077d80658e0e1c5e9b3b6910a83588c10c122d",
+      "repository_sha256": "db8a98fdcea8ee04fc7162a78edd2ff02dcc896d6894f520e6f0ccf0e2fc871e"
+    },
+    {
+      "path": "nexus-core/tests/state_safety.rs",
+      "sha256": "2c837790214819f295ccfd4bd0d3a8e22e9d1818640547cfc582257b38852a90",
+      "repository_sha256": "2c837790214819f295ccfd4bd0d3a8e22e9d1818640547cfc582257b38852a90"
+    },
+    {
+      "path": "nexus-crypto/Cargo.toml",
+      "sha256": "106f1fff3dd0158804e800bf562eab73359473e5f7afa21769754551aa7c0be3",
+      "repository_sha256": "29c7bb6f39d64dd280ad7c0ca1210ca3c7303b6c3bcec64de0fed68555b2a53d"
+    },
+    {
+      "path": "nexus-crypto/benches/classical_baseline.rs",
+      "sha256": "d7bc1b83ba346badf5826a974c2cbc530ec0ca86aecb519cba4c472cbceab896",
+      "repository_sha256": "1f684145f4febe750af0afda58bafd5eef0bbc4570b0836e3450c7e096b11792"
+    },
+    {
+      "path": "nexus-crypto/benches/dilithium_bench.rs",
+      "sha256": "680b8e38c02b371f78951453aa938e4bc9508dbdd1524032c6a22e1c7b691cfc",
+      "repository_sha256": "6f103342349f79c4597a0981a35153035e221032af2de7e0d522fbe7124fdffe"
+    },
+    {
+      "path": "nexus-crypto/benches/residencia_bench.rs",
+      "sha256": "4ff93c7794118936e310a333847fd9787a8a1bdb6e11fc0e9779602a98ca251e",
+      "repository_sha256": "147b85e6537ac3464a49a0e30ea0ec8b8216e280a02615459d4121695fef776d"
+    },
+    {
+      "path": "nexus-crypto/examples/apt_sweep.rs",
+      "sha256": "0931cdf72cace4abb3abac785682a5959737c450ca375f08a73249d476b3ace8",
+      "repository_sha256": "7ffa6a794d6bbcb37cb10b9471e17b72ce2732ed6793e722528cf41c93e980fe"
+    },
+    {
+      "path": "nexus-crypto/examples/rotation_demo.rs",
+      "sha256": "20980e891511dcc252e5b628445527022798bb0d4ccc2bb3856380bc1ac16154",
+      "repository_sha256": "9042ddb808609cd1f8a15daefc9d22c759b1defd575f349ad6f422a419748770"
+    },
+    {
+      "path": "nexus-crypto/examples/tg2_throughput.rs",
+      "sha256": "102d51806838c53c4c2db814c16d8fea723e98bc043572931202106028e97db0",
+      "repository_sha256": "3c31253c1c9f7ab3a63015039b39ccd4fc6a7c8558a4a11a96ed34cde0685bf3"
+    },
+    {
+      "path": "nexus-crypto/examples/throughput_tps.rs",
+      "sha256": "1ab4200bd4a7ee8bd085dcd9f27fd7fa39fce1396d2d227a5e0d3db483c6df71",
+      "repository_sha256": "2cdac45637709e98da0e912fd8ea23f31408953f0c2430d2523a7bd015c6263f"
+    },
+    {
+      "path": "nexus-crypto/experiments/tg2_throughput.rs",
+      "sha256": "4543da19a5a21e1325a6e077b93bf39144c83bd3fc95ef1e75a2e63cc9157dcb",
+      "repository_sha256": "1b33650a226f508b4990489a3c232bcc30feaa80e0349fab4fefea41cc79e77b"
+    },
+    {
+      "path": "nexus-crypto/src/dilithium.rs",
+      "sha256": "f414f7970bdda33de52b93ffcb26ff758898697060c639173fa99a0fe4a08d4e",
+      "repository_sha256": "f414f7970bdda33de52b93ffcb26ff758898697060c639173fa99a0fe4a08d4e"
+    },
+    {
+      "path": "nexus-crypto/src/entropy.rs",
+      "sha256": "d6e684db57bb566daa221bd0e31538eb40a6342d584d3a9588ff69ebb9ee491f",
+      "repository_sha256": "18966e74f95540e254643785efd1b695f82acaaee7a2de668c3602205380511a"
+    },
+    {
+      "path": "nexus-crypto/src/keypair.rs",
+      "sha256": "73b097386b86c3ed8c46f01faf25d0e619fc531d854019e3591a391de53113b1",
+      "repository_sha256": "9d448a9ec48436893f5b869b783fdfd74a63c535faa5ca8f86c77cf512da7d39"
+    },
+    {
+      "path": "nexus-crypto/src/lib.rs",
+      "sha256": "b6d69232f38f62c9d3948ff761cd7ea1e4c3036ab09fceaae579d12348601c58",
+      "repository_sha256": "f9279a2631d4a3d98cc9e9f9d21c997b194a6807607472876eb8ce72666cb623"
+    },
+    {
+      "path": "nexus-crypto/src/recovery.rs",
+      "sha256": "7b54df40d6ed245638d092ac8b3921444f03db0cd9767b2167b2d2def2922845",
+      "repository_sha256": "ed4f95aae8d20ad8de076110aa34c4afec8261b593c8addb93dd7033a7b986a2"
+    },
+    {
+      "path": "nexus-crypto/src/registry.rs",
+      "sha256": "e6ad58b812af6b784a78b095a148bf2a001f3301a7c396d16b9a9fbf08a96f47",
+      "repository_sha256": "1dbfc8bd6269a7e80570865a7cb4fafbebda7501e4c1256bd38e4ce9f8ab551b"
+    },
+    {
+      "path": "nexus-crypto/src/signer.rs",
+      "sha256": "34421de259691d85b90bff602b966462d1147f0625f25f1fb79b439622474d10",
+      "repository_sha256": "520bd1d2bcc785fde4e0da5982fb61a40a39448c270ef9620630545c2066e430"
+    },
+    {
+      "path": "nexus-crypto/tests/recovery_policy.rs",
+      "sha256": "460ddba2dff64e9fcda894df4a76594e385db6b401204400bb32368eb615d301",
+      "repository_sha256": "8e1aed6405dfdedff0d2e816c0a3a0fab540c7bd4e4fa3ca41fe29abfa9ee68c"
+    },
+    {
+      "path": "nexus-crypto/tests/tg2_correspondence.rs",
+      "sha256": "74a65eeaa08044f4c5103756648e7cdad85ce67fc988f30f6424643d58d851c1",
+      "repository_sha256": "209834147ea195f4734eb8b10581e1980f9ebc420771985fcd41656bc0953246"
+    },
+    {
+      "path": "nexus-crypto/tests/tg2_residence.rs",
+      "sha256": "9d280cc114eee3da61d446d4d69e1b5697e7d1a442c496ed2bb5de1e24743628",
+      "repository_sha256": "ee85b4011add54e0aa5de36a6b46aed22a2e45ee3628903a43d83a53b95f35e8"
+    },
+    {
+      "path": "nexus-crypto/tests/tg2_throughput.rs",
+      "sha256": "9c241c7a2166f3bd0c7131c8f8d2dbe1bb00c7bf5c484c07c4f4bd06ee49582c",
+      "repository_sha256": "1736c22e0caca7d8c988ade193744aaf866c36122a20874c54f1a2b0c01beb1b"
+    },
+    {
+      "path": "nexus-network/Cargo.toml",
+      "sha256": "b803408a8d67ef5e27ccea29550bcd1579b17ca8e5fb9b48bbb26963f690532c",
+      "repository_sha256": "13f8e2f0f11783e836b8a18d5b48be7e81186640fdafc85c54cff138e58a0b4b"
+    },
+    {
+      "path": "nexus-network/src/lib.rs",
+      "sha256": "dcfd7b4112aa9f6ae79725478578d00a733b00023ee8ce1b6fbdb7b5cadc7f1c",
+      "repository_sha256": "37a784a9ea7ae9687b761bbe0bef0fa45a603119bb12552e03fd6ee807ca34c2"
+    },
+    {
+      "path": "nexus-network/src/peer.rs",
+      "sha256": "84a454b4c5c5555d6812e1ac524311d1c59f0810437a1b29e60f579cf5a8713f",
+      "repository_sha256": "e2e0bd6c6d41f4b10b3d71ea4788c617e1cb7287cc1d14af0a8409ede2a6a7b8"
+    },
+    {
+      "path": "nexus-network/src/protocol.rs",
+      "sha256": "f54c5f61315ff731526f2bf22209d4a8d3dbf8d8adadbefe8a9eac09c6a7dcfe",
+      "repository_sha256": "7d5fbe4c093b50c8b3333568494f4fc956c58ebc2a5a16f3f49a8024b49f97da"
+    },
+    {
+      "path": "nexus-network/src/testnet.rs",
+      "sha256": "aed0c46363460bd4a908cb232d576a097e7ca967e4bfb336737661006613943a",
+      "repository_sha256": "c26cc71a6de9a356c687a094bafb19a2cc008b6c573d3c550c9afa522d6c82c6"
+    },
+    {
+      "path": "nexus-network/tests/testnet_wire.rs",
+      "sha256": "bd14daf2b80b90e15d29917305330e07b52706cccf967f1d5615513d114887f5",
+      "repository_sha256": "74dab376f37310cacfaa22d80ff0a7ed443c536879e4c1356ee7324b7e8923cb"
+    },
+    {
+      "path": "nexus-node/Cargo.toml",
+      "sha256": "1452315e1614b65c392770e4c725c09731f943abc1ccf00521945ecb33475726",
+      "repository_sha256": "ab13c683f76c6888b7a0a34f12b20e892c1928413ec7cb98d3f80960dd5ef1fb"
+    },
+    {
+      "path": "nexus-node/examples/local_cycle.rs",
+      "sha256": "9eb4978268e050f7aad8dc031a365b184b91d10a8dbe00cbbd748deefc44e5fe",
+      "repository_sha256": "54fffdcce5c70b7a9b0b57289365840e5afd11a3b5d042028fb5c45a3e4e169d"
+    },
+    {
+      "path": "nexus-node/src/bft.rs",
+      "sha256": "d398ac4ece9b631a7ee2896f94a197b17955c213655cef848bd6a228b96a3464",
+      "repository_sha256": "d398ac4ece9b631a7ee2896f94a197b17955c213655cef848bd6a228b96a3464"
+    },
+    {
+      "path": "nexus-node/src/config.rs",
+      "sha256": "ebef163af60a07e1f8551bbe96419df67322ed8b0ff25e688dd85e8e5cd0dcfd",
+      "repository_sha256": "a28eb67fdef8c5fe1a853eda4e13aa6c3c029adedcecd527c9472f3ad69f568e"
+    },
+    {
+      "path": "nexus-node/src/durable.rs",
+      "sha256": "d1ff2214793693c9bccaf9c9d7e6430bc8d5e22c21d695bc095f0cd3cee7f2b3",
+      "repository_sha256": "fae20dd6d8fb0121df7e9c40ad24d149222e637260840833ccc8061218206299"
+    },
+    {
+      "path": "nexus-node/src/lib.rs",
+      "sha256": "41f5f7d4cb7f4f4368212b8c4181123219da501e0f578a88b9603c0330ed8e67",
+      "repository_sha256": "96657ea48733a78ed28955702748e4cc5d11df160e23bf3b1e8c8f66450f0709"
+    },
+    {
+      "path": "nexus-node/src/rpc.rs",
+      "sha256": "442963766bc9f30ee0ef9ca3c328b10f7ce453af810dc42bafb5280e22777b03",
+      "repository_sha256": "69c1e2c457d25a976f8fd6c028f8d372b2001fd08115461b665141a6187f1019"
+    },
+    {
+      "path": "nexus-node/src/testnet.rs",
+      "sha256": "6bf0b9863d56ef24d59efd1a4056818c41c8edcb5a70c039f22f4ce5db9298a2",
+      "repository_sha256": "3912e96fde2879dea5cd882446ac164fcfc20be4d398e747a7774bfe5422ffeb"
+    },
+    {
+      "path": "nexus-node/tests/bft_durable.rs",
+      "sha256": "e6a3a6cf31d1c2ea82dadd133eb767ddb992955ff209917290cd4b5b02176e3e",
+      "repository_sha256": "734fbff1aac5bf211b79006a6e1e1bd42aa26221e20594c6b0ac5b24a95fd7d1"
+    },
+    {
+      "path": "nexus-node/tests/durable_cycle.rs",
+      "sha256": "abfca28ac660946084d3cb37139404277f71d0c45b5b5292170bee7f5aaf8022",
+      "repository_sha256": "4b885f3dbacfcfec8390d6f752a6fc604ee847d26130aa438ee9aef0d8416975"
+    },
+    {
+      "path": "nexus-node/tests/emergency_freeze.rs",
+      "sha256": "29c74cfc505e4ea73ddf18692bee7b5106af593580f1d333c65c383429e3d7e9",
+      "repository_sha256": "fb2aecccd824689676fb63b50db7af07ea118e7b893737a595148e146eae734f"
+    },
+    {
+      "path": "nexus-node/tests/key_authorization.rs",
+      "sha256": "ddf40f56ac75d7d2a93b46e29b66325058a68d972f1a33c75a2147116951303d",
+      "repository_sha256": "568f875120a7360bd63d7749a7a85ade69b06e8fa1499ca4dff68b76a513aff1"
+    },
+    {
+      "path": "nexus-node/tests/monetary_durable.rs",
+      "sha256": "6cdd6af3299246bfe9613f55794fdddcea047cfe1e78703e93468be3d1b1cd7e",
+      "repository_sha256": "777e1f23a5af032d9a9126477af6eda41af3120ef677108a2847db99ce79df7e"
+    },
+    {
+      "path": "nexus-sentinel/Cargo.toml",
+      "sha256": "9a17ef57ed874e80ee572f7e02e7e4a8ebe096d3c3d621faba7638b26d9e65af",
+      "repository_sha256": "4f7535f7c179b34b8bcad79a3b984924972f408a8daca215f7e71c1ec825de82"
+    },
+    {
+      "path": "nexus-sentinel/src/lib.rs",
+      "sha256": "31098331af6d890578ccc07da031aea55c8a5b83e0ba160025466904224c6702",
+      "repository_sha256": "0b5026807f51cb8ca203dc55c8e3224dd113c1efaa4ccee77973124d9fde9837"
+    },
+    {
+      "path": "nexus-zk/Cargo.toml",
+      "sha256": "a186b13cb9292cce8c7a7501d69a90f2f5433649a1d9d361a88fa75f7e78ae2d",
+      "repository_sha256": "c41e5fe083e6c1e5443591216ee0913dc8e70ffcb5687c2036a80be4b794b3a5"
+    },
+    {
+      "path": "nexus-zk/examples/stark_demo.rs",
+      "sha256": "ee5beb634ff18619f08513290e0cde91a07340c41a8c0f06e9d7e46e25352b40",
+      "repository_sha256": "ca23f72ad6213e1e9b2535223b93533c5a1e4c1ba321e3e1cc450295bb87223c"
+    },
+    {
+      "path": "nexus-zk/examples/tg2_stark_measure.rs",
+      "sha256": "3399edbf42e2cfae2bc8330d499f06b2a0f6acd63a9469f8173a3c0751c69053",
+      "repository_sha256": "45b0aa5f57c423458835d0d914ad2eeae22e815aac6db73443f5c6753dacf0df"
+    },
+    {
+      "path": "nexus-zk/experiments/tg2_air_algebra.rs",
+      "sha256": "c899b7f9a89b00df3a3a6c0fbdfda5b2dada531127de3c74de8a46e09b3f7d55",
+      "repository_sha256": "9a7a543084e6fb043d264fd15c4ce329f9ffdedbd24f85f07a8b22feb1b68346"
+    },
+    {
+      "path": "nexus-zk/experiments/tg2_linked_trace_fri.rs",
+      "sha256": "6e8a7c0209db558c674dd15dce1efe60a5ea62ca53dea3f03319096180e3f49f",
+      "repository_sha256": "468121176047007f20cac8eddbbf3cc50c5a24bc3c24f3d51e649c99a8f940a6"
+    },
+    {
+      "path": "nexus-zk/experiments/tg2_trace_proximity.rs",
+      "sha256": "fc73af507ce1242667d47b17d37d0b4a9570bc75a1fb49eabdb469be960b2b1f",
+      "repository_sha256": "3e7e1e9bf7ab972ed908003a668f463d86ff800e638a60f3bca2a670ae055592"
+    },
+    {
+      "path": "nexus-zk/src/circuits.rs",
+      "sha256": "fde3f78bb5e20e6be850bbe18f730fda3d815a45d19e906728be83aeac8ab899",
+      "repository_sha256": "44db234e436eea624e3eba179bb68fc6c506f98a186baae8ac159494f6fdc444"
+    },
+    {
+      "path": "nexus-zk/src/lib.rs",
+      "sha256": "7c1b7492c122d5bc83ca3bf3e729c1f898aaabba38dfdb49b4a6d421aa29bc63",
+      "repository_sha256": "4d12bf2ac2e86816c4c814612a59357d78b5d59ce3540bb2d2f688c819d4ff65"
+    },
+    {
+      "path": "nexus-zk/src/prover.rs",
+      "sha256": "18ab5a8d19a55e554cea62062003c1d1541330d22b085b89496e5d9e49c3866d",
+      "repository_sha256": "f10ea1a548bee212cff9762ff4cc4811957312b11bd62b7857b0c4454d775904"
+    },
+    {
+      "path": "nexus-zk/src/stark/air.rs",
+      "sha256": "c17a8f7b04152caf05c5361caf81ba0f886f277cbcbfb02a285b10c2621d76e7",
+      "repository_sha256": "d6a6b505e84fd0fb3326be2c2f3edd501617efaf064c664dcd01bd9870831fbb"
+    },
+    {
+      "path": "nexus-zk/src/stark/channel.rs",
+      "sha256": "4c7893a480906cd61e35a0fc07bcc6397326d8fc6e28fa8c4fe00e6829d2002d",
+      "repository_sha256": "6363949582e52f418a8afb001040233d114c2a6dc67cd130430f315e5a316c9e"
+    },
+    {
+      "path": "nexus-zk/src/stark/field.rs",
+      "sha256": "9f4826c0988cb3fb156084aa5df542c43d6210610d26d2bd59f74572a7608cd7",
+      "repository_sha256": "2f61535c7d37fac1088ff60ea581afa0d5b9628827a6a0bea25482fb7447ffc2"
+    },
+    {
+      "path": "nexus-zk/src/stark/fri.rs",
+      "sha256": "5eb621ce89ebdc155443b0ff08b8ac2168f1ed6e067e867e240809a8bf6cf3d5",
+      "repository_sha256": "21b590b56a94bf08c32cafccf86b69146dfa64e4ae4c050db5cafcd9f81b05ac"
+    },
+    {
+      "path": "nexus-zk/src/stark/linked.rs",
+      "sha256": "0f8438b6c4d293d19888a59f53831b9873f815c55f0a2a719706ae206402fd52",
+      "repository_sha256": "1828600580f5704f90a47efd6a04aa0100ccacfca10a16241d33ef3f696bbe21"
+    },
+    {
+      "path": "nexus-zk/src/stark/linked_codec.rs",
+      "sha256": "8c2ade36b7d5211bc88fa78a3224f7e79d408269ec54f15078ef081998b1e013",
+      "repository_sha256": "5c757023e3759092dff9a470ac394a82717c3ccb63af1d50e0991b49f092abc0"
+    },
+    {
+      "path": "nexus-zk/src/stark/merkle.rs",
+      "sha256": "04dfc76a61fbcc49c1a334831b8e093b049457da38a9464334921ea90eb79c7f",
+      "repository_sha256": "f004f71d14ea0bf653be481503b2ea860b132bd8d5da1f38c3e4301bd38ed620"
+    },
+    {
+      "path": "nexus-zk/src/stark/mod.rs",
+      "sha256": "d1b0572405fa67466258ae09f4d42c01f2ffb6d3c84a410c283bb5189b7b2b77",
+      "repository_sha256": "b3f5a34609dbd7e7c2b14bde4ace1d6b9c34bf9a74a7523fe77593f847a83175"
+    },
+    {
+      "path": "nexus-zk/src/stark/ntt.rs",
+      "sha256": "7649462a2939cbb82630ab7cabad00d80226ee55c93b73c4c840bf8752498cb3",
+      "repository_sha256": "bf7fa37d734fa35521ecf515a0a57586d9d29440ef46695340228222b7185510"
+    },
+    {
+      "path": "nexus-zk/src/stark/params.rs",
+      "sha256": "0366d03982279f78c8c39b759d99ee4bd0b4940a330b9216fbb2e610992d34b0",
+      "repository_sha256": "b9383bc206f184b1b5552c3e2027acb07a7dbaaca88849dfa4cf81110a6dcdaa"
+    },
+    {
+      "path": "nexus-zk/src/verifier.rs",
+      "sha256": "5f4c8168b6ff86e2712474e2dfc443f056a6091d46c48d662ad90b0ffb0b9a73",
+      "repository_sha256": "0b1f4aea3f87d2f172e72a26a69fc8242d003dc03e3a4b44b95bb1872c58d2ad"
+    },
+    {
+      "path": "nexus-zk/tests/lean_contract.rs",
+      "sha256": "813e358856ac550c660e2672218d7af71c0eaccc716eb2d2559c8e4c05344570",
+      "repository_sha256": "a7dc3d99752d198107446068e19e9cc6411bd1a5e9e9ef984c9a5aa9269c4642"
+    },
+    {
+      "path": "nexus-zk/tests/tg2_air_algebra.rs",
+      "sha256": "fd900251ca0b8363865c847976f618d66c8657993c0a24ad03cd5820eb86865e",
+      "repository_sha256": "d898fcf7755c0919d39922cec4dba76baf2f270f3ed1b256e29a653466ac4dfa"
+    },
+    {
+      "path": "nexus-zk/tests/tg2_linked_trace_fri.rs",
+      "sha256": "f951259b0ffbcd263cb2695e0917937603d271d26a457bea3921a9618dad46d7",
+      "repository_sha256": "f951259b0ffbcd263cb2695e0917937603d271d26a457bea3921a9618dad46d7"
+    },
+    {
+      "path": "nexus-zk/tests/tg2_soundness.rs",
+      "sha256": "1655b2f6e24d488329883aeec256595c8a02081419d7f0cb830c2e0435b878b7",
+      "repository_sha256": "40f2b536ec0e5e60b3f993e8a30c4d769743ce88313a18c0e4fa82b5e26d96e0"
+    },
+    {
+      "path": "nexus-zk/tests/tg2_trace_proximity.rs",
+      "sha256": "b3041688851e554e82c2340ff1e24d57017d7c662c11c9f226679717695fbcdc",
+      "repository_sha256": "b757d91714c4eae958e9f992533ee7a2a9d966b8380ab25375db29fc6814adac"
+    },
+    {
+      "path": "scripts/run_testnet_lab.py",
+      "sha256": "8ef534dababd7e106f0f8600cbc98ed367081bddb47fffa3e174bf14396ee95a",
+      "repository_sha256": "c95a06220f5d0050ec0e96a42c7397981eb69982f3d13d14babb8978e4edd57a"
+    }
+  ],
+  "external_http_probe": "https://check-host.net/check-report/548564eakd6f",
+  "external_cryptographic_transfer_confirmed": false,
+  "services_left_running": 6,
+  "limits": [
+    "Un computador y un operador",
+    "Enlace temporal sin disponibilidad garantizada",
+    "Sin poda; historia en RAM y recuperación crecientes",
+    "Comité fijo sin ciclo Sentinel completo",
+    "Sin refinamiento universal Rust/Lean ni composición poscuántica integral",
+    "NXS de prueba sin cotización establecida"
+  ],
+  "artifacts": [
+    {
+      "path": "downloaded-client-check.json",
+      "sha256": "1dba33c78c5255f4c36eef94754f8eab86f64b12d5e9941fae37bff48b9da2c7"
+    },
+    {
+      "path": "external-http-request.json",
+      "sha256": "576512217817c9d4af87c33a42a8ffe2577383d7ee929826dc1c140c59cef045"
+    },
+    {
+      "path": "external-http-result.json",
+      "sha256": "812659c1113af52cfddf7b69fb3840137f3bc10e7f91f4be6a4be2ca974f3975"
+    },
+    {
+      "path": "gateway-build.log",
+      "sha256": "c24839d8b3a80a27bfe90a20e19af81f236e9339a83a9295333f7e3b0a0bfabd"
+    },
+    {
+      "path": "genesis.json",
+      "sha256": "d5152429cc9642039795bd1ff8ea2df14ecc357c71750cf6fd9a96d3348c4f74"
+    },
+    {
+      "path": "http-local-check.json",
+      "sha256": "e9214f2a399271f950e5ca2aae5d9868960af1040e2b74e4773c15bd9af679c8"
+    },
+    {
+      "path": "https-public-check.json",
+      "sha256": "8af5d6bde2bccd7fd5925ce256da090d4f3c9b2053741ce477dc63d307ed0c68"
+    },
+    {
+      "path": "live-status.json",
+      "sha256": "9e9369d91fabec1d05b8600203044a85518856a0d29980e7db459ec50426fe93"
+    },
+    {
+      "path": "publication.json",
+      "sha256": "11a886ac1518cb46d0e13890adb0cd3dd72a943b85a61cf0dac4c9bd607ffb8f"
+    },
+    {
+      "path": "python-compile.log",
+      "sha256": "332020c7a19ca6c90a7ce8db6ed57bfdd7cfba701d53621f179247edc9f34a95"
+    },
+    {
+      "path": "python-tests.log",
+      "sha256": "c30cced577ad222f01ef07cbfad915fb4d3c7865b1efabe82ff7778c6478265a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a1f7e3bda9e9483532e67ef793eb557e97d27563d099d47945f0f5b3bc39af3b"
+    },
+    {
+      "path": "resources.json",
+      "sha256": "49168e0a46edb948c0ecd708a606e338723a5344f770f38f0f98453522471939"
+    },
+    {
+      "path": "runtime.json",
+      "sha256": "16f3ecfc67fd036efb76f905f323acd76a5737314e7f6e723f4163fac4dfc444"
+    },
+    {
+      "path": "sources/.gitattributes",
+      "sha256": "b406e959aa161fc43a61780099743610e66bb8db1627ea091098256ac0a8564b"
+    },
+    {
+      "path": "sources/deploy/.dockerignore",
+      "sha256": "7db01e79fae05e868dbdd9878532a48882569f0d8cf533713a9f21b6ef0ba8c8"
+    },
+    {
+      "path": "sources/deploy/check_downloaded_client.py",
+      "sha256": "ee1a4dbe1da21bf27e95877d01c45507b7f50ff62db386a032869781552445fb"
+    },
+    {
+      "path": "sources/deploy/check_home.py",
+      "sha256": "3a9e039aab9434067a691fcbc59c5fbba383a01e5c11ceb6dd8566ba49bdafb9"
+    },
+    {
+      "path": "sources/deploy/compose.build.yaml",
+      "sha256": "609dde9b4fe5e180bfb99a92621ef0df8f07fe34db76527d8a12a03636f8f589"
+    },
+    {
+      "path": "sources/deploy/compose.gateway-build.yaml",
+      "sha256": "f15497908cfaaf323008e8f92185bdf498cde5f58ec87ac9b65bb282f33c735e"
+    },
+    {
+      "path": "sources/deploy/Dockerfile",
+      "sha256": "33ee2ef80b1272c4337c7effa0c3f2bc539f665b85197aac8dbc0486602e0c2e"
+    },
+    {
+      "path": "sources/deploy/Dockerfile.gateway",
+      "sha256": "da3e4592b6d5a4626c39eff6219398abdf231c9c6b60671abdc8f76c73b92330"
+    },
+    {
+      "path": "sources/deploy/home.py",
+      "sha256": "00e28783c07d7fe0681d9d91f08d9ea194786523968feddddee6c1755d97fe7d"
+    },
+    {
+      "path": "sources/deploy/home_connect.py",
+      "sha256": "093b8b46ed0c41a962790a086854784fb0e57a9f5dbb3de8b953ccd70a6f4479"
+    },
+    {
+      "path": "sources/deploy/home_gateway.py",
+      "sha256": "738047f309b4af3364347f79362f1c4b73f4ea3816357d03ce5a133887a9845c"
+    },
+    {
+      "path": "sources/deploy/home_transport.py",
+      "sha256": "fb05158183eacfe73f05649889f0cad2bb80eb727b1fe507ad00d329d5a6f18e"
+    },
+    {
+      "path": "sources/deploy/prepare.py",
+      "sha256": "fb56e1f6ba613fe448fc1038a2c9f2841697745d7f34fd71a73e66ebd66270d8"
+    },
+    {
+      "path": "sources/deploy/test_containers.py",
+      "sha256": "456862699ac46e7c6b98fe9afc64b2183c45b97d3f0be332497718891667b198"
+    },
+    {
+      "path": "sources/deploy/test_home_gateway.py",
+      "sha256": "66fb5660d56c418a28d7a6b39bfbec2ca6123ea1bc9e31fb29e17c767ed720ec"
+    },
+    {
+      "path": "sources/deploy/test_prepare.py",
+      "sha256": "1be5d9d2f31869638e05734411d7403d7ec0ff5b7e51902c23adca61a54c856d"
+    },
+    {
+      "path": "sources/deploy/verify_public.py",
+      "sha256": "a6ee0a0ae0568a18d7e23845bd61a17bd9575dced36bbc5c3b470b2d7f32770d"
+    },
+    {
+      "path": "sources/scripts/run_testnet_lab.py",
+      "sha256": "8ef534dababd7e106f0f8600cbc98ed367081bddb47fffa3e174bf14396ee95a"
+    },
+    {
+      "path": "standalone-build.log",
+      "sha256": "ae964262fadcc423b56136aabb75d0af9630ea9877dcd61210c81e97daace396"
+    }
+  ],
+  "source_hash_scope": "sha256 identifica los bytes del workspace ejecutado; repository_sha256 identifica el blob Git publicado. Solo se permiten diferencias de CRLF/LF entre ambos. Los artefactos de evidencia y scripts descargables conservan sus bytes exactos."
+}

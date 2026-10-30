@@ -1,0 +1,147 @@
+﻿{
+    "consulted_at_utc":  "2026-10-30T14:25:21.7497008Z",
+    "source":  "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd\u0026order=market_cap_desc\u0026per_page=100\u0026page=1\u0026sparkline=false",
+    "selection":  "First 20 assets by market-cap rank excluding Dogecoin, the only memecoin in ranks 1-21 at consultation",
+    "assets":  [
+                   {
+                       "id":  "bitcoin",
+                       "symbol":  "btc",
+                       "name":  "Bitcoin",
+                       "market_cap_rank":  1,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "ethereum",
+                       "symbol":  "eth",
+                       "name":  "Ethereum",
+                       "market_cap_rank":  2,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "tether",
+                       "symbol":  "usdt",
+                       "name":  "Tether",
+                       "market_cap_rank":  3,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "binancecoin",
+                       "symbol":  "bnb",
+                       "name":  "BNB",
+                       "market_cap_rank":  4,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "ripple",
+                       "symbol":  "xrp",
+                       "name":  "XRP",
+                       "market_cap_rank":  5,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "usd-coin",
+                       "symbol":  "usdc",
+                       "name":  "USDC",
+                       "market_cap_rank":  6,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "solana",
+                       "symbol":  "sol",
+                       "name":  "Solana",
+                       "market_cap_rank":  7,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "tron",
+                       "symbol":  "trx",
+                       "name":  "TRON",
+                       "market_cap_rank":  8,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "figure-heloc",
+                       "symbol":  "figr_heloc",
+                       "name":  "Figure Heloc",
+                       "market_cap_rank":  9,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "hyperliquid",
+                       "symbol":  "hype",
+                       "name":  "Hyperliquid",
+                       "market_cap_rank":  10,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "zcash",
+                       "symbol":  "zec",
+                       "name":  "Zcash",
+                       "market_cap_rank":  11,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "monero",
+                       "symbol":  "xmr",
+                       "name":  "Monero",
+                       "market_cap_rank":  13,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "usds",
+                       "symbol":  "usds",
+                       "name":  "USDS",
+                       "market_cap_rank":  14,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "whitebit",
+                       "symbol":  "wbt",
+                       "name":  "WhiteBIT Coin",
+                       "market_cap_rank":  15,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "leo-token",
+                       "symbol":  "leo",
+                       "name":  "LEO Token",
+                       "market_cap_rank":  16,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "chainlink",
+                       "symbol":  "link",
+                       "name":  "Chainlink",
+                       "market_cap_rank":  17,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "cardano",
+                       "symbol":  "ada",
+                       "name":  "Cardano",
+                       "market_cap_rank":  18,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "stellar",
+                       "symbol":  "xlm",
+                       "name":  "Stellar",
+                       "market_cap_rank":  19,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "bitcoin-cash",
+                       "symbol":  "bch",
+                       "name":  "Bitcoin Cash",
+                       "market_cap_rank":  20,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   },
+                   {
+                       "id":  "near",
+                       "symbol":  "near",
+                       "name":  "NEAR Protocol",
+                       "market_cap_rank":  21,
+                       "last_updated":  "2026-10-30T14:23:48.000Z"
+                   }
+               ]
+}

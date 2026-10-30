@@ -6,7 +6,7 @@ use nexus_core::{
     Address, Amount, ChainId, Hash256, InMemoryState, NexusError, SignedTransaction,
     StateRoot, TransactionType, AccountState,
 };
-use nexus_crypto::verify_signed_transaction;
+use nexus_crypto::{KeyRegistry, RecoveryPolicy, EmergencyFreezeRequest, EmergencyFreezeReceipt};
 use serde::{Deserialize, Serialize};
 
 /// Result of transaction execution
@@ -91,6 +91,8 @@ pub struct ExecutionLog {
 /// Execution engine for L2
 #[derive(Serialize, Deserialize)]
 pub struct ExecutionEngine {
+    #[serde(with = "crate::authorization")]
+    pub(crate) authorization: crate::authorization::SharedAuthorization,
     /// Trusted expected transaction domain, independent of incoming messages.
     chain_id: ChainId,
     /// Current state
@@ -102,9 +104,10 @@ pub struct ExecutionEngine {
 }
 
 impl ExecutionEngine {
-    pub(crate) fn restore_checkpoint(bytes: &[u8], chain_id: ChainId) -> Result<Self, NexusError> {
+    pub(crate) fn restore_checkpoint(bytes: &[u8], chain_id: ChainId, recovery: &RecoveryPolicy) -> Result<Self, NexusError> {
         let engine: Self = nexus_core::checkpoint::decode(bytes)?;
-        if engine.chain_id != chain_id || engine.min_gas_price != Amount(1_000_000_000)
+        if engine.chain_id != chain_id || !engine.authorization.read().matches_context(chain_id, recovery)?
+            || engine.min_gas_price != Amount(1_000_000_000)
             || engine.block_gas_limit != 30_000_000 {
             return Err(NexusError::StateError("Incompatible checkpoint execution policy".into()));
         }
@@ -128,12 +131,47 @@ impl ExecutionEngine {
 
     /// Restore state under a trusted domain; the account root does not encode it.
     pub fn with_state_for_chain(state: InMemoryState, chain_id: ChainId) -> Self {
+        Self::empty_with_recovery(state, chain_id, RecoveryPolicy::default())
+    }
+
+    pub(crate) fn empty_with_recovery(state: InMemoryState, chain_id: ChainId, recovery: RecoveryPolicy) -> Self {
         Self {
+            authorization: std::sync::Arc::new(parking_lot::RwLock::new(
+                crate::authorization::AuthorizationState::empty(chain_id, recovery))),
             chain_id,
             state,
             min_gas_price: Amount(1_000_000_000),
             block_gas_limit: 30_000_000,
         }
+    }
+
+    /// Restore state with an explicitly trusted local key policy.
+    pub fn with_key_registry(state: InMemoryState, chain_id: ChainId, registry: KeyRegistry) -> Self {
+        let engine = Self::with_state_for_chain(state, chain_id);
+        engine.authorization.write().registry = registry;
+        engine
+    }
+
+    pub fn with_recovery_policy(state: InMemoryState, chain_id: ChainId, registry: KeyRegistry,
+        recovery: RecoveryPolicy) -> Result<Self, NexusError> {
+        let authorization = crate::authorization::AuthorizationState::new(chain_id, registry, recovery)?;
+        let mut engine = Self::with_state_for_chain(state, chain_id);
+        engine.authorization = std::sync::Arc::new(parking_lot::RwLock::new(authorization));
+        Ok(engine)
+    }
+
+    /// Authenticated local policy update for standalone engines.
+    pub fn apply_key_record(&mut self, record: nexus_crypto::registry::RotationRecord)
+        -> Result<(), NexusError> {
+        self.authorization.write().apply_key_record(record)
+    }
+
+    pub fn apply_emergency_freeze(&mut self, request: EmergencyFreezeRequest) -> Result<EmergencyFreezeReceipt, NexusError> {
+        self.authorization.write().apply_emergency_freeze_at(request, nexus_core::Timestamp::now())
+    }
+
+    pub fn emergency_freeze_status(&self, identity: &Address) -> Option<EmergencyFreezeReceipt> {
+        self.authorization.read().freeze_status(identity).cloned()
     }
 
     /// Execute a single transaction
@@ -147,10 +185,12 @@ impl ExecutionEngine {
         let tx_hash = tx.hash();
 
         // Verify signature
-        if !verify_signed_transaction(tx)? {
+        let authorization = self.authorization.clone();
+        let authorization = authorization.read();
+        if !authorization.verify_transaction_at(tx, nexus_core::Timestamp::now())? {
             return Ok(ExecutionResult::failure(
                 tx_hash,
-                "Invalid signature".into(),
+                "Invalid signature or unauthorized signing key".into(),
                 0,
             ));
         }

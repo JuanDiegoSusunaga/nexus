@@ -1,0 +1,14 @@
+{
+  "nodes": {
+    "us1.node.check-host.net": [
+      "us",
+      "USA",
+      "Los Angeles",
+      "38.145.202.12",
+      "AS18978"
+    ]
+  },
+  "ok": 1,
+  "permanent_link": "https://check-host.net/check-report/548564eakd6f",
+  "request_id": "548564eakd6f"
+}

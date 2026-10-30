@@ -66,7 +66,7 @@ async fn historical_expiry_and_consumed_nonce_do_not_erase_a_processed_inclusion
     let (chain, publisher) = pair(VerificationMode::Optimistic);
     let local = batch(&chain);
     let l1 = anchor();
-    let signed = publisher.sign_transaction(Transaction { chain_id: ChainId::LOCAL, nonce: Nonce(0),
+    let signed = publisher.sign_transaction(Transaction { chain_id: ChainId::LOCAL, network_domain: None, nonce: Nonce(0),
         gas_limit: 21000, gas_price: Amount::ZERO, timestamp: Timestamp(0), expires_at: Some(Timestamp(1)),
         tx_type: TransactionType::BatchSubmit { batch_root: local.post_state_root.0,
             batch_size: local.tx_count as u32, compressed_data: local.compressed_data.clone() } }).unwrap();

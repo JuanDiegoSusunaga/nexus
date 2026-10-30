@@ -1,0 +1,107 @@
+{
+  "success": true,
+  "url": "https://dreams-humanities-shelter-utilities.trycloudflare.com",
+  "verification_origin": "same host",
+  "genesis": "fd0b8883c82078d6911b4eeb28dd5b3af59de27d0810c90f7ed3a6b364a0780a",
+  "witness": {
+    "schema": 1,
+    "endpoints": [
+      "127.0.0.1:59258",
+      "127.0.0.1:59259",
+      "127.0.0.1:59260",
+      "127.0.0.1:59261"
+    ],
+    "observations": [
+      {
+        "utc": "2026-10-30T16:51:10.131989+00:00",
+        "statuses": [
+          {
+            "attested_by_validator": 1,
+            "burned_raw": "27074000000000",
+            "height": 35,
+            "issued_raw": "1000035000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "74eff64aa1b72b45a1ae8a4f5189b698e5d5ea1dcab9ffd584cd3dbaf57a1f44",
+            "supply_raw": "1000034999972926000000000"
+          },
+          {
+            "attested_by_validator": 0,
+            "burned_raw": "27074000000000",
+            "height": 35,
+            "issued_raw": "1000035000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "74eff64aa1b72b45a1ae8a4f5189b698e5d5ea1dcab9ffd584cd3dbaf57a1f44",
+            "supply_raw": "1000034999972926000000000"
+          },
+          {
+            "attested_by_validator": 2,
+            "burned_raw": "27074000000000",
+            "height": 35,
+            "issued_raw": "1000035000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "74eff64aa1b72b45a1ae8a4f5189b698e5d5ea1dcab9ffd584cd3dbaf57a1f44",
+            "supply_raw": "1000034999972926000000000"
+          },
+          {
+            "attested_by_validator": 3,
+            "burned_raw": "27074000000000",
+            "height": 35,
+            "issued_raw": "1000035000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "74eff64aa1b72b45a1ae8a4f5189b698e5d5ea1dcab9ffd584cd3dbaf57a1f44",
+            "supply_raw": "1000034999972926000000000"
+          }
+        ]
+      }
+    ],
+    "common_height": 35,
+    "state_root": "74eff64aa1b72b45a1ae8a4f5189b698e5d5ea1dcab9ffd584cd3dbaf57a1f44",
+    "scope": "Consultas autenticadas y certificados BFT verificados por CLI; no replay de toda la historia",
+    "independent_external_origin_confirmed": false
+  },
+  "transaction": "214d41f0585a6d4eb6b0b65cc6a1d6a83957714b7b4c7537ccdd4057374e284e",
+  "recipient": "1656c844f7dbbf5752716df442eada44c4794e38262a49d9f928707c47f189d0",
+  "amount_raw": "1250000000000000000",
+  "accounts": [
+    {
+      "address": "1656c844f7dbbf5752716df442eada44c4794e38262a49d9f928707c47f189d0",
+      "attested_by_validator": 1,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 36,
+      "nonce": 0
+    },
+    {
+      "address": "1656c844f7dbbf5752716df442eada44c4794e38262a49d9f928707c47f189d0",
+      "attested_by_validator": 0,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 36,
+      "nonce": 0
+    },
+    {
+      "address": "1656c844f7dbbf5752716df442eada44c4794e38262a49d9f928707c47f189d0",
+      "attested_by_validator": 2,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 36,
+      "nonce": 0
+    },
+    {
+      "address": "1656c844f7dbbf5752716df442eada44c4794e38262a49d9f928707c47f189d0",
+      "attested_by_validator": 3,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 36,
+      "nonce": 0
+    }
+  ]
+}

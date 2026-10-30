@@ -1,0 +1,106 @@
+{
+  "name": "nexus-e113a53df11b569e-v3",
+  "services": {
+    "node": {
+      "image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+      "pull_policy": "never",
+      "user": "10001:10001",
+      "init": true,
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "pids_limit": 128,
+      "mem_limit": "1g",
+      "cpus": 1.0,
+      "restart": "unless-stopped",
+      "stop_signal": "SIGINT",
+      "stop_grace_period": "30s",
+      "command": [
+        "testnet",
+        "run",
+        "--genesis",
+        "/etc/nexus/genesis.json",
+        "--data-dir",
+        "/var/lib/nexus/chain",
+        "--key",
+        "/run/secrets/validator.key",
+        "--listen",
+        "0.0.0.0:19001",
+        "--poll-ms",
+        "300",
+        "--peer",
+        "198.51.100.10:19001",
+        "--peer",
+        "198.51.100.11:19001",
+        "--peer",
+        "198.51.100.12:19001"
+      ],
+      "ports": [
+        {
+          "target": 19001,
+          "published": "19001",
+          "host_ip": "0.0.0.0",
+          "protocol": "tcp"
+        }
+      ],
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "./genesis.json",
+          "target": "/etc/nexus/genesis.json",
+          "read_only": true,
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "bind",
+          "source": "./validator.key",
+          "target": "/run/secrets/validator.key",
+          "read_only": true,
+          "bind": {
+            "create_host_path": false
+          }
+        },
+        {
+          "type": "volume",
+          "source": "data",
+          "target": "/var/lib/nexus"
+        }
+      ],
+      "tmpfs": [
+        "/tmp:size=16m,nosuid,nodev,noexec"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "/usr/local/bin/nexus",
+          "testnet",
+          "status",
+          "--genesis",
+          "/etc/nexus/genesis.json",
+          "--node",
+          "127.0.0.1:19001"
+        ],
+        "interval": "15s",
+        "timeout": "10s",
+        "retries": 3,
+        "start_period": "30s"
+      },
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-size": "10m",
+          "max-file": "3"
+        }
+      }
+    }
+  },
+  "volumes": {
+    "data": {}
+  }
+}

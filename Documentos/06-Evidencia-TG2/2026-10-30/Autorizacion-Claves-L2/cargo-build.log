@@ -1,0 +1,122 @@
+warn: could not canonicalize path C:\Users\juand
+   Compiling nexus-core v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-core)
+warning: unused import: `NexusError`
+ --> nexus-core\src\merkle.rs:5:22
+  |
+5 | use crate::{Hash256, NexusError, Hashable};
+  |                      ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> nexus-core\src\merkle.rs:88:13
+   |
+88 |         let mut current_index = index;
+   |             ----^^^^^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `current_index`
+  --> nexus-core\src\merkle.rs:88:13
+   |
+88 |         let mut current_index = index;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_current_index`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling nexus-crypto v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-crypto)
+   Compiling nexus-zk v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-zk)
+   Compiling nexus-network v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-network)
+warning: unused import: `NexusError`
+ --> nexus-network\src\lib.rs:6:34
+  |
+6 | use nexus_core::{Block, Hash256, NexusError, SignedTransaction};
+  |                                  ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `NexusError`
+ --> nexus-zk\src\lib.rs:9:27
+  |
+9 | use nexus_core::{Hash256, NexusError, StateRoot};
+  |                           ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PQSignature`
+ --> nexus-crypto\src\signer.rs:8:35
+  |
+8 |     Address, Hash256, NexusError, PQSignature, SignatureScheme,
+  |                                   ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `created_at` is never read
+   --> nexus-crypto\src\entropy.rs:233:5
+    |
+225 | pub struct SentinelSeed {
+    |            ------------ field in this struct
+...
+233 |     created_at: Timestamp,
+    |     ^^^^^^^^^^
+    |
+    = note: `SentinelSeed` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-core` (lib) generated 3 warnings (run `cargo fix --lib -p nexus-core` to apply 3 suggestions)
+warning: `nexus-network` (lib) generated 1 warning (run `cargo fix --lib -p nexus-network` to apply 1 suggestion)
+   Compiling nexus-anchor v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-anchor)
+   Compiling nexus-sentinel v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-sentinel)
+warning: unused imports: `Hash256` and `NexusError`
+  --> nexus-sentinel\src\lib.rs:14:27
+   |
+14 | use nexus_core::{Address, Hash256, NexusError, Timestamp};
+   |                           ^^^^^^^  ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::HashMap`
+  --> nexus-sentinel\src\lib.rs:15:5
+   |
+15 | use std::collections::HashMap;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `nexus-zk` (lib) generated 1 warning (run `cargo fix --lib -p nexus-zk` to apply 1 suggestion)
+warning: `nexus-sentinel` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-sentinel` to apply 2 suggestions)
+warning: `nexus-crypto` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-crypto` to apply 1 suggestion)
+warning: unused imports: `BlockHeight` and `Hash256`
+ --> nexus-anchor\src\validator.rs:5:35
+  |
+5 | use nexus_core::{Address, Amount, BlockHeight, Hash256, NexusError, Timestamp};
+  |                                   ^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `nexus_crypto::DilithiumPublicKey`
+ --> nexus-anchor\src\validator.rs:6:5
+  |
+6 | use nexus_crypto::DilithiumPublicKey;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   Compiling nexus-active v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-active)
+warning: unused import: `PQSignature`
+ --> nexus-active\src\batch.rs:5:39
+  |
+5 | use nexus_core::{Hash256, NexusError, PQSignature, SignedTransaction, StateRoot, BlockHeight, Timestamp};
+  |                                       ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `InMemoryState`
+  --> nexus-active\src\chain.rs:13:55
+   |
+13 |     SignedTransaction, StateRoot, Timestamp, Address, InMemoryState,
+   |                                                       ^^^^^^^^^^^^^
+
+   Compiling nexus-node v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-node)
+warning: `nexus-anchor` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-anchor` to apply 2 suggestions)
+warning: `nexus-active` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-active` to apply 2 suggestions)
+   Compiling nexus-cli v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.85s

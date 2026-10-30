@@ -1,0 +1,185 @@
+warn: could not canonicalize path C:\Users\juand
+    Checking nexus-core v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-core)
+    Checking nexus-crypto v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-crypto)
+    Checking nexus-zk v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-zk)
+warning: unused import: `NexusError`
+ --> nexus-zk\src\lib.rs:9:27
+  |
+9 | use nexus_core::{Hash256, NexusError, StateRoot};
+  |                           ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PQSignature`
+ --> nexus-crypto\src\signer.rs:8:35
+  |
+8 |     Address, Hash256, NexusError, PQSignature, SignatureScheme,
+  |                                   ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-zk` (lib) generated 1 warning (run `cargo fix --lib -p nexus-zk` to apply 1 suggestion)
+warning: field `created_at` is never read
+   --> nexus-crypto\src\entropy.rs:233:5
+    |
+225 | pub struct SentinelSeed {
+    |            ------------ field in this struct
+...
+233 |     created_at: Timestamp,
+    |     ^^^^^^^^^^
+    |
+    = note: `SentinelSeed` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-zk` (lib test) generated 1 warning (1 duplicate)
+warning: `nexus-crypto` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-crypto` to apply 1 suggestion)
+    Checking nexus-anchor v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-anchor)
+warning: struct `Division` is never constructed
+ --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:9:12
+  |
+9 | pub struct Division {
+  |            ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Audit` is never constructed
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:15:12
+   |
+15 | pub struct Audit {
+   |            ^^^^^
+
+warning: struct `Composition` is never constructed
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:24:12
+   |
+24 | pub struct Composition {
+   |            ^^^^^^^^^^^
+
+warning: function `trim` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:30:4
+   |
+30 | fn trim(mut p: Vec<Felt>) -> Vec<Felt> {
+   |    ^^^^
+
+warning: function `degree` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:35:8
+   |
+35 | pub fn degree(p: &[Felt]) -> Option<usize> {
+   |        ^^^^^^
+
+warning: function `degree_ext` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:39:8
+   |
+39 | pub fn degree_ext(p: &[Fp2]) -> Option<usize> {
+   |        ^^^^^^^^^^
+
+warning: function `sub` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:43:4
+   |
+43 | fn sub(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+   |    ^^^
+
+warning: function `mul` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:50:4
+   |
+50 | fn mul(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+   |    ^^^
+
+warning: function `shifted` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:59:4
+   |
+59 | fn shifted(a: &[Felt], factor: Felt) -> Vec<Felt> {
+   |    ^^^^^^^
+
+warning: function `divide` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:68:4
+   |
+68 | fn divide(a: &[Felt], b: &[Felt]) -> Result<Division, String> {
+   |    ^^^^^^
+
+warning: function `audit` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:87:8
+   |
+87 | pub fn audit(trace: &[Felt], start: Felt, output: Felt) -> Result<Audit, String> {
+   |        ^^^^^
+
+warning: function `compose` is never used
+   --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:127:8
+    |
+127 | pub fn compose(audit: &Audit, alphas: [Fp2; 3]) -> Composition {
+    |        ^^^^^^^
+
+warning: function `eval_ext` is never used
+   --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:144:8
+    |
+144 | pub fn eval_ext(coefficients: &[Fp2], x: Felt) -> Fp2 {
+    |        ^^^^^^^^
+
+    Checking nexus-sentinel v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-sentinel)
+warning: `nexus-zk` (test "tg2_trace_proximity") generated 13 warnings
+warning: unused imports: `Hash256` and `NexusError`
+  --> nexus-sentinel\src\lib.rs:14:27
+   |
+14 | use nexus_core::{Address, Hash256, NexusError, Timestamp};
+   |                           ^^^^^^^  ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::HashMap`
+  --> nexus-sentinel\src\lib.rs:15:5
+   |
+15 | use std::collections::HashMap;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `nexus-sentinel` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-sentinel` to apply 2 suggestions)
+warning: `nexus-crypto` (lib test) generated 2 warnings (2 duplicates)
+warning: unused imports: `BlockHeight` and `Hash256`
+ --> nexus-anchor\src\validator.rs:5:35
+  |
+5 | use nexus_core::{Address, Amount, BlockHeight, Hash256, NexusError, Timestamp};
+  |                                   ^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `nexus_crypto::DilithiumPublicKey`
+ --> nexus-anchor\src\validator.rs:6:5
+  |
+6 | use nexus_crypto::DilithiumPublicKey;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `nexus-sentinel` (lib test) generated 2 warnings (2 duplicates)
+warning: `nexus-anchor` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-anchor` to apply 2 suggestions)
+    Checking nexus-active v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-active)
+    Checking nexus-network v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-network)
+warning: unused import: `NexusError`
+ --> nexus-network\src\lib.rs:6:34
+  |
+6 | use nexus_core::{Block, Hash256, NexusError, SignedTransaction};
+  |                                  ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PQSignature`
+ --> nexus-active\src\batch.rs:5:39
+  |
+5 | use nexus_core::{Hash256, NexusError, PQSignature, SignedTransaction, StateRoot, BlockHeight, Timestamp};
+  |                                       ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-anchor` (lib test) generated 2 warnings (2 duplicates)
+warning: `nexus-network` (lib) generated 1 warning (run `cargo fix --lib -p nexus-network` to apply 1 suggestion)
+warning: `nexus-active` (lib) generated 1 warning (run `cargo fix --lib -p nexus-active` to apply 1 suggestion)
+    Checking nexus-node v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-node)
+warning: unused import: `StateRoot`
+ --> nexus-anchor\tests\chain_safety.rs:3:41
+  |
+3 |     SignatureScheme, SignedTransaction, StateRoot, Transaction};
+  |                                         ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-anchor` (test "chain_safety") generated 1 warning (run `cargo fix --test "chain_safety" -p nexus-anchor` to apply 1 suggestion)
+    Checking nexus-cli v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-cli)
+warning: `nexus-network` (lib test) generated 1 warning (1 duplicate)
+warning: `nexus-active` (lib test) generated 1 warning (1 duplicate)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.36s

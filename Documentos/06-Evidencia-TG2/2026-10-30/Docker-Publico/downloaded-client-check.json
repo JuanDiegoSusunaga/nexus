@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "origin": "isolated Docker client on same host",
+  "url": "https://dreams-humanities-shelter-utilities.trycloudflare.com",
+  "private_key_mounts": false,
+  "artifact_sha256": {
+    "genesis.json": "d5152429cc9642039795bd1ff8ea2df14ecc357c71750cf6fd9a96d3348c4f74",
+    "nexus-linux-amd64": "0fc54744a574792092497b643f38f405c018a5f9db3455ba746eb08140767a40",
+    "home_connect.py": "093b8b46ed0c41a962790a086854784fb0e57a9f5dbb3de8b953ccd70a6f4479",
+    "home_transport.py": "fb05158183eacfe73f05649889f0cad2bb80eb727b1fe507ad00d329d5a6f18e"
+  },
+  "common_height": 157,
+  "state_root": "1111b65832ca8f9c351fc358e7d38adae7ed752339a432906e3c020d0dff7f51",
+  "observations": [
+    [
+      {
+        "attested_by_validator": 1,
+        "burned_raw": "54148000000000",
+        "height": 157,
+        "issued_raw": "1000157000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "1111b65832ca8f9c351fc358e7d38adae7ed752339a432906e3c020d0dff7f51",
+        "supply_raw": "1000156999945852000000000"
+      },
+      {
+        "attested_by_validator": 0,
+        "burned_raw": "54148000000000",
+        "height": 157,
+        "issued_raw": "1000157000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "1111b65832ca8f9c351fc358e7d38adae7ed752339a432906e3c020d0dff7f51",
+        "supply_raw": "1000156999945852000000000"
+      },
+      {
+        "attested_by_validator": 2,
+        "burned_raw": "54148000000000",
+        "height": 157,
+        "issued_raw": "1000157000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "1111b65832ca8f9c351fc358e7d38adae7ed752339a432906e3c020d0dff7f51",
+        "supply_raw": "1000156999945852000000000"
+      },
+      {
+        "attested_by_validator": 3,
+        "burned_raw": "54148000000000",
+        "height": 157,
+        "issued_raw": "1000157000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "1111b65832ca8f9c351fc358e7d38adae7ed752339a432906e3c020d0dff7f51",
+        "supply_raw": "1000156999945852000000000"
+      }
+    ]
+  ]
+}

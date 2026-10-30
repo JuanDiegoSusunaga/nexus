@@ -1,0 +1,62 @@
+docker :  Image nexus-home-gateway:1 Building 
+En línea: 2 Carácter: 67
++ ... eway.py -v; docker compose --progress plain -f deploy/compose.gateway ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Image nexus-home-gateway:1 Building :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+#1 [internal] load local bake definitions
+#1 reading from stdin 581B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.gateway
+#2 transferring dockerfile: 443B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/nexus-testnet:protocol4-journal2
+#3 DONE 0.1s
+
+#4 [internal] load metadata for docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+#4 DONE 0.1s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 201B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 6.86kB done
+#6 DONE 0.0s
+
+#7 [nexus 1/1] FROM docker.io/library/nexus-testnet:protocol4-journal2@sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557
+#7 resolve docker.io/library/nexus-testnet:protocol4-journal2@sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557 0.1s done
+#7 DONE 0.1s
+
+#8 [stage-1 1/4] FROM docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+#8 resolve docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+#8 resolve docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1 2/4] WORKDIR /app
+#9 CACHED
+
+#10 [stage-1 3/4] COPY --from=nexus /usr/local/bin/nexus /usr/local/bin/nexus
+#10 CACHED
+
+#11 [stage-1 4/4] COPY home_gateway.py home_transport.py home_connect.py /app/
+#11 DONE 0.1s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.2s done
+#12 exporting manifest sha256:8ea7fd11e23a0e6bdb61ec4fbe39ff94b1b7c0767112a89a3a37b19f8e9cb026 0.1s done
+#12 exporting config sha256:a721c1d33bd2774293cf947ee06cc8e9022eeaed42d37710b7089be361b712b7 0.1s done
+#12 exporting attestation manifest sha256:24e7c0d02ac37243faa11c9971318c79f7a87de3d87d140ea577d795d772a460 0.0s done
+#12 exporting manifest list sha256:5bc3ebc6621fa47326e81c89ca9a6f2e8e73a58dff278d2e1d9f12175fca89ac 0.0s done
+#12 naming to docker.io/library/nexus-home-gateway:1
+#12 naming to docker.io/library/nexus-home-gateway:1 done
+#12 unpacking to docker.io/library/nexus-home-gateway:1 0.1s done
+#12 DONE 0.6s
+
+#13 resolving provenance for metadata file
+#13 DONE 0.0s
+ Image nexus-home-gateway:1 Built 

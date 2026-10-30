@@ -1,0 +1,71 @@
+{
+  "docker_stats": [
+    {
+      "BlockIO": "65.5kB / 0B",
+      "CPUPerc": "0.02%",
+      "Container": "f9163cd2c2d0",
+      "ID": "f9163cd2c2d0",
+      "MemPerc": "8.02%",
+      "MemUsage": "20.54MiB / 256MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-gateway-1",
+      "NetIO": "163kB / 4.98MB",
+      "PIDs": "2"
+    },
+    {
+      "BlockIO": "0B / 0B",
+      "CPUPerc": "0.00%",
+      "Container": "721d6e8edbb8",
+      "ID": "721d6e8edbb8",
+      "MemPerc": "6.39%",
+      "MemUsage": "16.35MiB / 256MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-tunnel-1",
+      "NetIO": "5.35MB / 5.25MB",
+      "PIDs": "14"
+    },
+    {
+      "BlockIO": "496kB / 27.8MB",
+      "CPUPerc": "2.02%",
+      "Container": "1fc489b079e6",
+      "ID": "1fc489b079e6",
+      "MemPerc": "3.85%",
+      "MemUsage": "19.71MiB / 512MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-node-2-1",
+      "NetIO": "660MB / 662MB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "0B / 28MB",
+      "CPUPerc": "2.15%",
+      "Container": "9ee8554d09a7",
+      "ID": "9ee8554d09a7",
+      "MemPerc": "3.73%",
+      "MemUsage": "19.11MiB / 512MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-node-3-1",
+      "NetIO": "662MB / 662MB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "1.09MB / 28.8MB",
+      "CPUPerc": "2.40%",
+      "Container": "29e5473481bc",
+      "ID": "29e5473481bc",
+      "MemPerc": "3.78%",
+      "MemUsage": "19.37MiB / 512MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-node-1-1",
+      "NetIO": "664MB / 660MB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "1.38MB / 27.9MB",
+      "CPUPerc": "1.90%",
+      "Container": "354e611bd3c2",
+      "ID": "354e611bd3c2",
+      "MemPerc": "3.84%",
+      "MemUsage": "19.64MiB / 512MiB",
+      "Name": "nexus-home-fd0b8883c82078d6-node-0-1",
+      "NetIO": "660MB / 662MB",
+      "PIDs": "7"
+    }
+  ],
+  "journal_kib_node_0": "27416"
+}

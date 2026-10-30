@@ -1,0 +1,173 @@
+[
+  {
+    "name": "nexus-home-fd0b8883c82078d6-gateway-1",
+    "image": "sha256:5bc3ebc6621fa47326e81c89ca9a6f2e8e73a58dff278d2e1d9f12175fca89ac",
+    "state": "running",
+    "health": null,
+    "user": "10001:10001",
+    "read_only_root": true,
+    "mounts": [
+      {
+        "type": "bind",
+        "destination": "/etc/nexus/genesis.json",
+        "read_only": true
+      }
+    ],
+    "memory_limit_bytes": 268435456,
+    "ports": {
+      "8080/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18080"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nexus-home-fd0b8883c82078d6-tunnel-1",
+    "image": "sha256:004d843fa5fdc3103983fd580ee19fab4a8fa98add31f87249c1659e848c98e0",
+    "state": "running",
+    "health": null,
+    "user": "65532:65532",
+    "read_only_root": true,
+    "mounts": [],
+    "memory_limit_bytes": 268435456,
+    "ports": {}
+  },
+  {
+    "name": "nexus-home-fd0b8883c82078d6-node-2-1",
+    "image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+    "state": "running",
+    "health": "healthy",
+    "user": "10001:10001",
+    "read_only_root": true,
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/nexus",
+        "read_only": false
+      },
+      {
+        "type": "bind",
+        "destination": "/etc/nexus/genesis.json",
+        "read_only": true
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/validator.key",
+        "read_only": true
+      }
+    ],
+    "memory_limit_bytes": 536870912,
+    "ports": {
+      "19001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19003"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nexus-home-fd0b8883c82078d6-node-3-1",
+    "image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+    "state": "running",
+    "health": "healthy",
+    "user": "10001:10001",
+    "read_only_root": true,
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/nexus",
+        "read_only": false
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/validator.key",
+        "read_only": true
+      },
+      {
+        "type": "bind",
+        "destination": "/etc/nexus/genesis.json",
+        "read_only": true
+      }
+    ],
+    "memory_limit_bytes": 536870912,
+    "ports": {
+      "19001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19004"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nexus-home-fd0b8883c82078d6-node-1-1",
+    "image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+    "state": "running",
+    "health": "healthy",
+    "user": "10001:10001",
+    "read_only_root": true,
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/nexus",
+        "read_only": false
+      },
+      {
+        "type": "bind",
+        "destination": "/etc/nexus/genesis.json",
+        "read_only": true
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/validator.key",
+        "read_only": true
+      }
+    ],
+    "memory_limit_bytes": 536870912,
+    "ports": {
+      "19001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19002"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nexus-home-fd0b8883c82078d6-node-0-1",
+    "image": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+    "state": "running",
+    "health": "healthy",
+    "user": "10001:10001",
+    "read_only_root": true,
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/nexus",
+        "read_only": false
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/validator.key",
+        "read_only": true
+      },
+      {
+        "type": "bind",
+        "destination": "/etc/nexus/genesis.json",
+        "read_only": true
+      }
+    ],
+    "memory_limit_bytes": 536870912,
+    "ports": {
+      "19001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19001"
+        }
+      ]
+    }
+  }
+]

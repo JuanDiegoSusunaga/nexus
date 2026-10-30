@@ -1,0 +1,2272 @@
+docker :  Image nexus-testnet:protocol4-journal2 Building 
+En línea: 2 Carácter: 1
++ docker compose --progress plain -f deploy/compose.build.yaml build *> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Image nexus-te...rnal2 Building :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+#1 [internal] load local bake definitions
+#1 reading from stdin 553B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.07kB 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/rust:1.97.1-bookworm@sha256:0e2bcaef56d041a486784e54104a81aebe0da44bd03019bd70bc0401e42e4a97
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 221B done
+#5 DONE 0.0s
+
+#6 [runtime 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3
+#6 resolve docker.io/library/debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3 0.0s done
+#6 DONE 0.1s
+
+#7 [verified 1/7] FROM docker.io/library/rust:1.97.1-bookworm@sha256:0e2bcaef56d041a486784e54104a81aebe0da44bd03019bd70bc0401e42e4a97
+#7 resolve docker.io/library/rust:1.97.1-bookworm@sha256:0e2bcaef56d041a486784e54104a81aebe0da44bd03019bd70bc0401e42e4a97 0.0s done
+#7 DONE 0.2s
+
+#8 [internal] load build context
+#8 ...
+
+#9 [verified 2/7] WORKDIR /src
+#9 DONE 0.1s
+
+#8 [internal] load build context
+#8 ...
+
+#10 [runtime 2/4] RUN groupadd --gid 10001 nexus     && useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin nexus     && mkdir -p /var/lib/nexus /etc/nexus     && chown 10001:10001 /var/lib/nexus
+#10 DONE 0.6s
+
+#8 [internal] load build context
+#8 transferring context: 1.22MB 1.3s done
+#8 DONE 1.5s
+
+#11 [verified 3/7] COPY . .
+#11 DONE 0.1s
+
+#12 [verified 4/7] RUN cargo fetch --locked
+#12 0.306     Updating crates.io index
+#12 5.182  Downloading crates ...
+#12 5.237   Downloaded windows-result v0.4.1
+#12 5.244   Downloaded core-foundation-sys v0.8.7
+#12 5.248   Downloaded crossbeam-utils v0.8.21
+#12 5.262   Downloaded void v1.0.2
+#12 5.263   Downloaded instant v0.1.13
+#12 5.266   Downloaded is-terminal v0.4.17
+#12 5.267   Downloaded version_check v0.9.5
+#12 5.269   Downloaded if-watch v3.2.1
+#12 5.272   Downloaded if-addrs v0.10.2
+#12 5.273   Downloaded criterion v0.5.1
+#12 5.287   Downloaded windows-strings v0.5.1
+#12 5.289   Downloaded block-buffer v0.10.4
+#12 5.290   Downloaded const-oid v0.9.6
+#12 5.292   Downloaded autocfg v1.5.0
+#12 5.298   Downloaded num-traits v0.2.19
+#12 5.303   Downloaded fnv v1.0.7
+#12 5.304   Downloaded xmltree v0.10.3
+#12 5.306   Downloaded hex v0.4.3
+#12 5.310   Downloaded want v0.3.1
+#12 5.312   Downloaded time-macros v0.2.26
+#12 5.314   Downloaded unsigned-varint v0.7.2
+#12 5.323   Downloaded semver v1.0.27
+#12 5.327   Downloaded netlink-packet-utils v0.5.2
+#12 5.329   Downloaded multistream-select v0.13.0
+#12 5.331   Downloaded iana-time-zone v0.1.65
+#12 5.335   Downloaded futures-timer v3.0.3
+#12 5.344   Downloaded windows-core v0.62.2
+#12 5.349   Downloaded crossbeam-epoch v0.9.18
+#12 5.351   Downloaded keccak v0.1.5
+#12 5.355   Downloaded rustc_version v0.4.1
+#12 5.358   Downloaded cpufeatures v0.2.17
+#12 5.364   Downloaded generic-array v0.14.7
+#12 5.367   Downloaded ark-serialize v0.4.2
+#12 5.368   Downloaded ark-snark v0.4.0
+#12 5.369   Downloaded ark-serialize-derive v0.4.2
+#12 5.370   Downloaded libm v0.2.16
+#12 5.386   Downloaded http-body v0.4.6
+#12 5.388   Downloaded time-core v0.1.8
+#12 5.389   Downloaded windows-targets v0.52.6
+#12 5.389   Downloaded parking v2.2.1
+#12 5.390   Downloaded subtle v2.6.1
+#12 5.392   Downloaded ark-ff-macros v0.4.2
+#12 5.395   Downloaded try-lock v0.2.5
+#12 5.395   Downloaded num-iter v0.1.46
+#12 5.396   Downloaded rusticata-macros v4.1.0
+#12 5.397   Downloaded oid-registry v0.7.1
+#12 5.400   Downloaded ark-bn254 v0.4.0
+#12 5.402   Downloaded tower-service v0.3.3
+#12 5.403   Downloaded cfg_aliases v0.2.1
+#12 5.405   Downloaded lru-slab v0.1.2
+#12 5.406   Downloaded num-conv v0.2.0
+#12 5.408   Downloaded android_system_properties v0.1.5
+#12 5.409   Downloaded arrayref v0.3.9
+#12 5.414   Downloaded system-configuration-sys v0.6.0
+#12 5.415   Downloaded lru v0.12.5
+#12 5.416   Downloaded same-file v1.0.6
+#12 5.417   Downloaded igd-next v0.14.3
+#12 5.421   Downloaded plotters-svg v0.3.7
+#12 5.422   Downloaded digest v0.10.7
+#12 5.425   Downloaded crossbeam-deque v0.8.6
+#12 5.428   Downloaded sec1 v0.7.3
+#12 5.431   Downloaded either v1.15.0
+#12 5.434   Downloaded windows-targets v0.48.5
+#12 5.435   Downloaded crypto-common v0.1.7
+#12 5.436   Downloaded plotters-backend v0.3.7
+#12 5.437   Downloaded base16ct v0.2.0
+#12 5.439   Downloaded rfc6979 v0.4.0
+#12 5.440   Downloaded windows-interface v0.59.3
+#12 5.441   Downloaded windows-result v0.1.2
+#12 5.443   Downloaded untrusted v0.9.0
+#12 5.446   Downloaded iana-time-zone-haiku v0.1.2
+#12 5.448   Downloaded wasm-bindgen-shared v0.2.108
+#12 5.452   Downloaded equivalent v1.0.2
+#12 5.454   Downloaded httpdate v1.0.3
+#12 5.456   Downloaded itoa v1.0.17
+#12 5.457   Downloaded matchers v0.2.0
+#12 5.458   Downloaded powerfmt v0.2.0
+#12 5.460   Downloaded rustc-hash v2.1.1
+#12 5.463   Downloaded futures-sink v0.3.31
+#12 5.464   Downloaded futures-core v0.3.31
+#12 5.466   Downloaded idna_adapter v1.2.1
+#12 5.466   Downloaded zerofrom v0.1.6
+#12 5.467   Downloaded yoke-derive v0.8.1
+#12 5.469   Downloaded constant_time_eq v0.4.2
+#12 5.471   Downloaded pem-rfc7468 v0.7.0
+#12 5.472   Downloaded heck v0.5.0
+#12 5.473   Downloaded ark-std v0.4.0
+#12 5.475   Downloaded ark-relations v0.4.0
+#12 5.477   Downloaded windows-implement v0.60.2
+#12 5.478   Downloaded colorchoice v1.0.4
+#12 5.479   Downloaded num-integer v0.1.46
+#12 5.481   Downloaded paste v1.0.15
+#12 5.484   Downloaded ark-ff-asm v0.4.2
+#12 5.486   Downloaded ff v0.13.1
+#12 5.488   Downloaded walkdir v2.5.0
+#12 5.489   Downloaded group v0.13.0
+#12 5.491   Downloaded winapi-util v0.1.11
+#12 5.493   Downloaded oorandom v11.1.5
+#12 5.494   Downloaded base64ct v1.8.3
+#12 5.496   Downloaded bincode v1.3.3
+#12 5.498   Downloaded chrono v0.4.43
+#12 5.505   Downloaded netlink-sys v0.8.8
+#12 5.507   Downloaded curve25519-dalek-derive v0.1.1
+#12 5.508   Downloaded system-configuration v0.6.1
+#12 5.510   Downloaded netlink-packet-core v0.7.0
+#12 5.511   Downloaded bitflags v1.3.2
+#12 5.515   Downloaded ipnet v2.11.0
+#12 5.517   Downloaded foldhash v0.1.5
+#12 5.519   Downloaded data-encoding-macro v0.1.19
+#12 5.520   Downloaded data-encoding-macro-internal v0.1.17
+#12 5.521   Downloaded spki v0.7.3
+#12 5.522   Downloaded core-foundation v0.9.4
+#12 5.524   Downloaded async-trait v0.1.89
+#12 5.528   Downloaded spin v0.5.2
+#12 5.530   Downloaded universal-hash v0.5.1
+#12 5.530   Downloaded linked-hash-map v0.5.6
+#12 5.532   Downloaded pathdiff v0.2.3
+#12 5.533   Downloaded sha2 v0.10.9
+#12 5.535   Downloaded signature v2.2.0
+#12 5.536   Downloaded ecdsa v0.16.9
+#12 5.538   Downloaded shlex v1.3.0
+#12 5.540   Downloaded pkcs8 v0.10.2
+#12 5.542   Downloaded primeorder v0.13.6
+#12 5.543   Downloaded rand_chacha v0.9.0
+#12 5.544   Downloaded rustversion v1.0.22
+#12 5.549   Downloaded concurrent-queue v2.5.0
+#12 5.551   Downloaded hermit-abi v0.5.2
+#12 5.552   Downloaded netlink-proto v0.11.5
+#12 5.555   Downloaded const-random v0.1.18
+#12 5.556   Downloaded deranged v0.5.5
+#12 5.557   Downloaded ark-groth16 v0.4.0
+#12 5.558   Downloaded zeroize v1.8.2
+#12 5.560   Downloaded derivative v2.2.0
+#12 5.569   Downloaded anstyle v1.0.13
+#12 5.571   Downloaded blake2 v0.10.6
+#12 5.575   Downloaded pkcs1 v0.7.5
+#12 5.577   Downloaded ahash v0.8.12
+#12 5.581   Downloaded arrayvec v0.7.6
+#12 5.584   Downloaded rustls-pki-types v1.14.0
+#12 5.586   Downloaded multihash v0.19.3
+#12 5.590   Downloaded windows-link v0.2.1
+#12 5.591   Downloaded ark-ff v0.4.2
+#12 5.596   Downloaded httparse v1.10.1
+#12 5.600   Downloaded xml-rs v0.8.28
+#12 5.604   Downloaded thiserror-impl v2.0.18
+#12 5.605   Downloaded once_cell_polyfill v1.70.2
+#12 5.606   Downloaded poly1305 v0.8.0
+#12 5.609   Downloaded rand_core v0.9.5
+#12 5.611   Downloaded pem v3.0.6
+#12 5.613   Downloaded zerofrom-derive v0.1.6
+#12 5.615   Downloaded base256emoji v1.0.2
+#12 5.615   Downloaded num_cpus v1.17.0
+#12 5.619   Downloaded quick-protobuf-codec v0.3.1
+#12 5.622   Downloaded potential_utf v0.1.4
+#12 5.622   Downloaded tinytemplate v1.2.1
+#12 5.625   Downloaded find-msvc-tools v0.1.9
+#12 5.627   Downloaded ctr v0.9.2
+#12 5.631   Downloaded hashlink v0.8.4
+#12 5.633   Downloaded anstyle-parse v0.2.7
+#12 5.635   Downloaded futures-lite v2.6.1
+#12 5.636   Downloaded crunchy v0.2.4
+#12 5.637   Downloaded asn1-rs-impl v0.2.0
+#12 5.637   Downloaded windows-core v0.53.0
+#12 5.640   Downloaded toml_write v0.1.2
+#12 5.643   Downloaded yasna v0.5.2
+#12 5.646   Downloaded rtnetlink v0.13.1
+#12 5.654   Downloaded litemap v0.8.1
+#12 5.656   Downloaded pest_generator v2.8.5
+#12 5.657   Downloaded quinn-udp v0.5.14
+#12 5.659   Downloaded spin v0.9.9
+#12 5.662   Downloaded hmac v0.12.1
+#12 5.665   Downloaded valuable v0.1.1
+#12 5.667   Downloaded errno v0.3.14
+#12 5.669   Downloaded rayon-core v1.13.0
+#12 5.673   Downloaded anyhow v1.0.100
+#12 5.679   Downloaded ark-poly v0.4.2
+#12 5.682   Downloaded async-io v2.6.0
+#12 5.685   Downloaded elliptic-curve v0.13.8
+#12 5.690   Downloaded pin-project-lite v0.2.16
+#12 5.697   Downloaded rand_core v0.6.4
+#12 5.699   Downloaded cast v0.3.0
+#12 5.700   Downloaded futures-task v0.3.31
+#12 5.701   Downloaded quinn v0.11.9
+#12 5.706   Downloaded lock_api v0.4.14
+#12 5.707   Downloaded nohash-hasher v0.2.0
+#12 5.709   Downloaded zeroize_derive v1.4.3
+#12 5.710   Downloaded ppv-lite86 v0.2.21
+#12 5.711   Downloaded rand_chacha v0.3.1
+#12 5.714   Downloaded anstyle-query v1.1.5
+#12 5.716   Downloaded percent-encoding v2.3.2
+#12 5.716   Downloaded futures-ticker v0.0.3
+#12 5.718   Downloaded polyval v0.6.2
+#12 5.720   Downloaded ark-ec v0.4.2
+#12 5.724   Downloaded pin-project-internal v1.1.10
+#12 5.726   Downloaded futures-executor v0.3.31
+#12 5.728   Downloaded untrusted v0.7.1
+#12 5.729   Downloaded prometheus-client-derive-encode v0.4.2
+#12 5.730   Downloaded serde_core v1.0.228
+#12 5.733   Downloaded polling v3.11.0
+#12 5.737   Downloaded synstructure v0.13.2
+#12 5.738   Downloaded thiserror v2.0.18
+#12 5.745   Downloaded opaque-debug v0.3.1
+#12 5.747   Downloaded enum-as-inner v0.6.1
+#12 5.749   Downloaded typenum v1.19.0
+#12 5.752   Downloaded ordered-multimap v0.7.3
+#12 5.755   Downloaded socket2 v0.5.10
+#12 5.758   Downloaded icu_provider v2.1.1
+#12 5.761   Downloaded thread_local v1.1.9
+#12 5.763   Downloaded tokio-macros v2.6.0
+#12 5.765   Downloaded thiserror-impl v1.0.69
+#12 5.767   Downloaded zmij v1.0.18
+#12 5.769   Downloaded attohttpc v0.24.1
+#12 5.773   Downloaded scopeguard v1.2.0
+#12 5.776   Downloaded parking_lot v0.12.5
+#12 5.780   Downloaded anstream v0.6.21
+#12 5.782   Downloaded anes v0.1.6
+#12 5.788   Downloaded clap_derive v4.5.55
+#12 5.791   Downloaded strsim v0.11.1
+#12 5.793   Downloaded anstyle-wincon v3.0.11
+#12 5.796   Downloaded writeable v0.6.2
+#12 5.798   Downloaded const-str v0.4.3
+#12 5.801   Downloaded pin-utils v0.1.0
+#12 5.803   Downloaded bs58 v0.5.1
+#12 5.805   Downloaded stable_deref_trait v1.2.1
+#12 5.807   Downloaded sharded-slab v0.1.7
+#12 5.812   Downloaded unsigned-varint v0.8.0
+#12 5.815   Downloaded p256 v0.13.2
+#12 5.819   Downloaded dtoa v1.0.11
+#12 5.820   Downloaded hex_fmt v0.3.0
+#12 5.822   Downloaded yoke v0.8.1
+#12 5.823   Downloaded toml_datetime v0.6.11
+#12 5.824   Downloaded utf8parse v0.2.2
+#12 5.827   Downloaded winreg v0.50.0
+#12 5.831   Downloaded libp2p-identity v0.2.13
+#12 5.833   Downloaded zerovec-derive v0.11.2
+#12 5.835   Downloaded arraydeque v0.5.1
+#12 5.836   Downloaded base-x v0.2.11
+#12 5.839   Downloaded aead v0.5.2
+#12 5.840   Downloaded rsa v0.9.10
+#12 5.846   Downloaded tracing-attributes v0.1.31
+#12 5.848   Downloaded icu_normalizer v2.1.1
+#12 5.852   Downloaded tiny-keccak v2.0.2
+#12 5.855   Downloaded convert_case v0.6.0
+#12 5.856   Downloaded ciborium-io v0.2.2
+#12 5.857   Downloaded futures-macro v0.3.31
+#12 5.858   Downloaded half v2.7.1
+#12 5.861   Downloaded allocator-api2 v0.2.21
+#12 5.864   Downloaded utf8_iter v1.0.4
+#12 5.865   Downloaded wasm-bindgen v0.2.108
+#12 5.867   Downloaded signal-hook-registry v1.4.8
+#12 5.869   Downloaded wasm-bindgen-macro-support v0.2.108
+#12 5.871   Downloaded multiaddr v0.18.2
+#12 5.873   Downloaded rustls-webpki v0.103.9
+#12 5.875   Downloaded inout v0.1.4
+#12 5.877   Downloaded is_terminal_polyfill v1.70.2
+#12 5.878   Downloaded match-lookup v0.1.2
+#12 5.878   Downloaded chacha20poly1305 v0.10.1
+#12 5.881   Downloaded cc v1.2.55
+#12 5.886   Downloaded crypto-bigint v0.5.5
+#12 5.895   Downloaded core2 v0.4.0
+#12 5.897   Downloaded der v0.7.10
+#12 5.916   Downloaded ark-crypto-primitives v0.4.0
+#12 5.927   Downloaded ron v0.8.1
+#12 5.940   Downloaded toml_edit v0.22.27
+#12 5.950   Downloaded tinyvec v1.10.0
+#12 5.955   Downloaded ipconfig v0.3.2
+#12 5.959   Downloaded yamux v0.13.8
+#12 5.963   Downloaded hashbrown v0.13.2
+#12 5.971   Downloaded futures-io v0.3.31
+#12 5.972   Downloaded url v2.5.8
+#12 5.975   Downloaded cfg-if v1.0.4
+#12 5.977   Downloaded wasi v0.11.1+wasi-snapshot-preview1
+#12 5.980   Downloaded itertools v0.10.5
+#12 5.986   Downloaded windows-targets v0.53.5
+#12 5.987   Downloaded tinyvec_macros v0.1.1
+#12 5.988   Downloaded minimal-lexical v0.2.1
+#12 5.994   Downloaded json5 v0.4.1
+#12 5.996   Downloaded uuid v1.20.0
+#12 6.000   Downloaded futures v0.3.31
+#12 6.004   Downloaded dashmap v5.5.3
+#12 6.009   Downloaded tinystr v0.8.2
+#12 6.011   Downloaded libp2p-tls v0.4.1
+#12 6.013   Downloaded ghash v0.5.1
+#12 6.015   Downloaded libp2p-upnp v0.2.2
+#12 6.015   Downloaded wasm-bindgen-macro v0.2.108
+#12 6.016   Downloaded clap_lex v0.7.7
+#12 6.018   Downloaded quick-protobuf v0.8.1
+#12 6.028   Downloaded bytes v1.11.0
+#12 6.034   Downloaded web-time v1.1.0
+#12 6.036   Downloaded pin-project v1.1.10
+#12 6.048   Downloaded quote v1.0.44
+#12 6.052   Downloaded tracing-log v0.2.0
+#12 6.054   Downloaded base64 v0.22.1
+#12 6.058   Downloaded smallvec v1.15.1
+#12 6.060   Downloaded multibase v0.9.2
+#12 6.062   Downloaded serde_spanned v0.6.9
+#12 6.063   Downloaded lazy_static v1.5.0
+#12 6.065   Downloaded asynchronous-codec v0.7.0
+#12 6.067   Downloaded pest_meta v2.8.5
+#12 6.069   Downloaded redox_syscall v0.5.18
+#12 6.073   Downloaded num-bigint v0.4.6
+#12 6.079   Downloaded log v0.4.29
+#12 6.081   Downloaded parking_lot_core v0.9.12
+#12 6.083   Downloaded static_assertions v1.1.0
+#12 6.087   Downloaded prometheus-client v0.22.3
+#12 6.100   Downloaded ucd-trie v0.1.7
+#12 6.118   Downloaded toml v0.8.23
+#12 6.136   Downloaded futures-rustls v0.26.0
+#12 6.151   Downloaded serde_derive v1.0.228
+#12 6.171   Downloaded libp2p-tcp v0.41.0
+#12 6.175   Downloaded thiserror v1.0.69
+#12 6.182   Downloaded asn1-rs v0.6.2
+#12 6.198   Downloaded ciborium-ll v0.2.2
+#12 6.200   Downloaded futures-bounded v0.2.4
+#12 6.202   Downloaded const-random-macro v0.1.16
+#12 6.204   Downloaded der-parser v9.0.0
+#12 6.213   Downloaded lru-cache v0.1.2
+#12 6.215   Downloaded dlv-list v0.5.2
+#12 6.221   Downloaded byteorder v1.5.0
+#12 6.233   Downloaded x509-parser v0.16.0
+#12 6.256   Downloaded form_urlencoded v1.2.2
+#12 6.257   Downloaded asn1-rs-derive v0.5.1
+#12 6.258   Downloaded libp2p-connection-limits v0.3.1
+#12 6.259   Downloaded libp2p-dns v0.41.1
+#12 6.261   Downloaded resolv-conf v0.7.6
+#12 6.264   Downloaded futures-channel v0.3.31
+#12 6.268   Downloaded indexmap v2.13.0
+#12 6.284   Downloaded rcgen v0.11.3
+#12 6.293   Downloaded unicode-segmentation v1.12.0
+#12 6.306   Downloaded data-encoding v2.10.0
+#12 6.309   Downloaded http v0.2.12
+#12 6.319   Downloaded uint v0.9.5
+#12 6.323   Downloaded num-bigint-dig v0.8.6
+#12 6.336   Downloaded js-sys v0.3.85
+#12 6.343   Downloaded base64 v0.21.7
+#12 6.348   Downloaded criterion-plot v0.5.0
+#12 6.350   Downloaded cipher v0.4.4
+#12 6.351   Downloaded x25519-dalek v2.0.1
+#12 6.353   Downloaded wit-bindgen v0.51.0
+#12 6.355   Downloaded pest_derive v2.8.5
+#12 6.358   Downloaded regex v1.12.2
+#12 6.365   Downloaded ciborium v0.2.2
+#12 6.368   Downloaded ed25519 v2.2.3
+#12 6.370   Downloaded unicode-ident v1.0.22
+#12 6.373   Downloaded libp2p-yamux v0.45.2
+#12 6.374   Downloaded r-efi v5.3.0
+#12 6.378   Downloaded libp2p-quic v0.10.3
+#12 6.380   Downloaded chacha20 v0.9.1
+#12 6.382   Downloaded zerotrie v0.2.3
+#12 6.385   Downloaded rw-stream-sink v0.4.0
+#12 6.386   Downloaded libp2p-noise v0.44.0
+#12 6.387   Downloaded slab v0.4.12
+#12 6.389   Downloaded yamux v0.12.1
+#12 6.390   Downloaded rust-ini v0.20.0
+#12 6.391   Downloaded displaydoc v0.2.5
+#12 6.395   Downloaded nu-ansi-term v0.50.3
+#12 6.398   Downloaded netlink-packet-route v0.17.1
+#12 6.414   Downloaded rand v0.9.2
+#12 6.444   Downloaded hickory-resolver v0.24.4
+#12 6.464   Downloaded once_cell v1.21.3
+#12 6.470   Downloaded socket2 v0.6.2
+#12 6.472   Downloaded getrandom v0.3.4
+#12 6.474   Downloaded plotters v0.3.7
+#12 6.483   Downloaded nom v7.1.3
+#12 6.488   Downloaded getrandom v0.2.17
+#12 6.492   Downloaded rand v0.8.5
+#12 6.497   Downloaded tracing-subscriber v0.2.25
+#12 6.502   Downloaded icu_properties v2.1.2
+#12 6.503   Downloaded aes v0.8.4
+#12 6.506   Downloaded ed25519-dalek v2.2.0
+#12 6.510   Downloaded libp2p-mdns v0.45.1
+#12 6.512   Downloaded proc-macro2 v1.0.106
+#12 6.516   Downloaded rayon v1.11.0
+#12 6.537   Downloaded hashbrown v0.14.5
+#12 6.546   Downloaded bitflags v2.10.0
+#12 6.553   Downloaded config v0.14.1
+#12 6.564   Downloaded sha3 v0.10.8
+#12 6.573   Downloaded hashbrown v0.15.5
+#12 6.582   Downloaded clap v4.5.56
+#12 6.592   Downloaded libp2p v0.53.2
+#12 6.596   Downloaded icu_normalizer_data v2.1.1
+#12 6.603   Downloaded memchr v2.7.6
+#12 6.622   Downloaded libp2p-core v0.41.3
+#12 6.628   Downloaded libp2p-identify v0.44.2
+#12 6.631   Downloaded serde_json v1.0.149
+#12 6.649   Downloaded tracing-core v0.1.36
+#12 6.651   Downloaded bumpalo v3.19.1
+#12 6.654   Downloaded icu_collections v2.1.1
+#12 6.659   Downloaded idna v1.1.0
+#12 6.662   Downloaded icu_locale_core v2.1.1
+#12 6.670   Downloaded libp2p-swarm v0.44.2
+#12 6.673   Downloaded tokio-util v0.7.18
+#12 6.681   Downloaded clap_builder v4.5.56
+#12 6.699   Downloaded wasip2 v1.0.2+wasi-0.2.9
+#12 6.718   Downloaded icu_properties_data v2.1.2
+#12 6.747   Downloaded blake3 v1.8.3
+#12 6.771   Downloaded tracing-subscriber v0.3.22
+#12 6.800   Downloaded libp2p-allow-block-list v0.3.0
+#12 6.802   Downloaded libp2p-metrics v0.14.1
+#12 6.806   Downloaded yaml-rust2 v0.8.1
+#12 6.850   Downloaded pest v2.8.5
+#12 6.862   Downloaded serde v1.0.228
+#12 6.870   Downloaded syn v1.0.109
+#12 6.894   Downloaded widestring v1.2.1
+#12 6.902   Downloaded futures-util v0.3.31
+#12 6.915   Downloaded h2 v0.3.27
+#12 6.920   Downloaded hkdf v0.12.4
+#12 6.924   Downloaded rustls-webpki v0.101.7
+#12 6.939   Downloaded mio v1.1.1
+#12 6.946   Downloaded winnow v0.7.14
+#12 6.956   Downloaded hyper v0.14.32
+#12 6.964   Downloaded hashbrown v0.16.1
+#12 6.969   Downloaded aho-corasick v1.1.4
+#12 6.975   Downloaded aes-gcm v0.10.3
+#12 6.979   Downloaded libp2p-kad v0.45.3
+#12 6.984   Downloaded zerocopy-derive v0.8.37
+#12 6.993   Downloaded zerovec v0.11.5
+#12 7.005   Downloaded zerocopy v0.8.37
+#12 7.085   Downloaded libp2p-gossipsub v0.46.1
+#12 7.100   Downloaded syn v2.0.114
+#12 7.141   Downloaded time v0.3.46
+#12 7.184   Downloaded curve25519-dalek v4.1.3
+#12 7.200   Downloaded regex-syntax v0.8.8
+#12 7.212   Downloaded quinn-proto v0.11.13
+#12 7.227   Downloaded hickory-proto v0.24.4
+#12 7.294   Downloaded nix v0.26.4
+#12 7.317   Downloaded tracing v0.1.44
+#12 7.364   Downloaded web-sys v0.3.85
+#12 7.495   Downloaded regex-automata v0.4.13
+#12 7.508   Downloaded fiat-crypto v0.2.9
+#12 7.516   Downloaded windows_aarch64_gnullvm v0.52.6
+#12 7.522   Downloaded rustls v0.23.36
+#12 7.532   Downloaded windows_x86_64_gnullvm v0.53.1
+#12 7.541   Downloaded windows_x86_64_msvc v0.53.1
+#12 7.551   Downloaded windows_aarch64_msvc v0.53.1
+#12 7.562   Downloaded windows_i686_gnullvm v0.53.1
+#12 7.573   Downloaded windows_x86_64_gnullvm v0.52.6
+#12 7.580   Downloaded windows_i686_gnullvm v0.52.6
+#12 7.587   Downloaded rustix v1.1.3
+#12 7.614   Downloaded windows_aarch64_gnullvm v0.48.5
+#12 7.621   Downloaded windows_x86_64_gnullvm v0.48.5
+#12 7.627   Downloaded fips204 v0.4.6
+#12 7.645   Downloaded windows-sys v0.61.2
+#12 7.820   Downloaded windows-sys v0.60.2
+#12 7.969   Downloaded winapi-i686-pc-windows-gnu v0.4.0
+#12 8.100   Downloaded snow v0.9.6
+#12 8.121   Downloaded windows_x86_64_msvc v0.48.5
+#12 8.144   Downloaded windows_aarch64_gnullvm v0.53.1
+#12 8.156   Downloaded windows_aarch64_msvc v0.48.5
+#12 8.169   Downloaded libc v0.2.180
+#12 8.210   Downloaded windows_x86_64_gnu v0.48.5
+#12 8.254   Downloaded windows_x86_64_msvc v0.52.6
+#12 8.270   Downloaded windows_i686_gnu v0.48.5
+#12 8.383   Downloaded windows_aarch64_msvc v0.52.6
+#12 8.426   Downloaded windows_x86_64_gnu v0.52.6
+#12 8.532   Downloaded windows_i686_gnu v0.52.6
+#12 8.672   Downloaded windows_i686_msvc v0.52.6
+#12 8.711   Downloaded tokio v1.49.0
+#12 8.760   Downloaded windows_i686_msvc v0.48.5
+#12 8.769   Downloaded windows_x86_64_gnu v0.53.1
+#12 8.853   Downloaded windows_i686_msvc v0.53.1
+#12 8.918   Downloaded windows_i686_gnu v0.53.1
+#12 8.997   Downloaded winapi v0.3.9
+#12 9.072   Downloaded encoding_rs v0.8.35
+#12 9.107   Downloaded ring v0.17.14
+#12 9.209   Downloaded windows-sys v0.52.0
+#12 9.399   Downloaded windows-sys v0.48.0
+#12 9.708   Downloaded linux-raw-sys v0.11.0
+#12 9.907   Downloaded winapi-x86_64-pc-windows-gnu v0.4.0
+#12 10.49   Downloaded ring v0.16.20
+#12 10.54   Downloaded windows v0.53.0
+#12 DONE 17.6s
+
+#13 [verified 5/7] RUN cargo check --workspace --all-targets --locked --offline
+#13 0.873    Compiling proc-macro2 v1.0.106
+#13 0.873    Compiling unicode-ident v1.0.22
+#13 0.914    Compiling quote v1.0.44
+#13 1.024     Checking cfg-if v1.0.4
+#13 1.038    Compiling libc v0.2.180
+#13 1.562    Compiling syn v2.0.114
+#13 2.309    Compiling version_check v0.9.5
+#13 2.411    Compiling typenum v1.19.0
+#13 2.499    Compiling zerocopy v0.8.37
+#13 2.622    Compiling generic-array v0.14.7
+#13 2.958     Checking subtle v2.6.1
+#13 2.999     Checking const-oid v0.9.6
+#13 3.036     Checking getrandom v0.2.17
+#13 3.087     Checking memchr v2.7.6
+#13 3.348     Checking rand_core v0.6.4
+#13 3.405     Checking pin-project-lite v0.2.16
+#13 3.424    Compiling serde_core v1.0.228
+#13 4.683    Compiling zeroize_derive v1.4.3
+#13 4.779    Compiling zerocopy-derive v0.8.37
+#13 4.869     Checking zeroize v1.8.2
+#13 5.165     Checking block-buffer v0.10.4
+#13 5.201     Checking crypto-common v0.1.7
+#13 5.237     Checking digest v0.10.7
+#13 5.319     Checking once_cell v1.21.3
+#13 5.407    Compiling autocfg v1.5.0
+#13 5.568    Compiling serde v1.0.228
+#13 5.665    Compiling serde_derive v1.0.228
+#13 7.263     Checking ppv-lite86 v0.2.21
+#13 7.309     Checking cpufeatures v0.2.17
+#13 7.325    Compiling libm v0.2.16
+#13 7.385     Checking rand_chacha v0.3.1
+#13 7.407    Compiling num-traits v0.2.19
+#13 7.460     Checking smallvec v1.15.1
+#13 7.463     Checking rand v0.8.5
+#13 7.519    Compiling thiserror v1.0.69
+#13 7.694    Compiling thiserror-impl v1.0.69
+#13 7.991     Checking bytes v1.11.0
+#13 8.179     Checking sha2 v0.10.9
+#13 8.280     Checking arrayref v0.3.9
+#13 8.295    Compiling parking_lot_core v0.9.12
+#13 8.356    Compiling shlex v1.3.0
+#13 8.398     Checking scopeguard v1.2.0
+#13 8.418    Compiling find-msvc-tools v0.1.9
+#13 8.420     Checking lock_api v0.4.14
+#13 8.486    Compiling cc v1.2.55
+#13 8.557    Compiling getrandom v0.3.4
+#13 8.640     Checking parking_lot v0.12.5
+#13 8.759     Checking itoa v1.0.17
+#13 8.799    Compiling zmij v1.0.18
+#13 8.872    Compiling serde_json v1.0.149
+#13 8.989     Checking either v1.15.0
+#13 9.087     Checking errno v0.3.14
+#13 9.118     Checking hex v0.4.3
+#13 9.190     Checking arrayvec v0.7.6
+#13 9.258     Checking signal-hook-registry v1.4.8
+#13 9.311    Compiling blake3 v1.8.3
+#13 9.358     Checking tracing-core v0.1.36
+#13 9.398    Compiling tokio-macros v2.6.0
+#13 9.490     Checking mio v1.1.1
+#13 9.609     Checking socket2 v0.6.2
+#13 9.628     Checking keccak v0.1.5
+#13 9.672     Checking sha3 v0.10.8
+#13 9.718     Checking tokio v1.49.0
+#13 9.862    Compiling async-trait v0.1.89
+#13 10.23     Checking constant_time_eq v0.4.2
+#13 10.26     Checking iana-time-zone v0.1.65
+#13 10.30     Checking chrono v0.4.43
+#13 11.08     Checking uuid v1.20.0
+#13 11.20     Checking bincode v1.3.3
+#13 11.34    Compiling tracing-attributes v0.1.31
+#13 11.80     Checking nexus-core v0.1.0 (/src/nexus-core)
+#13 11.89     Checking tracing v0.1.44
+#13 11.95    Compiling ahash v0.8.12
+#13 12.01    Compiling crossbeam-utils v0.8.21
+#13 12.27     Checking crossbeam-epoch v0.9.18
+#13 12.28    Compiling rayon-core v1.13.0
+#13 12.33     Checking num-integer v0.1.46
+#13 12.35     Checking crossbeam-deque v0.8.6
+#13 12.41     Checking itertools v0.10.5
+#13 12.54     Checking rayon v1.11.0
+#13 12.95     Checking allocator-api2 v0.2.21
+#13 13.06     Checking fips204 v0.4.6
+#13 13.30    Compiling paste v1.0.15
+#13 13.56     Checking nexus-crypto v0.1.0 (/src/nexus-crypto)
+#13 13.56    Compiling syn v1.0.109
+#13 13.62 warning: unused import: `PQSignature`
+#13 13.62  --> nexus-crypto/src/signer.rs:8:35
+#13 13.62   |
+#13 13.62 8 |     Address, Hash256, NexusError, PQSignature, SignatureScheme,
+#13 13.62   |                                   ^^^^^^^^^^^
+#13 13.62   |
+#13 13.62   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 13.62 
+#13 13.92 warning: field `created_at` is never read
+#13 13.92    --> nexus-crypto/src/entropy.rs:233:5
+#13 13.92     |
+#13 13.92 225 | pub struct SentinelSeed {
+#13 13.92     |            ------------ field in this struct
+#13 13.92 ...
+#13 13.92 233 |     created_at: Timestamp,
+#13 13.92     |     ^^^^^^^^^^
+#13 13.92     |
+#13 13.92     = note: `SentinelSeed` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+#13 13.92     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#13 13.92 
+#13 13.95 warning: `nexus-crypto` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-crypto` to apply 1 suggestion)
+#13 14.02     Checking hashbrown v0.14.5
+#13 14.65    Compiling num-bigint v0.4.6
+#13 15.69     Checking ark-std v0.4.0
+#13 16.12     Checking signature v2.2.0
+#13 16.13    Compiling ark-serialize-derive v0.4.2
+#13 16.16    Compiling ark-ff-macros v0.4.2
+#13 16.26     Checking ark-serialize v0.4.2
+#13 16.33    Compiling ark-ff-asm v0.4.2
+#13 16.44    Compiling derivative v2.2.0
+#13 16.49     Checking hmac v0.12.1
+#13 16.52     Checking dashmap v5.5.3
+#13 16.63    Compiling synstructure v0.13.2
+#13 16.86     Checking hashbrown v0.13.2
+#13 17.04     Checking futures-sink v0.3.31
+#13 17.06     Checking futures-core v0.3.31
+#13 17.09     Checking ark-ff v0.4.2
+#13 17.10     Checking futures-channel v0.3.31
+#13 17.16    Compiling zerofrom-derive v0.1.6
+#13 17.60     Checking nexus-anchor v0.1.0 (/src/nexus-anchor)
+#13 17.69 warning: unused imports: `BlockHeight` and `Hash256`
+#13 17.69  --> nexus-anchor/src/validator.rs:5:35
+#13 17.69   |
+#13 17.69 5 | use nexus_core::{Address, Amount, BlockHeight, Hash256, NexusError, Timestamp};
+#13 17.69   |                                   ^^^^^^^^^^^  ^^^^^^^
+#13 17.69   |
+#13 17.69   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 17.69 
+#13 17.69 warning: unused import: `nexus_crypto::DilithiumPublicKey`
+#13 17.69  --> nexus-anchor/src/validator.rs:6:5
+#13 17.69   |
+#13 17.69 6 | use nexus_crypto::DilithiumPublicKey;
+#13 17.69   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#13 17.69 
+#13 18.54 warning: `nexus-anchor` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-anchor` to apply 2 suggestions)
+#13 18.54     Checking tracing-subscriber v0.2.25
+#13 18.73    Compiling futures-macro v0.3.31
+#13 19.11     Checking futures-io v0.3.31
+#13 19.15     Checking futures-task v0.3.31
+#13 19.20     Checking slab v0.4.12
+#13 19.23     Checking ark-poly v0.4.2
+#13 19.26     Checking pin-utils v0.1.0
+#13 19.27     Checking futures-util v0.3.31
+#13 19.56     Checking ark-ec v0.4.2
+#13 20.13     Checking ark-relations v0.4.0
+#13 20.24     Checking zerofrom v0.1.6
+#13 20.27    Compiling yoke-derive v0.8.1
+#13 20.34     Checking stable_deref_trait v1.2.1
+#13 20.35     Checking ark-snark v0.4.0
+#13 20.38     Checking blake2 v0.10.6
+#13 20.45     Checking ark-crypto-primitives v0.4.0
+#13 20.47    Compiling zerovec-derive v0.11.2
+#13 20.61     Checking yoke v0.8.1
+#13 20.67     Checking ark-groth16 v0.4.0
+#13 20.81     Checking ark-bn254 v0.4.0
+#13 20.87     Checking zerovec v0.11.5
+#13 20.92    Compiling displaydoc v0.2.5
+#13 21.07     Checking byteorder v1.5.0
+#13 21.13    Compiling semver v1.0.27
+#13 21.15     Checking num_cpus v1.17.0
+#13 21.20     Checking futures-executor v0.3.31
+#13 21.25    Compiling rustc_version v0.4.1
+#13 21.26     Checking nexus-zk v0.1.0 (/src/nexus-zk)
+#13 21.31 warning: unused import: `NexusError`
+#13 21.31  --> nexus-zk/src/lib.rs:9:27
+#13 21.31   |
+#13 21.31 9 | use nexus_core::{Hash256, NexusError, StateRoot};
+#13 21.31   |                           ^^^^^^^^^^
+#13 21.31   |
+#13 21.31   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 21.31 
+#13 21.37     Checking log v0.4.29
+#13 21.42     Checking futures v0.3.31
+#13 21.44     Checking tinystr v0.8.2
+#13 21.50     Checking aho-corasick v1.1.4
+#13 21.55 warning: `nexus-zk` (lib) generated 1 warning (run `cargo fix --lib -p nexus-zk` to apply 1 suggestion)
+#13 21.55     Checking writeable v0.6.2
+#13 21.61     Checking litemap v0.8.1
+#13 21.67     Checking regex-syntax v0.8.8
+#13 21.88     Checking icu_locale_core v2.1.1
+#13 22.21     Checking zerotrie v0.2.3
+#13 22.30     Checking potential_utf v0.1.4
+#13 22.33    Compiling icu_normalizer_data v2.1.1
+#13 22.37    Compiling icu_properties_data v2.1.2
+#13 22.38     Checking regex-automata v0.4.13
+#13 22.42    Compiling thiserror v2.0.18
+#13 22.54     Checking icu_collections v2.1.1
+#13 22.66     Checking icu_provider v2.1.1
+#13 22.75    Compiling curve25519-dalek v4.1.3
+#13 22.81    Compiling thiserror-impl v2.0.18
+#13 23.56    Compiling pin-project-internal v1.1.10
+#13 23.61    Compiling curve25519-dalek-derive v0.1.1
+#13 23.79     Checking static_assertions v1.1.0
+#13 23.95     Checking pin-project v1.1.10
+#13 23.97     Checking regex v1.12.2
+#13 24.07     Checking icu_properties v2.1.2
+#13 24.13     Checking icu_normalizer v2.1.1
+#13 24.25     Checking unsigned-varint v0.8.0
+#13 24.29    Compiling data-encoding v2.10.0
+#13 24.47     Checking idna_adapter v1.2.1
+#13 24.49     Checking quick-protobuf v0.8.1
+#13 24.56    Compiling data-encoding-macro-internal v0.1.17
+#13 24.58     Checking ed25519 v2.2.3
+#13 24.63    Compiling match-lookup v0.1.2
+#13 24.72     Checking core2 v0.4.0
+#13 24.75     Checking const-str v0.4.3
+#13 24.79     Checking utf8_iter v1.0.4
+#13 24.82     Checking percent-encoding v2.3.2
+#13 24.86     Checking spin v0.9.9
+#13 24.89     Checking lazy_static v1.5.0
+#13 24.91     Checking base256emoji v1.0.2
+#13 24.96     Checking form_urlencoded v1.2.2
+#13 24.97     Checking data-encoding-macro v0.1.19
+#13 24.98     Checking idna v1.1.0
+#13 24.99     Checking multihash v0.19.3
+#13 25.03     Checking ed25519-dalek v2.2.0
+#13 25.08     Checking hkdf v0.12.4
+#13 25.13     Checking futures-timer v3.0.3
+#13 25.14     Checking equivalent v1.0.2
+#13 25.16     Checking base-x v0.2.11
+#13 25.19     Checking bs58 v0.5.1
+#13 25.20     Checking multibase v0.9.2
+#13 25.25     Checking libp2p-identity v0.2.13
+#13 25.28     Checking url v2.5.8
+#13 25.36     Checking web-time v1.1.0
+#13 25.38     Checking fnv v1.0.7
+#13 25.40     Checking unsigned-varint v0.7.2
+#13 25.43     Checking multistream-select v0.13.0
+#13 25.47     Checking multiaddr v0.18.2
+#13 25.58     Checking rw-stream-sink v0.4.0
+#13 25.61     Checking nexus-active v0.1.0 (/src/nexus-active)
+#13 25.62     Checking void v1.0.2
+#13 25.64     Checking libp2p-core v0.41.3
+#13 25.68 warning: unused import: `PQSignature`
+#13 25.68  --> nexus-active/src/batch.rs:5:39
+#13 25.68   |
+#13 25.68 5 | use nexus_core::{Hash256, NexusError, PQSignature, SignedTransaction, StateRoot, BlockHeight, Timestamp};
+#13 25.68   |                                       ^^^^^^^^^^^
+#13 25.68   |
+#13 25.68   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 25.68 
+#13 25.94    Compiling anyhow v1.0.100
+#13 26.05     Checking base64ct v1.8.3
+#13 26.13     Checking foldhash v0.1.5
+#13 26.17     Checking hashbrown v0.15.5
+#13 26.17 warning: `nexus-active` (lib) generated 1 warning (run `cargo fix --lib -p nexus-active` to apply 1 suggestion)
+#13 26.17     Checking pem-rfc7468 v0.7.0
+#13 26.28     Checking netlink-packet-utils v0.5.2
+#13 26.34     Checking der v0.7.10
+#13 26.40     Checking lru v0.12.5
+#13 26.45     Checking instant v0.1.13
+#13 26.46     Checking libp2p-swarm v0.44.2
+#13 26.70     Checking spki v0.7.3
+#13 26.76     Checking netlink-packet-core v0.7.0
+#13 26.85     Checking asynchronous-codec v0.7.0
+#13 26.92    Compiling ring v0.17.14
+#13 26.94    Compiling crunchy v0.2.4
+#13 27.01     Checking bitflags v1.3.2
+#13 27.02     Checking utf8parse v0.2.2
+#13 27.17     Checking anstyle-parse v0.2.7
+#13 27.23     Checking pkcs8 v0.10.2
+#13 27.28     Checking netlink-sys v0.8.8
+#13 27.34     Checking rand_core v0.9.5
+#13 27.40     Checking anstyle-query v1.1.5
+#13 27.42     Checking is_terminal_polyfill v1.70.2
+#13 27.45     Checking anstyle v1.0.13
+#13 27.52     Checking colorchoice v1.0.4
+#13 27.54    Compiling tiny-keccak v2.0.2
+#13 27.65     Checking anstream v0.6.21
+#13 27.72     Checking rand_chacha v0.9.0
+#13 27.78     Checking netlink-proto v0.11.5
+#13 27.92     Checking netlink-packet-route v0.17.1
+#13 28.42     Checking nix v0.26.4
+#13 28.79     Checking quick-protobuf-codec v0.3.1
+#13 28.82    Compiling snow v0.9.6
+#13 28.82    Compiling heck v0.5.0
+#13 28.87    Compiling prometheus-client v0.22.3
+#13 28.89     Checking clap_lex v0.7.7
+#13 28.91     Checking base64 v0.21.7
+#13 28.94     Checking strsim v0.11.1
+#13 29.00     Checking nohash-hasher v0.2.0
+#13 29.00     Checking untrusted v0.9.0
+#13 29.07     Checking clap_builder v4.5.56
+#13 29.52    Compiling clap_derive v4.5.55
+#13 29.73     Checking rtnetlink v0.13.1
+#13 29.96     Checking rand v0.9.2
+#13 30.19     Checking futures-bounded v0.2.4
+#13 30.22    Compiling prometheus-client-derive-encode v0.4.2
+#13 30.24     Checking ff v0.13.1
+#13 30.31    Compiling ucd-trie v0.1.7
+#13 30.36     Checking dtoa v1.0.11
+#13 30.43     Checking ipnet v2.11.0
+#13 30.51     Checking base16ct v0.2.0
+#13 30.54     Checking sec1 v0.7.3
+#13 30.61    Compiling pest v2.8.5
+#13 30.67     Checking if-watch v3.2.1
+#13 30.82    Compiling const-random-macro v0.1.16
+#13 30.96     Checking group v0.13.0
+#13 31.03     Checking clap v4.5.56
+#13 31.05     Checking uint v0.9.5
+#13 31.10     Checking yamux v0.13.8
+#13 31.44     Checking yamux v0.12.1
+#13 31.45     Checking futures-ticker v0.0.3
+#13 31.48     Checking x25519-dalek v2.0.1
+#13 31.51     Checking crypto-bigint v0.5.5
+#13 31.58     Checking socket2 v0.5.10
+#13 31.68     Checking hex_fmt v0.3.0
+#13 31.70     Checking libp2p-gossipsub v0.46.1
+#13 31.94     Checking elliptic-curve v0.13.8
+#13 32.06     Checking libp2p-tcp v0.41.0
+#13 32.17     Checking libp2p-yamux v0.45.2
+#13 32.23     Checking libp2p-noise v0.44.0
+#13 32.36    Compiling pest_meta v2.8.5
+#13 32.40     Checking libp2p-kad v0.45.3
+#13 32.92     Checking const-random v0.1.18
+#13 32.94     Checking libp2p-identify v0.44.2
+#13 33.11     Checking libp2p-allow-block-list v0.3.0
+#13 33.12     Checking libp2p-connection-limits v0.3.1
+#13 33.17     Checking half v2.7.1
+#13 33.20    Compiling num-bigint-dig v0.8.6
+#13 33.26     Checking ciborium-io v0.2.2
+#13 33.28     Checking plotters-backend v0.3.7
+#13 33.33     Checking hashbrown v0.16.1
+#13 33.37     Checking plotters-svg v0.3.7
+#13 33.40     Checking ciborium-ll v0.2.2
+#13 33.46     Checking libp2p v0.53.2
+#13 33.55     Checking indexmap v2.13.0
+#13 33.56     Checking dlv-list v0.5.2
+#13 33.62    Compiling pest_generator v2.8.5
+#13 33.80     Checking rfc6979 v0.4.0
+#13 33.83     Checking num-iter v0.1.46
+#13 33.86     Checking serde_spanned v0.6.9
+#13 33.89     Checking toml_datetime v0.6.11
+#13 33.91     Checking winnow v0.7.14
+#13 33.98     Checking toml_write v0.1.2
+#13 34.04     Checking same-file v1.0.6
+#13 34.06     Checking cast v0.3.0
+#13 34.11     Checking criterion-plot v0.5.0
+#13 34.19     Checking walkdir v2.5.0
+#13 34.58     Checking toml_edit v0.22.27
+#13 34.94    Compiling pest_derive v2.8.5
+#13 35.35     Checking ecdsa v0.16.9
+#13 35.43     Checking ordered-multimap v0.7.3
+#13 35.50     Checking ciborium v0.2.2
+#13 35.52     Checking plotters v0.3.7
+#13 35.71     Checking primeorder v0.13.6
+#13 35.80     Checking pkcs1 v0.7.5
+#13 35.90     Checking hashlink v0.8.4
+#13 35.95     Checking tinytemplate v1.2.1
+#13 36.01     Checking bitflags v2.10.0
+#13 36.03     Checking is-terminal v0.4.17
+#13 36.05     Checking encoding_rs v0.8.35
+#13 36.06     Checking oorandom v11.1.5
+#13 36.08     Checking minimal-lexical v0.2.1
+#13 36.16     Checking arraydeque v0.5.1
+#13 36.22     Checking anes v0.1.6
+#13 36.29     Checking unicode-segmentation v1.12.0
+#13 36.42     Checking convert_case v0.6.0
+#13 36.46     Checking yaml-rust2 v0.8.1
+#13 36.48     Checking criterion v0.5.1
+#13 36.61     Checking nom v7.1.3
+#13 37.17     Checking ron v0.8.1
+#13 37.32     Checking rsa v0.9.10
+#13 37.43     Checking p256 v0.13.2
+#13 37.50     Checking rust-ini v0.20.0
+#13 37.53     Checking toml v0.8.23
+#13 37.57     Checking json5 v0.4.1
+#13 37.66     Checking nexus-network v0.1.0 (/src/nexus-network)
+#13 37.69 warning: unused import: `NexusError`
+#13 37.69  --> nexus-network/src/lib.rs:6:34
+#13 37.69   |
+#13 37.69 6 | use nexus_core::{Block, Hash256, NexusError, SignedTransaction};
+#13 37.69   |                                  ^^^^^^^^^^
+#13 37.69   |
+#13 37.69   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 37.69 
+#13 37.69     Checking sharded-slab v0.1.7
+#13 37.83 warning: `nexus-network` (lib) generated 1 warning (run `cargo fix --lib -p nexus-network` to apply 1 suggestion)
+#13 37.83     Checking matchers v0.2.0
+#13 37.86     Checking tracing-log v0.2.0
+#13 37.86     Checking thread_local v1.1.9
+#13 37.90     Checking pathdiff v0.2.3
+#13 37.91     Checking nu-ansi-term v0.50.3
+#13 37.92     Checking config v0.14.1
+#13 37.98     Checking tracing-subscriber v0.3.22
+#13 38.11     Checking nexus-sentinel v0.1.0 (/src/nexus-sentinel)
+#13 38.13 warning: unused imports: `Hash256` and `NexusError`
+#13 38.13   --> nexus-sentinel/src/lib.rs:14:27
+#13 38.13    |
+#13 38.13 14 | use nexus_core::{Address, Hash256, NexusError, Timestamp};
+#13 38.13    |                           ^^^^^^^  ^^^^^^^^^^
+#13 38.13    |
+#13 38.13    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 38.13 
+#13 38.13 warning: unused import: `std::collections::HashMap`
+#13 38.13   --> nexus-sentinel/src/lib.rs:15:5
+#13 38.13    |
+#13 38.13 15 | use std::collections::HashMap;
+#13 38.13    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+#13 38.13 
+#13 38.15 warning: `nexus-sentinel` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-sentinel` to apply 2 suggestions)
+#13 38.43     Checking nexus-node v0.1.0 (/src/nexus-node)
+#13 38.92 warning: `nexus-crypto` (lib test) generated 2 warnings (2 duplicates)
+#13 38.97     Checking nexus-cli v0.1.0 (/src/nexus-cli)
+#13 39.81 warning: `nexus-network` (lib test) generated 1 warning (1 duplicate)
+#13 40.60 warning: struct `Division` is never constructed
+#13 40.60  --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:9:12
+#13 40.60   |
+#13 40.60 9 | pub struct Division {
+#13 40.60   |            ^^^^^^^^
+#13 40.60   |
+#13 40.60   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#13 40.60 
+#13 40.60 warning: struct `Audit` is never constructed
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:15:12
+#13 40.60    |
+#13 40.60 15 | pub struct Audit {
+#13 40.60    |            ^^^^^
+#13 40.60 
+#13 40.60 warning: struct `Composition` is never constructed
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:24:12
+#13 40.60    |
+#13 40.60 24 | pub struct Composition {
+#13 40.60    |            ^^^^^^^^^^^
+#13 40.60 
+#13 40.60 warning: function `trim` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:30:4
+#13 40.60    |
+#13 40.60 30 | fn trim(mut p: Vec<Felt>) -> Vec<Felt> {
+#13 40.60    |    ^^^^
+#13 40.60 
+#13 40.60 warning: function `degree` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:35:8
+#13 40.60    |
+#13 40.60 35 | pub fn degree(p: &[Felt]) -> Option<usize> {
+#13 40.60    |        ^^^^^^
+#13 40.60 
+#13 40.60 warning: function `degree_ext` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:39:8
+#13 40.60    |
+#13 40.60 39 | pub fn degree_ext(p: &[Fp2]) -> Option<usize> {
+#13 40.60    |        ^^^^^^^^^^
+#13 40.60 
+#13 40.60 warning: function `sub` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:43:4
+#13 40.60    |
+#13 40.60 43 | fn sub(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+#13 40.60    |    ^^^
+#13 40.60 
+#13 40.60 warning: function `mul` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:50:4
+#13 40.60    |
+#13 40.60 50 | fn mul(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+#13 40.60    |    ^^^
+#13 40.60 
+#13 40.60 warning: function `shifted` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:59:4
+#13 40.60    |
+#13 40.60 59 | fn shifted(a: &[Felt], factor: Felt) -> Vec<Felt> {
+#13 40.60    |    ^^^^^^^
+#13 40.60 
+#13 40.60 warning: function `divide` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:68:4
+#13 40.60    |
+#13 40.60 68 | fn divide(a: &[Felt], b: &[Felt]) -> Result<Division, String> {
+#13 40.60    |    ^^^^^^
+#13 40.60 
+#13 40.60 warning: function `audit` is never used
+#13 40.60   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:87:8
+#13 40.60    |
+#13 40.60 87 | pub fn audit(trace: &[Felt], start: Felt, output: Felt) -> Result<Audit, String> {
+#13 40.60    |        ^^^^^
+#13 40.60 
+#13 40.60 warning: function `compose` is never used
+#13 40.60    --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:127:8
+#13 40.60     |
+#13 40.60 127 | pub fn compose(audit: &Audit, alphas: [Fp2; 3]) -> Composition {
+#13 40.60     |        ^^^^^^^
+#13 40.60 
+#13 40.60 warning: function `eval_ext` is never used
+#13 40.60    --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:144:8
+#13 40.60     |
+#13 40.60 144 | pub fn eval_ext(coefficients: &[Fp2], x: Felt) -> Fp2 {
+#13 40.60     |        ^^^^^^^^
+#13 40.60 
+#13 40.60 warning: `nexus-zk` (test "tg2_trace_proximity") generated 13 warnings
+#13 40.87 warning: `nexus-active` (lib test) generated 1 warning (1 duplicate)
+#13 40.94 warning: `nexus-zk` (lib test) generated 1 warning (1 duplicate)
+#13 41.17 warning: unused import: `StateRoot`
+#13 41.17  --> nexus-anchor/tests/chain_safety.rs:3:41
+#13 41.17   |
+#13 41.17 3 |     SignatureScheme, SignedTransaction, StateRoot, Transaction};
+#13 41.17   |                                         ^^^^^^^^^
+#13 41.17   |
+#13 41.17   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#13 41.17 
+#13 41.23 warning: `nexus-anchor` (test "chain_safety") generated 1 warning (run `cargo fix --test "chain_safety" -p nexus-anchor` to apply 1 suggestion)
+#13 41.29 warning: `nexus-sentinel` (lib test) generated 2 warnings (2 duplicates)
+#13 42.02 warning: `nexus-anchor` (lib test) generated 2 warnings (2 duplicates)
+#13 42.02     Finished `dev` profile [unoptimized + debuginfo] target(s) in 41.58s
+#13 DONE 42.5s
+
+#14 [verified 6/7] RUN cargo test --workspace --locked --offline
+#14 0.585    Compiling cfg-if v1.0.4
+#14 0.588    Compiling libc v0.2.180
+#14 0.602    Compiling zeroize v1.8.2
+#14 0.676    Compiling zerocopy v0.8.37
+#14 1.428    Compiling typenum v1.19.0
+#14 1.701    Compiling subtle v2.6.1
+#14 1.751    Compiling const-oid v0.9.6
+#14 1.818    Compiling memchr v2.7.6
+#14 2.164    Compiling generic-array v0.14.7
+#14 2.428    Compiling getrandom v0.2.17
+#14 2.508    Compiling rand_core v0.6.4
+#14 2.604    Compiling crypto-common v0.1.7
+#14 2.669    Compiling block-buffer v0.10.4
+#14 2.714    Compiling digest v0.10.7
+#14 2.770    Compiling pin-project-lite v0.2.16
+#14 2.794    Compiling ppv-lite86 v0.2.21
+#14 2.812    Compiling serde_core v1.0.228
+#14 2.940    Compiling rand_chacha v0.3.1
+#14 3.174    Compiling once_cell v1.21.3
+#14 3.262    Compiling rand v0.8.5
+#14 3.578    Compiling cpufeatures v0.2.17
+#14 3.595    Compiling libm v0.2.16
+#14 3.860    Compiling serde v1.0.228
+#14 4.092    Compiling smallvec v1.15.1
+#14 4.163    Compiling bytes v1.11.0
+#14 4.190    Compiling thiserror v1.0.69
+#14 4.213    Compiling num-traits v0.2.19
+#14 4.446    Compiling arrayref v0.3.9
+#14 4.465    Compiling sha2 v0.10.9
+#14 4.511    Compiling scopeguard v1.2.0
+#14 4.533    Compiling lock_api v0.4.14
+#14 4.619    Compiling parking_lot_core v0.9.12
+#14 4.639    Compiling getrandom v0.3.4
+#14 4.712    Compiling parking_lot v0.12.5
+#14 4.719    Compiling itoa v1.0.17
+#14 4.807    Compiling zmij v1.0.18
+#14 4.917    Compiling serde_json v1.0.149
+#14 4.939    Compiling tracing-core v0.1.36
+#14 5.210    Compiling arrayvec v0.7.6
+#14 5.289    Compiling hex v0.4.3
+#14 5.386    Compiling errno v0.3.14
+#14 5.430    Compiling keccak v0.1.5
+#14 5.509    Compiling sha3 v0.10.8
+#14 5.516    Compiling signal-hook-registry v1.4.8
+#14 5.624    Compiling socket2 v0.6.2
+#14 5.627    Compiling mio v1.1.1
+#14 5.852    Compiling constant_time_eq v0.4.2
+#14 5.860    Compiling iana-time-zone v0.1.65
+#14 5.909    Compiling either v1.15.0
+#14 5.964    Compiling chrono v0.4.43
+#14 5.983    Compiling blake3 v1.8.3
+#14 6.201    Compiling tracing v0.1.44
+#14 6.285    Compiling tokio v1.49.0
+#14 6.779    Compiling uuid v1.20.0
+#14 6.952    Compiling bincode v1.3.3
+#14 7.117    Compiling nexus-core v0.1.0 (/src/nexus-core)
+#14 8.500    Compiling ahash v0.8.12
+#14 8.566    Compiling crossbeam-utils v0.8.21
+#14 8.779    Compiling crossbeam-epoch v0.9.18
+#14 8.916    Compiling crossbeam-deque v0.8.6
+#14 8.982    Compiling num-integer v0.1.46
+#14 9.112    Compiling allocator-api2 v0.2.21
+#14 9.258    Compiling rayon-core v1.13.0
+#14 9.623    Compiling rayon v1.11.0
+#14 9.932    Compiling fips204 v0.4.6
+#14 10.55    Compiling itertools v0.10.5
+#14 10.62    Compiling nexus-crypto v0.1.0 (/src/nexus-crypto)
+#14 10.71 warning: unused import: `PQSignature`
+#14 10.71  --> nexus-crypto/src/signer.rs:8:35
+#14 10.71   |
+#14 10.71 8 |     Address, Hash256, NexusError, PQSignature, SignatureScheme,
+#14 10.71   |                                   ^^^^^^^^^^^
+#14 10.71   |
+#14 10.71   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 10.71 
+#14 11.11 warning: field `created_at` is never read
+#14 11.11    --> nexus-crypto/src/entropy.rs:233:5
+#14 11.11     |
+#14 11.11 225 | pub struct SentinelSeed {
+#14 11.11     |            ------------ field in this struct
+#14 11.11 ...
+#14 11.11 233 |     created_at: Timestamp,
+#14 11.11     |     ^^^^^^^^^^
+#14 11.11     |
+#14 11.11     = note: `SentinelSeed` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+#14 11.11     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#14 11.11 
+#14 11.20    Compiling hashbrown v0.14.5
+#14 11.57    Compiling num-bigint v0.4.6
+#14 11.76 warning: `nexus-crypto` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-crypto` to apply 1 suggestion)
+#14 11.76    Compiling ark-std v0.4.0
+#14 12.20    Compiling ark-ff-macros v0.4.2
+#14 12.49    Compiling ark-serialize v0.4.2
+#14 12.54    Compiling dashmap v5.5.3
+#14 12.60    Compiling ark-ff v0.4.2
+#14 12.79    Compiling nexus-anchor v0.1.0 (/src/nexus-anchor)
+#14 12.88 warning: unused imports: `BlockHeight` and `Hash256`
+#14 12.88  --> nexus-anchor/src/validator.rs:5:35
+#14 12.88   |
+#14 12.88 5 | use nexus_core::{Address, Amount, BlockHeight, Hash256, NexusError, Timestamp};
+#14 12.88   |                                   ^^^^^^^^^^^  ^^^^^^^
+#14 12.88   |
+#14 12.88   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 12.88 
+#14 12.88 warning: unused import: `nexus_crypto::DilithiumPublicKey`
+#14 12.88  --> nexus-anchor/src/validator.rs:6:5
+#14 12.88   |
+#14 12.88 6 | use nexus_crypto::DilithiumPublicKey;
+#14 12.88   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#14 12.88 
+#14 14.70    Compiling hashbrown v0.13.2
+#14 14.92    Compiling signature v2.2.0
+#14 14.97    Compiling ark-poly v0.4.2
+#14 15.04 warning: `nexus-anchor` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-anchor` to apply 2 suggestions)
+#14 15.04    Compiling tracing-subscriber v0.2.25
+#14 15.28    Compiling hmac v0.12.1
+#14 15.32    Compiling futures-sink v0.3.31
+#14 15.34    Compiling futures-core v0.3.31
+#14 15.35    Compiling ark-ec v0.4.2
+#14 15.39    Compiling futures-channel v0.3.31
+#14 15.46    Compiling ark-relations v0.4.0
+#14 15.61    Compiling futures-io v0.3.31
+#14 15.66    Compiling futures-task v0.3.31
+#14 15.71    Compiling slab v0.4.12
+#14 15.76    Compiling pin-utils v0.1.0
+#14 15.78    Compiling futures-util v0.3.31
+#14 16.00    Compiling zerofrom v0.1.6
+#14 16.06    Compiling ark-snark v0.4.0
+#14 16.09    Compiling blake2 v0.10.6
+#14 16.29    Compiling stable_deref_trait v1.2.1
+#14 16.31    Compiling yoke v0.8.1
+#14 16.37    Compiling ark-crypto-primitives v0.4.0
+#14 16.40    Compiling ark-groth16 v0.4.0
+#14 16.55    Compiling ark-bn254 v0.4.0
+#14 16.66    Compiling zerovec v0.11.5
+#14 16.89    Compiling byteorder v1.5.0
+#14 16.97    Compiling nexus-zk v0.1.0 (/src/nexus-zk)
+#14 17.01 warning: unused import: `NexusError`
+#14 17.01  --> nexus-zk/src/lib.rs:9:27
+#14 17.01   |
+#14 17.01 9 | use nexus_core::{Hash256, NexusError, StateRoot};
+#14 17.01   |                           ^^^^^^^^^^
+#14 17.01   |
+#14 17.01   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 17.01 
+#14 17.14    Compiling num_cpus v1.17.0
+#14 17.30    Compiling futures-executor v0.3.31
+#14 17.56    Compiling log v0.4.29
+#14 17.63    Compiling futures v0.3.31
+#14 17.65    Compiling tinystr v0.8.2
+#14 17.67 warning: `nexus-zk` (lib) generated 1 warning (run `cargo fix --lib -p nexus-zk` to apply 1 suggestion)
+#14 17.67    Compiling litemap v0.8.1
+#14 17.71    Compiling writeable v0.6.2
+#14 17.74    Compiling zerotrie v0.2.3
+#14 17.79    Compiling icu_locale_core v2.1.1
+#14 17.87    Compiling potential_utf v0.1.4
+#14 17.92    Compiling icu_collections v2.1.1
+#14 18.13    Compiling icu_provider v2.1.1
+#14 18.24    Compiling aho-corasick v1.1.4
+#14 18.26    Compiling regex-syntax v0.8.8
+#14 19.31    Compiling regex-automata v0.4.13
+#14 19.62    Compiling thiserror v2.0.18
+#14 19.65    Compiling icu_normalizer_data v2.1.1
+#14 19.67    Compiling icu_properties_data v2.1.2
+#14 19.72    Compiling static_assertions v1.1.0
+#14 19.74    Compiling curve25519-dalek v4.1.3
+#14 20.29    Compiling pin-project v1.1.10
+#14 20.31    Compiling icu_properties v2.1.2
+#14 20.96    Compiling icu_normalizer v2.1.1
+#14 21.23    Compiling unsigned-varint v0.8.0
+#14 21.29    Compiling idna_adapter v1.2.1
+#14 21.32    Compiling quick-protobuf v0.8.1
+#14 21.43    Compiling ed25519 v2.2.3
+#14 21.50    Compiling core2 v0.4.0
+#14 21.57    Compiling const-str v0.4.3
+#14 21.71    Compiling utf8_iter v1.0.4
+#14 21.76    Compiling percent-encoding v2.3.2
+#14 21.84    Compiling data-encoding v2.10.0
+#14 22.11    Compiling data-encoding-macro v0.1.19
+#14 22.12    Compiling form_urlencoded v1.2.2
+#14 22.18    Compiling idna v1.1.0
+#14 22.24    Compiling base256emoji v1.0.2
+#14 22.30    Compiling multihash v0.19.3
+#14 22.35    Compiling ed25519-dalek v2.2.0
+#14 22.46    Compiling regex v1.12.2
+#14 22.56    Compiling hkdf v0.12.4
+#14 22.61    Compiling equivalent v1.0.2
+#14 22.63    Compiling bs58 v0.5.1
+#14 22.72    Compiling futures-timer v3.0.3
+#14 22.74    Compiling base-x v0.2.11
+#14 22.78    Compiling multibase v0.9.2
+#14 22.86    Compiling libp2p-identity v0.2.13
+#14 22.90    Compiling url v2.5.8
+#14 23.09    Compiling unsigned-varint v0.7.2
+#14 23.13    Compiling web-time v1.1.0
+#14 23.14    Compiling fnv v1.0.7
+#14 23.16    Compiling multistream-select v0.13.0
+#14 23.31    Compiling multiaddr v0.18.2
+#14 23.35    Compiling rw-stream-sink v0.4.0
+#14 23.37    Compiling nexus-active v0.1.0 (/src/nexus-active)
+#14 23.45 warning: unused import: `PQSignature`
+#14 23.45  --> nexus-active/src/batch.rs:5:39
+#14 23.45   |
+#14 23.45 5 | use nexus_core::{Hash256, NexusError, PQSignature, SignedTransaction, StateRoot, BlockHeight, Timestamp};
+#14 23.45   |                                       ^^^^^^^^^^^
+#14 23.45   |
+#14 23.45   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 23.45 
+#14 23.66    Compiling spin v0.9.9
+#14 23.69    Compiling void v1.0.2
+#14 23.72    Compiling libp2p-core v0.41.3
+#14 24.20    Compiling lazy_static v1.5.0
+#14 24.22    Compiling foldhash v0.1.5
+#14 24.27    Compiling hashbrown v0.15.5
+#14 24.53    Compiling anyhow v1.0.100
+#14 24.70    Compiling netlink-packet-utils v0.5.2
+#14 24.79    Compiling lru v0.12.5
+#14 24.85    Compiling instant v0.1.13
+#14 24.87    Compiling libp2p-swarm v0.44.2
+#14 25.12 warning: `nexus-active` (lib) generated 1 warning (run `cargo fix --lib -p nexus-active` to apply 1 suggestion)
+#14 25.12    Compiling netlink-packet-core v0.7.0
+#14 25.19    Compiling asynchronous-codec v0.7.0
+#14 25.27    Compiling bitflags v1.3.2
+#14 25.29    Compiling netlink-sys v0.8.8
+#14 25.38    Compiling rand_core v0.9.5
+#14 25.46    Compiling base64ct v1.8.3
+#14 25.55    Compiling pem-rfc7468 v0.7.0
+#14 25.69    Compiling rand_chacha v0.9.0
+#14 25.74    Compiling netlink-proto v0.11.5
+#14 25.82    Compiling nix v0.26.4
+#14 25.88    Compiling netlink-packet-route v0.17.1
+#14 26.31    Compiling quick-protobuf-codec v0.3.1
+#14 26.35    Compiling base64 v0.21.7
+#14 26.48    Compiling nohash-hasher v0.2.0
+#14 26.50    Compiling untrusted v0.9.0
+#14 26.53    Compiling ring v0.17.14
+#14 27.12    Compiling rtnetlink v0.13.1
+#14 27.60    Compiling rand v0.9.2
+#14 27.62    Compiling der v0.7.10
+#14 27.86    Compiling crunchy v0.2.4
+#14 27.88    Compiling futures-bounded v0.2.4
+#14 27.93    Compiling ipnet v2.11.0
+#14 28.14    Compiling dtoa v1.0.11
+#14 28.19    Compiling prometheus-client v0.22.3
+#14 28.24    Compiling if-watch v3.2.1
+#14 28.33    Compiling spki v0.7.3
+#14 28.40    Compiling uint v0.9.5
+#14 28.40    Compiling yamux v0.13.8
+#14 28.50    Compiling snow v0.9.6
+#14 28.70    Compiling yamux v0.12.1
+#14 28.75    Compiling futures-ticker v0.0.3
+#14 28.78    Compiling x25519-dalek v2.0.1
+#14 28.82    Compiling socket2 v0.5.10
+#14 28.97    Compiling utf8parse v0.2.2
+#14 28.99    Compiling hex_fmt v0.3.0
+#14 29.03    Compiling ucd-trie v0.1.7
+#14 29.03    Compiling const-random-macro v0.1.16
+#14 29.12    Compiling pest v2.8.5
+#14 29.13    Compiling libp2p-gossipsub v0.46.1
+#14 29.99    Compiling anstyle-parse v0.2.7
+#14 30.05    Compiling libp2p-tcp v0.41.0
+#14 30.27    Compiling libp2p-yamux v0.45.2
+#14 30.37    Compiling libp2p-noise v0.44.0
+#14 30.61    Compiling libp2p-kad v0.45.3
+#14 31.05    Compiling pkcs8 v0.10.2
+#14 31.15    Compiling libp2p-identify v0.44.2
+#14 31.62    Compiling libp2p-connection-limits v0.3.1
+#14 31.72    Compiling libp2p-allow-block-list v0.3.0
+#14 31.80    Compiling anstyle v1.0.13
+#14 31.88    Compiling anstyle-query v1.1.5
+#14 31.91    Compiling is_terminal_polyfill v1.70.2
+#14 31.92    Compiling colorchoice v1.0.4
+#14 31.93    Compiling libp2p v0.53.2
+#14 31.95    Compiling anstream v0.6.21
+#14 32.05    Compiling pest_meta v2.8.5
+#14 32.07    Compiling const-random v0.1.18
+#14 32.08    Compiling clap_lex v0.7.7
+#14 32.16    Compiling hashbrown v0.16.1
+#14 32.41    Compiling strsim v0.11.1
+#14 32.56    Compiling clap_builder v4.5.56
+#14 32.79    Compiling indexmap v2.13.0
+#14 33.13    Compiling pest_generator v2.8.5
+#14 33.44    Compiling dlv-list v0.5.2
+#14 33.52    Compiling toml_datetime v0.6.11
+#14 33.62    Compiling serde_spanned v0.6.9
+#14 33.66    Compiling ff v0.13.1
+#14 33.70    Compiling base16ct v0.2.0
+#14 33.75    Compiling winnow v0.7.14
+#14 34.64    Compiling toml_write v0.1.2
+#14 34.70    Compiling toml_edit v0.22.27
+#14 34.77    Compiling sec1 v0.7.3
+#14 34.88    Compiling group v0.13.0
+#14 34.94    Compiling clap v4.5.56
+#14 34.95    Compiling ordered-multimap v0.7.3
+#14 35.05    Compiling pest_derive v2.8.5
+#14 35.13    Compiling nexus-network v0.1.0 (/src/nexus-network)
+#14 35.16 warning: unused import: `NexusError`
+#14 35.16  --> nexus-network/src/lib.rs:6:34
+#14 35.16   |
+#14 35.16 6 | use nexus_core::{Block, Hash256, NexusError, SignedTransaction};
+#14 35.16   |                                  ^^^^^^^^^^
+#14 35.16   |
+#14 35.16   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 35.16 
+#14 35.65 warning: `nexus-network` (lib) generated 1 warning (run `cargo fix --lib -p nexus-network` to apply 1 suggestion)
+#14 35.65    Compiling hashlink v0.8.4
+#14 35.77    Compiling bitflags v2.10.0
+#14 35.84    Compiling crypto-bigint v0.5.5
+#14 36.38    Compiling encoding_rs v0.8.35
+#14 36.45    Compiling unicode-segmentation v1.12.0
+#14 36.61    Compiling minimal-lexical v0.2.1
+#14 36.70    Compiling arraydeque v0.5.1
+#14 36.77    Compiling nom v7.1.3
+#14 37.15    Compiling yaml-rust2 v0.8.1
+#14 37.48    Compiling convert_case v0.6.0
+#14 37.64    Compiling elliptic-curve v0.13.8
+#14 37.67    Compiling ron v0.8.1
+#14 37.78    Compiling toml v0.8.23
+#14 38.09    Compiling json5 v0.4.1
+#14 38.16    Compiling rust-ini v0.20.0
+#14 38.37    Compiling sharded-slab v0.1.7
+#14 38.54    Compiling matchers v0.2.0
+#14 38.59    Compiling tracing-log v0.2.0
+#14 38.63    Compiling nexus-sentinel v0.1.0 (/src/nexus-sentinel)
+#14 38.64 warning: unused imports: `Hash256` and `NexusError`
+#14 38.64   --> nexus-sentinel/src/lib.rs:14:27
+#14 38.64    |
+#14 38.64 14 | use nexus_core::{Address, Hash256, NexusError, Timestamp};
+#14 38.64    |                           ^^^^^^^  ^^^^^^^^^^
+#14 38.64    |
+#14 38.64    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 38.64 
+#14 38.64 warning: unused import: `std::collections::HashMap`
+#14 38.64   --> nexus-sentinel/src/lib.rs:15:5
+#14 38.64    |
+#14 38.64 15 | use std::collections::HashMap;
+#14 38.64    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+#14 38.64 
+#14 38.68    Compiling half v2.7.1
+#14 38.68 warning: `nexus-sentinel` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-sentinel` to apply 2 suggestions)
+#14 38.68    Compiling thread_local v1.1.9
+#14 38.77    Compiling pathdiff v0.2.3
+#14 38.79    Compiling ciborium-io v0.2.2
+#14 38.80    Compiling nu-ansi-term v0.50.3
+#14 38.81    Compiling plotters-backend v0.3.7
+#14 38.90    Compiling plotters-svg v0.3.7
+#14 38.92    Compiling tracing-subscriber v0.3.22
+#14 38.98    Compiling ciborium-ll v0.2.2
+#14 39.05    Compiling config v0.14.1
+#14 39.84    Compiling rfc6979 v0.4.0
+#14 39.87    Compiling num-iter v0.1.46
+#14 39.90    Compiling same-file v1.0.6
+#14 39.95    Compiling cast v0.3.0
+#14 40.00    Compiling criterion-plot v0.5.0
+#14 40.09    Compiling walkdir v2.5.0
+#14 40.19    Compiling num-bigint-dig v0.8.6
+#14 40.22    Compiling ecdsa v0.16.9
+#14 40.38    Compiling ciborium v0.2.2
+#14 40.63    Compiling plotters v0.3.7
+#14 40.82    Compiling primeorder v0.13.6
+#14 40.97    Compiling pkcs1 v0.7.5
+#14 41.20    Compiling tinytemplate v1.2.1
+#14 41.31    Compiling is-terminal v0.4.17
+#14 41.33    Compiling anes v0.1.6
+#14 41.40    Compiling oorandom v11.1.5
+#14 41.41    Compiling rsa v0.9.10
+#14 41.44    Compiling criterion v0.5.1
+#14 41.71    Compiling p256 v0.13.2
+#14 41.87    Compiling nexus-node v0.1.0 (/src/nexus-node)
+#14 46.80    Compiling nexus-cli v0.1.0 (/src/nexus-cli)
+#14 48.06 warning: `nexus-crypto` (lib test) generated 2 warnings (2 duplicates)
+#14 52.64 warning: `nexus-network` (lib test) generated 1 warning (1 duplicate)
+#14 57.67 warning: struct `Division` is never constructed
+#14 57.67  --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:9:12
+#14 57.67   |
+#14 57.67 9 | pub struct Division {
+#14 57.67   |            ^^^^^^^^
+#14 57.67   |
+#14 57.67   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#14 57.67 
+#14 57.67 warning: struct `Audit` is never constructed
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:15:12
+#14 57.67    |
+#14 57.67 15 | pub struct Audit {
+#14 57.67    |            ^^^^^
+#14 57.67 
+#14 57.67 warning: struct `Composition` is never constructed
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:24:12
+#14 57.67    |
+#14 57.67 24 | pub struct Composition {
+#14 57.67    |            ^^^^^^^^^^^
+#14 57.67 
+#14 57.67 warning: function `trim` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:30:4
+#14 57.67    |
+#14 57.67 30 | fn trim(mut p: Vec<Felt>) -> Vec<Felt> {
+#14 57.67    |    ^^^^
+#14 57.67 
+#14 57.67 warning: function `degree` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:35:8
+#14 57.67    |
+#14 57.67 35 | pub fn degree(p: &[Felt]) -> Option<usize> {
+#14 57.67    |        ^^^^^^
+#14 57.67 
+#14 57.67 warning: function `degree_ext` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:39:8
+#14 57.67    |
+#14 57.67 39 | pub fn degree_ext(p: &[Fp2]) -> Option<usize> {
+#14 57.67    |        ^^^^^^^^^^
+#14 57.67 
+#14 57.67 warning: function `sub` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:43:4
+#14 57.67    |
+#14 57.67 43 | fn sub(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+#14 57.67    |    ^^^
+#14 57.67 
+#14 57.67 warning: function `mul` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:50:4
+#14 57.67    |
+#14 57.67 50 | fn mul(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+#14 57.67    |    ^^^
+#14 57.67 
+#14 57.67 warning: function `shifted` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:59:4
+#14 57.67    |
+#14 57.67 59 | fn shifted(a: &[Felt], factor: Felt) -> Vec<Felt> {
+#14 57.67    |    ^^^^^^^
+#14 57.67 
+#14 57.67 warning: function `divide` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:68:4
+#14 57.67    |
+#14 57.67 68 | fn divide(a: &[Felt], b: &[Felt]) -> Result<Division, String> {
+#14 57.67    |    ^^^^^^
+#14 57.67 
+#14 57.67 warning: function `audit` is never used
+#14 57.67   --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:87:8
+#14 57.67    |
+#14 57.67 87 | pub fn audit(trace: &[Felt], start: Felt, output: Felt) -> Result<Audit, String> {
+#14 57.67    |        ^^^^^
+#14 57.67 
+#14 57.67 warning: function `compose` is never used
+#14 57.67    --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:127:8
+#14 57.67     |
+#14 57.67 127 | pub fn compose(audit: &Audit, alphas: [Fp2; 3]) -> Composition {
+#14 57.67     |        ^^^^^^^
+#14 57.67 
+#14 57.67 warning: function `eval_ext` is never used
+#14 57.67    --> nexus-zk/tests/../experiments/tg2_air_algebra.rs:144:8
+#14 57.67     |
+#14 57.67 144 | pub fn eval_ext(coefficients: &[Fp2], x: Felt) -> Fp2 {
+#14 57.67     |        ^^^^^^^^
+#14 57.67 
+#14 58.10 warning: `nexus-zk` (test "tg2_trace_proximity") generated 13 warnings
+#14 59.89 warning: `nexus-active` (lib test) generated 1 warning (1 duplicate)
+#14 59.91 warning: unused import: `StateRoot`
+#14 59.91  --> nexus-anchor/tests/chain_safety.rs:3:41
+#14 59.91   |
+#14 59.91 3 |     SignatureScheme, SignedTransaction, StateRoot, Transaction};
+#14 59.91   |                                         ^^^^^^^^^
+#14 59.91   |
+#14 59.91   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+#14 59.91 
+#14 60.00 warning: `nexus-zk` (lib test) generated 1 warning (1 duplicate)
+#14 60.62 warning: `nexus-anchor` (test "chain_safety") generated 1 warning (run `cargo fix --test "chain_safety" -p nexus-anchor` to apply 1 suggestion)
+#14 62.97 warning: `nexus-sentinel` (lib test) generated 2 warnings (2 duplicates)
+#14 65.03 warning: `nexus-anchor` (lib test) generated 2 warnings (2 duplicates)
+#14 65.09     Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 04s
+#14 65.11      Running unittests src/lib.rs (target/debug/deps/nexus_active-6fd327069a5e9e86)
+#14 65.11 
+#14 65.11 running 39 tests
+#14 65.14 test authorization::tests::archived_freeze_remains_effective_after_submission_window_expires ... ok
+#14 65.16 test batch::tests::bloque_completo_se_agrega_atomicamente_y_cuenta_el_tamano_serializado ... ok
+#14 65.18 test batch::tests::finalizar_rango_invertido_no_consume_el_contexto_del_lote ... ok
+#14 65.27 test authorization::tests::forged_duplicate_or_invalid_time_receipts_are_rejected_on_restore ... ok
+#14 65.27 test batch::tests::test_batch_submitter ... ok
+#14 65.28 test batch::tests::test_batch_builder ... ok
+#14 65.48 test chain::tests::certificados_truncados_o_con_sufijos_no_registran_ni_envian_el_lote ... ok
+#14 65.54 test chain::tests::configured_transaction_domain_is_shared_by_admission_and_block_execution ... ok
+#14 65.68 test chain::tests::envios_simultaneos_del_mismo_lote_solo_registran_un_envio ... ok
+#14 65.70 test chain::tests::cableado_escalar_sintetico_verifica_antes_del_envio_y_no_confunde_indice_con_altura ... ok
+#14 65.71 test chain::tests::la_cadena_fija_filas_y_trabajo_antes_de_recibir_el_certificado ... ok
+#14 65.86 test chain::tests::local_checkpoint_preserves_an_accepted_scalar_certificate_and_verified_root ... ok
+#14 65.93 test chain::tests::l1_registration_failure_does_not_register_a_valid_scalar_root ... ok
+#14 66.11 test chain::tests::preparing_a_valid_scalar_fixture_does_not_register_its_root_or_submission ... ok
+#14 66.19 test chain::tests::processed_recovery_checks_l1_before_registering_a_valid_scalar_root ... ok
+#14 66.32 test chain::tests::submission_retries_preserve_the_validity_certificate_and_local_context ... ok
+#14 66.33 test chain::tests::test_active_chain_creation ... ok
+#14 66.33 test chain::tests::test_chain_stats ... ok
+#14 66.34 test chain::tests::test_produce_block ... ok
+#14 66.35 test chain::tests::un_certificado_valido_no_autoriza_lotes_desconocidos_ni_sobres_alterados ... ok
+#14 66.37 test execution::tests::test_execute_transfer ... ok
+#14 66.37 test execution::tests::test_execution_engine_creation ... ok
+#14 66.37 test pq_verifier::tests::garbage_bytes_do_not_deserialize_as_proof ... ok
+#14 66.50 test pq_verifier::tests::prove_and_verify_bound ... ok
+#14 66.52 test chain::tests::recovering_a_processed_retry_preserves_the_accepted_scalar_certificate ... ok
+#14 66.56 test pq_verifier::tests::wrong_post_root_rejected ... ok
+#14 66.59 test sequencer::tests::concurrent_duplicate_admission_has_a_single_winner ... ok
+#14 66.69 test sequencer::tests::failed_execution_releases_current_nonce_and_preserves_future_dependencies ... ok
+#14 66.71 test pq_verifier::tests::serialization_roundtrip ... ok
+#14 66.76 test sequencer::tests::incomplete_batches_and_cancelled_reservations_do_not_advance_nonces ... ok
+#14 66.81 test sequencer::tests::test_duplicate_transaction ... ok
+#14 66.81 test sequencer::tests::test_sequencer_creation ... ok
+#14 66.84 test sequencer::tests::test_submit_transaction ... ok
+#14 66.88 test sequencer::tests::test_build_batch ... ok
+#14 66.88 test verifier::tests::test_optimistic_verification ... ok
+#14 66.98 test verifier::tests::test_legacy_stark_requires_linked_contract_and_context ... ok
+#14 66.98 test verifier::tests::test_verifier_creation ... ok
+#14 66.98 test verifier::tests::test_zk_rejects_format_only_without_context ... ok
+#14 67.02 test verifier::tests::test_stark_pq_rejects_wrong_post_root ... ok
+#14 67.02 
+#14 67.02 test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.91s
+#14 67.02 
+#14 67.02      Running tests/active_chain_contract.rs (target/debug/deps/active_chain_contract-d8033423e4663acb)
+#14 67.02 
+#14 67.02 running 6 tests
+#14 67.05 test intervalo_cero_se_rechaza_antes_de_consumir_transacciones ... ok
+#14 67.06 test cambiar_el_lote_y_recalcular_su_hash_no_cambia_el_contexto_local ... ok
+#14 67.11 test modo_optimista_permanece_provisional_y_no_admite_envios_duplicados ... ok
+#14 67.12 test produccion_concurrente_no_reutiliza_alturas_ni_contextos_de_estado ... ok
+#14 67.14 test lote_local_sin_certificado_valido_no_se_envia_y_un_rechazo_no_muta_el_estado ... ok
+#14 67.24 test vacios_conservan_raiz_y_la_rotacion_del_lote_no_parte_bloques ... ok
+#14 67.24 
+#14 67.24 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+#14 67.24 
+#14 67.24      Running tests/batch_retry.rs (target/debug/deps/batch_retry-60090991053cfaf3)
+#14 67.24 
+#14 67.24 running 8 tests
+#14 67.37 test an_included_mismatched_attempt_does_not_hide_a_later_matching_one ... ok
+#14 67.38 test a_delayed_original_attempt_can_confirm_after_a_retry ... ok
+#14 67.41 test concurrent_retries_with_the_same_expected_hash_have_one_winner ... ok
+#14 67.47 test confirmation_and_retry_race_preserves_one_confirmation_and_consistent_history ... ok
+#14 67.50 test incorrect_hash_can_be_retried_without_changing_the_local_batch ... ok
+#14 67.59 test stale_empty_and_reserved_hashes_do_not_consume_attempts_or_reservations ... ok
+#14 67.60 test multiple_included_attempts_choose_the_first_recorded_matching_intent ... ok
+#14 67.67 test three_retries_are_allowed_and_a_fourth_leaves_the_pending_attempt_intact ... ok
+#14 67.67 
+#14 67.67 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+#14 67.67 
+#14 67.67      Running tests/chain_policy.rs (target/debug/deps/chain_policy-b734e94260ddc469)
+#14 67.67 
+#14 67.67 running 7 tests
+#14 67.71 test active_chain_rejects_foreign_transactions_at_its_public_boundary ... ok
+#14 67.71 test configured_sequencer_and_restored_engine_use_the_explicit_domain ... ok
+#14 67.73 test default_engine_rejects_foreign_signatures_before_balance_or_nonce_changes ... ok
+#14 67.76 test default_sequencer_rejects_foreign_signatures_without_reserving_a_nonce ... ok
+#14 67.80 test foreign_deployment_and_call_are_rejected_before_any_execution_effect ... ok
+#14 67.83 test mixed_batch_rejects_foreign_entries_without_consuming_the_honest_nonce ... ok
+#14 67.85 test relabelling_a_foreign_transaction_does_not_replace_its_signature ... ok
+#14 67.85 
+#14 67.85 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+#14 67.85 
+#14 67.85      Running tests/emergency_freeze.rs (target/debug/deps/emergency_freeze-11794db97e634559)
+#14 67.85 
+#14 67.85 running 6 tests
+#14 67.96 test direct_execution_and_checkpoints_keep_the_full_emergency_context ... ok
+#14 68.04 test concurrent_admission_and_duplicate_freezes_have_one_authorized_transition ... ok
+#14 68.11 test freeze_cancels_external_reservations_and_leaves_other_senders_operational ... ok
+#14 68.21 test independent_freeze_cancels_work_and_survives_operational_rotations ... ok
+#14 68.22 test invalid_freezes_do_not_cancel_pending_work_or_publish_status ... ok
+#14 68.32 test recovery_signers_cannot_transfer_even_when_funded_and_cannot_enter_operational_registry ... ok
+#14 68.32 
+#14 68.32 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+#14 68.32 
+#14 68.32      Running tests/execution_contract.rs (target/debug/deps/execution_contract-691decacad3e6a82)
+#14 68.32 
+#14 68.32 running 3 tests
+#14 68.35 test a_funded_call_to_existing_code_must_not_claim_a_simulated_success ... ok
+#14 68.37 test deployment_cannot_claim_success_while_ignoring_initialization ... ok
+#14 68.38 test unsupported_contract_work_does_not_prevent_a_real_transfer_at_the_same_nonce ... ok
+#14 68.38 
+#14 68.38 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+#14 68.38 
+#14 68.38      Running tests/execution_safety.rs (target/debug/deps/execution_safety-cd89d25ff12c7394)
+#14 68.38 
+#14 68.38 running 8 tests
+#14 68.41 test batch_gas_accounting_rejects_u64_max_without_overflow_or_nonce_change ... ok
+#14 68.44 test r07_forged_pending_transaction_must_not_block_the_real_sender_nonce ... ok
+#14 68.45 test failed_deployment_and_insufficient_balance_leave_state_and_nonce_unchanged ... ok
+#14 68.47 test r09_transaction_cannot_succeed_with_less_gas_than_execution_requires ... ok
+#14 68.48 test r11_unrelated_attacker_supplied_trace_must_not_prove_fraud ... ok
+#14 68.49 test r08_honest_transactions_from_one_sender_must_be_nonce_ordered ... ok
+#14 68.49 test timeout_cannot_promote_optimistic_proof_without_a_fraud_verification_contract ... ok
+#14 68.53 test r12_oversized_high_priority_transaction_must_not_starve_other_senders ... ok
+#14 68.53 
+#14 68.53 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+#14 68.53 
+#14 68.53      Running tests/key_authorization.rs (target/debug/deps/key_authorization-c8782caafa7138e9)
+#14 68.53 
+#14 68.53 running 7 tests
+#14 68.59 test direct_execution_and_serialization_preserve_revocation_without_state_changes ... ok
+#14 68.67 test registered_envelopes_bind_identity_epoch_payload_and_key_and_require_policy ... ok
+#14 68.71 test concurrent_admission_leaves_no_revoked_work_after_policy_update_returns ... ok
+#14 68.76 test rejected_registry_records_do_not_change_policy_or_pending_work ... ok
+#14 68.80 test reserved_work_blocks_policy_update_and_v1_checkpoint_is_rejected ... ok
+#14 68.85 test retirement_purges_work_and_cannot_fall_back_to_a_legacy_signature ... ok
+#14 68.93 test rotation_releases_pending_nonces_and_new_key_spends_the_same_account ... ok
+#14 68.93 
+#14 68.93 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+#14 68.93 
+#14 68.94      Running tests/l1_confirmation.rs (target/debug/deps/l1_confirmation-e2ba1a1eadd1b723)
+#14 68.94 
+#14 68.94 running 8 tests
+#14 68.98 test an_invented_submission_hash_cannot_confirm_a_local_batch ... ok
+#14 69.01 test an_included_transfer_cannot_stand_in_for_a_batch_submission ... ok
+#14 69.07 test concurrent_confirmations_record_exactly_one_observation ... ok
+#14 69.11 test local_da_helper_is_not_signed_transaction_inclusion ... ok
+#14 69.11 test confirmation_requires_processing_then_records_exact_local_l1_provenance ... ok
+#14 69.18 test one_submission_hash_cannot_be_assigned_to_two_local_batches ... ok
+#14 69.21 test zero_submission_hash_is_rejected_without_consuming_the_local_batch ... ok
+#14 69.53 test processed_submission_must_match_root_count_payload_and_sequencer_identity ... ok
+#14 69.53 
+#14 69.53 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.59s
+#14 69.53 
+#14 69.53      Running tests/lean_contract.rs (target/debug/deps/lean_contract-942d5cd27bd6c318)
+#14 69.53 
+#14 69.53 running 7 tests
+#14 69.72 test contexto_tipo_altura_entradas_y_todas_las_coordenadas_se_comprueban ... ok
+#14 69.82 test altura_es_contexto_externo_y_no_se_anuncia_como_restriccion_air ... ok
+#14 69.82 test modo_hibrido_no_cae_a_aceptacion_optimista_por_tamano ... ok
+#14 69.82 test no_reinterpreta_hashes_arbitrarios_ni_alias_modulares_como_escalares ... ok
+#14 69.82 test rechaza_basura_truncados_sufijos_y_perfiles_sin_cambiar_estado ... ok
+#14 69.84 test modo_optimista_no_registra_raiz_antes_de_finalizar_ni_acredita_el_contrato ... ok
+#14 69.93 test solo_la_ruta_con_contexto_registra_una_raiz_tras_aceptar ... ok
+#14 69.93 
+#14 69.93 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+#14 69.93 
+#14 69.93      Running tests/processed_recovery.rs (target/debug/deps/processed_recovery-88f04da499d6218f)
+#14 69.93 
+#14 69.93 running 8 tests
+#14 70.05 test concurrent_recovery_commits_one_initial_observation ... ok
+#14 70.12 test historical_expiry_and_consumed_nonce_do_not_erase_a_processed_inclusion ... ok
+#14 70.26 test omitted_initial_registration_recovers_exact_packet_and_original_block_once ... ok
+#14 70.38 test actually_processed_different_payload_or_publisher_cannot_claim_the_local_batch ... ok
+#14 70.39 test preparation_helpers_rejected_blocks_and_another_source_are_not_processed_inclusion ... ok
+#14 70.50 test recovery_cannot_replace_existing_attempts_or_discard_their_history ... ok
+#14 70.58 test processed_inclusion_cannot_bypass_validity_or_hybrid_certificate_policy ... ok
+#14 70.62 test same_hash_does_not_authorize_an_altered_signed_envelope ... ok
+#14 70.62 
+#14 70.62 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.68s
+#14 70.62 
+#14 70.62      Running tests/processed_retry.rs (target/debug/deps/processed_retry-b999d60f24e4dd61)
+#14 70.62 
+#14 70.62 running 8 tests
+#14 70.69 test a_hash_only_intent_can_recover_an_expired_but_processed_replacement ... ok
+#14 70.96 test concurrent_recovery_or_normal_retry_has_only_one_winning_transition ... ok
+#14 71.11 test a_processed_different_batch_or_publisher_cannot_replace_the_local_attempt ... ok
+#14 71.18 test omitted_signed_retry_preserves_both_packets_and_original_inclusion ... ok
+#14 71.32 test recovery_targets_the_missing_packet_and_does_not_duplicate_an_already_recorded_attempt ... ok
+#14 71.42 test recovery_uses_the_same_three_retry_limit_and_cannot_consume_a_fourth ... ok
+#14 71.53 test stale_absent_or_globally_reserved_attempts_cannot_change_pending_history ... ok
+#14 71.57 test unprocessed_or_altered_packets_are_rejected_before_attempts_change ... ok
+#14 71.57 
+#14 71.57 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+#14 71.57 
+#14 71.57      Running tests/signed_registration.rs (target/debug/deps/signed_registration-d4c6c55d6899a77a)
+#14 71.57 
+#14 71.57 running 8 tests
+#14 71.77 test forged_envelopes_and_invalid_l1_policy_are_rejected_without_recording_bytes ... ok
+#14 71.83 test concurrent_signed_registration_and_retries_each_have_one_winner ... ok
+#14 71.88 test hash_only_intents_remain_distinct_and_can_retry_with_a_validated_packet ... ok
+#14 71.97 test invalid_or_stale_retries_preserve_counter_packet_history_and_reservations ... ok
+#14 72.03 test valid_signatures_for_different_payloads_or_publishers_do_not_reserve_an_intent ... ok
+#14 72.07 test validated_registration_retains_exact_signed_bytes_before_and_after_confirmation ... ok
+#14 72.25 test validated_retry_keeps_both_packets_and_confirms_the_new_nonce ... ok
+#14 72.27 test validated_retries_remain_bounded_and_do_not_store_a_rejected_fourth_packet ... ok
+#14 72.27 
+#14 72.27 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+#14 72.27 
+#14 72.27      Running tests/submission_preparation.rs (target/debug/deps/submission_preparation-55cfd928ff28ae0d)
+#14 72.27 
+#14 72.27 running 8 tests
+#14 72.41 test a_stale_preparation_is_rejected_and_can_be_prepared_again_for_an_explicit_retry ... ok
+#14 72.58 test invalid_gas_cost_expiry_and_balance_leave_both_chains_unchanged ... ok
+#14 72.64 test l1_budget_and_payload_bounds_are_checked_by_the_preparer ... ok
+#14 72.90 test preparation_derives_l1_domain_nonce_time_and_batch_fields_without_publishing_effects ... ok
+#14 73.02 test transaction_preflight_is_separate_from_a_proposers_reward_overflow ... ok
+#14 73.11 test unknown_or_altered_batches_and_a_different_publisher_are_rejected ... ok
+#14 73.23 test validity_and_hybrid_preparation_require_a_valid_certificate_without_recording_a_root ... ok
+#14 74.61 test a_payload_fitting_l2_must_also_fit_the_signed_l1_block_envelope ... ok
+#14 74.61 
+#14 74.61 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.34s
+#14 74.61 
+#14 74.61      Running tests/tg2_verification.rs (target/debug/deps/tg2_verification-78eef7c3df6ee674)
+#14 74.61 
+#14 74.61 running 15 tests
+#14 74.63 test active_rejects_garbage_without_marking_root_verified ... ok
+#14 74.63 test active_rejects_legacy_stark_without_trusted_context ... ok
+#14 74.63 test canonical_bounds_trace_size_before_arithmetic ... ok
+#14 74.67 test canonical_executes_stark_checks_after_structural_validation ... ok
+#14 74.67 test canonical_refuses_arbitrary_hash_roots ... ok
+#14 74.68 test canonical_rejects_empty_truncated_trailing_and_oversized_payloads ... ok
+#14 74.70 test canonical_does_not_claim_height_is_in_the_air_statement ... ok
+#14 74.73 test canonical_rejects_missing_queries_layers_and_paths ... ok
+#14 74.76 test canonical_rejects_mutations_in_every_byte_of_pre_and_post ... ok
+#14 74.76 test canonical_rejects_wrong_type_height_and_outer_inputs ... ok
+#14 74.77 test canonical_rejects_noncanonical_deserialized_field_elements ... ok
+#14 74.83 test canonical_valid_proof_accepts ... ok
+#14 74.85 test legacy_field_reduction_also_collides_within_first_eight_bytes ... ok
+#14 74.85 test public_openings_recover_the_witness_for_the_16_row_example ... ok
+#14 78.45 test legacy_ignores_each_of_the_last_24_bytes_of_both_roots ... ok
+#14 78.45 
+#14 78.45 test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.85s
+#14 78.45 
+#14 78.45      Running unittests src/lib.rs (target/debug/deps/nexus_anchor-566d1e8e3661ae75)
+#14 78.45 
+#14 78.45 running 20 tests
+#14 78.46 test chain::tests::monetary_restore_rejects_forged_balances_or_counters_even_with_matching_archived_roots ... ok
+#14 78.46 test chain::tests::test_chain_creation ... ok
+#14 78.47 test chain::tests::test_chain_stats ... ok
+#14 78.48 test chain::tests::test_l2_batch_submission ... ok
+#14 78.48 test consensus::tests::test_consensus_config_default ... ok
+#14 78.48 test consensus::tests::test_pos_creation ... ok
+#14 78.49 test data_availability::tests::corrupt_or_missing_chunks_in_any_payload_fail_the_local_integrity_check ... ok
+#14 78.49 test data_availability::tests::corrupted_receipt_metadata_is_rejected_without_allocating_from_it ... ok
+#14 78.49 test data_availability::tests::test_da_proof_generation ... ok
+#14 78.49 test data_availability::tests::test_da_sampling ... ok
+#14 78.49 test data_availability::tests::test_da_submit_and_reconstruct ... ok
+#14 78.49 test finality::tests::test_add_block ... ok
+#14 78.49 test finality::tests::test_finality_gadget_creation ... ok
+#14 78.50 test chain::tests::processed_packet_validation_propagates_inconsistent_da_storage ... ok
+#14 78.50 test finality::tests::test_fork_choice ... ok
+#14 78.50 test validator::tests::test_slashing ... ok
+#14 78.50 test validator::tests::test_validator_creation ... ok
+#14 78.50 test validator::tests::test_validator_registry ... ok
+#14 78.50 test validator::tests::test_validator_set ... ok
+#14 78.53 test finality::tests::test_finalization ... ok
+#14 78.53 
+#14 78.53 test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+#14 78.53 
+#14 78.53      Running tests/bft_rounds.rs (target/debug/deps/bft_rounds-f1a7ca3ea17acdc1)
+#14 78.53 
+#14 78.53 running 4 tests
+#14 78.79 test a_single_sender_cannot_jump_rounds_or_allocate_unbounded_future_state ... ok
+#14 78.96 test signatures_bind_phase_height_round_member_context_and_full_block_body ... ok
+#14 79.17 test two_votes_and_retransmissions_do_not_create_a_quorum_or_timeout ... ok
+#14 79.25 test restored_lock_rejects_conflicting_proposal_and_accepts_only_a_sufficiently_new_pol ... ok
+#14 79.25 
+#14 79.25 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.73s
+#14 79.25 
+#14 79.25      Running tests/block_policy.rs (target/debug/deps/block_policy-933a128a3682c099)
+#14 79.26 
+#14 79.26 running 8 tests
+#14 79.31 test configured_domain_accepts_its_signature_and_rejects_a_relabelled_signature ... ok
+#14 79.36 test default_budget_rejects_aggregate_declared_gas_even_at_zero_price ... ok
+#14 79.36 test aggregate_gas_cannot_wrap_at_u64_maximum ... ok
+#14 79.39 test default_chain_rejects_a_valid_signature_for_another_chain ... ok
+#14 79.40 test received_block_with_a_correct_root_still_must_match_the_local_domain ... ok
+#14 79.44 test single_reservation_at_u64_maximum_is_representable_and_accepted ... ok
+#14 79.46 test zero_budget_accepts_empty_blocks_and_rejects_transactions ... ok
+#14 79.52 test received_overbudget_block_is_atomic_and_exact_budget_can_be_retried ... ok
+#14 79.52 
+#14 79.52 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+#14 79.52 
+#14 79.52      Running tests/chain_safety.rs (target/debug/deps/chain_safety-132796a179b779ca)
+#14 79.52 
+#14 79.52 running 7 tests
+#14 79.52 test accepts_linked_successive_blocks_and_rejects_concurrent_duplicate_rewards ... ok
+#14 79.55 test r01_l1_must_reject_a_cryptographically_invalid_signature ... ok
+#14 79.56 test r02_accepting_a_block_must_advance_l1_height ... ok
+#14 79.57 test r03_processing_the_same_l1_block_must_not_mint_rewards_twice ... ok
+#14 79.61 test r04_rejected_l1_block_must_not_keep_earlier_transaction_mutations ... ok
+#14 79.63 test r05_unsigned_precommit_from_a_nonvalidator_must_not_commit_or_hang ... ok
+#14 79.65 test failed_block_rolls_back_validator_registration_balance_and_batch_side_effects ... ok
+#14 79.65 
+#14 79.65 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+#14 79.65 
+#14 79.65      Running tests/consensus_safety.rs (target/debug/deps/consensus_safety-9340fcc73082d545)
+#14 79.65 
+#14 79.65 running 5 tests
+#14 79.78 test malformed_conflicting_and_wrong_context_votes_do_not_replace_honest_votes ... ok
+#14 79.96 test exactly_two_thirds_and_repeated_votes_cannot_commit_but_full_quorum_can ... ok
+#14 79.96 test quorum_uses_stake_not_validator_count_or_truncated_whole_tokens ... ok
+#14 79.97 test weaker_float_policy_is_rejected_instead_of_overriding_the_lean_quorum ... ok
+#14 80.07 test rejects_unknown_voters_and_cross_phase_replays_without_advancing ... ok
+#14 80.07 
+#14 80.07 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s
+#14 80.07 
+#14 80.07      Running tests/finality_safety.rs (target/debug/deps/finality_safety-768414c06b1bf28c)
+#14 80.08 
+#14 80.08 running 5 tests
+#14 80.15 test authority_changes_cannot_rewrite_a_pending_block_snapshot ... ok
+#14 80.22 test rejects_forged_signatures_weights_and_target_replays ... ok
+#14 80.23 test quorum_cannot_finalize_a_fork_that_does_not_descend_from_the_anchor ... ok
+#14 80.31 test zero_authority_and_missing_ancestry_never_create_a_certificate ... ok
+#14 80.32 test two_thirds_duplicates_and_untrusted_totals_cannot_finalize ... ok
+#14 80.32 
+#14 80.32 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+#14 80.32 
+#14 80.32      Running tests/local_da.rs (target/debug/deps/local_da-aaa04177af835242)
+#14 80.32 
+#14 80.32 running 9 tests
+#14 80.33 test altered_chunk_bytes_lengths_indexes_and_paths_are_rejected ... ok
+#14 80.33 test empty_submission_is_rejected_without_registering_an_empty_commitment ... ok
+#14 80.33 test exact_chunk_lengths_and_one_two_and_odd_leaf_trees_round_trip ... ok
+#14 80.33 test honest_generated_proof_verifies_against_the_registered_commitment ... ok
+#14 80.33 test independent_two_leaf_oracle_matches_the_receipt_and_proof_order ... ok
+#14 80.33 test multiple_submissions_at_one_height_cannot_silently_select_overwritten_data ... ok
+#14 80.34 test payload_indexes_keep_every_submission_and_its_proofs_separate ... ok
+#14 80.34 test receipt_version_digest_sizes_coding_and_root_are_bound_or_validated ... ok
+#14 81.44 test empty_oversized_and_unknown_requests_preserve_registered_payloads ... ok
+#14 81.44 
+#14 81.44 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+#14 81.44 
+#14 81.44      Running tests/local_da_chain.rs (target/debug/deps/local_da_chain-9cce8c6e1fb72d21)
+#14 81.44 
+#14 81.44 running 2 tests
+#14 81.45 test local_registration_preserves_both_payloads_at_one_height_and_rejects_empty_data ... ok
+#14 81.59 test signed_submissions_survive_root_rejection_retry_and_a_new_height ... ok
+#14 81.59 
+#14 81.59 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+#14 81.59 
+#14 81.59      Running tests/monetary_profile.rs (target/debug/deps/monetary_profile-8343c79579f4d45e)
+#14 81.59 
+#14 81.59 running 11 tests
+#14 81.65 test checkpoint_requires_expected_genesis_and_replays_money_before_accepting_it ... ok
+#14 81.66 test deployment_domain_prevents_replay_and_cannot_be_added_after_signing ... ok
+#14 81.69 test exhausted_cap_stays_exhausted_after_faucet_transfer_and_burning ... ok
+#14 81.74 test failed_batch_and_forged_root_leave_balances_supply_nonce_and_da_unchanged ... ok
+#14 81.74 test fee_split_has_exact_rounding_and_handles_the_entire_amount_range ... ok
+#14 81.75 test genesis_is_canonical_binds_policy_and_rejects_invalid_allocations ... ok
+#14 81.75 test issuance_halves_at_exact_heights_and_burn_never_reopens_the_lifetime_cap ... ok
+#14 81.80 test payload_bytes_are_metered_and_unsupported_operations_cannot_create_escrow ... ok
+#14 81.87 test signed_batch_submission_charges_bytes_and_reconstructs_payload_after_replay ... ok
+#14 81.91 test fee_accounting_handles_sender_receiver_and_proposer_aliases ... ok
+#14 81.94 test transfers_charge_actual_fees_split_burn_and_replay_identically_on_four_replicas ... ok
+#14 81.94 
+#14 81.94 test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+#14 81.94 
+#14 81.94      Running tests/state_root_contract.rs (target/debug/deps/state_root_contract-21dd888e251b41a3)
+#14 81.94 
+#14 81.94 running 9 tests
+#14 81.95 test empty_block_root_includes_reward_and_preparation_has_no_effects ... ok
+#14 81.96 test empty_or_arbitrary_claimed_root_is_rejected_without_reward_or_storage ... ok
+#14 81.96 test header_version_receipts_and_backdated_time_are_rejected_before_publication ... ok
+#14 81.97 test reward_overflow_rejects_even_an_empty_block_without_advancing_height ... ok
+#14 81.98 test root_is_checked_against_local_reward_policy_and_the_current_parent ... ok
+#14 82.01 test block_time_controls_expiry_and_historical_replay_is_deterministic ... ok
+#14 82.03 test self_transfer_and_reward_to_the_sender_have_one_exact_balance_update ... ok
+#14 82.05 test transfer_root_commits_nonce_balances_and_final_reward_without_inventing_gas_fees ... ok
+#14 82.11 test wrong_root_rolls_back_valid_registry_and_da_effects_then_allows_honest_retry ... ok
+#14 82.11 
+#14 82.11 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+#14 82.11 
+#14 82.11      Running tests/validator_accounting.rs (target/debug/deps/validator_accounting-9e5bcf4d8f9fb09a)
+#14 82.11 
+#14 82.11 running 3 tests
+#14 82.11 test maximum_stake_penalty_uses_exact_percentage_without_overflow ... ok
+#14 82.11 test slashing_updates_total_stake_and_removal_conserves_the_remainder ... ok
+#14 82.11 test stake_overflow_rejects_registration_without_changing_the_set ... ok
+#14 82.11 
+#14 82.11 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 82.11 
+#14 82.11      Running unittests src/main.rs (target/debug/deps/nexus-7418730421c932a7)
+#14 82.11 
+#14 82.11 running 1 test
+#14 82.11 test testnet::tests::decimal_amounts_are_exact_and_reject_ambiguous_or_overflowing_input ... ok
+#14 82.11 
+#14 82.11 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 82.11 
+#14 82.11      Running tests/testnet_processes.rs (target/debug/deps/testnet_processes-bae1ccf149b30d81)
+#14 82.12 
+#14 82.12 running 1 test
+#14 104.7 test four_tcp_processes_transfer_halt_without_quorum_restart_and_verify_history ... ok
+#14 104.7 
+#14 104.7 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.56s
+#14 104.7 
+#14 104.7      Running unittests src/lib.rs (target/debug/deps/nexus_core-6fc725da44c8503c)
+#14 104.7 
+#14 104.7 running 15 tests
+#14 104.7 test block::tests::test_block_validation ... ok
+#14 104.7 test block::tests::test_block_hash_deterministic ... ok
+#14 104.7 test block::tests::test_genesis_block ... ok
+#14 104.7 test merkle::tests::test_empty_merkle_tree ... ok
+#14 104.7 test merkle::tests::test_merkle_tree_multiple_leaves ... ok
+#14 104.7 test merkle::tests::test_merkle_tree_non_power_of_two ... ok
+#14 104.7 test merkle::tests::test_merkle_tree_single_leaf ... ok
+#14 104.7 test state::tests::test_account_state ... ok
+#14 104.7 test state::tests::test_in_memory_state_transfer ... ok
+#14 104.7 test transaction::tests::test_transaction_hash_deterministic ... ok
+#14 104.7 test transaction::tests::test_transfer_transaction ... ok
+#14 104.7 test types::tests::test_address_from_pk ... ok
+#14 104.7 test types::tests::test_amount_arithmetic ... ok
+#14 104.7 test types::tests::test_hash256 ... ok
+#14 104.7 test merkle::tests::test_sparse_merkle_tree ... ok
+#14 104.7 
+#14 104.7 test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+#14 104.7 
+#14 104.7      Running tests/journal.rs (target/debug/deps/journal-0de4680d00288017)
+#14 104.7 
+#14 104.7 running 7 tests
+#14 104.7 test abrupt_exit_with_partial_temporary_preserves_every_committed_record ... ok
+#14 104.8 test corruption_truncation_missing_middle_and_spliced_records_fail_closed ... ok
+#14 104.8 test empty_oversized_legacy_and_malformed_records_are_rejected ... ok
+#14 104.8 test exclusive_writer_streamed_recovery_and_append_preserve_all_records ... ok
+#14 104.8 test failed_publication_keeps_sequence_and_allows_retry ... ok
+#14 104.8 test visitor_failure_does_not_rewrite_or_discard_the_committed_history ... ok
+#14 121.3 test aggregate_history_exceeds_64_mib_without_an_oversized_record ... ok
+#14 121.3 
+#14 121.3 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.63s
+#14 121.3 
+#14 121.3      Running tests/local_checkpoint.rs (target/debug/deps/local_checkpoint-d57d7ad206a8a3ed)
+#14 121.3 
+#14 121.3 running 3 tests
+#14 121.3 test checkpoint_codec_rejects_trailing_bytes_and_unrepresentable_collection_lengths ... ok
+#14 121.4 test only_one_writer_opens_a_store_and_partial_files_do_not_publish_a_new_generation ... ok
+#14 121.4 test corrupt_latest_checkpoint_is_rejected_instead_of_silently_restoring_an_older_nonce ... ok
+#14 121.4 
+#14 121.4 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+#14 121.4 
+#14 121.4      Running tests/merkle_position.rs (target/debug/deps/merkle_position-5ee192d90515c42d)
+#14 121.4 
+#14 121.4 running 3 tests
+#14 121.4 test a_single_leaf_proof_only_accepts_position_zero ... ok
+#14 121.4 test an_index_beyond_the_path_depth_is_not_an_alias_for_a_valid_index ... ok
+#14 121.4 test changing_only_the_claimed_leaf_index_invalidates_the_proof ... ok
+#14 121.4 
+#14 121.4 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 121.4 
+#14 121.4      Running tests/state_safety.rs (target/debug/deps/state_safety-328b6c276f64febc)
+#14 121.4 
+#14 121.4 running 4 tests
+#14 121.4 test cost_overflow_is_rejected_and_legacy_estimation_saturates ... ok
+#14 121.4 test r10_max_cost_must_not_panic_on_public_numeric_inputs ... ok
+#14 121.4 test r06_failed_transfer_must_not_debit_sender ... ok
+#14 121.4 test self_transfer_preserves_balance_and_failed_unknown_sender_creates_no_accounts ... ok
+#14 121.4 
+#14 121.4 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 121.4 
+#14 121.4      Running unittests src/lib.rs (target/debug/deps/nexus_crypto-f132103696e46028)
+#14 121.4 
+#14 121.4 running 57 tests
+#14 121.4 test dilithium::tests::test_address_derivation ... ok
+#14 121.5 test dilithium::tests::test_deterministic_from_seed ... ok
+#14 121.5 test dilithium::tests::test_keypair_generation ... ok
+#14 121.5 test dilithium::tests::test_all_schemes ... ok
+#14 121.5 test dilithium::tests::test_serialization ... ok
+#14 121.5 test entropy::tests::test_apt_counts_reference_and_fails_at_sixteen ... ok
+#14 121.5 test entropy::tests::test_apt_cutoff_matches_conditional_binomial_tail ... ok
+#14 121.5 test entropy::tests::test_apt_resets_reference_at_exact_window_boundary ... ok
+#14 121.5 test entropy::tests::test_failure_after_complete_batch_blocks_whole_ingestion ... ok
+#14 121.5 test entropy::tests::test_health_passes_on_random ... ok
+#14 121.5 test entropy::tests::test_health_rct_detects_stuck_source ... ok
+#14 121.5 test dilithium::tests::test_sign_verify ... ok
+#14 121.5 test entropy::tests::test_history_zero_and_epoch_overflow_do_not_bypass_policy ... ok
+#14 121.5 test entropy::tests::test_health_recovery_requires_new_batch_then_rotation ... ok
+#14 121.5 test entropy::tests::test_ingest_unhealthy_source_triggers_rotation ... ok
+#14 121.5 test entropy::tests::test_low_frequency_entropy_latches_until_explicit_recovery ... ok
+#14 121.5 test entropy::tests::test_min_entropy_estimate ... ok
+#14 121.5 test entropy::tests::test_needs_rotation_uses ... ok
+#14 121.5 test entropy::tests::test_rct_continues_across_apt_windows ... ok
+#14 121.5 test entropy::tests::test_rotation_preserves_continuous_health_and_partial_batch ... ok
+#14 121.5 test entropy::tests::test_sentinel_seed_creation ... ok
+#14 121.5 test entropy::tests::test_invalid_source_parameters_fail_closed_even_after_reset ... ok
+#14 121.5 test entropy::tests::test_sentinel_seed_derive ... ok
+#14 121.5 test entropy::tests::test_shannon_entropy_two_values ... ok
+#14 121.5 test entropy::tests::test_shannon_entropy_uniform ... ok
+#14 121.5 test entropy::tests::test_sentinel_seed_rotation_forward_secure ... ok
+#14 121.5 test entropy::tests::test_source_evaluation_is_independent_of_chunk_sizes ... ok
+#14 121.5 test entropy::tests::test_source_requires_complete_batch_across_calls ... ok
+#14 121.8 test keypair::tests::enrollment_after_rotation_and_repeated_rotations_remain_verifiable ... ok
+#14 121.9 test keypair::tests::exhausted_derivation_budget_requires_capacity_for_rotation ... ok
+#14 122.0 test keypair::tests::failed_registry_validation_does_not_install_staged_keys ... ok
+#14 122.1 test keypair::tests::failure_after_first_derived_key_leaves_entire_state_unchanged ... ok
+#14 122.1 test keypair::tests::health_failure_blocks_all_operation_signing_until_recovery_and_rotation ... ok
+#14 122.1 test keypair::tests::invalid_import_and_empty_rotation_do_not_change_registry ... ok
+#14 122.3 test keypair::tests::operation_signature_binds_epoch_identity_and_payload ... ok
+#14 122.4 test keypair::tests::retirement_rejects_new_signatures_but_preserves_historical_verification ... ok
+#14 122.5 test keypair::tests::rotation_changes_all_keys_preserves_identity_default_and_history ... ok
+#14 122.6 test keypair::tests::test_key_manager ... ok
+#14 122.6 test keypair::tests::test_key_manager_respects_source_evaluation_and_recovery ... ok
+#14 122.7 test keypair::tests::test_key_manager_sign ... ok
+#14 122.7 test keypair::tests::test_keypair_from_sentinel ... ok
+#14 122.7 test keypair::tests::test_keypair_generation ... ok
+#14 122.8 test registry::tests::duplicate_enrollment_and_reenrollment_after_retirement_are_rejected ... ok
+#14 123.1 test registry::tests::foreign_history_and_modified_full_hash_are_rejected ... ok
+#14 123.2 test registry::tests::malformed_truncated_unknown_version_and_trailing_bytes_are_rejected ... ok
+#14 123.4 test registry::tests::missing_reordered_or_duplicated_records_are_rejected ... ok
+#14 123.6 test registry::tests::public_registry_recovers_after_file_roundtrip ... ok
+#14 123.6 test keypair::tests::age_expiration_blocks_signing ... ok
+#14 123.7 test registry::tests::rotation_missing_an_identity_or_new_proof_is_rejected_without_mutation ... ok
+#14 123.8 test registry::tests::skipped_epochs_duplicate_identities_and_reused_keys_are_rejected ... ok
+#14 123.9 test registry::tests::tampered_metadata_or_authorization_is_rejected ... ok
+#14 124.0 test signer::tests::test_batch_verify ... ok
+#14 124.1 test registry::tests::trusted_checkpoint_detects_valid_prefix_rollback ... ok
+#14 124.1 test signer::tests::test_batch_verify_with_invalid ... ok
+#14 124.1 test signer::tests::test_sign_transaction ... ok
+#14 124.1 test signer::tests::test_signer_trait ... ok
+#14 124.1 test signer::tests::test_signature_aggregator ... ok
+#14 124.1 
+#14 124.1 test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.71s
+#14 124.1 
+#14 124.1      Running tests/recovery_policy.rs (target/debug/deps/recovery_policy-a6c1d06c0cf960a9)
+#14 124.1 
+#14 124.1 running 3 tests
+#14 124.2 test operational_keys_and_generic_signatures_do_not_authorize_emergencies ... ok
+#14 124.3 test configuration_requires_distinct_valid_authorities_even_when_deserialized ... ok
+#14 124.3 test signed_freezes_bind_all_fields_and_enforce_submission_window ... ok
+#14 124.3 
+#14 124.3 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+#14 124.3 
+#14 124.3      Running tests/tg2_correspondence.rs (target/debug/deps/tg2_correspondence-4dba10b4cb742c95)
+#14 124.3 
+#14 124.3 running 3 tests
+#14 124.4 test correspondencia_ml_dsa_44 ... ok
+#14 124.4 test correspondencia_ml_dsa_65 ... ok
+#14 124.5 test correspondencia_ml_dsa_87 ... ok
+#14 124.5 
+#14 124.5 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+#14 124.5 
+#14 124.5      Running tests/tg2_residence.rs (target/debug/deps/tg2_residence-d39e9d9a1205fe35)
+#14 124.5 
+#14 124.5 running 3 tests
+#14 124.5 test backend_object_sizes_differ_from_encoded_key_lengths ... ok
+#14 124.5 test serialized_keypair_includes_public_material_and_headers ... ok
+#14 124.6 test retained_seed_recreates_signing_capability_after_key_drop ... ok
+#14 124.6 
+#14 124.6 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+#14 124.6 
+#14 124.6      Running tests/tg2_throughput.rs (target/debug/deps/tg2_throughput-6b50455b815f16a5)
+#14 124.6 
+#14 124.6 running 3 tests
+#14 124.6 test invalid_measurement_parameters_are_rejected ... ok
+#14 124.6 test invalid_work_aborts_measurement ... ok
+#14 124.8 test coordinated_trial_counts_only_successful_work_and_covers_interval ... ok
+#14 124.8 
+#14 124.8 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+#14 124.8 
+#14 124.8      Running unittests src/lib.rs (target/debug/deps/nexus_network-62a24502c2cad02d)
+#14 124.8 
+#14 124.8 running 0 tests
+#14 124.8 
+#14 124.8 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 124.8 
+#14 124.8      Running tests/testnet_wire.rs (target/debug/deps/testnet_wire-0eedc2c97332dc23)
+#14 124.8 
+#14 124.8 running 4 tests
+#14 124.8 test frame_limits_and_canonical_payload_are_checked_before_acceptance ... ok
+#14 124.9 test one_validator_attestation_cannot_invent_a_finalized_tip_without_a_quorum_certificate ... ok
+#14 124.9 test a_response_attestation_binds_query_nonce_context_body_and_validator ... ok
+#14 124.9 test public_transaction_id_commits_sender_public_key_and_signature_profile ... ok
+#14 124.9 
+#14 124.9 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+#14 124.9 
+#14 124.9      Running unittests src/lib.rs (target/debug/deps/nexus_node-5424a8cdf5490dc8)
+#14 124.9 
+#14 124.9 running 5 tests
+#14 125.3 test bft::tests::replay_preserves_exact_signatures_and_rejects_missing_reordered_or_extra_output ... ok
+#14 125.7 test bft::tests::replay_rejects_a_rehashed_journal_with_an_invalid_finality_certificate ... ok
+#14 125.7 test testnet::tests::public_genesis_pins_protocol_and_trust_roots ... ok
+#14 125.7 test testnet::tests::round_timeouts_grow_and_overflow_is_an_error ... ok
+#14 129.3 test bft::tests::incremental_records_do_not_grow_with_preceding_block_history ... ok
+#14 129.3 
+#14 129.3 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.39s
+#14 129.3 
+#14 129.3      Running tests/bft_durable.rs (target/debug/deps/bft_durable-1075571dda2f65f3)
+#14 129.3 
+#14 129.3 running 8 tests
+#14 129.6 test a_signed_proposal_survives_abrupt_process_exit_before_any_peer_receives_it ... ok
+#14 130.7 test an_equivocating_leader_cannot_finalize_conflicting_blocks_at_honest_nodes ... ok
+#14 131.8 test failed_commit_checkpoint_preserves_lock_and_retry_applies_the_reward_once ... ok
+#14 131.8 test an_absent_leader_is_replaced_after_nil_quorums_and_three_nodes_make_progress ... ok
+#14 132.4 test invalid_proposals_and_changed_committee_or_clock_policy_do_not_change_state ... ok
+#14 132.7 test proposal_is_durable_before_return_and_reopen_cannot_sign_a_different_value ... ok
+#14 134.5 test two_nodes_halt_without_quorum_and_resume_when_a_third_returns ... ok
+#14 139.6 test four_validators_certify_transfers_and_an_observer_syncs_without_signing ... ok
+#14 139.6 
+#14 139.6 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.34s
+#14 139.6 
+#14 139.6      Running tests/durable_cycle.rs (target/debug/deps/durable_cycle-c2848f5782d040a7)
+#14 139.6 
+#14 139.6 running 7 tests
+#14 139.6 test checkpoint_child ... ignored, Invoked only by the parent test in a separate process
+#14 140.1 test failed_writes_roll_back_pool_state_packet_history_inclusion_and_confirmation ... ok
+#14 140.2 test execution_submission_inclusion_and_confirmation_survive_separate_abrupt_process_exits ... ok
+#14 140.3 test historical_expired_inclusion_and_da_remain_recoverable_after_restart ... ok
+#14 140.4 test reopening_rejects_another_identity_policy_or_genesis_and_never_overwrites_existing_history ... ok
+#14 140.6 test pending_pool_and_an_unfinished_batch_survive_restart_without_reordering_or_duplication ... ok
+#14 141.1 test signed_retries_and_their_limit_survive_restart ... ok
+#14 141.1 
+#14 141.1 test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.45s
+#14 141.1 
+#14 141.1      Running tests/emergency_freeze.rs (target/debug/deps/emergency_freeze-ace672dbf5945529)
+#14 141.1 
+#14 141.1 running 3 tests
+#14 141.3 test failed_emergency_commit_restores_policy_pool_and_generation ... ok
+#14 141.5 test emergency_policy_survives_abrupt_process_exit_and_rejects_context_replacement ... ok
+#14 141.5 test operational_authority_cannot_freeze_and_rejection_preserves_pending_work ... ok
+#14 141.5 
+#14 141.5 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+#14 141.5 
+#14 141.5      Running tests/key_authorization.rs (target/debug/deps/key_authorization-fcd7c8dd4baf9659)
+#14 141.5 
+#14 141.5 running 3 tests
+#14 141.6 test invalid_policy_never_commits_and_managed_transactions_cannot_bypass_l1 ... ok
+#14 141.7 test failed_policy_commit_restores_registry_pending_work_and_generation ... ok
+#14 142.1 test rotation_and_retirement_survive_restarts_and_preserve_account_identity ... ok
+#14 142.1 
+#14 142.1 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+#14 142.1 
+#14 142.1      Running tests/monetary_durable.rs (target/debug/deps/monetary_durable-e83441c6526c0665)
+#14 142.1 
+#14 142.1 running 4 tests
+#14 142.2 test failed_checkpoint_rolls_back_money_and_retry_does_not_charge_twice ... ok
+#14 142.3 test monetary_checkpoint_survives_abrupt_process_exit ... ok
+#14 142.4 test monetary_genesis_cannot_be_replaced_on_reopen_or_allocate_nxs_twice_across_layers ... ok
+#14 142.4 test four_stores_replay_the_same_signed_block_and_preserve_supply_after_reopen ... ok
+#14 142.4 
+#14 142.4 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+#14 142.4 
+#14 142.4      Running unittests src/lib.rs (target/debug/deps/nexus_sentinel-3cb0c017fa45ce05)
+#14 142.4 
+#14 142.4 running 0 tests
+#14 142.4 
+#14 142.4 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 142.4 
+#14 142.4      Running unittests src/lib.rs (target/debug/deps/nexus_zk-1781e599ccfd6963)
+#14 142.4 
+#14 142.4 running 36 tests
+#14 142.5 test stark::air::tests::adversarial_per_element_tamper_rejected ... ok
+#14 142.6 test stark::air::tests::adversarial_transition_violation_rejected ... ok
+#14 142.8 test stark::air::tests::adversarial_unrelated_low_degree_cp_rejected ... ok
+#14 143.5 test stark::air::tests::multiple_sizes ... ok
+#14 143.6 test stark::air::tests::pipeline_honest_is_faithful ... ok
+#14 143.6 test stark::air::tests::tampered_output_rejects ... ok
+#14 143.6 test stark::air::tests::tampered_start_rejects ... ok
+#14 143.7 test stark::air::tests::tampered_trace_value_rejects ... ok
+#14 143.8 test stark::air::tests::valid_transition_accepts ... ok
+#14 143.8 test stark::air::tests::verifier_total_on_empty_queries ... ok
+#14 143.8 test stark::air::tests::wrong_steps_rejects ... ok
+#14 143.8 test stark::channel::tests::grinding_roundtrip ... ok
+#14 143.8 test stark::channel::tests::indices_in_range ... ok
+#14 143.8 test stark::channel::tests::tag_injectivity ... ok
+#14 143.8 test stark::channel::tests::transcript_is_deterministic_and_order_sensitive ... ok
+#14 143.8 test stark::field::tests::add_sub_roundtrip ... ok
+#14 143.8 test stark::field::tests::fp2_is_field ... ok
+#14 143.8 test stark::field::tests::legendre_seven_is_non_residue ... ok
+#14 143.8 test stark::field::tests::mul_inv_roundtrip ... ok
+#14 143.8 test stark::field::tests::near_modulus_arithmetic ... ok
+#14 143.8 test stark::field::tests::root_of_unity_has_correct_order ... ok
+#14 143.9 test stark::fri::tests::accepts_low_degree ... ok
+#14 143.9 test stark::fri::tests::query_indices_distinct_without_replacement ... ok
+#14 143.9 test stark::fri::tests::rejects_high_degree ... ok
+#14 144.0 test stark::fri::tests::rejects_tampered_opening ... ok
+#14 144.0 test stark::fri::tests::rejects_wrong_final_value ... ok
+#14 144.0 test stark::linked::tests::selector_cuenta_duplicados_y_rechaza_dominios_invalidos ... ok
+#14 144.0 test stark::linked::tests::selector_respeta_limite_512_y_orden ... ok
+#14 144.0 test stark::merkle::tests::leaf_node_domain_separation ... ok
+#14 144.0 test stark::merkle::tests::open_and_verify_all_leaves ... ok
+#14 144.0 test stark::merkle::tests::tampered_value_rejected ... ok
+#14 144.0 test stark::ntt::tests::coset_ntt_matches_naive_eval ... ok
+#14 144.0 test stark::ntt::tests::ntt_intt_roundtrip ... ok
+#14 144.0 test stark::ntt::tests::ntt_matches_naive_eval ... ok
+#14 144.0 test stark::params::tests::soundness_budget_print ... ok
+#14 144.5 test stark::air::tests::adversarial_property_valid_accept_flips_reject ... ok
+#14 144.5 
+#14 144.5 test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.07s
+#14 144.5 
+#14 144.5      Running tests/lean_contract.rs (target/debug/deps/lean_contract-591ff494c1ece4ea)
+#14 144.5 
+#14 144.5 running 4 tests
+#14 144.5 test lector_acota_filas_version_y_perfil_antes_de_asignar_vectores ... FAILED
+#14 144.5 test lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos ... FAILED
+#14 144.5 test los_catorce_certificados_historicos_conservan_su_resultado_y_bytes ... FAILED
+#14 144.5 test verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar ... FAILED
+#14 144.5 
+#14 144.5 failures:
+#14 144.5 
+#14 144.5 ---- lector_acota_filas_version_y_perfil_antes_de_asignar_vectores stdout ----
+#14 144.5 
+#14 144.5 thread 'lector_acota_filas_version_y_perfil_antes_de_asignar_vectores' (10376) panicked at nexus-zk/tests/lean_contract.rs:10:25:
+#14 144.5 El corpus público conservado debe estar disponible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+#14 144.5 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+#14 144.5 
+#14 144.5 ---- lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos stdout ----
+#14 144.5 
+#14 144.5 thread 'lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos' (10377) panicked at nexus-zk/tests/lean_contract.rs:10:25:
+#14 144.5 El corpus público conservado debe estar disponible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+#14 144.5 
+#14 144.5 ---- los_catorce_certificados_historicos_conservan_su_resultado_y_bytes stdout ----
+#14 144.5 
+#14 144.5 thread 'los_catorce_certificados_historicos_conservan_su_resultado_y_bytes' (10378) panicked at nexus-zk/tests/lean_contract.rs:10:25:
+#14 144.5 El corpus público conservado debe estar disponible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+#14 144.5 
+#14 144.5 ---- verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar stdout ----
+#14 144.5 
+#14 144.5 thread 'verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar' (10379) panicked at nexus-zk/tests/lean_contract.rs:10:25:
+#14 144.5 El corpus público conservado debe estar disponible: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+#14 144.5 
+#14 144.5 
+#14 144.5 failures:
+#14 144.5     lector_acota_filas_version_y_perfil_antes_de_asignar_vectores
+#14 144.5     lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos
+#14 144.5     los_catorce_certificados_historicos_conservan_su_resultado_y_bytes
+#14 144.5     verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar
+#14 144.5 
+#14 144.5 test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#14 144.5 
+#14 144.5 error: test failed, to rerun pass `-p nexus-zk --test lean_contract`
+#14 ERROR: process "/bin/sh -c cargo test --workspace --locked --offline" did not complete successfully: exit code: 101
+------
+ > [verified 6/7] RUN cargo test --workspace --locked --offline:
+144.5 
+144.5 failures:
+144.5     lector_acota_filas_version_y_perfil_antes_de_asignar_vectores
+144.5     lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos
+144.5     los_catorce_certificados_historicos_conservan_su_resultado_y_bytes
+144.5     verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar
+144.5 
+144.5 test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+144.5 
+144.5 error: test failed, to rerun pass `-p nexus-zk --test lean_contract`
+------
+Dockerfile:10
+
+--------------------
+
+   8 |     RUN cargo fetch --locked
+
+   9 |     RUN cargo check --workspace --all-targets --locked --offline
+
+  10 | >>> RUN cargo test --workspace --locked --offline
+
+  11 |     RUN cargo build --release -p nexus-cli --locked --offline
+
+  12 |     
+
+--------------------
+
+failed to solve: process "/bin/sh -c cargo test --workspace --locked --offline" did not complete successfully: exit 
+code: 101
+
+
+
+View build details: docker-desktop://dashboard/build/default/default/oxbs6bqbk657je7eigunq2gog
+

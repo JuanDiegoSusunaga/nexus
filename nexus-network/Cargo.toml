@@ -8,6 +8,8 @@ license.workspace = true
 
 [dependencies]
 nexus-core = { path = "../nexus-core" }
+nexus-anchor = { path = "../nexus-anchor" }
+nexus-crypto = { path = "../nexus-crypto" }
 
 tokio.workspace = true
 async-trait.workspace = true
@@ -15,3 +17,5 @@ thiserror.workspace = true
 serde.workspace = true
 tracing.workspace = true
 libp2p.workspace = true
+bincode.workspace = true
+rand.workspace = true

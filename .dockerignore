@@ -1,0 +1,20 @@
+# Contexto de construcción independiente: Rust y corpus público de regresión.
+**
+!Cargo.toml
+!Cargo.lock
+!nexus-*/
+!nexus-*/**
+!Documentos/
+!Documentos/06-Evidencia-TG2/
+!Documentos/06-Evidencia-TG2/2026-09-22/
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-*/
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado/corpus-*/*.bin
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-*/
+!Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad/corpus-*/*.bin
+**/target/**
+**/*.key
+**/.env*
+**/.git/**
+**/*.log

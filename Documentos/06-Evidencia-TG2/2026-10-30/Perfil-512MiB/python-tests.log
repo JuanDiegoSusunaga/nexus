@@ -1,0 +1,13 @@
+test_canonical_address_normalization_detects_aliases (test_prepare.PreparationTests.test_canonical_address_normalization_detects_aliases) ... ok
+test_existing_bundle_is_never_overwritten (test_prepare.PreparationTests.test_existing_bundle_is_never_overwritten) ... ok
+test_image_must_be_content_pinned (test_prepare.PreparationTests.test_image_must_be_content_pinned) ... ok
+test_invalid_or_duplicate_addresses_fail_before_creating_a_bundle (test_prepare.PreparationTests.test_invalid_or_duplicate_addresses_fail_before_creating_a_bundle) ... ok
+test_json_whitespace_cannot_select_a_fresh_volume_for_the_same_genesis (test_prepare.PreparationTests.test_json_whitespace_cannot_select_a_fresh_volume_for_the_same_genesis) ... ok
+test_memory_profile_applies_to_all_four_nodes_and_invalid_limits_fail_before_output (test_prepare.PreparationTests.test_memory_profile_applies_to_all_four_nodes_and_invalid_limits_fail_before_output) ... ok
+test_secret_files_are_never_copied_and_each_node_mounts_one_key_read_only (test_prepare.PreparationTests.test_secret_files_are_never_copied_and_each_node_mounts_one_key_read_only) ... ok
+test_unknown_fields_cannot_smuggle_a_private_key_into_the_public_bundle (test_prepare.PreparationTests.test_unknown_fields_cannot_smuggle_a_private_key_into_the_public_bundle) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.101s
+
+OK

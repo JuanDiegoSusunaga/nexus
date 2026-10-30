@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-30T17:25:19.139260+00:00",
+  "origin": "same physical host",
+  "url": "https://dreams-humanities-shelter-utilities.trycloudflare.com",
+  "statuses": [
+    {
+      "attested_by_validator": 1,
+      "burned_raw": "54148000000000",
+      "height": 409,
+      "issued_raw": "1000409000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "910fdda7cb729972f6aa50c5a930f1700ebd288970c6a727e6b122fb32841e58",
+      "supply_raw": "1000408999945852000000000",
+      "verified_by_local_cli": true
+    },
+    {
+      "attested_by_validator": 0,
+      "burned_raw": "54148000000000",
+      "height": 409,
+      "issued_raw": "1000409000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "910fdda7cb729972f6aa50c5a930f1700ebd288970c6a727e6b122fb32841e58",
+      "supply_raw": "1000408999945852000000000",
+      "verified_by_local_cli": true
+    },
+    {
+      "attested_by_validator": 2,
+      "burned_raw": "54148000000000",
+      "height": 409,
+      "issued_raw": "1000409000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "910fdda7cb729972f6aa50c5a930f1700ebd288970c6a727e6b122fb32841e58",
+      "supply_raw": "1000408999945852000000000",
+      "verified_by_local_cli": true
+    },
+    {
+      "attested_by_validator": 3,
+      "burned_raw": "54148000000000",
+      "height": 409,
+      "issued_raw": "1000409000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "910fdda7cb729972f6aa50c5a930f1700ebd288970c6a727e6b122fb32841e58",
+      "supply_raw": "1000408999945852000000000",
+      "verified_by_local_cli": true
+    }
+  ],
+  "scope": "Resultado de CLI verificado dentro de la pasarela; consulta HTTP informativa"
+}

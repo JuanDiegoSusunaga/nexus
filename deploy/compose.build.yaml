@@ -1,0 +1,6 @@
+services:
+  image:
+    image: nexus-testnet:protocol4-journal2
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile

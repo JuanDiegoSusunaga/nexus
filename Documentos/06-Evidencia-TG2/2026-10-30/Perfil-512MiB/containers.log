@@ -1,0 +1,20 @@
+node-1-1  | {
+node-2-1  | {
+node-0-1  | {
+node-3-1  | {
+node-1-1  |   "height": 8,
+node-2-1  |   "height": 8,
+node-1-1  |   "listening": "0.0.0.0:19001",
+node-2-1  |   "listening": "0.0.0.0:19001",
+node-2-1  |   "network_domain": "04a9a0436c9f129afb38ad7dee76f7d9a5ae744e022e84ad94dd567a6790e4fa"
+node-1-1  |   "network_domain": "04a9a0436c9f129afb38ad7dee76f7d9a5ae744e022e84ad94dd567a6790e4fa"
+node-3-1  |   "height": 8,
+node-3-1  |   "listening": "0.0.0.0:19001",
+node-0-1  |   "height": 8,
+node-2-1  | }
+node-0-1  |   "listening": "0.0.0.0:19001",
+node-1-1  | }
+node-0-1  |   "network_domain": "04a9a0436c9f129afb38ad7dee76f7d9a5ae744e022e84ad94dd567a6790e4fa"
+node-3-1  |   "network_domain": "04a9a0436c9f129afb38ad7dee76f7d9a5ae744e022e84ad94dd567a6790e4fa"
+node-0-1  | }
+node-3-1  | }

@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-30",
+  "scope": "Checked stake insertion and exact, atomic slashing accounting",
+  "new_tests": 3,
+  "before": "reproduction-before.json",
+  "results": [
+    {
+      "stage": "check",
+      "command": [
+        "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+        "check",
+        "--workspace",
+        "--all-targets",
+        "--locked",
+        "--offline",
+        "--jobs",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 2.25,
+      "log": "cargo-check.log",
+      "passed": 0,
+      "ignored": 0,
+      "sha256": "8528b2a1123f0046bc440a2de74fdcd0b5952246b888704f0ab1484bbfb86842"
+    },
+    {
+      "stage": "test",
+      "command": [
+        "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--jobs",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 48.687,
+      "log": "cargo-test.log",
+      "passed": 387,
+      "ignored": 1,
+      "sha256": "371d946f7fc30ec979fb3bdc1fb9d81728124d86b67c2879fe0961025a587cd9"
+    }
+  ],
+  "limits": [
+    "Not an audit of all cryptographic dependencies or a public deployment",
+    "No public network, complete BFT round changes, supply cap, fees or burn implemented",
+    "Existing local snapshots remain trusted; no migration or repair of historical accounting",
+    "Legacy whole-token voting-power statistics are not used by consensus quorum arithmetic"
+  ],
+  "success": true,
+  "source_files": [
+    {
+      "path": "nexus/nexus-anchor/src/validator.rs",
+      "sha256": "fde899b9e7fe7b3015e0f1f8045a9d1145e530286b576c9c34482bc12e368d4e"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/validator_accounting.rs",
+      "sha256": "cbdfd557326f3ee9f5cd4a64ce90a1a9e8908032ed9e65c9be0fa52235c0a9ae"
+    },
+    {
+      "path": "Documentos/06-Evidencia-TG2/2026-10-30/Auditoria-Red-Publica/validator-before.rs",
+      "sha256": "56a4e4727d2e236741de2db6bd1d137d8cdec5f5617fc723e971651953aeb9b8"
+    }
+  ],
+  "ignored_test": "Existing checkpoint_child helper is invoked by its parent process-crash test"
+}

@@ -1,0 +1,4 @@
+# Las evidencias conservan exactamente los bytes identificados por sus hashes.
+Documentos/06-Evidencia-TG2/** -text -whitespace
+# Los scripts públicos descargables mantienen las huellas de la guía.
+deploy/*.py text eol=lf

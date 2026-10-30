@@ -29,6 +29,7 @@
 //! └─────────────────────────────────────────────────────────┘
 //! ```
 
+mod authorization;
 pub mod sequencer;
 pub mod verifier;
 pub mod pq_verifier;

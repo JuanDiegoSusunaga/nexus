@@ -1,0 +1,28 @@
+{
+  "burned_raw": "54148000000000",
+  "genesis": "eb8e6192eb7aec33af6c56b773d89576efeadc90c70cf044a21fa3d9b720d623",
+  "initial_heights": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "issued_raw": "1000007000000000000000000",
+  "network_domain": "b19ca17ebf4943e4c9a84d6ea05fa9b4cbbcbdec70de6bf53c8081f4ac1aecc1",
+  "processes": 4,
+  "recipient_balance_raw": "3500000000000000000",
+  "restarted_and_caught_up": true,
+  "three_node_heights": [
+    5,
+    5,
+    5
+  ],
+  "transfer_hashes": [
+    "03e789effe70db18af1a8ac314a4099d0eea160936320b0b972e7bb0d8746d3f",
+    "df9deaa261238788143877d755606aa0c0c97e546ebbbd48174853f51b89ec2b"
+  ],
+  "transport": "TCP loopback",
+  "two_node_transfer_stayed_pending": true,
+  "verified_height": 7,
+  "verified_state_root": "2b7dc9cffc347081ca3fc7a2f2acd8a501122a6f1d88f145d950885c51395a04"
+}

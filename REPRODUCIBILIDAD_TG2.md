@@ -1,8 +1,116 @@
 # Reproducibilidad de la edición TG2
 
+## Publicación desde Docker y repositorio exclusivo — 30 de octubre de 2026
+
+Por decisión del autor, los avances de la testnet se guardan exclusivamente en `JuanDiegoSusunaga/nexus`. Se incluyen documentación, corpus público y evidencia sin claves ni datos operativos. Las dos pruebas que leían corpus desde la carpeta contigua del repositorio académico ahora lo leen dentro de este clon; Docker construye desde esta raíz. La lógica Rust de producción no cambia por esa reubicación.
+
+La [guía operativa](deploy/PUBLICAR_DOCKER.md) registra cuatro validadores, pasarela y túnel públicos desde un solo computador. Diecisiete pruebas Python pasan. Se verifica una transferencia por HTTPS y un cliente Linux descargado que valida cuatro identidades y raíz certificada común; una sonda HTTP de otra red recibe 200. Las transferencias y la validación criptográfica se originan en el mismo computador físico del servidor. [Evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Docker-Publico/README.md).
+
+Los nodos conservan la imagen nativa verificada anterior y sus diarios; la reconstrucción independiente del paquete no reemplaza los contenedores activos. Siguen pendientes operadores y máquinas independientes, custodia, retención de historia y refinamiento universal Rust/Lean. El enlace es temporal; NXS es de prueba y no tiene precio establecido para este génesis. Las secciones siguientes conservan el estado de las etapas anteriores.
+
 **Acceso unificado, 29 de octubre de 2026:** [tesis, matemáticas, Rust y evidencias](https://github.com/JuanDiegoSusunaga/tesis-nexus). El workspace se incluye también en la carpeta `nexus/` de ese repositorio.
 
 **Organización histórica:** 23 de septiembre de 2026. Este repositorio contiene el prototipo Rust y las variantes experimentales de TG2. Los documentos se mantienen en `https://github.com/JuanDiegoSusunaga/tesis-nexus`.
+
+## Límite de 512 MiB para la prueba inicial — 30 de octubre de 2026
+
+El generador y el helper de contenedores admiten `--memory-limit 512m`, manteniendo `1g` como predeterminado. El manifiesto y los cuatro servicios reflejan el límite. Ocho pruebas Python pasan y se repite el ensayo de transferencias, cortes y recreación, comprobando el límite efectivo de 536.870.912 bytes por contenedor; los cuatro reabren en altura 8 con 2 NXS de saldo receptor. No se altera la imagen ni Rust/Cargo; las 436 pruebas y build de la imagen se conservan como evidencia anterior, sin presentarlos como una ejecución nueva.
+
+[Resultados y huellas](Documentos/06-Evidencia-TG2/2026-10-30/Perfil-512MiB/README.md). Este ensayo local respalda evaluar cuatro VPS de 1 GiB por US$24/mes de base, antes de impuestos y extras. No reproduce el sistema operativo completo de esos VPS ni carga sostenida. Se mantienen pendientes presupuesto, cuenta, hosts y publicación externa.
+
+## Despliegue Linux preparado — 30 de octubre de 2026
+
+La imagen Linux amd64 se construye con Rust 1.97.1 y bases fijadas por digest. Check de todos los targets, **436 pruebas** y build release de `nexus-cli` correctos; siete pruebas Python del generador también pasan. El contexto incluye veinte artefactos públicos de regresión que necesitan las pruebas, sin claves ni manuscrito. El runtime no contiene fuentes ni Cargo. Los 132 archivos de la auditoría anterior conservan sus huellas.
+
+Un cliente Windows verifica cuatro identidades y una raíz certificada común de cuatro contenedores Linux. El ensayo incluye transferencias de 1,25 y 0,75 NXS, avance con tres, detención con dos, reinicios por SIGKILL y recreación de contenedores con diarios conservados; los cuatro reabren en altura 9 con saldo de 2 NXS. Se verifican UID, raíz solo lectura, capacidades eliminadas y una clave de solo lectura por nodo. Se cierran contenedores y red propios y se conservan volúmenes.
+
+[Paquete y guía](deploy/README.md) · [Propuesta de alojamiento](deploy/ALOJAMIENTO.md) · [Imagen, consultas, logs y huellas](Documentos/06-Evidencia-TG2/2026-10-30/Despliegue-Linux/README.md). Esta prueba usa una sola máquina y loopback, sin publicación en Internet. Faltan proveedor/cuenta, presupuesto y destinos autorizados. No se modifican matemáticas ni Rust y no se afirma custodia de producción o composición poscuántica integral.
+
+## Auditoría actual y diario incremental — 30 de octubre de 2026
+
+Se corrigen ocho errores de compilación de una prueba que todavía usaba snapshots eliminados, la detección de diarios al reiniciar desde CLI y la aceptación de posiciones alteradas en `MerkleProof`. Tres regresiones reproducen el fallo Merkle antes de corregirlo; la raíz y el formato no cambian. El consumidor debe seguir comprobando una raíz confiable y, cuando corresponda, el número original de hojas.
+
+`BftNode` usa diario **v2**: persiste entradas, salidas firmadas exactas, huellas y raíces en registros acotados de hasta 8 MiB. Al abrir reproduce transiciones con las firmas registradas, sin generar otras. Publica el temporal sincronizado antes de devolver mensajes; corrupción, huecos intermedios o diferencias semánticas impiden recuperar. El protocolo de red permanece en **4**. No se migra automáticamente el snapshot BFT v1 ni deben reutilizarse claves con un diario vacío para el mismo génesis.
+
+Pasan check de todos los targets, **436 pruebas** y build, con doce pruebas netas adicionales respecto del incremento TCP. Incluyen historia genérica de 75.000.000 bytes, crecimiento de 24 bloques certificados con registros inicial/final de 27.832 bytes, corrupción, firmas faltantes/reordenadas y salida abrupta. El ensayo TCP de cuatro procesos vuelve a pasar. Un helper ignorado por la suite ordinaria se invoca desde su prueba padre.
+
+[Hallazgos, logs y huellas](Documentos/06-Evidencia-TG2/2026-10-30/Auditoria-Actual-y-Journal/README.md). Persisten historia/certificados en RAM y replay creciente, confianza en el almacenamiento, claves sin cifrar de laboratorio y falta de publicación/pruebas entre redes. No se modifica el manuscrito ni Lean y no se afirma composición poscuántica integral. Las secciones siguientes registran etapas históricas.
+
+## Testnet TCP — 30 de octubre de 2026
+
+`nexus testnet init/run/status/account/transfer` habilita laboratorio, procesos, consultas y envío real por TCP. `PublicGenesis` fija protocolo y compromisos de génesis, red y comité, conservando enteros monetarios de 128 bits. El runtime consulta pares, verifica certificados secuenciales, retransmite mensajes persistidos, difunde una cola acotada y programa plazos crecientes por ronda. Las respuestas de validadores vinculan nonce, petición y cuerpo con ML-DSA; un saldo consultado es una atestación, no una prueba independiente de pertenencia.
+
+El protocolo pasa a **4**: el identificador de transacciones públicas compromete el sobre completo, incluidos remitente, clave y esquema; TCP usa `NXSNET04` y la ruta declarada es `/nexus/4.0.0`. Los formatos de checkpoint que no cambian mantienen sus versiones y rechazan contextos/protocolos anteriores. No hay migración automática.
+
+Pasan check de todos los targets, **424 pruebas** y build, con ocho nuevas. La prueba de cuatro ejecutables sobre TCP verifica transferencias, rechazo de un sobre alterado, tres participantes operativos, operación pendiente con solo dos, reinicios y replay independiente de seis bloques con saldo final de 3,5 NXS. Se corrigieron pila insuficiente del cliente Windows y configuración JSON aplanada que impedía leer `u128`. [Evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Testnet-TCP/README.md) · [Guía y lanzador](TESTNET.md).
+
+No se mantienen procesos de prueba activos al finalizar ni se publica un endpoint externo. TCP es público en claro y las claves generadas por `init` son de laboratorio, sin cifrar. La cola es volátil; `pending` no significa finalidad. Faltan almacenamiento incremental, gestión operativa y operadores/máquinas externos antes de Internet. Las secciones siguientes conservan estados de incrementos anteriores.
+
+## Consenso BFT experimental — 30 de octubre de 2026
+
+`BftNode` y `BftNodeConfig` implementan un runtime persistente de comité fijo: cuatro claves ML-DSA-65 con igual peso, quórum exacto de tres, propuestas/prevotos/precommits, bloqueos entre rondas y certificados. El dominio monetario también incorpora comité y política temporal. Cada voto vincula contexto, altura, ronda, fase y hash del bloque completo. La referencia matemática propia es la intersección honesta de quórums; el esquema de fases sigue el antecedente Tendermint, sin afirmar un refinamiento formal del programa.
+
+La API persiste antes de devolver mensajes para envío y guarda decisión, transición monetaria y altura siguiente de forma conjunta. Tras reinicio retransmite lo registrado y conserva fase/bloqueo. Un fallo de escritura restaura el estado anterior. Recargar exige el mismo contexto, historia certificada y diario válido. Un observador sin clave de validador puede aplicar certificados secuenciales.
+
+El planificador de pruebas comprueba líder ausente, conflicto de un líder bizantino, detención con dos participantes, recuperación con tres, pruebas antiguas de bloqueo, salto de ronda con dos anuncios, salida abrupta y errores de archivo/escritura. Pasan check global, **416 pruebas** y build; trece pruebas nuevas. [Contrato, fuentes y evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Consenso-BFT/README.md).
+
+Protocolo general **3**, checkpoint propio de `BftNode` **1**. No se migran formatos anteriores. El nodo BFT es una ruta distinta del nodo local L1/L2 conservado. Faltan transporte, límites de red, temporizadores crecientes y retransmisión reales, almacenamiento incremental y pruebas entre procesos/redes. Se requiere almacenamiento confiable y un diario activo por clave. El motor es experimental y no implica una testnet pública ya publicada, PoS abierto o seguridad poscuántica integral.
+
+## Perfil monetario — 30 de octubre de 2026
+
+`AnchorChain::new_monetary(config, genesis)` habilita `MonetaryGenesis` y `MonetaryPolicy`: asignaciones comprobadas en orden canónico, tope de emisión histórica, subsidios por altura con reducción por intervalos, precio mínimo, gas por bytes del sobre y reparto entre quema y proponente. Los valores pequeños de las pruebas no fijan suministro ni porcentajes de producción. Deben deshabilitarse recompensa y metadato de tarifas legados al seleccionar este perfil.
+
+Cada bloque exige conservación entre saldos, emisión y quema. La quema no reabre la emisión acumulada. El perfil permite transferencias y `BatchSubmit` con ML-DSA-65; no staking, contratos generales ni emisión de representaciones entre capas. Las transacciones incluyen el `network_domain` esperado dentro de los bytes firmados. La raíz de estado vincula cuentas, contadores y dominio monetario; no debe confundirse con la relación escalar AIR/FRI.
+
+`DurableNodeConfig::anchor_monetary` selecciona el perfil. Las asignaciones experimentales L2 deben quedar vacías para evitar crear NXS independientemente en ambas capas. La recarga monetaria recibe el génesis esperado y reproduce los bloques, rechazando contadores o balances inventados aun con raíces archivadas recalculadas. La escritura fallida revierte el cambio antes de devolver error. El almacenamiento local sigue siendo confiable y no impide un rollback malicioso a un prefijo válido.
+
+Protocolo **3**, ruta `/nexus/3.0.0`, checkpoint L1 **3** y L2/nodo **4**. No hay migración automática del formato anterior. Pasan check global de todos los targets, **403 pruebas** y build, con dieciséis pruebas nuevas. [Contrato detallado y evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Politica-Monetaria/README.md).
+
+La aplicación de bloques todavía no acredita finalidad BFT, transporte ni una testnet pública. Las reglas de propuestas en vivo, comité y diario de votos siguen pendientes. Las secciones siguientes conservan el estado y las versiones de incrementos anteriores; la comprobación actual es la enlazada arriba.
+
+## Contabilidad de validadores — 30 de octubre de 2026
+
+La revisión para la futura testnet pública reproduce y corrige tres fallos en `ValidatorSet::add_validator` y `ValidatorRegistry::slash`: suma saturada de stake, total que no disminuía al penalizar y producto desbordado al calcular la multa. Las actualizaciones validan antes de mutar y el acceso mutable directo a un validador pasa a ser interno. Check global de todos los targets y 387 pruebas correctas, incluidas tres nuevas. [Reproducción anterior, corrección y alcance](Documentos/06-Evidencia-TG2/2026-10-30/Auditoria-Red-Publica/README.md).
+
+La estructura serializada y las versiones se conservan; no se migran ni reparan snapshots anteriores. No se implementan todavía red pública, tope de emisión, tarifas debitadas ni quema. La contabilidad del registro no equivale a una prueba de seguridad económica del consenso.
+
+## Bloqueo de emergencia L2 — 30 de octubre de 2026
+
+`ActiveChainConfig::recovery` fija antes de operar un `RecoveryPolicy` con un identificador de despliegue no nulo y una clave pública de recuperación por identidad protegida. La configuración es inmutable durante la ejecución. Su constructor y deserializador rechazan identidades repetidas y la reutilización de claves operativas protegidas como autoridades. Admisión y ejecución también rechazan transacciones firmadas con cualquiera de las claves de recuperación configuradas, aunque su dirección tenga saldo; el registro operativo no admite esas claves.
+
+`EmergencyFreezeRequest::sign(chain_id, deployment, identity, issued_at, expires_at, &guardian)` produce una orden con dominio exclusivo de bloqueo L2. La autoridad se obtiene de la configuración confiable, nunca de la orden. Se comprueban firma, versión, cadena, despliegue e intervalo temporal. La API `apply_emergency_freeze(request)` está disponible en `ActiveChain`, `DurableNode` y el motor independiente. No exige la firma ni la disponibilidad de la clave operativa. `emergency_freeze_status(&identity)` devuelve la orden aceptada y su fecha local de aceptación.
+
+El bloqueo es permanente en este perfil: impide emitir operaciones desde la identidad, cancela su pool y sus reservas externas y no se elimina al rotar, retirar o volver a presentar eventos operativos. Las órdenes repetidas, incluso con otra firma válida para la misma identidad, se rechazan. Esta protección usa el estado monótono de bloqueo; no hay un contador de desbloqueos ni una API para desbloquear, sustituir la clave o recuperar fondos. El bloqueo no mueve saldos, consume nonces ni revierte operaciones previas; tampoco impide recibir transferencias.
+
+El cambio se serializa con producción y admisión. Una reserva externa de la identidad no puede bloquear la emergencia. `DurableNode` persiste la orden y la cancelación del pool juntas antes de devolver éxito; si falla la escritura, restaura ambas. La recarga verifica la firma de cada orden a su fecha de aceptación guardada: vencer el plazo para presentar la orden no desactiva un bloqueo ya aceptado. La configuración esperada debe coincidir, de modo que abrir con autoridades distintas o con la recuperación deshabilitada falla.
+
+La verificación de este incremento pasó `cargo check --workspace --all-targets`, 384 pruebas y `cargo build --workspace`, con dependencias locked/offline. Incluye catorce pruebas nuevas de firmas, contextos, separación de claves, bloqueo tras rotación, concurrencia, recibos alterados, persistencia, fallo de escritura y salida abrupta de otro proceso. [Evidencia y hashes](Documentos/06-Evidencia-TG2/2026-10-30/Bloqueo-Emergencia-L2/verification.json).
+
+**Alcance vigente:** protocolo de bloques/red v2; checkpoints de `ActiveChain` y `DurableNode` v3 y de `AnchorChain` v2. No hay migración automática de checkpoints anteriores. Las claves de recuperación deben custodiarse fuera del firmador operativo; este cambio no implementa esa custodia ni prueba independencia física. La política y los bloqueos son locales y no están anclados en L1. La protección contra un propietario malicioso del almacenamiento o la restauración de una copia antigua sigue pendiente. Un identificador de despliegue reutilizado en otra instancia con las mismas autoridades permite reutilizar órdenes entre ambas; debe elegirse uno distinto por despliegue. La evidencia anterior conserva su corte y sus hashes.
+
+## Autorización local de claves L2 — 30 de octubre de 2026
+
+`KeyManager::sign_transaction(&identity, transaction)` firma para una identidad estable y su época vigente. La firma incluye un dominio específico de transacciones L2, además de los campos de la operación, la identidad y la época. `SignedTransaction::authorization_epoch = Some(epoch)` selecciona este contrato; su hash compromete la envoltura completa. Las firmas sin época conservan el contrato de dirección derivada de la clave, pero se rechazan para cualquier identidad que ya figure en el registro, incluso después de su retiro. El verificador sin registro y L1 rechazan explícitamente las envolturas con época.
+
+`ActiveChain::apply_key_record(record)` y `DurableNode::apply_key_record(record)` reciben un evento del historial público de `KeyManager`. Verifican secuencia, enlace y autorizaciones antes de instalarlo. Se aplican los eventos en orden: el registro existente es un único historial autorizado, no una mezcla de historiales independientes de varios gestores. La rotación conserva las reglas del registro, incluidas las autorizaciones de todas las identidades activas. No se acepta un registro adjunto a una transacción ni se reemplaza el historial con una instantánea arbitraria.
+
+Admisión y ejecución comparten el mismo registro. Un cambio de política se serializa con la producción de bloques y retira del pool las transacciones cuya clave dejó de estar vigente, liberando sus reservas de nonce. Si un consumidor externo tiene trabajo del secuenciador reservado, el cambio se rechaza antes de modificar el registro. Tras una rotación, la clave nueva opera sobre la cuenta original, conservando su saldo y nonce. El retiro impide nuevas operaciones; no revierte operaciones ejecutadas previamente. `key_registry_checkpoint()` entrega el número de eventos y el hash de cabecera locales.
+
+El coordinador durable publica registro y pool en una misma generación. Un fallo de escritura restaura ambos y no devuelve éxito. Al abrir, reconstruye y verifica las autorizaciones del historial y vuelve a conectar admisión y ejecución con una sola política. La recarga comprueba las firmas y vigencia del pool sin aplicar el reloj actual al vencimiento histórico; la selección y la ejecución posteriores sí aplican sus controles de vencimiento normales.
+
+Uso sobre un nodo ya creado y una identidad de un gestor configurado:
+
+```rust,ignore
+// Entregar cada evento nuevo exactamente una vez, en el orden del historial.
+node.apply_key_record(manager.registry().records()[0].clone())?;
+let signed = manager.sign_transaction(&identity, transaction)?;
+node.submit_transaction(signed)?;
+// Después de rotar o retirar en manager, entregar también el evento siguiente.
+```
+
+Las pruebas de `nexus-active/tests/key_authorization.rs` y `nexus-node/tests/key_authorization.rs` cubren identidad estable, firmas alteradas, separación de mensajes, retiro, acceso directo al motor, concurrencia, reinicios, registros inválidos y fallos de persistencia. Los resultados de esta ejecución se conservan en la [verificación del 30 de octubre](Documentos/06-Evidencia-TG2/2026-10-30/Autorizacion-Claves-L2/verification.json).
+
+**Corte de este primer incremento:** protocolo y checkpoints v2; el bloqueo de emergencia descrito arriba eleva los checkpoints L2/nodo a v3. La codificación binaria de transacciones añade la época opcional. No hay migración de checkpoints anteriores. La política se incorpora mediante una API administrativa local confiable y no está anclada en L1 ni comprometida por la raíz de cuentas. Los controles de salud de entropía no detectan intrusiones. La tesis, sus resultados Lean y el manifiesto de la edición conservada mantienen su alcance histórico; las nuevas fuentes se identifican en la evidencia de cada ejecución.
 
 ## Ciclo local persistente y ejecución soportada — 20 de octubre de 2026
 
@@ -189,7 +297,7 @@ Se captura la raíz inicial antes de ejecutar. Los bloques se incorporan complet
 
 **Límite operativo:** el motor de transacciones usa raíces SHA3 generales y el AIR sigue siendo una recurrencia escalar. No se recortan hashes, no se genera una prueba de recurrencia para presentarla como prueba de transacciones y no se habilita fallback. Un lote con raíces fuera del modelo no puede registrarse como enviado en validez/híbrido; ampliar el AIR para validarlo no forma parte de esta integración. Los casos positivos de cableado usan instantáneas escalares sintéticas solo en pruebas internas. Esta conexión no convierte el PoC en una L2 completa.
 
-La evidencia de esta integración se conserva en `../Documentos/06-Evidencia-TG2/2026-10-20/ActiveChain/`. `integracion.json` conserva la instantánea previa al commit; `consolidacion.json` identifica el commit posterior y enlaza el check/build y las 55 pruebas aisladas (trece nuevas), sin repetirlos para consolidar. El commit `3e40e28` y su manifiesto quedan como antecedentes de la adaptación anterior; el manifiesto documental vigente identifica el commit de integración. Permanecen los límites operativos descritos arriba.
+La evidencia de esta integración se conserva en `Documentos/06-Evidencia-TG2/2026-10-20/ActiveChain/`. `integracion.json` conserva la instantánea previa al commit; `consolidacion.json` identifica el commit posterior y enlaza el check/build y las 55 pruebas aisladas (trece nuevas), sin repetirlos para consolidar. El commit `3e40e28` y su manifiesto quedan como antecedentes de la adaptación anterior; el manifiesto documental vigente identifica el commit de integración. Permanecen los límites operativos descritos arriba.
 
 ## Adaptación al contrato Lean — 20 de octubre de 2026
 
@@ -199,7 +307,7 @@ En `nexus-active`, usar `LinkedValidityProof` para el PoC y `NitroVerifier::veri
 
 Este perfil admite únicamente escalares canónicos de Goldilocks codificados en 32 bytes con los últimos 24 a cero. **No** demuestra validez de raíces SHA3 arbitrarias, firmas ML-DSA dentro del AIR ni ejecución completa de `ActiveChain`. La altura es contexto externo, no parte del enunciado AIR. La integración del llamante con políticas de autorización y antirrepetición es distinta del contrato matemático. `pq_verifier` y los experimentos anteriores se conservan como referencias históricas y no habilitan la aceptación de la ruta nueva. La equivalencia universal de Rust con Lean sigue sin estar demostrada.
 
-Antes de editar Rust pasaron check/test/build globales (197 pruebas) y la compilación/auditoría globales de Lean (2709 declaraciones). Después de la adaptación pasan check/test/build **aislados** de `nexus-zk` y `nexus-active`, con 113 pruebas, incluidas trece nuevas. No se repite el workspace global después de editar. Los catorce certificados históricos de ambos perfiles conservan sus bytes y resultados. La evidencia está en `../Documentos/06-Evidencia-TG2/2026-10-20/Rust-Lean/`; las dependencias no cambian. `adaptacion.json` y `revision-final.json` conservan las instantáneas anteriores al commit; `consolidacion.json` vincula el commit posterior con esas comprobaciones, sin presentarlas como pruebas nuevas. El manifiesto del 19 se conserva como antecedente y la identificación vigente se consulta en el manifiesto documental actualizado.
+Antes de editar Rust pasaron check/test/build globales (197 pruebas) y la compilación/auditoría globales de Lean (2709 declaraciones). Después de la adaptación pasan check/test/build **aislados** de `nexus-zk` y `nexus-active`, con 113 pruebas, incluidas trece nuevas. No se repite el workspace global después de editar. Los catorce certificados históricos de ambos perfiles conservan sus bytes y resultados. La evidencia está en `Documentos/06-Evidencia-TG2/2026-10-20/Rust-Lean/`; las dependencias no cambian. `adaptacion.json` y `revision-final.json` conservan las instantáneas anteriores al commit; `consolidacion.json` vincula el commit posterior con esas comprobaciones, sin presentarlas como pruebas nuevas. El manifiesto del 19 se conserva como antecedente y la identificación vigente se consulta en el manifiesto documental actualizado.
 
 ```powershell
 cargo check -p nexus-zk -p nexus-active --all-targets --locked --offline --jobs 4

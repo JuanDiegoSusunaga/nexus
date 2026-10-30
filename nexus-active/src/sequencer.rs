@@ -3,7 +3,8 @@
 
 use crate::execution::ExecutionResult;
 use nexus_core::{Address, Amount, ChainId, Hash256, NexusError, SignedTransaction, Timestamp};
-use nexus_crypto::{verify_signed_transaction, DilithiumKeypair};
+use nexus_crypto::{DilithiumKeypair, KeyRegistry, RegistryCheckpoint, RecoveryPolicy,
+    EmergencyFreezeRequest, EmergencyFreezeReceipt};
 use parking_lot::{Mutex, RwLock};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BinaryHeap, HashMap, HashSet};
@@ -90,6 +91,7 @@ struct Pool {
 }
 
 pub struct NexusSequencer {
+    authorization: crate::authorization::SharedAuthorization,
     config: SequencerConfig,
     address: Address,
     is_active: RwLock<bool>,
@@ -106,9 +108,10 @@ impl NexusSequencer {
     }
 
     pub(crate) fn restore_checkpoint(bytes: &[u8], config: SequencerConfig,
-        keypair: DilithiumKeypair, state: &nexus_core::InMemoryState) -> Result<Self, NexusError> {
+        keypair: DilithiumKeypair, state: &nexus_core::InMemoryState,
+        registry: crate::authorization::SharedAuthorization) -> Result<Self, NexusError> {
         let (active, pool): (bool, Pool) = nexus_core::checkpoint::decode(bytes)?;
-        let sequencer = Self::new(config, keypair);
+        let sequencer = Self::with_registry(config, keypair, registry);
         sequencer.check_config()?;
         if !pool.in_flight.is_empty() || pool.confirmed_nonces.iter().any(|(sender, nonce)|
             state.get_account(sender).map_or(0, |a| a.nonce.0) != *nonce) {
@@ -123,6 +126,7 @@ impl NexusSequencer {
                 if tx.sender != *sender || tx.transaction.nonce.0 != *nonce
                     || *nonce < pool.confirmed_nonces.get(sender).copied().unwrap_or(0)
                     || tx.transaction.chain_id != sequencer.config.chain_id
+                    || !sequencer.authorization.read().verify_transaction_at(tx, tx.transaction.timestamp)?
                     || bincode::serialize(tx)? != bincode::serialize(stored)?
                     || pending.size as u64 != bincode::serialized_size(tx)? {
                     return Err(NexusError::StateError("Inconsistent checkpoint transaction".into()));
@@ -135,7 +139,18 @@ impl NexusSequencer {
     }
 
     pub fn new(config: SequencerConfig, keypair: DilithiumKeypair) -> Self {
-        Self { config, address: keypair.address(), is_active: RwLock::new(true),
+        Self::with_key_registry(config, keypair, KeyRegistry::new())
+    }
+
+    pub fn with_key_registry(config: SequencerConfig, keypair: DilithiumKeypair, registry: KeyRegistry) -> Self {
+        let mut state = crate::authorization::AuthorizationState::empty(config.chain_id, RecoveryPolicy::default());
+        state.registry = registry;
+        Self::with_registry(config, keypair, std::sync::Arc::new(RwLock::new(state)))
+    }
+
+    pub(crate) fn with_registry(config: SequencerConfig, keypair: DilithiumKeypair,
+        authorization: crate::authorization::SharedAuthorization) -> Self {
+        Self { authorization, config, address: keypair.address(), is_active: RwLock::new(true),
             pool: Mutex::new(Pool { pending: HashMap::new(), lookup: HashMap::new(),
                 in_flight: HashMap::new(), confirmed_nonces: HashMap::new(),
                 last_batch_time: Timestamp::now(), batch_counter: 0 }) }
@@ -158,7 +173,9 @@ impl NexusSequencer {
         let size = usize::try_from(bincode::serialized_size(&tx)?)
             .map_err(|_| NexusError::BatchTooLarge)?;
         if size > self.config.max_batch_bytes { return Err(NexusError::BatchTooLarge); }
-        if !verify_signed_transaction(&tx)? {
+        // Hold policy through reservation; a completed revocation cannot race admission.
+        let authorization = self.authorization.read();
+        if !authorization.verify_transaction_at(&tx, Timestamp::now())? {
             return Err(NexusError::SignatureVerificationFailed(tx.sender));
         }
         let hash = tx.hash();
@@ -182,9 +199,58 @@ impl NexusSequencer {
         self.pool.lock().pending.values().map(BTreeMap::len).sum()
     }
 
+    /// ActiveChain also holds its production lock. The write lock orders admission
+    /// and direct sequencer reservations against this authenticated policy update.
+    pub(crate) fn apply_key_record(&self, record: nexus_crypto::registry::RotationRecord)
+        -> Result<RegistryCheckpoint, NexusError> {
+        let mut authorization = self.authorization.write();
+        let mut pool = self.pool.lock();
+        if !pool.in_flight.is_empty() {
+            return Err(NexusError::StateError("Cannot update key policy with reserved sequencer work".into()));
+        }
+        let mut next = authorization.clone();
+        next.apply_key_record(record)?;
+        let mut removed = Vec::new();
+        for transactions in pool.pending.values_mut() {
+            transactions.retain(|_, pending| {
+                // Expiration is handled by build_batch; this check changes key policy only.
+                let keep = next.verify_transaction_at(&pending.tx, pending.tx.transaction.timestamp).unwrap_or(false);
+                if !keep { removed.push(pending.tx.hash()); }
+                keep
+            });
+        }
+        for hash in removed { pool.lookup.remove(&hash); }
+        pool.pending.retain(|_, transactions| !transactions.is_empty());
+        *authorization = next;
+        Ok(authorization.registry.checkpoint())
+    }
+
+    pub(crate) fn key_registry_checkpoint(&self) -> RegistryCheckpoint {
+        self.authorization.read().registry.checkpoint()
+    }
+
+    /// Production is locked by ActiveChain. An emergency cancels even externally
+    /// reserved work for the affected identity; it cannot be delayed by that work.
+    pub(crate) fn apply_emergency_freeze(&self, request: EmergencyFreezeRequest)
+        -> Result<EmergencyFreezeReceipt, NexusError> {
+        let mut authorization = self.authorization.write();
+        let mut pool = self.pool.lock();
+        let receipt = authorization.apply_emergency_freeze_at(request, Timestamp::now())?;
+        let identity = receipt.request.body.identity;
+        pool.pending.remove(&identity);
+        pool.in_flight.retain(|_, pending| pending.tx.sender != identity);
+        pool.lookup.retain(|_, tx| tx.sender != identity);
+        Ok(receipt)
+    }
+
+    pub(crate) fn emergency_freeze_status(&self, identity: &Address) -> Option<EmergencyFreezeReceipt> {
+        self.authorization.read().freeze_status(identity).cloned()
+    }
+
     pub fn build_batch(&self) -> Result<Option<SequencerBatch>, NexusError> {
         self.check_config()?;
         if !self.is_active() { return Err(NexusError::NotActiveSequencer); }
+        let _authorization = self.authorization.read();
         let mut pool = self.pool.lock();
         let now = Timestamp::now();
         let mut expired = Vec::new();

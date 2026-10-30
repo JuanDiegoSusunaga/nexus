@@ -1,11 +1,17 @@
 # Artefactos de compilación de Rust (no versionar)
 target/
 
+# Claves privadas de testnet; distribuirlas por separado, nunca versionarlas.
+*.key
+__pycache__/
+*.pyc
+
 # Logs de compilación locales
 build_log*.txt
 check_log.txt
 *.log
 logs/
+!Documentos/06-Evidencia-TG2/**/*.log
 
 # Versión antigua del monorepo (histórica, no versionar)
 nexus-monorepo/

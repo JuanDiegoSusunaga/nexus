@@ -283,6 +283,17 @@ impl KeyManager {
         Ok(EpochSignature { identity: *address, epoch: key.epoch(), signature })
     }
 
+    /// Sign an L2 transaction for a stable identity under the current epoch policy.
+    pub fn sign_transaction(&self, address: &Address, tx: nexus_core::Transaction)
+        -> Result<nexus_core::SignedTransaction, NexusError> {
+        let signed = self.sign(address, &crate::signer::registered_transaction_message(&tx))?;
+        let key = self.registry.current(address).ok_or(NexusError::AccountNotFound(*address))?;
+        let mut transaction = nexus_core::SignedTransaction::new(tx, *address,
+            signed.signature.to_pq_signature(), key.material.public_key.as_bytes().to_vec());
+        transaction.authorization_epoch = Some(signed.epoch);
+        Ok(transaction)
+    }
+
     /// Sign with default key
     pub fn sign_default(&self, message: &[u8]) -> Result<EpochSignature, NexusError> {
         let address = self.default_key.ok_or_else(|| NexusError::ConfigError("No hay clave predeterminada".into()))?;

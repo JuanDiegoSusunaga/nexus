@@ -13,7 +13,10 @@ use std::sync::Arc;
 pub mod config;
 pub mod rpc;
 pub mod durable;
+pub mod bft;
+pub mod testnet;
 pub use durable::{DurableNode, DurableNodeConfig};
+pub use bft::{BftNode, BftNodeConfig};
 
 /// Node role
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

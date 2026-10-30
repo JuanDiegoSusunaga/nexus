@@ -6,7 +6,30 @@ Documentación organizada para revisión: **29 de octubre de 2026**.
 
 Este workspace acompaña la tesis NEXUS sobre firmas poscuánticas, gestión de claves y registros verificables en una arquitectura de dos capas. Incluye las implementaciones, pruebas y experimentos del prototipo.
 
-**Acceso único para el director: [tesis, matemáticas y Rust en tesis-nexus](https://github.com/JuanDiegoSusunaga/tesis-nexus).** El workspace también está incluido allí en `nexus/`, como archivos normales. Este repositorio conserva la procedencia y el historial de la implementación.
+**Destino exclusivo de este desarrollo:** [JuanDiegoSusunaga/nexus](https://github.com/JuanDiegoSusunaga/nexus). Código, [documentación de tecnologías](documentacion.md), corpus público y evidencia de la testnet se conservan aquí. La publicación no asigna precio a NXS ni valida integralmente la tesis.
+
+**Publicación experimental desde Docker, 30 de octubre:** [abrir NEXUS](https://dreams-humanities-shelter-utilities.trycloudflare.com). Cuatro validadores en un computador y enlace temporal. NXS de prueba sin cotización establecida. Pasan 17 pruebas Python; se verifican firmas/certificados, transferencia por HTTPS y cliente descargado, con sonda HTTP adicional desde otra red. [Guía operativa](deploy/PUBLICAR_DOCKER.md) · [Evidencia y alcance](Documentos/06-Evidencia-TG2/2026-10-30/Docker-Publico/README.md). La imagen Rust se reutiliza sin cambios.
+
+**Base Rust del 30 de octubre de 2026:** autorización/emergencia L2, perfil monetario y BFT/TCP experimental, ahora con diario incremental y recuperación sin volver a generar firmas. La auditoría corrige compilación, detección del diario CLI y posición Merkle. Check, **436 pruebas** y build correctos, incluido un ensayo de cuatro ejecutables con cortes/reinicios. Protocolo v4, diario `BftNode` v2, sin migración automática. Siguen pendientes custodia y retención de historia en RAM. [Arranque](TESTNET.md) · [Contrato actual](REPRODUCIBILIDAD_TG2.md#auditoría-actual-y-diario-incremental--30-de-octubre-de-2026) · [Hallazgos y evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Auditoria-Actual-y-Journal/README.md).
+
+**Preparación Linux anterior a la publicación:** imagen amd64, check y **436 pruebas** en Linux, build release y siete pruebas Python correctos. Ensayo entre cuatro contenedores: transferencias, avance con tres, detención con dos y recreación conservando diarios. [Paquete y alojamiento](deploy/README.md) · [Evidencia](Documentos/06-Evidencia-TG2/2026-10-30/Despliegue-Linux/README.md). El ensayo público posterior utiliza el Docker del autor.
+
+**Perfil de 512 MiB:** ocho pruebas de configuración y un nuevo ensayo de cuatro contenedores pasan con ese límite efectivo, empleado también en la publicación desde Docker. La alternativa VPS permanece para una etapa entre máquinas independientes. [Resultados](Documentos/06-Evidencia-TG2/2026-10-30/Perfil-512MiB/README.md) · [Alojamiento](deploy/ALOJAMIENTO.md).
+
+Los incrementos previos y sus pruebas se conservan en la documentación de reproducción. Este desarrollo es posterior al código de la edición documental de la tesis; no modifica el manuscrito ni Lean.
+
+La edición académica anterior se conserva en [tesis-nexus](https://github.com/JuanDiegoSusunaga/tesis-nexus). Los avances de esta testnet se guardan exclusivamente en este repositorio `nexus`; no se actualiza el repositorio académico al publicarlos.
+
+Para construir el código y ejecutar su suite desde un solo clon, con Docker y Compose:
+
+```powershell
+git clone https://github.com/JuanDiegoSusunaga/nexus.git
+Set-Location nexus
+docker compose --progress plain -f deploy/compose.build.yaml build
+python -m unittest discover -s deploy -p 'test_*.py'
+```
+
+La construcción ejecuta check, pruebas Rust y build release. Incluye veinte archivos públicos de regresión, sin descargar el repositorio académico. Para operar la instancia publicada, consultar la guía Docker enlazada arriba.
 
 ## Por dónde empezar
 
@@ -30,12 +53,10 @@ El prototipo conserva límites explícitos: el AIR escalar comprueba su relació
 
 ## Reproducción
 
-El acceso recomendado reúne todas las partes:
+El desarrollo actual se reproduce desde este repositorio:
 
 ```powershell
-git clone -c core.longpaths=true https://github.com/JuanDiegoSusunaga/tesis-nexus.git
-Set-Location tesis-nexus
-python scripts/verificar_version_tg2.py
+git clone -c core.longpaths=true https://github.com/JuanDiegoSusunaga/nexus.git
 Set-Location nexus
 ```
 

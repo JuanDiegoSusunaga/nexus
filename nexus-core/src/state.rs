@@ -273,6 +273,14 @@ impl InMemoryState {
     pub fn account_count(&self) -> usize {
         self.accounts.len()
     }
+
+    /// Liquid balances only. Profiles with escrow/staking must account for
+    /// those obligations separately rather than treating this as total supply.
+    pub fn total_balance(&self) -> Result<Amount, NexusError> {
+        self.accounts.values().try_fold(Amount::ZERO, |total, account|
+            total.checked_add(account.balance)
+                .ok_or_else(|| NexusError::StateError("Total account balance overflow".into())))
+    }
 }
 
 /// State diff for efficient synchronization

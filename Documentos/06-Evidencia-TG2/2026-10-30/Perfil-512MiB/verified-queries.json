@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "endpoints": [
+    "127.0.0.1:50797",
+    "127.0.0.1:50798",
+    "127.0.0.1:50799",
+    "127.0.0.1:50800"
+  ],
+  "observations": [
+    {
+      "utc": "2026-10-30T16:21:05.199711+00:00",
+      "statuses": [
+        {
+          "attested_by_validator": 3,
+          "burned_raw": "0",
+          "height": 2,
+          "issued_raw": "1000002000000000000000000",
+          "pending": 0,
+          "phase": "Propose",
+          "round": 0,
+          "state_root": "fe27b5db6d16584ec4956a3f294e1bddcb83d41ea0a7b04bd3020e4f16c0e523",
+          "supply_raw": "1000002000000000000000000"
+        },
+        {
+          "attested_by_validator": 0,
+          "burned_raw": "0",
+          "height": 2,
+          "issued_raw": "1000002000000000000000000",
+          "pending": 0,
+          "phase": "Propose",
+          "round": 0,
+          "state_root": "fe27b5db6d16584ec4956a3f294e1bddcb83d41ea0a7b04bd3020e4f16c0e523",
+          "supply_raw": "1000002000000000000000000"
+        },
+        {
+          "attested_by_validator": 2,
+          "burned_raw": "0",
+          "height": 2,
+          "issued_raw": "1000002000000000000000000",
+          "pending": 0,
+          "phase": "Propose",
+          "round": 0,
+          "state_root": "fe27b5db6d16584ec4956a3f294e1bddcb83d41ea0a7b04bd3020e4f16c0e523",
+          "supply_raw": "1000002000000000000000000"
+        },
+        {
+          "attested_by_validator": 1,
+          "burned_raw": "0",
+          "height": 2,
+          "issued_raw": "1000002000000000000000000",
+          "pending": 0,
+          "phase": "Propose",
+          "round": 0,
+          "state_root": "fe27b5db6d16584ec4956a3f294e1bddcb83d41ea0a7b04bd3020e4f16c0e523",
+          "supply_raw": "1000002000000000000000000"
+        }
+      ]
+    }
+  ],
+  "common_height": 2,
+  "state_root": "fe27b5db6d16584ec4956a3f294e1bddcb83d41ea0a7b04bd3020e4f16c0e523",
+  "scope": "Consultas autenticadas y certificados BFT verificados por CLI; no replay de toda la historia",
+  "independent_external_origin_confirmed": false
+}

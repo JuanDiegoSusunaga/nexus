@@ -2,7 +2,7 @@
 //!
 //! Provides efficient proof of inclusion for transactions and state.
 
-use crate::{Hash256, NexusError, Hashable};
+use crate::{Hash256, Hashable};
 use serde::{Deserialize, Serialize};
 
 /// Merkle tree for efficient verification of data inclusion
@@ -85,7 +85,6 @@ impl MerkleTree {
         }
 
         let mut proof = Vec::new();
-        let mut current_index = index;
 
         // Adjust for padding
         let padded_len = self.nodes[0].len();
@@ -150,19 +149,24 @@ impl MerkleProof {
         self.verify_against_root(&self.root)
     }
 
-    /// Verify against a specific root
+    /// Verifica raíz y posición en el árbol rellenado. El número de hojas
+    /// originales debe validarse externamente cuando el protocolo lo requiera.
     pub fn verify_against_root(&self, root: &Hash256) -> bool {
+        if self.proof.len() > usize::BITS as usize { return false; }
         let mut current = self.leaf_hash;
+        let mut index = self.leaf_index;
 
         for node in &self.proof {
+            if node.is_left != (index % 2 == 1) { return false; }
             current = if node.is_left {
                 MerkleTree::hash_pair(&node.hash, &current)
             } else {
                 MerkleTree::hash_pair(&current, &node.hash)
             };
+            index /= 2;
         }
 
-        current == *root
+        index == 0 && current == *root
     }
 
     /// Get proof size in bytes

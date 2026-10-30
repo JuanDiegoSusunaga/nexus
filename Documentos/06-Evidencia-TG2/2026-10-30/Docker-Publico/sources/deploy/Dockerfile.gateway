@@ -1,0 +1,8 @@
+FROM nexus-testnet:protocol4-journal2 AS nexus
+FROM python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY --from=nexus /usr/local/bin/nexus /usr/local/bin/nexus
+COPY home_gateway.py home_transport.py home_connect.py /app/
+USER 10001:10001
+ENTRYPOINT ["python", "/app/home_gateway.py"]

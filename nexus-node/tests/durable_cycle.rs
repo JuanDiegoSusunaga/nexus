@@ -192,7 +192,7 @@ async fn historical_expired_inclusion_and_da_remain_recoverable_after_restart() 
     let mut node = DurableNode::create(&path, config.clone(), key(1)).unwrap();
     node.submit_transaction(transfer(0)).unwrap(); node.produce_block().unwrap();
     let batch = node.batch(0).unwrap();
-    let signed = key(1).sign_transaction(Transaction { chain_id: ChainId::LOCAL, nonce: Nonce(0),
+    let signed = key(1).sign_transaction(Transaction { chain_id: ChainId::LOCAL, network_domain: None, nonce: Nonce(0),
         gas_limit: 21000, gas_price: Amount::ZERO, timestamp: Timestamp(0), expires_at: Some(Timestamp(1)),
         tx_type: TransactionType::BatchSubmit { batch_root: batch.post_state_root.0,
             batch_size: batch.tx_count as u32, compressed_data: batch.compressed_data.clone() } }).unwrap();

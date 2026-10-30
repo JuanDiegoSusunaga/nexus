@@ -14,6 +14,8 @@ path = "src/main.rs"
 nexus-core = { path = "../nexus-core" }
 nexus-crypto = { path = "../nexus-crypto" }
 nexus-node = { path = "../nexus-node" }
+nexus-anchor = { path = "../nexus-anchor" }
+nexus-network = { path = "../nexus-network" }
 
 tokio.workspace = true
 clap.workspace = true

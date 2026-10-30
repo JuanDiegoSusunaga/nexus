@@ -1,0 +1,103 @@
+{
+  "scope": "Docker Desktop, cuatro contenedores Linux amd64 y cliente Windows; no Internet",
+  "image_id": "sha256:9a116eec1e0e5b2e1adb018ed843eb4719eb1c707c4b5cdf175aab9f9da28557",
+  "protocol": 4,
+  "journal": 2,
+  "ports": [
+    62627,
+    62628,
+    62629,
+    62630
+  ],
+  "subnet": "10.240.0.0/24",
+  "genesis": "e113a53df11b569e58b8a4f85d7997278823c66ee06e7564fea7768b64645bdb",
+  "network_domain": "5487a5dd41b081a7c6a3e814b8a7fe7a1b6f3708db67d728af698e7e5cd3905d",
+  "success": true,
+  "isolated_validators": 4,
+  "runtime_excludes_build_sources_and_cargo": true,
+  "common_certified_height": 2,
+  "initial_heights": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "three_node_heights": [
+    6,
+    6,
+    6
+  ],
+  "two_node_transfer_stayed_pending": true,
+  "final_heights": [
+    8,
+    8,
+    9,
+    9
+  ],
+  "burned_raw": "54148000000000",
+  "reopened_heights": [
+    9,
+    9,
+    9,
+    9
+  ],
+  "recipient_balance_raw": "2000000000000000000",
+  "transfer_hashes": [
+    "653cec6ce5ea1615d7c0422161d78aebb3e644e6fb21d9b636ef97ad4a0ddea7",
+    "d0bdd89d5c9d2b41e30caf3b80c0a0e9b52c5eb0904d8ab90d7fde366908f719"
+  ],
+  "resource_snapshot": [
+    {
+      "BlockIO": "0B / 69.6kB",
+      "CPUPerc": "2.25%",
+      "Container": "3486b7ddb1376026fb674bf9d38f2203f5bba60b2234b30a218e827bbf0244fe",
+      "ID": "3486b7ddb137",
+      "MemPerc": "0.62%",
+      "MemUsage": "6.301MiB / 1GiB",
+      "Name": "nexus-linux-32548-1793376858617684900-node-0-1",
+      "NetIO": "541kB / 586kB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "0B / 73.7kB",
+      "CPUPerc": "2.36%",
+      "Container": "8ba424ccb6b578c044be41ce039f20a9d5086361413762de24307fa345751a7f",
+      "ID": "8ba424ccb6b5",
+      "MemPerc": "0.57%",
+      "MemUsage": "5.883MiB / 1GiB",
+      "Name": "nexus-linux-32548-1793376858617684900-node-1-1",
+      "NetIO": "577kB / 592kB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "0B / 69.6kB",
+      "CPUPerc": "2.43%",
+      "Container": "24dbbd59532c5e1b4b447332387107867546ddf50c981276091f401dbefb6e86",
+      "ID": "24dbbd59532c",
+      "MemPerc": "0.56%",
+      "MemUsage": "5.77MiB / 1GiB",
+      "Name": "nexus-linux-32548-1793376858617684900-node-2-1",
+      "NetIO": "553kB / 610kB",
+      "PIDs": "7"
+    },
+    {
+      "BlockIO": "0B / 81.9kB",
+      "CPUPerc": "2.23%",
+      "Container": "54a5275611a19f8de8b693416dafe1283740d65c7ffd43b69be58b5702eb224f",
+      "ID": "54a5275611a1",
+      "MemPerc": "0.68%",
+      "MemUsage": "6.953MiB / 1GiB",
+      "Name": "nexus-linux-32548-1793376858617684900-node-3-1",
+      "NetIO": "619kB / 579kB",
+      "PIDs": "7"
+    }
+  ],
+  "image_archive": {
+    "path": "nexus-testnet-linux.tar",
+    "bytes": 29945344,
+    "sha256": "0b5977735e5840cf71c91c5e6c55eb50f6cc12b7b0bae8336e5047ce5bc6fdc6"
+  },
+  "cleanup_exit_code": 0,
+  "remaining_own_containers": [],
+  "volumes_preserved": true
+}

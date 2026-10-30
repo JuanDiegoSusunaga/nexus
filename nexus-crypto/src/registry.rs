@@ -326,6 +326,15 @@ impl KeyRegistry {
 
     pub fn active_count(&self) -> usize { self.current.len() }
 
+    /// Includes retired identities, which must never fall back to legacy signing.
+    pub fn is_enrolled(&self, identity: &Address) -> bool { self.enrolled.contains_key(identity) }
+
+    /// Apply one authenticated extension of the current public history.
+    /// Replayed, forked or partially authorized records leave the registry intact.
+    pub fn apply_record(&mut self, record: RotationRecord) -> Result<(), NexusError> {
+        self.append(record)
+    }
+
     /// El reloj es metadato; el orden autorizado lo fija la secuencia encadenada.
     pub(crate) fn prepare(&self, event: RegistryEvent) -> RecordBody {
         RecordBody {
