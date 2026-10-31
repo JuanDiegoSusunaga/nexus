@@ -1,0 +1,155 @@
+{
+  "success": true,
+  "before": [
+    {
+      "attested_by_validator": 3,
+      "burned_raw": "27074000000000",
+      "height": 614,
+      "issued_raw": "1000614000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "2ec357c3390879c25466e7ae91c1545ba5ec772a11d4556c1a5a11cb90de4fd8",
+      "supply_raw": "1000613999972926000000000"
+    },
+    {
+      "attested_by_validator": 2,
+      "burned_raw": "27074000000000",
+      "height": 614,
+      "issued_raw": "1000614000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "2ec357c3390879c25466e7ae91c1545ba5ec772a11d4556c1a5a11cb90de4fd8",
+      "supply_raw": "1000613999972926000000000"
+    },
+    {
+      "attested_by_validator": 0,
+      "burned_raw": "27074000000000",
+      "height": 614,
+      "issued_raw": "1000614000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "2ec357c3390879c25466e7ae91c1545ba5ec772a11d4556c1a5a11cb90de4fd8",
+      "supply_raw": "1000613999972926000000000"
+    },
+    {
+      "attested_by_validator": 1,
+      "burned_raw": "27074000000000",
+      "height": 614,
+      "issued_raw": "1000614000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "2ec357c3390879c25466e7ae91c1545ba5ec772a11d4556c1a5a11cb90de4fd8",
+      "supply_raw": "1000613999972926000000000"
+    }
+  ],
+  "nodes": [
+    {
+      "node": 0,
+      "recovered": {
+        "attested_by_validator": 3,
+        "burned_raw": "27074000000000",
+        "height": 615,
+        "issued_raw": "1000615000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "551a327efa6dad8ec5ea2bfabe02385b97fab3f841e69c730273da232678c282",
+        "supply_raw": "1000614999972926000000000"
+      }
+    },
+    {
+      "node": 1,
+      "recovered": {
+        "attested_by_validator": 2,
+        "burned_raw": "27074000000000",
+        "height": 617,
+        "issued_raw": "1000617000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "c1eca6c08df1d58960fa5f3e41242f7ec8fe4bd591d145b778e4a893cfc02855",
+        "supply_raw": "1000616999972926000000000"
+      }
+    },
+    {
+      "node": 2,
+      "recovered": {
+        "attested_by_validator": 0,
+        "burned_raw": "27074000000000",
+        "height": 618,
+        "issued_raw": "1000618000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "45836f38dd7e76581d6a2d47caaef31f44ba80d7661bffe521116aac6a496cc2",
+        "supply_raw": "1000617999972926000000000"
+      }
+    },
+    {
+      "node": 3,
+      "recovered": {
+        "attested_by_validator": 1,
+        "burned_raw": "27074000000000",
+        "height": 619,
+        "issued_raw": "1000619000000000000000000",
+        "pending": 0,
+        "phase": "Propose",
+        "round": 0,
+        "state_root": "6804467489b349cb7946404f76ff3a4e9f7006d6bda4ade2e84d81d78c61eb9c",
+        "supply_raw": "1000618999972926000000000"
+      }
+    }
+  ],
+  "image": "sha256:49c11e1d801eb8066316fb65826dace423cb4e681c8f8957a2ada737138bf938",
+  "gateway": "sha256:af58fcc2696a96341217ed3eb1b4d9528b1b641144bc850464c696bab49f7819",
+  "after": [
+    {
+      "attested_by_validator": 3,
+      "burned_raw": "27074000000000",
+      "height": 619,
+      "issued_raw": "1000619000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "6804467489b349cb7946404f76ff3a4e9f7006d6bda4ade2e84d81d78c61eb9c",
+      "supply_raw": "1000618999972926000000000"
+    },
+    {
+      "attested_by_validator": 2,
+      "burned_raw": "27074000000000",
+      "height": 619,
+      "issued_raw": "1000619000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "6804467489b349cb7946404f76ff3a4e9f7006d6bda4ade2e84d81d78c61eb9c",
+      "supply_raw": "1000618999972926000000000"
+    },
+    {
+      "attested_by_validator": 0,
+      "burned_raw": "27074000000000",
+      "height": 619,
+      "issued_raw": "1000619000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "6804467489b349cb7946404f76ff3a4e9f7006d6bda4ade2e84d81d78c61eb9c",
+      "supply_raw": "1000618999972926000000000"
+    },
+    {
+      "attested_by_validator": 1,
+      "burned_raw": "27074000000000",
+      "height": 619,
+      "issued_raw": "1000619000000000000000000",
+      "pending": 0,
+      "phase": "Propose",
+      "round": 0,
+      "state_root": "6804467489b349cb7946404f76ff3a4e9f7006d6bda4ade2e84d81d78c61eb9c",
+      "supply_raw": "1000618999972926000000000"
+    }
+  ]
+}

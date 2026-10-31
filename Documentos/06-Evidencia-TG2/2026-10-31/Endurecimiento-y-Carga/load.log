@@ -1,0 +1,41 @@
+funded 1/32
+funded 2/32
+funded 3/32
+funded 4/32
+funded 5/32
+funded 6/32
+funded 7/32
+funded 8/32
+funded 9/32
+funded 10/32
+funded 11/32
+funded 12/32
+funded 13/32
+funded 14/32
+funded 15/32
+funded 16/32
+funded 17/32
+funded 18/32
+funded 19/32
+funded 20/32
+funded 21/32
+funded 22/32
+funded 23/32
+funded 24/32
+funded 25/32
+funded 26/32
+funded 27/32
+funded 28/32
+funded 29/32
+funded 30/32
+funded 31/32
+funded 32/32
+repetition=0 concurrency=1 confirmed=6 tps=0.182
+repetition=0 concurrency=8 confirmed=48 tps=1.441
+repetition=0 concurrency=32 confirmed=112 tps=2.845
+repetition=1 concurrency=32 confirmed=112 tps=2.881
+repetition=1 concurrency=1 confirmed=6 tps=0.182
+repetition=1 concurrency=8 confirmed=48 tps=1.469
+repetition=2 concurrency=8 confirmed=48 tps=1.451
+repetition=2 concurrency=32 confirmed=112 tps=2.875
+repetition=2 concurrency=1 confirmed=6 tps=0.183

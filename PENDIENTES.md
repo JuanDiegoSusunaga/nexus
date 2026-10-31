@@ -1,5 +1,8 @@
-# Pendientes del prototipo NEXUS — 30 de octubre de 2026
+# Pendientes del prototipo NEXUS — 31 de octubre de 2026
 
+- [x] Rechazar generación y verificación Groth16 genéricas no implementadas, incluso con claves cargadas y bytes de prueba no vacíos; el contrato AIR/FRI escalar mantiene su alcance separado.
+- [x] Sincronizar directorios del diario en Unix y exigir recuperación tras un fallo posterior al renombrado, bloqueando nuevas firmas BFT desde el estado anterior; regresión con fallo de sincronización inyectado. Otras plataformas conservan su garantía previa de sincronización del archivo.
+- [x] Medir carga cerrada L1 en el laboratorio cloud: 498 transferencias, tres repeticiones con concurrencias 1/8/32, latencias y recursos; [evidencia](Documentos/06-Evidencia-TG2/2026-10-31/Endurecimiento-y-Carga/README.md). No acredita capacidad sostenida de producción ni comparación entre arquitecturas.
 - [x] Autorización, rotación/retiro por épocas y bloqueo de emergencia L2 en el prototipo local, con persistencia y pruebas.
 - [x] Perfil monetario experimental: génesis, máximo de emisión histórica, subsidios, comisiones y quema.
 - [x] Cuatro validadores ML-DSA-65, quórum tres, transporte TCP, consultas autenticadas, certificados y diario incremental recuperable.

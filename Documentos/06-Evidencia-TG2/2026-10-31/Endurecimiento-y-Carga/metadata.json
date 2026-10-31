@@ -1,0 +1,66 @@
+{
+  "utc": "2026-10-31T01:45:17.369690+00:00",
+  "genesis": "f7e411df3d6dc1bbc79c36830229668a5c53adaf572e83d960e47111de276112",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "logical_cpus_reported": 5,
+  "nodes": [
+    {
+      "service": "node-0",
+      "id": "2fb3265bdbd9",
+      "image": "sha256:49c11e1d801eb8066316fb65826dace423cb4e681c8f8957a2ada737138bf938"
+    },
+    {
+      "service": "node-1",
+      "id": "fb8567496576",
+      "image": "sha256:49c11e1d801eb8066316fb65826dace423cb4e681c8f8957a2ada737138bf938"
+    },
+    {
+      "service": "node-2",
+      "id": "9cc9ccf57b56",
+      "image": "sha256:49c11e1d801eb8066316fb65826dace423cb4e681c8f8957a2ada737138bf938"
+    },
+    {
+      "service": "node-3",
+      "id": "3fa9618dc65b",
+      "image": "sha256:49c11e1d801eb8066316fb65826dace423cb4e681c8f8957a2ada737138bf938"
+    }
+  ],
+  "phase_seconds": 30,
+  "repetitions": 3,
+  "sample_interval_target_seconds": 5,
+  "binary_sha256": "4ddc18257f7665f6ff7bbe4937c70ebd64b97def14475d954af22319c5d8d3b7",
+  "container_limits": {
+    "node-0": {
+      "cpus": 1.0,
+      "mem_limit": "512m",
+      "pids_limit": 128
+    },
+    "node-1": {
+      "cpus": 1.0,
+      "mem_limit": "512m",
+      "pids_limit": 128
+    },
+    "node-2": {
+      "cpus": 1.0,
+      "mem_limit": "512m",
+      "pids_limit": 128
+    },
+    "node-3": {
+      "cpus": 1.0,
+      "mem_limit": "512m",
+      "pids_limit": 128
+    }
+  },
+  "base_commit": "dd46a0f6e4499f8eddfc28554480ca100e4ed86c",
+  "source_sha256": {
+    "Cargo.lock": "71428a790dc6e7f8d0acbe7aa4d64bc4d2526a3692d89c8700a92089700a11bd",
+    "nexus-core/src/journal.rs": "b87a30740074ee1222d717ee227b4a681aa70132ae0d4e686dfd3b846dfcc10d",
+    "nexus-node/src/bft.rs": "cdeea240f0c5017ec51be3570ac6f8cf7ffe28ec73d5dcb5daf40bb528cb9400",
+    "nexus-zk/src/verifier.rs": "c91e458bd9c443504b069ce0cc4b9b2076ad58011e9a87fa91a5adfc9818e609",
+    "nexus-zk/src/prover.rs": "800289b114190556f838eed3beec42daa7a049d1de5682757e90b279ebaf9b1d",
+    "nexus-cli/examples/testnet_load.rs": "783e6364f5a317f95afea60bfa5c7c125d493086a232065af03c18ff58dbf312",
+    "deploy/measure_testnet.py": "49236ed0636c3433fd4d42a0112cb30d0f71574e17ebe7c652bd2c8b7fd20e70"
+  },
+  "cpu.max": "400000 100000",
+  "memory.max": "17179869184"
+}

@@ -1,0 +1,165 @@
+{
+  "success": true,
+  "groups": [
+    {
+      "concurrency": 1,
+      "repetitions": 3,
+      "confirmed": 18,
+      "offer_seconds": 90,
+      "elapsed_including_drain_seconds": 98.77221223800001,
+      "confirmed_tps_offer_window": 0.16666666666666666,
+      "confirmed_tps_including_drain": 0.1822374895950237,
+      "latency_ms_p50": 5492.948669,
+      "latency_ms_p95": 5706.626064,
+      "latency_ms_p99": 5706.626064,
+      "submission_ack_ms_p95": 4.953747,
+      "memory_peak_bytes_per_node": 214433792.0,
+      "cpu_mean_percent_per_node": 3.572142857142857,
+      "cpu_peak_percent_per_node": 6.8,
+      "resource_samples": 14,
+      "journal_growth_bracketed": [
+        {
+          "repetition": 0,
+          "sample_interval_seconds": 46.464,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 827392,
+            "node-1": 741376,
+            "node-2": 815104,
+            "node-3": 872448
+          }
+        },
+        {
+          "repetition": 1,
+          "sample_interval_seconds": 46.229,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 1114112,
+            "node-1": 1064960,
+            "node-2": 1220608,
+            "node-3": 1069056
+          }
+        },
+        {
+          "repetition": 2,
+          "sample_interval_seconds": 46.29,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 921600,
+            "node-1": 839680,
+            "node-2": 909312,
+            "node-3": 946176
+          }
+        }
+      ],
+      "signed_transaction_bytes": 98208
+    },
+    {
+      "concurrency": 8,
+      "repetitions": 3,
+      "confirmed": 144,
+      "offer_seconds": 90,
+      "elapsed_including_drain_seconds": 99.062237766,
+      "confirmed_tps_offer_window": 1.3333333333333333,
+      "confirmed_tps_including_drain": 1.4536316082435954,
+      "latency_ms_p50": 5497.373901999999,
+      "latency_ms_p95": 5716.119958,
+      "latency_ms_p99": 5724.645224999999,
+      "submission_ack_ms_p95": 4.5579790000000004,
+      "memory_peak_bytes_per_node": 210868633.6,
+      "cpu_mean_percent_per_node": 4.385357142857143,
+      "cpu_peak_percent_per_node": 9.13,
+      "resource_samples": 14,
+      "journal_growth_bracketed": [
+        {
+          "repetition": 0,
+          "sample_interval_seconds": 46.287,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 1323008,
+            "node-1": 1212416,
+            "node-2": 1351680,
+            "node-3": 1294336
+          }
+        },
+        {
+          "repetition": 1,
+          "sample_interval_seconds": 46.217,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 1548288,
+            "node-1": 1343488,
+            "node-2": 1495040,
+            "node-3": 1339392
+          }
+        },
+        {
+          "repetition": 2,
+          "sample_interval_seconds": 46.234,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 1748992,
+            "node-1": 1495040,
+            "node-2": 1785856,
+            "node-3": 1638400
+          }
+        }
+      ],
+      "signed_transaction_bytes": 785664
+    },
+    {
+      "concurrency": 32,
+      "repetitions": 3,
+      "confirmed": 336,
+      "offer_seconds": 90,
+      "elapsed_including_drain_seconds": 117.208583075,
+      "confirmed_tps_offer_window": 2.6666666666666665,
+      "confirmed_tps_including_drain": 2.86668425796939,
+      "latency_ms_p50": 11056.155077,
+      "latency_ms_p95": 11471.987564000001,
+      "latency_ms_p99": 11487.808477,
+      "submission_ack_ms_p95": 5.42537,
+      "memory_peak_bytes_per_node": 213699788.8,
+      "cpu_mean_percent_per_node": 6.041911764705882,
+      "cpu_peak_percent_per_node": 13.52,
+      "resource_samples": 17,
+      "journal_growth_bracketed": [
+        {
+          "repetition": 0,
+          "sample_interval_seconds": 52.8,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 2695168,
+            "node-1": 2781184,
+            "node-2": 2703360,
+            "node-3": 2682880
+          }
+        },
+        {
+          "repetition": 1,
+          "sample_interval_seconds": 52.778,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 2674688,
+            "node-1": 2478080,
+            "node-2": 2678784,
+            "node-3": 2584576
+          }
+        },
+        {
+          "repetition": 2,
+          "sample_interval_seconds": 52.391,
+          "allocated_growth_bytes_per_node": {
+            "node-0": 2654208,
+            "node-1": 2404352,
+            "node-2": 2752512,
+            "node-3": 2633728
+          }
+        }
+      ],
+      "signed_transaction_bytes": 1833216
+    }
+  ],
+  "scope": "Existing four-validator Docker LAB; client and sampler share host; monetary L1 transfers only",
+  "journal_growth_scope": "du -sk allocated bytes; brackets may extend beyond phase and include background blocks",
+  "limits": [
+    "One outstanding transaction per sender; 32 senders maximum",
+    "Empirical nearest-rank quantiles; small sample sizes, especially concurrency 1",
+    "No open-loop overload, distributed operators, independent host or L2 proof generation",
+    "CPU percentages use Docker semantics (100 percent corresponds to one CPU)",
+    "Resource collection and certificate polling also consume host resources",
+    "Signed byte totals exclude TCP framing, consensus retransmission and query traffic"
+  ]
+}
