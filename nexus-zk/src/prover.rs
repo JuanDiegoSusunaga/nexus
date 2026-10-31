@@ -15,25 +15,12 @@ impl Prover {
         }
     }
 
-    /// Generate state transition proof
+    /// Generic Groth16 proving is not implemented. Never fabricate a certificate.
     pub fn prove_state_transition(
         &self,
-        inputs: &StateTransitionInputs,
+        _inputs: &StateTransitionInputs,
     ) -> Result<ZKProof, NexusError> {
-        // Placeholder implementation
-        // In production, would use arkworks Groth16 prover
-
-        let mut public_inputs = Vec::new();
-        public_inputs.extend_from_slice(inputs.pre_state_root.0.as_bytes());
-        public_inputs.extend_from_slice(inputs.post_state_root.0.as_bytes());
-        public_inputs.extend_from_slice(inputs.transactions_root.as_bytes());
-        public_inputs.extend_from_slice(&inputs.block_number.to_le_bytes());
-
-        Ok(ZKProof {
-            proof_bytes: vec![0u8; 256], // Placeholder
-            public_inputs,
-            proof_type: ProofType::StateTransition,
-        })
+        Err(NexusError::NotImplemented("Generic Groth16 proof generation".into()))
     }
 
     /// Load proving key

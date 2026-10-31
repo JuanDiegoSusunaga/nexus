@@ -45,6 +45,10 @@ La construcción ejecuta check, pruebas Rust y build release. Incluye veinte arc
 
 ## Estado de la implementación
 
+La revisión local del 30 de octubre añade rechazo explícito de las APIs Groth16 genéricas no implementadas y sincronización del directorio del diario en Unix. Un fallo posterior al renombrado exige recuperación antes de seguir firmando. Pasan **439 pruebas Rust**, con un caso auxiliar reservado al proceso hijo ignorado por el ejecutor principal. Esto no amplía el AIR escalar a ejecución L2 general ni completa las obligaciones de reducción de seguridad de ML-DSA. [Pruebas del rechazo genérico](nexus-zk/tests/generic_verifier_rejection.rs) · [Contrato del diario](nexus-core/src/journal.rs) · [Límites operativos](TESTNET.md).
+
+El ensayo cloud del 31 de octubre confirma **498 transferencias medidas** con concurrencias 1, 8 y 32, en tres repeticiones por perfil. El perfil 32 observa 2,67 TPS dentro de las ventanas de oferta y 2,87 TPS incluyendo el vaciado, con latencia p95 de 11,47 s. Los cuatro nodos convergen con colas vacías. Son transferencias L1 en un host compartido; no se deduce capacidad máxima de producción ni ventaja integral L1/L2. [Método, datos y límites](Documentos/06-Evidencia-TG2/2026-10-31/Endurecimiento-y-Carga/README.md).
+
 El ciclo local permite admitir transferencias L2, ejecutarlas, construir lotes, preparar paquetes firmados L1, observar su inclusión y confirmar el lote. `DurableNode` guarda las transiciones antes de devolver éxito y recupera el estado al reabrir. Las llamadas y despliegues de contratos se rechazan explícitamente porque este perfil no implementa un intérprete.
 
 El [registro del 20 de octubre](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/06-Evidencia-TG2/2026-10-20/Ciclo-Local-Durable/verificacion.json), sobre el código `b16688c`, conserva 360 pruebas del workspace y 13 pruebas dirigidas en release, además de check/build. Son comprobaciones previas; la preparación de esta documentación no vuelve a ejecutarlas ni cambia las fuentes Rust.

@@ -1,0 +1,5533 @@
+{
+  "success": true,
+  "scope": "Closed-loop monetary L1 transfers on four endpoints; no L2 proof benchmark",
+  "genesis": "f7e411df3d6dc1bbc79c36830229668a5c53adaf572e83d960e47111de276112",
+  "signature": "ML-DSA-65",
+  "nodes": [
+    "127.0.0.1:19001",
+    "127.0.0.1:19002",
+    "127.0.0.1:19003",
+    "127.0.0.1:19004"
+  ],
+  "block_time_ms": 5000,
+  "poll_ms": 200,
+  "funding_excluded": true,
+  "funding": [
+    {
+      "sender": 0,
+      "nonce": 2,
+      "hash": "40b9ee998410bac22643473f4c2649bffea8f2350b8db5c63130eebc28bc0de4",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.345064,
+      "confirmation_ms": 1223.426098,
+      "height": 5195,
+      "observed_unix_ms": 1793411121886
+    },
+    {
+      "sender": 1,
+      "nonce": 3,
+      "hash": "8ec4cffc012952445323a3b6c48db7a2dfeef479addfcc7192718962a0182e44",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.90645,
+      "confirmation_ms": 5493.8649829999995,
+      "height": 5196,
+      "observed_unix_ms": 1793411127381
+    },
+    {
+      "sender": 2,
+      "nonce": 4,
+      "hash": "4c497fbdfc2368e00fb36d6f133f0a07f066dc865f5915f2aeb9345ca350b83b",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.5474040000000002,
+      "confirmation_ms": 5696.728991,
+      "height": 5197,
+      "observed_unix_ms": 1793411133080
+    },
+    {
+      "sender": 3,
+      "nonce": 5,
+      "hash": "b8afdef6e562ed0821ccdd6c0cec7a9f77784c7efeaea56d3b91d33a38d58fb8",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 4.859972,
+      "confirmation_ms": 5291.16921,
+      "height": 5198,
+      "observed_unix_ms": 1793411138372
+    },
+    {
+      "sender": 4,
+      "nonce": 6,
+      "hash": "99a09cbf22ea9d2485a54fe67a1ca3afc942faf958618663984ca5995ba93f7d",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 1.622945,
+      "confirmation_ms": 5488.1196660000005,
+      "height": 5199,
+      "observed_unix_ms": 1793411143862
+    },
+    {
+      "sender": 5,
+      "nonce": 7,
+      "hash": "67ac9dba8283a396dab6acd7fffb499006bb5bc485b7be22a6fd721f530bee33",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.525992,
+      "confirmation_ms": 5691.204188000001,
+      "height": 5200,
+      "observed_unix_ms": 1793411149555
+    },
+    {
+      "sender": 6,
+      "nonce": 8,
+      "hash": "07554f9654c96b556609a7a6b608d4cf4726b5cd7449961cb50f6ea9cdcded71",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.065789,
+      "confirmation_ms": 5688.559593,
+      "height": 5201,
+      "observed_unix_ms": 1793411155245
+    },
+    {
+      "sender": 7,
+      "nonce": 9,
+      "hash": "5bdde3bb0ae44a67e1327cb0b7cc967fbedc016b99b9ce8ef30a600a9013a884",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.06737,
+      "confirmation_ms": 5492.538592,
+      "height": 5202,
+      "observed_unix_ms": 1793411160740
+    },
+    {
+      "sender": 8,
+      "nonce": 10,
+      "hash": "a209c55a0bb2049eb873389b060f5cda1eeb44c8aee3bfe00e828e870df7190f",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.619697,
+      "confirmation_ms": 5289.466483,
+      "height": 5203,
+      "observed_unix_ms": 1793411166033
+    },
+    {
+      "sender": 9,
+      "nonce": 11,
+      "hash": "85a6774e07afe26f9ee434b87f35fa95be787292f662a70255818fa42fb4b27e",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.6529510000000003,
+      "confirmation_ms": 5508.179882,
+      "height": 5204,
+      "observed_unix_ms": 1793411171545
+    },
+    {
+      "sender": 10,
+      "nonce": 12,
+      "hash": "224668354b0c082ebc05a82c522baaaac53cf7deb0f17e4ba9cf6aae2682f16d",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 1.915733,
+      "confirmation_ms": 5699.546985999999,
+      "height": 5205,
+      "observed_unix_ms": 1793411177245
+    },
+    {
+      "sender": 11,
+      "nonce": 13,
+      "hash": "57c9f3b070af2a4f5f0d2c9a9ed45775df29ccf0edab3fb7acf3e837579c61f3",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.174151,
+      "confirmation_ms": 5285.4442070000005,
+      "height": 5206,
+      "observed_unix_ms": 1793411182532
+    },
+    {
+      "sender": 12,
+      "nonce": 14,
+      "hash": "fc53106978cdc51c122e24e52b0d1af2817b78196e6f85123818ba7b338a2735",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.524008,
+      "confirmation_ms": 5486.393299,
+      "height": 5207,
+      "observed_unix_ms": 1793411188020
+    },
+    {
+      "sender": 13,
+      "nonce": 15,
+      "hash": "08af80035d411fe1ec30410bbe16351fb4a93c98766188cfd3febd3a450ebad2",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.013874,
+      "confirmation_ms": 5289.24663,
+      "height": 5208,
+      "observed_unix_ms": 1793411193310
+    },
+    {
+      "sender": 14,
+      "nonce": 16,
+      "hash": "583fc4ea8c2b1069cc7b14e8fc00690360c316b5a45e3f9275d462708db2e55c",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.224961,
+      "confirmation_ms": 5483.4283749999995,
+      "height": 5209,
+      "observed_unix_ms": 1793411198795
+    },
+    {
+      "sender": 15,
+      "nonce": 17,
+      "hash": "9e70e8eed7ead74fb01dd01b731013a59adc99f16e35f7b03fe48ce6c2249d3b",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 4.2427209999999995,
+      "confirmation_ms": 5288.185639,
+      "height": 5210,
+      "observed_unix_ms": 1793411204085
+    },
+    {
+      "sender": 16,
+      "nonce": 18,
+      "hash": "c2fe96b4be26c950f6c7dd7d8df5a6b6e2f687253d001952edfab948111c1b20",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.767148,
+      "confirmation_ms": 5487.429082000001,
+      "height": 5211,
+      "observed_unix_ms": 1793411209574
+    },
+    {
+      "sender": 17,
+      "nonce": 19,
+      "hash": "c9f8efc053125a409db47bff5cfa3be2e51b9aef76145ff539fa8b00d089bf5c",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.2914120000000002,
+      "confirmation_ms": 5287.199581000001,
+      "height": 5212,
+      "observed_unix_ms": 1793411214863
+    },
+    {
+      "sender": 18,
+      "nonce": 20,
+      "hash": "f4c1b7fe69f5cb14e17691d47cfe79bcd4b5eda1bf886c1330a399eb5a9e03e9",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.4058930000000003,
+      "confirmation_ms": 5700.147266,
+      "height": 5213,
+      "observed_unix_ms": 1793411220565
+    },
+    {
+      "sender": 19,
+      "nonce": 21,
+      "hash": "86cdae66ab37bfac79cdc652864329b03a0a8115755a6a19432c5f4d2a92be53",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.272052,
+      "confirmation_ms": 5494.230350999999,
+      "height": 5214,
+      "observed_unix_ms": 1793411226061
+    },
+    {
+      "sender": 20,
+      "nonce": 22,
+      "hash": "c7ceb93a7e28ebb786b4b82110b6ade6606489fd7d7c0019fe0ec2f64421726b",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.045321,
+      "confirmation_ms": 5493.986009,
+      "height": 5215,
+      "observed_unix_ms": 1793411231557
+    },
+    {
+      "sender": 21,
+      "nonce": 23,
+      "hash": "84614fd74bbc048a085f64ab84d20767d59c7a83f3ffb8fea8bf5ff72afaffeb",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.618134,
+      "confirmation_ms": 5502.353198,
+      "height": 5216,
+      "observed_unix_ms": 1793411237060
+    },
+    {
+      "sender": 22,
+      "nonce": 24,
+      "hash": "214f3e50a3a748184a06e47bbe3095ef3daf49ce90a3bffa54c73ec2fc3292a0",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.373665,
+      "confirmation_ms": 5700.9514039999995,
+      "height": 5217,
+      "observed_unix_ms": 1793411242764
+    },
+    {
+      "sender": 23,
+      "nonce": 25,
+      "hash": "ebc8b434f40ee43a45d7443ff84171194e0a8ec9952de3cb395456470f73adca",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 7.708011,
+      "confirmation_ms": 5506.489733,
+      "height": 5218,
+      "observed_unix_ms": 1793411248272
+    },
+    {
+      "sender": 24,
+      "nonce": 26,
+      "hash": "d1c762c24d045c400a5cedef1c3ff139a556555f137d5d9c098ae1153eda5ddf",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.834239,
+      "confirmation_ms": 5289.423168,
+      "height": 5219,
+      "observed_unix_ms": 1793411253563
+    },
+    {
+      "sender": 25,
+      "nonce": 27,
+      "hash": "2082066eea45f9b774d37198328f3e45e9ad9ad90e6e6c4715af1c6f940dd7da",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.514638,
+      "confirmation_ms": 5696.650111,
+      "height": 5220,
+      "observed_unix_ms": 1793411259262
+    },
+    {
+      "sender": 26,
+      "nonce": 28,
+      "hash": "e8ffe59735a918e7a6e6a0072f8a94e4c01705c8ab6853c1d95ec954ab15732f",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.3887769999999997,
+      "confirmation_ms": 5700.063357999999,
+      "height": 5221,
+      "observed_unix_ms": 1793411264965
+    },
+    {
+      "sender": 27,
+      "nonce": 29,
+      "hash": "e7f9ebe38ab200cbdafebc8cac3a527a58fb71802158f757afffcf9325453a7c",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.2929489999999997,
+      "confirmation_ms": 5517.223104000001,
+      "height": 5222,
+      "observed_unix_ms": 1793411270488
+    },
+    {
+      "sender": 28,
+      "nonce": 30,
+      "hash": "876e4811fc36270b9c555e1e1646597bf32d12a1130be7fa31d53200ac1ae214",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.245823,
+      "confirmation_ms": 5282.094325,
+      "height": 5223,
+      "observed_unix_ms": 1793411275773
+    },
+    {
+      "sender": 29,
+      "nonce": 31,
+      "hash": "1edafb8e51538acf16e1228ee7abf3d7ca01228b429a9ae116d14b636964632a",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.165869,
+      "confirmation_ms": 5694.825035,
+      "height": 5224,
+      "observed_unix_ms": 1793411281469
+    },
+    {
+      "sender": 30,
+      "nonce": 32,
+      "hash": "6b95cd7fc51fb8f720ae1b126bd96390c40b8e4164426ed10bec19c6feccceaf",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 3.3489940000000002,
+      "confirmation_ms": 5698.374675,
+      "height": 5225,
+      "observed_unix_ms": 1793411287169
+    },
+    {
+      "sender": 31,
+      "nonce": 33,
+      "hash": "2c83e816edbe5033f460d76d8ae50e0d780858581c8147b52b8a5b995c30c9ff",
+      "signed_bytes": 5456,
+      "submit_ack_ms": 2.446354,
+      "confirmation_ms": 5497.747204,
+      "height": 5226,
+      "observed_unix_ms": 1793411292668
+    }
+  ],
+  "phases": [
+    {
+      "repetition": 0,
+      "concurrency": 1,
+      "started_unix_ms": 1793411292670,
+      "finished_unix_ms": 1793411325670,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 33.00022498,
+      "confirmed_in_offer_window": 5,
+      "confirmed_total": 6,
+      "confirmed_tps_offer_window": 0.16666666666666666,
+      "confirmed_tps_including_drain": 0.1818169422674039,
+      "latency_ms_p50": 5492.948669,
+      "latency_ms_p95": 5706.626064,
+      "latency_ms_p99": 5706.626064,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 0,
+          "hash": "6a181381417755e109e61ec4ead208dc13121166827aefad290069f6ebcd24bb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.974259,
+          "confirmation_ms": 5295.080557,
+          "height": 5227,
+          "observed_unix_ms": 1793411297965
+        },
+        {
+          "sender": 0,
+          "nonce": 1,
+          "hash": "bd3b500228a4e017f785697f4de21ec24d2d03a73b6c7542b77240a929248eb8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.2979659999999997,
+          "confirmation_ms": 5497.311468000001,
+          "height": 5228,
+          "observed_unix_ms": 1793411303464
+        },
+        {
+          "sender": 0,
+          "nonce": 2,
+          "hash": "75d4f23046d82925f26e6146776582212667936600e7164517126538565c6044",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3308959999999996,
+          "confirmation_ms": 5702.2972310000005,
+          "height": 5229,
+          "observed_unix_ms": 1793411309169
+        },
+        {
+          "sender": 0,
+          "nonce": 3,
+          "hash": "10f7f03271bc9fbf51e45a0b33bc4d039c7a595345a36cfd78ac5244016cb25e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.097264,
+          "confirmation_ms": 5294.153397,
+          "height": 5230,
+          "observed_unix_ms": 1793411314464
+        },
+        {
+          "sender": 0,
+          "nonce": 4,
+          "hash": "1bfb9e4e282bdfe181d9a88acab06c404390f0ac9dc64353242b66b5da4dc32d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.089883,
+          "confirmation_ms": 5492.948669,
+          "height": 5231,
+          "observed_unix_ms": 1793411319959
+        },
+        {
+          "sender": 0,
+          "nonce": 5,
+          "hash": "424d330c70192441ad6d6d18308cb38af0490733923ed2094124735059371ebf",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.953747,
+          "confirmation_ms": 5706.626064,
+          "height": 5232,
+          "observed_unix_ms": 1793411325668
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "concurrency": 8,
+      "started_unix_ms": 1793411325670,
+      "finished_unix_ms": 1793411358977,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 33.306896969,
+      "confirmed_in_offer_window": 40,
+      "confirmed_total": 48,
+      "confirmed_tps_offer_window": 1.3333333333333333,
+      "confirmed_tps_including_drain": 1.4411429574083539,
+      "latency_ms_p50": 5512.664411000001,
+      "latency_ms_p95": 5722.4533759999995,
+      "latency_ms_p99": 5727.1494059999995,
+      "receipts": [
+        {
+          "sender": 5,
+          "nonce": 0,
+          "hash": "4f9edf01715d6c7a1b49a403334bbee9925b986bb3414a8c75c556775997c9bd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.7418579999999997,
+          "confirmation_ms": 5700.030661,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 6,
+          "nonce": 0,
+          "hash": "01268d756e527713dd969f87c6941d7e4d780002a1c57609f116e293ddded8f7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.072885,
+          "confirmation_ms": 5697.347651,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 7,
+          "nonce": 0,
+          "hash": "19c5fbc742f2dc3f6ff0b1493e665ee13989a5c8f42376a2d11b10cbe9f3f2fa",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.600836,
+          "confirmation_ms": 5694.310117999999,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 0,
+          "nonce": 6,
+          "hash": "6393e7b22c278276bb40f599c71b3cdc05bc63a1bf56d52ef5defc3f91cc619b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.811252,
+          "confirmation_ms": 5712.851247,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 1,
+          "nonce": 0,
+          "hash": "7a2cd80983e905d5c351c3dd6a1f7ed6b3588f759ddfa2188e67a31dcaff6cec",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3553580000000003,
+          "confirmation_ms": 5710.073466,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 2,
+          "nonce": 0,
+          "hash": "caa6a5fe4a37ef4b4516534e440b42bfb190cff0cba5216c93232d6a43b9b975",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.716738,
+          "confirmation_ms": 5707.75226,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 3,
+          "nonce": 0,
+          "hash": "ec4fed1b14a5c1380f0c5de190536ae61e9cf39daa46b9876133cd8249c1e7fd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.857995,
+          "confirmation_ms": 5704.069192000001,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 4,
+          "nonce": 0,
+          "hash": "99b979011fa10add6993927af69a4241a39b52771ad3beda11d1df757bb83761",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.945622,
+          "confirmation_ms": 5702.242744,
+          "height": 5233,
+          "observed_unix_ms": 1793411331383
+        },
+        {
+          "sender": 1,
+          "nonce": 1,
+          "hash": "65e7a9f9df8b7ca4ffa9da02837b5491c2c232958dfd6783fbc13937d75c343c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.2425840000000004,
+          "confirmation_ms": 5309.781117,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 2,
+          "nonce": 1,
+          "hash": "b598503f84832b97d44692da5f7081048aee66a6292ce40fecd34235082a5918",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.5579790000000004,
+          "confirmation_ms": 5306.573526,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 3,
+          "nonce": 1,
+          "hash": "8e1a5be5976b3183686caec19df4872502223267ceb31ebcaa14342e4cf88667",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.773457,
+          "confirmation_ms": 5302.049317,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 0,
+          "nonce": 7,
+          "hash": "6fbe46256eac18aeb5e1280235867186e093004d36d8b71135482c772d75aced",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.245983,
+          "confirmation_ms": 5312.132308,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 4,
+          "nonce": 1,
+          "hash": "6c5726615b43d3672fc97aa6c245c5ac5a15fdc25b062ce6a06d776561b03d0d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.985698999999999,
+          "confirmation_ms": 5299.343553,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 5,
+          "nonce": 1,
+          "hash": "7f0524dedaf3fb1af1eed671efbcefafb3e5d344c83c63780572546cce572b04",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.630777,
+          "confirmation_ms": 5294.3915959999995,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 6,
+          "nonce": 1,
+          "hash": "82d977681592d40f679ac00b2a90ecb130d0cd7c790b1eb25e70f99b33a33ae3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5152669999999997,
+          "confirmation_ms": 5291.794459,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 7,
+          "nonce": 1,
+          "hash": "64a21d46206ce5d07d3793c79c11d0daa5d7bf9908f6fc7dc0e458e4e40d6e52",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.248436,
+          "confirmation_ms": 5289.312542000001,
+          "height": 5234,
+          "observed_unix_ms": 1793411336697
+        },
+        {
+          "sender": 0,
+          "nonce": 8,
+          "hash": "8a336e6179dfce721724a9603dd7bcb074143aa0ec2df7d056a947a71ab21bf2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1330590000000003,
+          "confirmation_ms": 5512.664411000001,
+          "height": 5235,
+          "observed_unix_ms": 1793411342211
+        },
+        {
+          "sender": 1,
+          "nonce": 2,
+          "hash": "4beeb81eb9a77566a41076e9a38cc62af87071f3414077dee3484601f4667b6e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.30627,
+          "confirmation_ms": 5510.565764,
+          "height": 5235,
+          "observed_unix_ms": 1793411342211
+        },
+        {
+          "sender": 2,
+          "nonce": 2,
+          "hash": "6048a07b649f428bd2a6b5d5aeafd9cc1e29b0614121e2bce60eeca97d42475a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.1901490000000003,
+          "confirmation_ms": 5508.293535,
+          "height": 5235,
+          "observed_unix_ms": 1793411342211
+        },
+        {
+          "sender": 3,
+          "nonce": 2,
+          "hash": "96f24acd5be640bd4e06c480180116bc4a67f4a67adb04176f7f5fa81f4d667c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.265038,
+          "confirmation_ms": 5505.137547,
+          "height": 5235,
+          "observed_unix_ms": 1793411342211
+        },
+        {
+          "sender": 4,
+          "nonce": 2,
+          "hash": "c82e5719b0f9ed6ca18e40e3fd3f7bc06a2c12d741062af43dee24426e51c25b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.8504329999999998,
+          "confirmation_ms": 5502.90639,
+          "height": 5235,
+          "observed_unix_ms": 1793411342211
+        },
+        {
+          "sender": 5,
+          "nonce": 2,
+          "hash": "283a3e2401b3837b6c3eb8e56b389a77589b1830fba50dbf90c43bcb07fbf204",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.28953,
+          "confirmation_ms": 5499.089688,
+          "height": 5235,
+          "observed_unix_ms": 1793411342212
+        },
+        {
+          "sender": 6,
+          "nonce": 2,
+          "hash": "dcb4a5c7e0d96c6881687fa13b49ab9eef5e50684774b78c467bae50eba9e66c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.565449,
+          "confirmation_ms": 5495.8336580000005,
+          "height": 5235,
+          "observed_unix_ms": 1793411342212
+        },
+        {
+          "sender": 7,
+          "nonce": 2,
+          "hash": "733ab5a414193b64f2be973e451e810b4742fde0bbc066c36b897d9755d4150f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.316023,
+          "confirmation_ms": 5491.301899,
+          "height": 5235,
+          "observed_unix_ms": 1793411342212
+        },
+        {
+          "sender": 5,
+          "nonce": 3,
+          "hash": "18809907eb2c1340306ab6e807d65e545695f18248382fffb4bc7e8b3e6358e8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.489238,
+          "confirmation_ms": 5708.711506000001,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 6,
+          "nonce": 3,
+          "hash": "726837a1ba4ebc6be2e40c64f2d793df2c988bda2ad070c7afa6f11f0964b5d9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.572925000000001,
+          "confirmation_ms": 5705.2571499999995,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 7,
+          "nonce": 3,
+          "hash": "841ff2c679cc2051f870090193d27acc1711484c244e427fe05b0acd9054e2bb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.605192,
+          "confirmation_ms": 5700.7183860000005,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 0,
+          "nonce": 9,
+          "hash": "1d4ccc31cd84f3853009999c257d3f9a2307702de544d5cae62b03e36abba896",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.55053,
+          "confirmation_ms": 5727.1494059999995,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 1,
+          "nonce": 3,
+          "hash": "26c92c691e828aba92e5c4920b142c02dc8a0a73d55cce8b2164570aafa9874e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.268275,
+          "confirmation_ms": 5724.645224999999,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 2,
+          "nonce": 3,
+          "hash": "b7df6217f8bb139d4d9282a40c837f92287b3d05c1bbbcfcf5939ba64997041a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.661083,
+          "confirmation_ms": 5722.4533759999995,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 3,
+          "nonce": 3,
+          "hash": "91e514a085e8f3082fb73d12ed1494d254ec9242d3e5350d24156e203c8e4b3c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.812015000000001,
+          "confirmation_ms": 5718.826044,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 4,
+          "nonce": 3,
+          "hash": "12c8b628de47d536a27107a2cf62737df686fac0efb066c399be76691d011bad",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.0383249999999995,
+          "confirmation_ms": 5714.047729,
+          "height": 5236,
+          "observed_unix_ms": 1793411347940
+        },
+        {
+          "sender": 5,
+          "nonce": 4,
+          "hash": "72dc17d319dd41fabd5e8b591f51bb3c612aa0af21dc2c8af2eb45ad8e901a1a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2062340000000003,
+          "confirmation_ms": 5694.999554,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 6,
+          "nonce": 4,
+          "hash": "f97b625aba9737a65072c7f658b0098b15d102efd7cd3b5b860cefff910fd183",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.815722,
+          "confirmation_ms": 5692.853,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 7,
+          "nonce": 4,
+          "hash": "dc80287533a23a73d01555c31d1dd497d500beaaf13fa114ec4c2573c849fa41",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.1254690000000003,
+          "confirmation_ms": 5690.096157,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 0,
+          "nonce": 10,
+          "hash": "7f2c064b7484938ed60df9e15588f77454129c50609a96504f7c9f29110cc5e2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.104673,
+          "confirmation_ms": 5710.259796,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 1,
+          "nonce": 4,
+          "hash": "e4bdbaed8bf9fdd3866a85922cde13c7cb7e41770f56c82f9066cc151cb691bf",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.814139,
+          "confirmation_ms": 5706.215485,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 2,
+          "nonce": 4,
+          "hash": "88d9508ed64ecbeada45a9cdac8a69b22192034a29978381035e59e1a6170ba7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.431793,
+          "confirmation_ms": 5703.462097,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 3,
+          "nonce": 4,
+          "hash": "7b687e676c66d88d27a9a063d2962cdbabd9c54bf92acd4d6874e9dc1d51f26b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.204616,
+          "confirmation_ms": 5701.081450000001,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 4,
+          "nonce": 4,
+          "hash": "3f2372f8db277cf18eae98efb957b83e826fd3a5eb24863356cd20abb68ee5db",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.5336339999999997,
+          "confirmation_ms": 5698.9107460000005,
+          "height": 5237,
+          "observed_unix_ms": 1793411353652
+        },
+        {
+          "sender": 6,
+          "nonce": 5,
+          "hash": "1e6d6eb67ee8d9e2089984a00c68b17ee0f4bcd84fac5fc0fce937e61dc92b68",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.150384,
+          "confirmation_ms": 5300.178268,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 7,
+          "nonce": 5,
+          "hash": "844e3990f3da51085bffd4575d4bef6974b73a1da3e5ca1884e24ac81b72c165",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.728339,
+          "confirmation_ms": 5297.062537000001,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 0,
+          "nonce": 11,
+          "hash": "cf7ac764ef4a51240a4f853b46f1ac4bcd56104e6fc2180d93cf02e7b765fcdd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.554372,
+          "confirmation_ms": 5319.403219,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 1,
+          "nonce": 5,
+          "hash": "cdc28b4b574e7af3301dd60adc898d6777f395e32b1468196ac5718668c2fb21",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.8794709999999997,
+          "confirmation_ms": 5314.882407,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 2,
+          "nonce": 5,
+          "hash": "82860a7f0cda5b45316acb11e3fb396940411b75439683d08d5075df05f6f8ce",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1459309999999996,
+          "confirmation_ms": 5311.036757,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 3,
+          "nonce": 5,
+          "hash": "8a7b2bcd8122e8752310425ffbdb58333581f5f1b9577945c739413eb621a25d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.293944,
+          "confirmation_ms": 5308.924898,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 4,
+          "nonce": 5,
+          "hash": "ded0811a6ccb4d50510afe36b65a27a02c00d64791872ec86036d331a5121dab",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0870379999999997,
+          "confirmation_ms": 5306.664554,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        },
+        {
+          "sender": 5,
+          "nonce": 5,
+          "hash": "30154adede5600d7e73c21b30b39874610561d12d5cfc3732f0372f85efb4426",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.191245,
+          "confirmation_ms": 5303.610336000001,
+          "height": 5238,
+          "observed_unix_ms": 1793411358975
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "concurrency": 32,
+      "started_unix_ms": 1793411358977,
+      "finished_unix_ms": 1793411398350,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 39.372856994,
+      "confirmed_in_offer_window": 80,
+      "confirmed_total": 112,
+      "confirmed_tps_offer_window": 2.6666666666666665,
+      "confirmed_tps_including_drain": 2.8445992633216224,
+      "latency_ms_p50": 11118.914035,
+      "latency_ms_p95": 11483.139176,
+      "latency_ms_p99": 11492.569034,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 12,
+          "hash": "3bc9ff145bc7316a7d51b697b5506192c4420cf0b8ec1b9b3fea0c7a373b6069",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.465416,
+          "confirmation_ms": 5371.785411,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 1,
+          "nonce": 6,
+          "hash": "1c67d47be52389993041cff5144d5d1417f42e3ebd960378cfb2c58d23a44c26",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.653739,
+          "confirmation_ms": 5369.494678999999,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 2,
+          "nonce": 6,
+          "hash": "0f668022d2f915cb13f7abeda4b0809e09cecea78fd72c2270ff71d3db6766c0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.119739,
+          "confirmation_ms": 5366.875141,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 3,
+          "nonce": 6,
+          "hash": "a9d54ae84d58a3243ec975a7e3d12afb0c4fb388b4ea3210d584d4a8ac3305bb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.716553,
+          "confirmation_ms": 5364.789232,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 4,
+          "nonce": 6,
+          "hash": "1597491dd26730ebda3f6f738180623addd4944de2bf1deb07fd9ea0a05e85b1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1914569999999998,
+          "confirmation_ms": 5362.1068000000005,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 5,
+          "nonce": 6,
+          "hash": "391efbcc653d714458e745a4773b6e70a7fc67910531a3962a89dc6df50053fb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.055979,
+          "confirmation_ms": 5359.949445,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 6,
+          "nonce": 6,
+          "hash": "bfc567c32d489755b71b80095609598361785b54fc366629754c398a5c4a7f35",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9211950000000002,
+          "confirmation_ms": 5357.927688,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 7,
+          "nonce": 6,
+          "hash": "9d94cce354b4d3efb7cff087e554bd094157db8c8c145f061cbfc3f106f2497d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.725179,
+          "confirmation_ms": 5356.040634,
+          "height": 5239,
+          "observed_unix_ms": 1793411364349
+        },
+        {
+          "sender": 8,
+          "nonce": 0,
+          "hash": "c3a93885c1716d227e8a516f5a514d3c34dc0e3ac1e6884eb78c01f872361979",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.608277,
+          "confirmation_ms": 5354.349336,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 9,
+          "nonce": 0,
+          "hash": "fe6f2024879d56887fc9858865e0d7219bdf41b0dd69968f73a4af70ac411255",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.578605,
+          "confirmation_ms": 5350.8206979999995,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 10,
+          "nonce": 0,
+          "hash": "bde406ed2bf74f7d5e2ab694c8a9f1a349ab65aa57d1ab282fdfa5d735b0d05b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.548751,
+          "confirmation_ms": 5348.276355,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 11,
+          "nonce": 0,
+          "hash": "d2de53e8a4313ea208bf05402b64917b253a5778aaf6cc8cda8ed5855c2da55d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.1102430000000005,
+          "confirmation_ms": 5345.761405,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 12,
+          "nonce": 0,
+          "hash": "2ebf5b745e591804005641fc54070a38a20dfe2e0d07bc27da44fede8c4bad27",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.789634,
+          "confirmation_ms": 5341.684952,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 13,
+          "nonce": 0,
+          "hash": "91af85f084e8f70469ae1097027fd25f6f7e22f367f7485096e1037781499e00",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.881796,
+          "confirmation_ms": 5338.929039,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 14,
+          "nonce": 0,
+          "hash": "5b2ec29f7f03c5cbf6285654c7cc75cda6375752e8af74f1d90edcd9cba8aeef",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3816390000000003,
+          "confirmation_ms": 5337.081075,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 15,
+          "nonce": 0,
+          "hash": "a35bfdc63791bace85a5d6b5435b23ea293da6116e839434a72d865b44116a03",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.277071,
+          "confirmation_ms": 5334.732034,
+          "height": 5239,
+          "observed_unix_ms": 1793411364350
+        },
+        {
+          "sender": 30,
+          "nonce": 0,
+          "hash": "cb17fc4497346ab1fe8af263662f50d15a12b89c8bfb102c07d9adf4e7f4ba18",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.49534,
+          "confirmation_ms": 11044.366114,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 31,
+          "nonce": 0,
+          "hash": "b63a2fddc7a5b91cfcf8da1316fff37c4970203acdac73132a5fd4d3b37fae10",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.259872,
+          "confirmation_ms": 11041.905706,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 16,
+          "nonce": 0,
+          "hash": "d8036e0c4626765bbe117d639ff62ef3973b8962883417ddcaa1f5d3f20f2ca0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.905628,
+          "confirmation_ms": 11083.989066999999,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 17,
+          "nonce": 0,
+          "hash": "0305768c4cdf20fe911d35429e29926815cd1473cbcb3ce0b63f7506d87da041",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.428249,
+          "confirmation_ms": 11081.117439,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 18,
+          "nonce": 0,
+          "hash": "ddfbb5959540bd6ce123f46b6258782eaa8ee32b7a82cecb0ed4650d8a465c0a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.918558,
+          "confirmation_ms": 11078.722921,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 19,
+          "nonce": 0,
+          "hash": "4e94c04e3562bb9db365abea3e723f9dac7bd656f4ec325a0ff9f3878a17bb65",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.129118,
+          "confirmation_ms": 11072.838494000001,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 20,
+          "nonce": 0,
+          "hash": "f15c114f4d270f6ece5af8a4bf632fc292c5a1527fd1821511933487677f8762",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6424819999999998,
+          "confirmation_ms": 11070.743077,
+          "height": 5240,
+          "observed_unix_ms": 1793411370101
+        },
+        {
+          "sender": 21,
+          "nonce": 0,
+          "hash": "ff6fb0f4c69b847312e38571619ead100cb2160a9dc50c58a99866877ece9e87",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9905969999999997,
+          "confirmation_ms": 11068.140776,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 22,
+          "nonce": 0,
+          "hash": "ac94e2fbb774740dc729d505a55daee65a1b1b8e6ab4114d6146a3df18c672ca",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.563944,
+          "confirmation_ms": 11065.260214,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 23,
+          "nonce": 0,
+          "hash": "5f62add7ab665121a7da30603aa6d46e97c91a657297b07bb48be7a1b16ad8bf",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9478259999999998,
+          "confirmation_ms": 11062.730593,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 24,
+          "nonce": 0,
+          "hash": "eaa9b89f1cede99f960f86d4b036160346485724cc54f08a9e8b458be6381115",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.650154,
+          "confirmation_ms": 11060.816477999999,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 25,
+          "nonce": 0,
+          "hash": "e605ea75987d1001953d48a1fa81da5477fc69e46afb0fbdc361c56af74ace0a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1136459999999997,
+          "confirmation_ms": 11058.200015,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 26,
+          "nonce": 0,
+          "hash": "57b545c41467dac8f6cecd984a8484beda2b3634006c232b0647d9d501ac1d37",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2128400000000004,
+          "confirmation_ms": 11056.120091,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 27,
+          "nonce": 0,
+          "hash": "efe3201f8a4866d1ebaf1e52886e88e5eed19d2570aa6f1c8f8fbdca44c5dccc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.917647,
+          "confirmation_ms": 11053.940961,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 28,
+          "nonce": 0,
+          "hash": "738ae472958cb107d35da7af960007a18964ba6cb279cb981a10d36b2842d059",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.373257,
+          "confirmation_ms": 11051.057066,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 29,
+          "nonce": 0,
+          "hash": "74624f95b72f953aa37a4606b72937a362b544257868c5286d67342bd7b6d31f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.6872659999999997,
+          "confirmation_ms": 11048.652151,
+          "height": 5240,
+          "observed_unix_ms": 1793411370102
+        },
+        {
+          "sender": 0,
+          "nonce": 13,
+          "hash": "c8fd297eb5d99f64e4f629ce62f8563ddb2ef4328cb97e7ea6fce372c84445b7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.925796,
+          "confirmation_ms": 11374.88465,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 1,
+          "nonce": 7,
+          "hash": "bda8d2d8e469a754ca36d67d42289eb84fa1d4470125e629afd2abf1b6c8c0a0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.607538000000001,
+          "confirmation_ms": 11372.995079,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 2,
+          "nonce": 7,
+          "hash": "1801f9e2da130c0b8f5a6ae63d23f0c0c0212ec64c5a5b5040c59da1883236ba",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.800892,
+          "confirmation_ms": 11368.421552,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 3,
+          "nonce": 7,
+          "hash": "695f2178ead4d67d92fb01cd2d6f4ac7f3fc00ed9b687e5650f6833f515ff277",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.402117,
+          "confirmation_ms": 11365.654962,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 4,
+          "nonce": 7,
+          "hash": "abe4fed04432a56b1f6c5ab799bf715bf69f255fcc334896135a3de44699cf0a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.7124639999999998,
+          "confirmation_ms": 11363.286525,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 5,
+          "nonce": 7,
+          "hash": "3c35b37d207e193dcde457d7191de914e596670f36bff5d271edb0a87233c289",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.585979,
+          "confirmation_ms": 11360.608633,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 6,
+          "nonce": 7,
+          "hash": "1c05f86548ecffffe99fa1b88600553c5a24cfce19e4cc0c3e99b9679210f25a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3454270000000004,
+          "confirmation_ms": 11357.056535,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 7,
+          "nonce": 7,
+          "hash": "aa8ee766513c164b603e73830c84999e66ef80bfdb61c9d05a4054429fda8a83",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.977327,
+          "confirmation_ms": 11354.744948,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 8,
+          "nonce": 1,
+          "hash": "ac2d5f89e1a85ee36bd574a9ce04ffe0922c90c0bffd78a829559ddb4f362738",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.830142,
+          "confirmation_ms": 11352.816434999999,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 9,
+          "nonce": 1,
+          "hash": "3d8b23e9144d30aefbe18746f532b72e12ec5a50bc4cf639cb21837390fb0e8f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0919760000000003,
+          "confirmation_ms": 11350.020456,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 10,
+          "nonce": 1,
+          "hash": "777eb6585ea6bf7f71f785bdba105c2ee98a4c504b52c142aafa82511f62361d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.834793,
+          "confirmation_ms": 11346.962009,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 11,
+          "nonce": 1,
+          "hash": "f3c9a82593354eba54b4746795f6694a5e7853b23cfffbf609e176bc5012ea2a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.878779,
+          "confirmation_ms": 11345.160878,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 12,
+          "nonce": 1,
+          "hash": "ebd4c608027ed506c24ca37bb852a415df78f2a72887ddc9bf02404a4fb5ced2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.031078,
+          "confirmation_ms": 11343.315999,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 13,
+          "nonce": 1,
+          "hash": "ea555d257ffd35b9cf9b59694f135c423cb84985f82fc7f053736c0e8d4daefb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4535440000000004,
+          "confirmation_ms": 11341.318662000001,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 14,
+          "nonce": 1,
+          "hash": "bb1789bf05c693de4e2bec2f8b97db62dcc153645165e4d049f67662ce88c065",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.198821,
+          "confirmation_ms": 11338.898858,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 15,
+          "nonce": 1,
+          "hash": "d022b61a44191f9d7939b1587cf69b4260d4a6618fd2c3a6abf97eff9c7104b9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.835008,
+          "confirmation_ms": 11336.733668,
+          "height": 5241,
+          "observed_unix_ms": 1793411375726
+        },
+        {
+          "sender": 16,
+          "nonce": 1,
+          "hash": "4fd161092fcfe0c52a142bb06a4c2b361d41da847e99ecd7fea2599f172193a9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.1128789999999995,
+          "confirmation_ms": 11380.031605999999,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 17,
+          "nonce": 1,
+          "hash": "072143dd3d28812ac33bdd5d345d407b8dffb09fe87d919927fc051ef0cba88f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.33721,
+          "confirmation_ms": 11374.95421,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 18,
+          "nonce": 1,
+          "hash": "e8408a10a6656cf655cf46e5976a9fd3e93310e29670923d744a49ca98ae4f9b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.8745939999999996,
+          "confirmation_ms": 11370.65089,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 19,
+          "nonce": 1,
+          "hash": "8ae42890f0e8c93e96c01fab7f7c9bcbe7c90fdd6c89b1966fc22b7feb948a7b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.588127,
+          "confirmation_ms": 11366.809977,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 20,
+          "nonce": 1,
+          "hash": "e97d88e675ac27bbfb41909fc5d1148b622200f8a2f980b0314095ff4072563b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 7.1656699999999995,
+          "confirmation_ms": 11364.255890999999,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 21,
+          "nonce": 1,
+          "hash": "513b281cc836ebfe7165a182a72bcc7d7f302bad70d239e9731c3efab60e50f6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.89177,
+          "confirmation_ms": 11357.124743,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 22,
+          "nonce": 1,
+          "hash": "a7af2f20bacd33722d16183509e30186a7132f8dae223276c1b0e68cfaeb0228",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.043398,
+          "confirmation_ms": 11353.266813999999,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 30,
+          "nonce": 1,
+          "hash": "b301e277f052d35164bd8379c7647194b0095eaabcf305265012823c1f87ba9e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.487852,
+          "confirmation_ms": 11322.804444000001,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 31,
+          "nonce": 1,
+          "hash": "3c28c36a6d42e1777114bd80745013f384a9ac075dd283af2a908916812b23da",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.447445,
+          "confirmation_ms": 11319.350312999999,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 23,
+          "nonce": 1,
+          "hash": "4bcec4b0ac35e0913c6817e703b974e817afe0f4597762320b7163e2bf14889a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.27272,
+          "confirmation_ms": 11349.326641,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 24,
+          "nonce": 1,
+          "hash": "deb2bc8dc88e44d1deb78821d911f2c78db261f01b8a1e5ae622e2099ec6c180",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.266774,
+          "confirmation_ms": 11344.088064,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 25,
+          "nonce": 1,
+          "hash": "0d584349a67e2120b7e4e64b27f5d25dff109bfdae677caa49377da7ef400c4d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.1394329999999995,
+          "confirmation_ms": 11341.864995,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 26,
+          "nonce": 1,
+          "hash": "f00bf2b3914cb365e8ae69dfd98e78b9a9660c647c566a2f27e7d73c6379a87a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.85123,
+          "confirmation_ms": 11337.759534,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 27,
+          "nonce": 1,
+          "hash": "ee7a24eafc1656448ab7461a1aacfdb77a0044d5942f17db0398ec55a88727f5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.707363,
+          "confirmation_ms": 11331.942435,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 28,
+          "nonce": 1,
+          "hash": "fbd9cc0e8ec4bb6c33245125e1c737843c8386ac7508a87a31311771c5dd8fa7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.269273,
+          "confirmation_ms": 11328.268843,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 29,
+          "nonce": 1,
+          "hash": "154ff072a1237cd035c053f2991ac1ed0abe6850694b24cc11a0d14c21a9c522",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.941724,
+          "confirmation_ms": 11325.035334,
+          "height": 5242,
+          "observed_unix_ms": 1793411381486
+        },
+        {
+          "sender": 0,
+          "nonce": 14,
+          "hash": "f0b4ec27ecae30f4df8d6aa1eb21ac9a9706c70ba5f90c7a5b97976ee624e0b7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5997540000000003,
+          "confirmation_ms": 11119.605986999999,
+          "height": 5243,
+          "observed_unix_ms": 1793411386847
+        },
+        {
+          "sender": 1,
+          "nonce": 8,
+          "hash": "bf70fe40d157d9522855f50b2cf507b818e734468f823de8189575cc32cd5ed0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4228880000000004,
+          "confirmation_ms": 11117.041585,
+          "height": 5243,
+          "observed_unix_ms": 1793411386847
+        },
+        {
+          "sender": 2,
+          "nonce": 8,
+          "hash": "919ebf1bf2612c345fb54d193cffcba5c646f0a59ccdc17118ed439c64bf2dbf",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.00183,
+          "confirmation_ms": 11114.652849,
+          "height": 5243,
+          "observed_unix_ms": 1793411386847
+        },
+        {
+          "sender": 3,
+          "nonce": 8,
+          "hash": "402e3eb3a86cb391d8b4d41fc96df58631109a1807590619bee1823c3a8df83e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.7959199999999997,
+          "confirmation_ms": 11111.685281,
+          "height": 5243,
+          "observed_unix_ms": 1793411386847
+        },
+        {
+          "sender": 4,
+          "nonce": 8,
+          "hash": "383b1a45cdd0f3ea047887625321686d0288ad300bc76c0e71c7f7976d21fa54",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.240163,
+          "confirmation_ms": 11108.923742,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 5,
+          "nonce": 8,
+          "hash": "ff9a232a98a0fc45096971a82893e1dbe000b90883127be6893128739947d97d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5933789999999997,
+          "confirmation_ms": 11106.718181,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 6,
+          "nonce": 8,
+          "hash": "a7636919c48e0c3555aa1f158cb31e3511cb5f9c4370fef0bb05b350ab6a3651",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.371807,
+          "confirmation_ms": 11104.158502,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 7,
+          "nonce": 8,
+          "hash": "82bbc89bb3b8ba3474bb71fb72873f48acf18b82a517bc8421dea3269cd7e164",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.837572,
+          "confirmation_ms": 11100.820636,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 8,
+          "nonce": 2,
+          "hash": "4a508d022dac303e2948b6bd4e8857fc886dee9366aac1b1c99d98c6c7c58ad2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1026360000000004,
+          "confirmation_ms": 11098.016964999999,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 9,
+          "nonce": 2,
+          "hash": "934e41d78cdef605e121b9caed3591452a1666640e3235fa5eda3bea4f948df5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.360765,
+          "confirmation_ms": 11095.948639999999,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 10,
+          "nonce": 2,
+          "hash": "a1bee0fae39af157160c15e5ed1d6df09cdd74adb77212157823dace1946f1ed",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.452203,
+          "confirmation_ms": 11093.621857,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 11,
+          "nonce": 2,
+          "hash": "242021fea8dbc2c15dbf583f9e2738673ae02b3c634514d44719d82423025438",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.129572,
+          "confirmation_ms": 11091.203715000001,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 12,
+          "nonce": 2,
+          "hash": "7ad6796b0e1db7bc703fbfaf52397d036649ec47f3201a613d7852e946884a0f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.984163,
+          "confirmation_ms": 11088.108053999998,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 13,
+          "nonce": 2,
+          "hash": "ceecad2f68408c406ac16bf1bbec654c37185f8e3ec764f0d21ab2a2e1c95ba1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9960910000000003,
+          "confirmation_ms": 11085.157761999999,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 14,
+          "nonce": 2,
+          "hash": "b34eee3b69318d8b2979a2544e5b0ec20477c6c936b00b1975593b1a89eb15d8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.623345,
+          "confirmation_ms": 11082.195872,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 15,
+          "nonce": 2,
+          "hash": "7336fe8a259f199167bb295e3b7cda601f2c0064fb2a522a16773a8416fa2795",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.6064410000000002,
+          "confirmation_ms": 11078.606198,
+          "height": 5243,
+          "observed_unix_ms": 1793411386848
+        },
+        {
+          "sender": 16,
+          "nonce": 2,
+          "hash": "783a65360331a41b6707bec9d23f25f829bfcdafc6678a8e5b8c56af7ef0dc8b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.155561,
+          "confirmation_ms": 11143.339283,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 17,
+          "nonce": 2,
+          "hash": "37271739527d76a62c3c4f3080b2ef3bda59a3881a723a5cb371d9c3b4d69136",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.285572,
+          "confirmation_ms": 11140.218234,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 18,
+          "nonce": 2,
+          "hash": "f455fc59f9ab4b5f6f7543ad5effea0ee7c3094728855480b85c3d98cdd610c3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.097177,
+          "confirmation_ms": 11137.966643,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 19,
+          "nonce": 2,
+          "hash": "f4bc7967a4c6f8af726e6620d395736ca7703b83e9a9dada5431a57f00edf4e8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.077510999999999,
+          "confirmation_ms": 11135.903407000002,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 20,
+          "nonce": 2,
+          "hash": "389248c9fa01eb85ba0e58d9b24ff867d360d45b808dd42ade17816660ea7d10",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.279383,
+          "confirmation_ms": 11129.869441,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 21,
+          "nonce": 2,
+          "hash": "42a61808f0cc0469b1112a9b301ae5f2ba4e5c57b9aeac01046cd23afcae6321",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.437572,
+          "confirmation_ms": 11125.623619,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 22,
+          "nonce": 2,
+          "hash": "f5a533445bf539b29cb5eb08d379207932c8c3620031bc53b44c4d55b6f6ddf6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.338711,
+          "confirmation_ms": 11121.219136,
+          "height": 5244,
+          "observed_unix_ms": 1793411392631
+        },
+        {
+          "sender": 23,
+          "nonce": 2,
+          "hash": "ca09e21be4d79678147734e2585d8cf6179485214fe43f39292994d65ae0a09b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.313229,
+          "confirmation_ms": 11118.914035,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 24,
+          "nonce": 2,
+          "hash": "59987ac83595f3b1538b7d0ceee754852e0bc5c63717dd10a698de1e411a9c4c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.026497,
+          "confirmation_ms": 11115.634478,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 25,
+          "nonce": 2,
+          "hash": "d9a489e02b7220c7dfab2025e6d960827f8ca9c8f4d1fa2d273712f5b225c44a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.499469,
+          "confirmation_ms": 11112.642032,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 26,
+          "nonce": 2,
+          "hash": "ac66dcbc38806636d4f402684767fd6946647d9886de385b27ec6a95280fc76e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.7899269999999996,
+          "confirmation_ms": 11109.176053000001,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 27,
+          "nonce": 2,
+          "hash": "71100f8effb9cf921a183e4255aa154feb9f3dc4c866b8a2e5138d1eae2193b6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.566932,
+          "confirmation_ms": 11105.419688,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 28,
+          "nonce": 2,
+          "hash": "298a1964f288a829b503a292ad781e968dff8960f07d3f17ea6d8748ca723e79",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.33385,
+          "confirmation_ms": 11099.886577,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 29,
+          "nonce": 2,
+          "hash": "587f3bd2d3d48ef88e1a027cc1c90d59c7f8b679f54ffde993c50227bf6f9bf6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.412338,
+          "confirmation_ms": 11096.586197,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 30,
+          "nonce": 2,
+          "hash": "9b1e1b753884b5c9d76cbe0f7ced8be8565fe361edf10bbc8d66ee14195947c8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.903275,
+          "confirmation_ms": 11093.207519,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 31,
+          "nonce": 2,
+          "hash": "9ea7ce54108e9d8ae6804770962a369da73d59a4cdf57c36b2c6a60b6262239a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.050978,
+          "confirmation_ms": 11091.337625,
+          "height": 5244,
+          "observed_unix_ms": 1793411392632
+        },
+        {
+          "sender": 14,
+          "nonce": 3,
+          "hash": "c8826c6b5afa8249781f95e519de90645c3d0626359e9b2fd4e7d0c74e9b4fbb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 8.07623,
+          "confirmation_ms": 11448.174254,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 15,
+          "nonce": 3,
+          "hash": "858885c295b4bdedb33f2d5f7edbd575ac89c329bdf113638ad69c3a508b4294",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.348586,
+          "confirmation_ms": 11440.160988000001,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 0,
+          "nonce": 15,
+          "hash": "9bec63fc3dda024bb558b3119eba9193ee0c690a4080f56a4afd0e4c10e3189b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.727578,
+          "confirmation_ms": 11496.263090999999,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 1,
+          "nonce": 9,
+          "hash": "5dcc63910aa8cab07a1b16653cc2680544edb9dfcf6b6312e03d13fa294bd164",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.485417,
+          "confirmation_ms": 11492.569034,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 2,
+          "nonce": 9,
+          "hash": "6c1902171b0277c4c0be568a24b8f8a54f525738052192762a6d28349d97b7d7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.342521,
+          "confirmation_ms": 11490.117077,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 3,
+          "nonce": 9,
+          "hash": "449f6bfe35ebd76905068ba4ab98ca8b7878e91dd79b8c3a8e423f88fcf0262d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.231881,
+          "confirmation_ms": 11487.808477,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 4,
+          "nonce": 9,
+          "hash": "5c97e04b46847b14604f62e6f29c45f0c25964560ffea60521f7dc10aba20da7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.504661,
+          "confirmation_ms": 11485.610306,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 5,
+          "nonce": 9,
+          "hash": "b82ec8f8f90f08dab5152d63a421e04e94e4aabe90dfab492c14d860a0919b18",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.7846340000000005,
+          "confirmation_ms": 11483.139176,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 6,
+          "nonce": 9,
+          "hash": "aca2c7ec316df5b00a38f6c8629de20087abdc493c8b30d858f2b9d8fd8510ab",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.8051759999999994,
+          "confirmation_ms": 11478.387751,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 7,
+          "nonce": 9,
+          "hash": "19bb1e097621d3827fc4df9524b1ccab44aa4ff04a55e9b5a9f36094b16632d9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.18765,
+          "confirmation_ms": 11471.589505,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 8,
+          "nonce": 3,
+          "hash": "1d394337b8c92f6ab54295e9e4ca1c08abe55c8614a01d204cd356c77257eb15",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.397347,
+          "confirmation_ms": 11468.441265,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 9,
+          "nonce": 3,
+          "hash": "f5c8e15c2ab31800030dd228505c47a50f9bcea4c59581a695cc9a30317ff9d3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0290909999999998,
+          "confirmation_ms": 11463.250800000002,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 10,
+          "nonce": 3,
+          "hash": "b868cb7f5fed8c95be6cbe3a0a91217b70e888b233cd7cf3e851307f236ea026",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.794788,
+          "confirmation_ms": 11460.255329000001,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 11,
+          "nonce": 3,
+          "hash": "8fb77d34731b92603156a8f5c9913ddf89a0953061c6015aeb14fd952c283810",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.976232,
+          "confirmation_ms": 11457.494343,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 12,
+          "nonce": 3,
+          "hash": "dce9d74aa776bd7f4a9525a881cede4021eb48eaf960021af0e33b2b5c4a79d6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.713712,
+          "confirmation_ms": 11454.551911999999,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        },
+        {
+          "sender": 13,
+          "nonce": 3,
+          "hash": "ef7e2877dafce850410869cccacf4577accc6e205987cacfeb28763201f56c74",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.972265,
+          "confirmation_ms": 11451.871820999999,
+          "height": 5245,
+          "observed_unix_ms": 1793411398348
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "concurrency": 32,
+      "started_unix_ms": 1793411398350,
+      "finished_unix_ms": 1793411437232,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 38.881273816,
+      "confirmed_in_offer_window": 80,
+      "confirmed_total": 112,
+      "confirmed_tps_offer_window": 2.6666666666666665,
+      "confirmed_tps_including_drain": 2.880564060993058,
+      "latency_ms_p50": 11019.216879,
+      "latency_ms_p95": 11467.397426,
+      "latency_ms_p99": 11476.483720999999,
+      "receipts": [
+        {
+          "sender": 24,
+          "nonce": 3,
+          "hash": "cfb3b4622bcb91ecdec1cafa899567049a69d579c4bc29f38ed6e771a3155223",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.119768,
+          "confirmation_ms": 5573.797224,
+          "height": 5246,
+          "observed_unix_ms": 1793411403998
+        },
+        {
+          "sender": 25,
+          "nonce": 3,
+          "hash": "21d9d6ddb130e6e82f879c1c200d67ae692d6a42e03bf9b3f6914cbc6bb32498",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.00538,
+          "confirmation_ms": 5570.712028,
+          "height": 5246,
+          "observed_unix_ms": 1793411403998
+        },
+        {
+          "sender": 26,
+          "nonce": 3,
+          "hash": "c4cb0822954450d31f9ad3558cef3164c459377b4b296470817ad4b0e4c5615c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2240990000000003,
+          "confirmation_ms": 5568.74051,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 27,
+          "nonce": 3,
+          "hash": "14e42b8afc7dc1734be5d0a18b5418b784d14a484f637a010c85c0ee86db9c6b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.185291,
+          "confirmation_ms": 5566.550432,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 28,
+          "nonce": 3,
+          "hash": "82566af44082e59ce5fcaa395b2b2520cc17b5cbb7129ed72641aa7cce4914f0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6819029999999997,
+          "confirmation_ms": 5563.398952,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 29,
+          "nonce": 3,
+          "hash": "c99d8018877fcda18c8f49c07823ab7e3f86824395f3a9ea1952269f1d16a380",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.951675,
+          "confirmation_ms": 5560.75095,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 30,
+          "nonce": 3,
+          "hash": "408aad05be8d633bd28d80236c6c4706fe330e26ce3f6bd68c84b7a0a992a8ec",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1116289999999998,
+          "confirmation_ms": 5556.900798,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 31,
+          "nonce": 3,
+          "hash": "4bcb64b9e35843f10f8b94acd0e62f191633d66383a7ad095b415cfe87e7bba8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9645230000000002,
+          "confirmation_ms": 5554.823149,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 0,
+          "nonce": 16,
+          "hash": "e4cf86eaa0a8d72bfc55755a7bf6473499b9dab94194a0fafbb3a9109fd98d41",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.602614,
+          "confirmation_ms": 5648.341549,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 1,
+          "nonce": 10,
+          "hash": "5b26bd0038de59ef4f3d5f2bcf051f30eeaa12e3aa1eb6d94343770bae16390a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.206943,
+          "confirmation_ms": 5644.7763110000005,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 2,
+          "nonce": 10,
+          "hash": "b70cf1686a3f0876bb70c036c1a7faa22ca4d1bdf70e1606d2f6842b292ab0b8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.307995,
+          "confirmation_ms": 5642.641066,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 3,
+          "nonce": 10,
+          "hash": "dc11e3569d9b94c3f517fb6ec539d808fe78a1dceaba99303449ec960f6c83e9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.8046529999999996,
+          "confirmation_ms": 5640.367021999999,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 4,
+          "nonce": 10,
+          "hash": "0b635420873ea7bb13b765513cf26c71991a31f311e45ef686dd21cc0271db6b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.509234,
+          "confirmation_ms": 5637.596149,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 5,
+          "nonce": 10,
+          "hash": "f87d8acf7a0f74b5dcef051a2c597c66f7876249527a3b77d3d44ce2f700de79",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.8231010000000003,
+          "confirmation_ms": 5634.120457,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 6,
+          "nonce": 10,
+          "hash": "53783839dd464d67d7709b62bf7681f1ac57ef63ba3a1618fdff110d8c64d554",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.164189,
+          "confirmation_ms": 5631.330856,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 7,
+          "nonce": 10,
+          "hash": "62e78ff53d315f1c3f85f38eda726e278cb2c10cd4104c6b4b78b4c786a371cc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.206894,
+          "confirmation_ms": 5629.200528,
+          "height": 5246,
+          "observed_unix_ms": 1793411403999
+        },
+        {
+          "sender": 8,
+          "nonce": 4,
+          "hash": "a53e99ae6863ecdb311cdd499f2279815c6a522b7c33360ce548651184c8d614",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.9615650000000002,
+          "confirmation_ms": 10988.900896000001,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 9,
+          "nonce": 4,
+          "hash": "16676fe52ce9133a04809a8014f744a34a961e3de71db25e98c76269b6d0a56a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.124639,
+          "confirmation_ms": 10984.974825,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 10,
+          "nonce": 4,
+          "hash": "9254e71d723681332180f9bb28d49cc0729a0ad21a33fea44edf50ac964f1a86",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.78573,
+          "confirmation_ms": 10982.884558,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 11,
+          "nonce": 4,
+          "hash": "428f58cf95ebd9ee695be4608852ebd1501987e3b8962a68fa7eb518ae9fef86",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.73216,
+          "confirmation_ms": 10979.131586,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 12,
+          "nonce": 4,
+          "hash": "1ea26fe4469adeca8d03d9c374d41acb761b900a8841c6ae7e360c456f0b3fca",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.813917,
+          "confirmation_ms": 10974.433176999999,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 13,
+          "nonce": 4,
+          "hash": "3c921dd42ef48bd10bfd7d6d9707412df566f333341a0dc7f28cd4d63ecc4298",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.104802,
+          "confirmation_ms": 10971.653311,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 14,
+          "nonce": 4,
+          "hash": "f950178146c580e5ddc41fd6abe9fc6097e0e18f76ebe8ee8107564607db8501",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.495393,
+          "confirmation_ms": 10965.598194,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 15,
+          "nonce": 4,
+          "hash": "585303b008a24b9b1e96ee75c8f46c3c7d95180895afbcd2b228cbd3905d71ee",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.203227,
+          "confirmation_ms": 10962.136622,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 16,
+          "nonce": 3,
+          "hash": "1f39e1868819a28df0123abd5f16b8e94a51020375e7cea5de970eb920e0519e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4028880000000004,
+          "confirmation_ms": 10959.967165,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 17,
+          "nonce": 3,
+          "hash": "d9939b54ee182a5bc49ef0f84bab5034a44721157bfed44f34bfe0cd30ac07cc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1272729999999997,
+          "confirmation_ms": 10957.598237999999,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 18,
+          "nonce": 3,
+          "hash": "cd647b4c18e9d4b413ea635b526314afc2666acdfb33fde116e610f289921315",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.711969,
+          "confirmation_ms": 10955.504836,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 19,
+          "nonce": 3,
+          "hash": "f5bdd8276f91f2d282c6e80109c4381e1a9c32b62d8f6b6f4196b446b1bea361",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.637641,
+          "confirmation_ms": 10951.826487,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 20,
+          "nonce": 3,
+          "hash": "e622dcc1ef81a22c6c290e4cae1c7fc31cb76ad5457afe2ad55aeb62f7fa82b9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4747760000000003,
+          "confirmation_ms": 10949.222767,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 21,
+          "nonce": 3,
+          "hash": "40e396244674ba7337b6d2aab26dcf127819c5aaecbcad5d4a8d287c767dd897",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.334792,
+          "confirmation_ms": 10946.781693,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 22,
+          "nonce": 3,
+          "hash": "82f828b18eee465fc7302821508ac09e0edbadb623f2c5c828dfbab5d7106e47",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.383449,
+          "confirmation_ms": 10943.480782,
+          "height": 5247,
+          "observed_unix_ms": 1793411409363
+        },
+        {
+          "sender": 23,
+          "nonce": 3,
+          "hash": "1a13dcb8484025ff1a5b995331972630d31c3d4dabdab32345ca99b782454f2a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.266752,
+          "confirmation_ms": 10941.131264,
+          "height": 5247,
+          "observed_unix_ms": 1793411409364
+        },
+        {
+          "sender": 24,
+          "nonce": 4,
+          "hash": "e41cd7021372563d2a3c9ecc9dad5da31311392b9520e86ddb13f73301763ff5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.712002,
+          "confirmation_ms": 11071.772642,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 25,
+          "nonce": 4,
+          "hash": "7000487006c36b59d3202532a9af8763fa4c05ce88900989e5b973be7060a887",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.78407,
+          "confirmation_ms": 11067.094901,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 26,
+          "nonce": 4,
+          "hash": "2e24269e5c2d2f40f4f150853502880e0a97c749439003a8d06affc9e7ebfbe9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.529052,
+          "confirmation_ms": 11064.344732,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 27,
+          "nonce": 4,
+          "hash": "603228b00d3dac0c958402f28ca9d4bd020daae398a4c5160e95ab9924ad8390",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 8.187452,
+          "confirmation_ms": 11061.849512,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 28,
+          "nonce": 4,
+          "hash": "776040f9670b4a99a634f192b3c87aceb78b4d8720ba3289085b86b122b0b343",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.0954440000000005,
+          "confirmation_ms": 11053.693567,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 29,
+          "nonce": 4,
+          "hash": "779a1e6c3afd05497c7978b7b4c2bf0824236fa0b861430858bad1fbd399fc79",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.1883179999999998,
+          "confirmation_ms": 11047.630582,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 30,
+          "nonce": 4,
+          "hash": "accf1ebd53c6ca3da8ff38cd61bd1e20572cbf206bdc58e038e279e4e151e43e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9282269999999997,
+          "confirmation_ms": 11044.475434,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 31,
+          "nonce": 4,
+          "hash": "8fd19fb20f2ab809dc5acdee865e2711816d79d5ce1fdc3a9c1319fe09219ece",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2596410000000002,
+          "confirmation_ms": 11041.580277,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 0,
+          "nonce": 17,
+          "hash": "3cb534197b0265b435d01cf574f6f4dfec9f7e80b2ee0f8ca25ce7590ecea090",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.42537,
+          "confirmation_ms": 11105.093328,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 1,
+          "nonce": 11,
+          "hash": "dbf3396cd56c8475898916fd9bea49ad06edbb67797e34878eb5ee622c97e4d0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.457259,
+          "confirmation_ms": 11099.701669,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 2,
+          "nonce": 11,
+          "hash": "49e7d55da263580113526ec5c7a52643bf6273c98e53a97e11958f742b15d533",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.872858,
+          "confirmation_ms": 11093.326434,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 3,
+          "nonce": 11,
+          "hash": "82668c54c3ab088395a847fb395a7d375caf4fc81d11264e311ae990e159a1c3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.856374,
+          "confirmation_ms": 11089.486566,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 4,
+          "nonce": 11,
+          "hash": "5fcff52b0c6a00d10dee2772cdb1a28f898fc56f908a05039ba8b98ed5d493e5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.41871,
+          "confirmation_ms": 11087.664263,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 5,
+          "nonce": 11,
+          "hash": "2c20215164e84c0691d1c1508d826b499032ec4bb8086f9aa68ffa369aa39f6f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.530759,
+          "confirmation_ms": 11085.278963,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 6,
+          "nonce": 11,
+          "hash": "2b924faca76d7a1b42aef6ce23b406e6fc7cc7c624ca0dc6df8f5c162cc47230",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.8780609999999998,
+          "confirmation_ms": 11078.795896000001,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 7,
+          "nonce": 11,
+          "hash": "06bccf4ad5442cfe3a7988f042d2f817940a005c79010e987ef195f8b5d688bd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.59788,
+          "confirmation_ms": 11074.951256,
+          "height": 5248,
+          "observed_unix_ms": 1793411415108
+        },
+        {
+          "sender": 8,
+          "nonce": 5,
+          "hash": "dc3eaf8a15fbd26dd79369ce6a760ad7f273415f796bcff5a166dce5e993645f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1043469999999997,
+          "confirmation_ms": 11478.529410000001,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 9,
+          "nonce": 5,
+          "hash": "8e7b9aee620749d5a40a91286873500443126a54c5042cb6bcef6e0c56e9c675",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.0935799999999998,
+          "confirmation_ms": 11476.483720999999,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 10,
+          "nonce": 5,
+          "hash": "c78943800fa9e196553b249342b4ce16017b217532b14f5d2f2a1eb5a1872812",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.49782,
+          "confirmation_ms": 11474.451222000002,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 11,
+          "nonce": 5,
+          "hash": "eab3dab657fe37cf254457b6ce77a7432321957b7dfa99440c0bca1bffcb15ff",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.544028,
+          "confirmation_ms": 11471.987564000001,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 12,
+          "nonce": 5,
+          "hash": "7f179eb3eb66eaa7daaab3c1babf02381b53cb892170e1c3a09a2c00de0d9189",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1143720000000004,
+          "confirmation_ms": 11469.477397,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 13,
+          "nonce": 5,
+          "hash": "37d7a33b65f37551e0225d91e45ddf19884f6adbcefdd53df3fe1e5679ca2792",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.8737250000000003,
+          "confirmation_ms": 11467.397426,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 14,
+          "nonce": 5,
+          "hash": "a662a1d01b6ec3b591a1e10efde2ee9a4723e47870a3d5ee80e3f28b6e4ce7df",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.0229139999999997,
+          "confirmation_ms": 11464.557652,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 15,
+          "nonce": 5,
+          "hash": "4953119424e7502534d28c69b59d4d499964de97d8f213e5ecd2c644c7928f05",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.228694,
+          "confirmation_ms": 11462.584902999999,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 16,
+          "nonce": 4,
+          "hash": "0cc54780f5e7f339e19a08971e90880c9dc0b3b76923c13b0b1f50c347218bc1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.060672,
+          "confirmation_ms": 11460.40278,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 17,
+          "nonce": 4,
+          "hash": "c561286b33196b239273e1a59d0f556911b3ac53e10c06b8a7ae81ea665109fd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9414420000000001,
+          "confirmation_ms": 11458.37603,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 18,
+          "nonce": 4,
+          "hash": "919ec07d92cd78c19deb45874cd215cdde9d515808461c90482f472097fe238d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.550769,
+          "confirmation_ms": 11456.468248000001,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 19,
+          "nonce": 4,
+          "hash": "2f0b19e792bc8c722f99346c3b65a2ad6642681382c34c6b87ad58afdd26e47c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.187492,
+          "confirmation_ms": 11453.95145,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 20,
+          "nonce": 4,
+          "hash": "68bef34b02329c553ab0fd262e3289ac31cfee74334d3feeab0df0f7887c0961",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.287062000000001,
+          "confirmation_ms": 11451.797729000002,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 21,
+          "nonce": 4,
+          "hash": "8272d1608e67a290fd01ecb874891bf5c54adeef42c91d72b1609ce5c26b1743",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.6457870000000003,
+          "confirmation_ms": 11447.544458,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 22,
+          "nonce": 4,
+          "hash": "cd5e914120b68895e4ce07adac3a0c7eba3a3a21f9a2b2ec4be88ecc0c4e9b52",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.721536,
+          "confirmation_ms": 11443.932412,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 23,
+          "nonce": 4,
+          "hash": "9c6d2dbb7ce5439300fefa6310b9b32d3eb40df58c5fa998f95de69c31cd2297",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.840615000000001,
+          "confirmation_ms": 11441.244486,
+          "height": 5249,
+          "observed_unix_ms": 1793411420844
+        },
+        {
+          "sender": 0,
+          "nonce": 18,
+          "hash": "b816e10a6704c84ed0ea8523d61af90c977a01f724b4119708fc6e5fc3f29113",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.435763,
+          "confirmation_ms": 11067.549692,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 1,
+          "nonce": 12,
+          "hash": "ea8168f10d2ab2601e56ed10615faa0c963032914d78e1fae1388da61ea5fa61",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.342913,
+          "confirmation_ms": 11064.166759000002,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 2,
+          "nonce": 12,
+          "hash": "969db9c195f701ddf0c6cfad2c9bcb87b87556d4cac5ad6d57a60b6900c77fd6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.411661,
+          "confirmation_ms": 11060.858058000002,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 3,
+          "nonce": 12,
+          "hash": "0cd712eef243ea8f67e0f236940e8b07057c2fb1c4af9349e33afa7e64803123",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.001934,
+          "confirmation_ms": 11058.498735000001,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 4,
+          "nonce": 12,
+          "hash": "1a6ce961a74d22ba695f2f75657b28d16e281e0778b875aee6dc91752e930036",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.185746,
+          "confirmation_ms": 11056.530842,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 5,
+          "nonce": 12,
+          "hash": "1baac33c8a109499029ee540109bf3a03abc1babf6608a72344a3336908d8441",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 7.365273999999999,
+          "confirmation_ms": 11053.546459,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 6,
+          "nonce": 12,
+          "hash": "4cff36fc838bc8e4806f1a1c111405163ca6368ed2bd92ae81619510aa23b0cc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.7047719999999997,
+          "confirmation_ms": 11046.224991000001,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 24,
+          "nonce": 5,
+          "hash": "e26cea02cda0952004cfd0247730fb1fad133b6d8f19598f1596e521d282b49b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4551260000000004,
+          "confirmation_ms": 11041.160251000001,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 25,
+          "nonce": 5,
+          "hash": "013160705a2b04b0da9ee88d04590429003d32b1a56179bb690372e8c59a01c8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.028254,
+          "confirmation_ms": 11038.770864,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 26,
+          "nonce": 5,
+          "hash": "ea6f7e3a36686b93417f6ae35b0b3981f671d8f6dff93221607e30aa77601f21",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.8693219999999995,
+          "confirmation_ms": 11036.776661,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 27,
+          "nonce": 5,
+          "hash": "39369060ea899569150089a25c63300599f96a514e71f88dc51c2f8c3f4b4a62",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.095415,
+          "confirmation_ms": 11030.948650999999,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 28,
+          "nonce": 5,
+          "hash": "92057360ff6314005b7a818e5f40f32d07fdd733e62234908c686c546a9292df",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.160869,
+          "confirmation_ms": 11028.886805999999,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 29,
+          "nonce": 5,
+          "hash": "b1b182d1fa834e58fa9676561b984618233b1d0dfb5900573e8d3d437a089f3c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.933056,
+          "confirmation_ms": 11024.759488000002,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 30,
+          "nonce": 5,
+          "hash": "6966ba8d566f12cec8831e7e971e36c3df46905868081908e696fe1752fb2f96",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.327555,
+          "confirmation_ms": 11022.859923,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 31,
+          "nonce": 5,
+          "hash": "4ce69dac20f9e1f1309bfcc0b4bbc318071ea3dc8d0860efc97ffe13adb157ef",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.640911,
+          "confirmation_ms": 11020.56685,
+          "height": 5250,
+          "observed_unix_ms": 1793411426178
+        },
+        {
+          "sender": 7,
+          "nonce": 12,
+          "hash": "9df891c677969d0e9aeab9e2698abfa98c2438fd5a0f99c80d7bc82e4aa21d9e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.392407,
+          "confirmation_ms": 11043.976526,
+          "height": 5250,
+          "observed_unix_ms": 1793411426179
+        },
+        {
+          "sender": 8,
+          "nonce": 6,
+          "hash": "6779f5cb81c9e675589386ecc3535a1a4040598bfdaa397f6edc120f68623b4f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2139019999999996,
+          "confirmation_ms": 10687.63326,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 9,
+          "nonce": 6,
+          "hash": "ee1f6731169df808613b9bd7f657a7abf9077772cffd2385a5136a0eac641590",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.513593,
+          "confirmation_ms": 10685.4542,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 10,
+          "nonce": 6,
+          "hash": "b9cb847327a55cfc65a896854727a2a47b882dd5d4c6af4782be70a9895022f8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9704750000000002,
+          "confirmation_ms": 10682.974738,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 11,
+          "nonce": 6,
+          "hash": "332cb091a7e6ad8fe1fe04035a8bb79478edbeac0aa330db51289b33ba3d15d8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.924477,
+          "confirmation_ms": 10681.037823,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 12,
+          "nonce": 6,
+          "hash": "f1f1107a273ea8c55fcbc6d7f3fdb30225ce450f59f85586cc45c48c4d3cef8b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.51781,
+          "confirmation_ms": 10679.147168,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 13,
+          "nonce": 6,
+          "hash": "2582bc578f5d6f4eeeb345968b3267ef3005bea70fda9e1422c89c48ce5f6cd9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5160970000000002,
+          "confirmation_ms": 10676.663379000001,
+          "height": 5251,
+          "observed_unix_ms": 1793411431533
+        },
+        {
+          "sender": 14,
+          "nonce": 6,
+          "hash": "64ce4ed10e2b4b215a84787c6cf818d2fe24c7cc48a254b10e533ef113040ccd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.838227,
+          "confirmation_ms": 10674.180573,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 15,
+          "nonce": 6,
+          "hash": "7614199d352472c4d5aa5643d0f7a9141a7ee215165d086ff6894e847f57d27d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.597299,
+          "confirmation_ms": 10672.375987000001,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 16,
+          "nonce": 5,
+          "hash": "527a2e43852ddc35203eecbc7bd2968312f02b14da517afba6bc6fd1aae3671a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.755542,
+          "confirmation_ms": 10669.812348000001,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 17,
+          "nonce": 5,
+          "hash": "f326d653edcf345b7b4f4eaa6b7e962ae3259135df59b2cd48467f053f8efeb1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.564094,
+          "confirmation_ms": 10668.090857,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 18,
+          "nonce": 5,
+          "hash": "56f59911a53f70862bf93fb825eb08694446193ed0062d4ecd15c225d09b64e1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2887099999999996,
+          "confirmation_ms": 10665.560204,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 19,
+          "nonce": 5,
+          "hash": "327e8e61ac42a061dfa3252ea3a4ee7084c8ec07868ff909c419ee4189363ac8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.949799,
+          "confirmation_ms": 10663.305043999999,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 20,
+          "nonce": 5,
+          "hash": "1b033da6896d7051e2937b10b1a83f05a6680fccdead96e7c7378e4598abebbe",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.027667,
+          "confirmation_ms": 10660.388936000001,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 21,
+          "nonce": 5,
+          "hash": "70803a2ca9e639cf3fab678ce2e369ecbc222088f3f0e5d23cc40ab07a2ac27e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.5350400000000002,
+          "confirmation_ms": 10657.394749,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 22,
+          "nonce": 5,
+          "hash": "55cc90b60e99ed5a4a07cb94633460c74e9e66d602d34dd27c3358ec1371a58a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.226641,
+          "confirmation_ms": 10655.893489,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 23,
+          "nonce": 5,
+          "hash": "1771f1cc51057084b9d4a2dd0d94e1d5ead3b3d577739bb81ae8f2cc470307fb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.7045950000000003,
+          "confirmation_ms": 10651.700279,
+          "height": 5251,
+          "observed_unix_ms": 1793411431534
+        },
+        {
+          "sender": 0,
+          "nonce": 19,
+          "hash": "bcef832dbdf2ffec48df7e29eba83e028d2e0a3d49d6e5aaf8d2408052800d29",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.566268,
+          "confirmation_ms": 11048.803634,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 1,
+          "nonce": 13,
+          "hash": "5f15a89d1d5bc68bc05bc73c43543d371463f1d408df6f7333f7902449405578",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.635301,
+          "confirmation_ms": 11045.272188,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 2,
+          "nonce": 13,
+          "hash": "653c87f78e78fcfc80a4a62ad6776bca7149e82a8f1d51e0109f33df0f66a95c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.862213,
+          "confirmation_ms": 11041.670858,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 3,
+          "nonce": 13,
+          "hash": "55e16d8c12837249192e69447f55e021609b30b07f19c9b4a7d84ae15d641e12",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.027277,
+          "confirmation_ms": 11037.842567,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 24,
+          "nonce": 6,
+          "hash": "1250de3db7980cba757b5ae703fbc2b1ac81a5906e4e4501d91a4ea53fb021b9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.430739,
+          "confirmation_ms": 11019.216879,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 25,
+          "nonce": 6,
+          "hash": "bc61fe2a77289372d5283410701876fbaed61efedd27a6b8dc288e4b656c5fc7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.020521,
+          "confirmation_ms": 11016.819861,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 26,
+          "nonce": 6,
+          "hash": "00bfff5d7c9927ef81f734f9d5ab911420df96c6be11a032bb01ce539142a05f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.64753,
+          "confirmation_ms": 11014.832951,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 27,
+          "nonce": 6,
+          "hash": "0ebe30cd0ff4645ac8e56c92befe79e5dc328f546e64a0c6d4c5cb1414827768",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.162655,
+          "confirmation_ms": 11011.218942,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 28,
+          "nonce": 6,
+          "hash": "263737fce9c6c90c43c6975cfba5a6f4cc600b53dae7682084ca41adfdf9f264",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.741706,
+          "confirmation_ms": 11009.090098,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 29,
+          "nonce": 6,
+          "hash": "e41b104ceedbea6985fd99abb6a3e10ffbb31a82c407cc8703c698e5e6ae2c44",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 7.030837,
+          "confirmation_ms": 11006.382173,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 30,
+          "nonce": 6,
+          "hash": "9732615fb9fdde2b39af112bea567c62362f889f3a42d2d77af8604ceda1f7f9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.2063159999999997,
+          "confirmation_ms": 10999.384385000001,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 31,
+          "nonce": 6,
+          "hash": "34249234347b20a58ff423c4f0d40c061163d6ed23f26c5aa4b17517b88e260c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5974150000000003,
+          "confirmation_ms": 10996.211801,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 4,
+          "nonce": 13,
+          "hash": "682a6f7e48527ba411102099a5ccbdbba4ab743cdb77657b620bee1fd45219da",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.043455,
+          "confirmation_ms": 11035.122543,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 5,
+          "nonce": 13,
+          "hash": "b8eecc11e36647d700876fc1d065ef78e7452354fd84aeeb8ccd883552d816ef",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.230682,
+          "confirmation_ms": 11031.111617,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 6,
+          "nonce": 13,
+          "hash": "92fbf2020268407e1a69abde5210e65ac6122e87fd4f083126267e2a5e944a6c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.031473,
+          "confirmation_ms": 11027.914576000001,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        },
+        {
+          "sender": 7,
+          "nonce": 13,
+          "hash": "8f198cfba950a412f62d8f9cfe3e7c57a341b110485b2a0eefe30bad33422b50",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.321104,
+          "confirmation_ms": 11021.915742,
+          "height": 5252,
+          "observed_unix_ms": 1793411437230
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "concurrency": 1,
+      "started_unix_ms": 1793411437232,
+      "finished_unix_ms": 1793411470210,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 32.977743318,
+      "confirmed_in_offer_window": 5,
+      "confirmed_total": 6,
+      "confirmed_tps_offer_window": 0.16666666666666666,
+      "confirmed_tps_including_drain": 0.1819408909258222,
+      "latency_ms_p50": 5487.698902,
+      "latency_ms_p95": 5705.32255,
+      "latency_ms_p99": 5705.32255,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 20,
+          "hash": "f58d6f513772544096019b88e6eb6f29e89ea60e6ec0a6fa9394488b9ff2ee5f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0330130000000004,
+          "confirmation_ms": 5702.676474000001,
+          "height": 5253,
+          "observed_unix_ms": 1793411442935
+        },
+        {
+          "sender": 0,
+          "nonce": 21,
+          "hash": "c5002c358967afd5fce7f416ce3e760600abaeb4513ada000df349deac7ba5ad",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.703285,
+          "confirmation_ms": 5494.437138,
+          "height": 5254,
+          "observed_unix_ms": 1793411448432
+        },
+        {
+          "sender": 0,
+          "nonce": 22,
+          "hash": "dd71752b297bb9e6cf2b341b7a564e9e9aa630dc3653a2865133ae311497e03a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.270128,
+          "confirmation_ms": 5287.078861,
+          "height": 5255,
+          "observed_unix_ms": 1793411453720
+        },
+        {
+          "sender": 0,
+          "nonce": 23,
+          "hash": "69e2b00a06804139db92b3523160228047907613b922c2866a34ef0df4fcdecf",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.06902,
+          "confirmation_ms": 5705.32255,
+          "height": 5256,
+          "observed_unix_ms": 1793411459426
+        },
+        {
+          "sender": 0,
+          "nonce": 24,
+          "hash": "48360fe82e59d3dcd3f446b4de472f935ff160486ece0e0719abda9d55c72283",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.470535,
+          "confirmation_ms": 5487.698902,
+          "height": 5257,
+          "observed_unix_ms": 1793411464916
+        },
+        {
+          "sender": 0,
+          "nonce": 25,
+          "hash": "cccfd4d9322a77bca416c6c2b80e472e92a42f20eb52a9692db41cab2615b393",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.17918,
+          "confirmation_ms": 5290.956887,
+          "height": 5258,
+          "observed_unix_ms": 1793411470208
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "concurrency": 8,
+      "started_unix_ms": 1793411470210,
+      "finished_unix_ms": 1793411502876,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 32.665542456,
+      "confirmed_in_offer_window": 40,
+      "confirmed_total": 48,
+      "confirmed_tps_offer_window": 1.3333333333333333,
+      "confirmed_tps_including_drain": 1.4694383252522223,
+      "latency_ms_p50": 5321.930076000001,
+      "latency_ms_p95": 5700.967944,
+      "latency_ms_p99": 5708.4007,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 26,
+          "hash": "555e391770a2bea9a611e8539db93a623d18944dc8b0a496b7bb081d8bd1612e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.437791,
+          "confirmation_ms": 5511.328097,
+          "height": 5259,
+          "observed_unix_ms": 1793411475721
+        },
+        {
+          "sender": 1,
+          "nonce": 14,
+          "hash": "07d9f1b49c11bb904a449b8cf7c926f85af9e5b1c568c397e72fb682e8602c25",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.715743,
+          "confirmation_ms": 5508.991317999999,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 2,
+          "nonce": 14,
+          "hash": "851cf55e404c64eeb73be3fad2d1953c246701c53b7f1f6cd93112c2edd5b601",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2273039999999997,
+          "confirmation_ms": 5507.309786999999,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 3,
+          "nonce": 14,
+          "hash": "419a6b85dcca333690a783f3d80aa198520cc0eb66fbfbaba51ba93651e20781",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.848533,
+          "confirmation_ms": 5505.116535,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 4,
+          "nonce": 14,
+          "hash": "0cec11c5cd32ec351d8c442d3886cb365be65f5cf088477a52b87c21b7dadbe2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.690585,
+          "confirmation_ms": 5503.301752,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 5,
+          "nonce": 14,
+          "hash": "8700e2ca4d4deff28338215ed08cd89217c79f9bf3152dda0eda534f42cc4ef1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6733540000000002,
+          "confirmation_ms": 5501.645689,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 6,
+          "nonce": 14,
+          "hash": "4539c920ef7ddd2199d75969adb169ff0abe834862a79dbdf3ec57ac21d202d2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3878749999999997,
+          "confirmation_ms": 5499.036801,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 7,
+          "nonce": 14,
+          "hash": "c4e85f3073aedc86de66e1483bb55e25a1cccb601391ca1e1bc92f926647b96e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.097989,
+          "confirmation_ms": 5496.709659,
+          "height": 5259,
+          "observed_unix_ms": 1793411475722
+        },
+        {
+          "sender": 7,
+          "nonce": 15,
+          "hash": "879c7c2c051c7cfdc0f2170b4070f0a79a5569355315a6f0502763c8a699a04a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.798549,
+          "confirmation_ms": 5688.722129000001,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 0,
+          "nonce": 27,
+          "hash": "952d58150b10c7f5f677ac02d97155a8e19f66d8c684f8dfeb993b1cfbe3b450",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.7879430000000003,
+          "confirmation_ms": 5708.4007,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 1,
+          "nonce": 15,
+          "hash": "ca0076a9d340c30d17373c3f778ff7f26a4274ba2da6d7368d5b6249e4a472a9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.712545,
+          "confirmation_ms": 5704.646649,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 2,
+          "nonce": 15,
+          "hash": "32eef43bf0900c2a2a5ecad64b4eba649e0192610b76c859b2903f3159b6b2aa",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.907581,
+          "confirmation_ms": 5700.967944,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 3,
+          "nonce": 15,
+          "hash": "8f7c0242a5309252e46917121137171933e2308920c7597aaa030c140b67fc4d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.081188,
+          "confirmation_ms": 5699.094043,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 4,
+          "nonce": 15,
+          "hash": "506f3a8b655878fad75e9f55997c64b6807b2511c718ddb561bf2d20f7aebb59",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3111289999999998,
+          "confirmation_ms": 5696.046536,
+          "height": 5260,
+          "observed_unix_ms": 1793411481431
+        },
+        {
+          "sender": 5,
+          "nonce": 15,
+          "hash": "afc709b50ddcf3df926bd9b7afaa45102280123270618fc75e1680e17f6ec4e0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.714757,
+          "confirmation_ms": 5693.769187,
+          "height": 5260,
+          "observed_unix_ms": 1793411481432
+        },
+        {
+          "sender": 6,
+          "nonce": 15,
+          "hash": "d27f066ec7de01a9f37720aad9fbd2c718f66e98e34440944886de6247c27b38",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1244889999999996,
+          "confirmation_ms": 5691.091015999999,
+          "height": 5260,
+          "observed_unix_ms": 1793411481432
+        },
+        {
+          "sender": 5,
+          "nonce": 16,
+          "hash": "747365313b3c50795fdf9c0e0c272dd2bab952721ff9a5a6f341dbe040149129",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.981989,
+          "confirmation_ms": 5291.936127999999,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 6,
+          "nonce": 16,
+          "hash": "2452214d63de629679d8d5751c32c2498d5699a5c0c94fb20294a587b129cfdc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.173624,
+          "confirmation_ms": 5289.0165830000005,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 7,
+          "nonce": 16,
+          "hash": "91ce7a3aa20846d27e5bbe6d6870090c35a94106e2dfc6f60ca7b2e235e9e493",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.781211,
+          "confirmation_ms": 5284.8766989999995,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 0,
+          "nonce": 28,
+          "hash": "64a494918e9997405e0f3cac14d4516946403b8f769857073dc382a4c613ec82",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.760025,
+          "confirmation_ms": 5304.528598,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 1,
+          "nonce": 16,
+          "hash": "b191586db365bb62bc9334674dc769f237ce8404d44dca82d2a4b88d90f398e0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.161534,
+          "confirmation_ms": 5301.8023330000005,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 2,
+          "nonce": 16,
+          "hash": "cb060f893051a4f04eb86e566634abc8a2e63b1159011b6d89adeabc8bb0e3e6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2984009999999997,
+          "confirmation_ms": 5299.675561,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 3,
+          "nonce": 16,
+          "hash": "852d2cee1e73774458eecc0afd5f92015f659d8ac03f7137a50f45814170ef02",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.859039,
+          "confirmation_ms": 5297.410881,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 4,
+          "nonce": 16,
+          "hash": "8699c817b84a4d9916c87fcda73eafce918d79d9bbcb59687e4d88f62c904324",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.3761740000000002,
+          "confirmation_ms": 5295.585794,
+          "height": 5261,
+          "observed_unix_ms": 1793411486737
+        },
+        {
+          "sender": 7,
+          "nonce": 17,
+          "hash": "82c02902ec3fd8ba87d8001fcf42d6defc86a64a4c15bf08db8f91571f6f1e97",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.554085,
+          "confirmation_ms": 5489.088495,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 0,
+          "nonce": 29,
+          "hash": "7904594377f8c6614345d7daf768c807a71fcbda32243d5ae4bad9e4b5ea4759",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.505507,
+          "confirmation_ms": 5504.823376,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 1,
+          "nonce": 17,
+          "hash": "7140b1393a89a9af0cff8e8081c49e0caef715e82edde796a3e6947617604941",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.834932,
+          "confirmation_ms": 5501.351519,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 2,
+          "nonce": 17,
+          "hash": "695730ee726145803be05f0861de55f1d8b694b71735f55869a19c7cff0c0c85",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2101260000000003,
+          "confirmation_ms": 5499.550508,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 3,
+          "nonce": 17,
+          "hash": "75f1439d5bf5776be2d16cfd9963e3fb357596d240041a8559412037d8677a05",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.575421,
+          "confirmation_ms": 5497.373901999999,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 4,
+          "nonce": 17,
+          "hash": "d5dd9c4ce2da6e5df7ab24da5d6ac26dea0b84a538f9302d2e4e07fc2e3e28a7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.0516430000000003,
+          "confirmation_ms": 5495.832762,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 5,
+          "nonce": 17,
+          "hash": "abbbd3a3802e44bc90082688f427e125137dfbe162bf8b463a16a97f6c6e1e29",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.823245,
+          "confirmation_ms": 5493.815009999999,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 6,
+          "nonce": 17,
+          "hash": "1eb3527ce9fe6556f3b70e9b4c5d5b578e48a0ab86e03a5fa9992d945c87cdec",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6950659999999997,
+          "confirmation_ms": 5492.031945,
+          "height": 5262,
+          "observed_unix_ms": 1793411492245
+        },
+        {
+          "sender": 0,
+          "nonce": 30,
+          "hash": "ac1aa3beeeec2c6e3118c3bc8134b88d0c959f00fde21f34646204fafe60710f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.249381,
+          "confirmation_ms": 5303.948669,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 1,
+          "nonce": 18,
+          "hash": "ba662bc32bc8b551978bf8197313fc852b256b5288464298b7740535e94e7811",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.65059,
+          "confirmation_ms": 5301.750905999999,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 2,
+          "nonce": 18,
+          "hash": "bab4aef97af980ea23cbca44676a5019ea509ac33ca795f7850275055c4f8f2d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.795703,
+          "confirmation_ms": 5299.134037,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 3,
+          "nonce": 18,
+          "hash": "17dc5cf72c90fcfc4f34acd6f9496355681af364d42675adfbee660580581a60",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.513203,
+          "confirmation_ms": 5297.372345000001,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 4,
+          "nonce": 18,
+          "hash": "daf82ec416ab94546aa0c25f8dc972d0123b8c3d76781a07b7ce889328187996",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.74419,
+          "confirmation_ms": 5294.892583,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 5,
+          "nonce": 18,
+          "hash": "08e95939611382c916a2b49bc8d0d8cffb22d7755509f89dedf6057457d20d66",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0333959999999998,
+          "confirmation_ms": 5292.182634,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 6,
+          "nonce": 18,
+          "hash": "07973ad585f21a4493794e9ab847192fda486dfd1c41b5f67a18f7b11c5d50ea",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.625492,
+          "confirmation_ms": 5289.194427,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 7,
+          "nonce": 18,
+          "hash": "9ceee6ae0c57ec94d611e359c70377b3bb157e9a4baf043c54619307a5a67bd9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6395530000000003,
+          "confirmation_ms": 5286.602876,
+          "height": 5263,
+          "observed_unix_ms": 1793411497551
+        },
+        {
+          "sender": 3,
+          "nonce": 19,
+          "hash": "79e302d787d318df1aab9177bd999419a04badfbe0fa5fa6fe5b49af4cd4b82c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5344450000000003,
+          "confirmation_ms": 5313.651055,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 4,
+          "nonce": 19,
+          "hash": "32789af1ec985599c518252833c68c452b054718d53da2de7c731e5bf0582b4d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.782798,
+          "confirmation_ms": 5311.151433,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 5,
+          "nonce": 19,
+          "hash": "0d5f58185365b68861ac9986f97596f115499df29cf83852f0376825ffb54551",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.8402,
+          "confirmation_ms": 5308.402675,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 6,
+          "nonce": 19,
+          "hash": "95d577337745c2a81b4fe43bfb49cc556e02a4e9b7ab30d3c8e8d1c1dd7c9849",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.624421,
+          "confirmation_ms": 5306.596257,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 7,
+          "nonce": 19,
+          "hash": "c512daea7575bbe0328bb51567f54f09b8f603d7e431bc9045013f6cbecd1bd3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.732003,
+          "confirmation_ms": 5304.049053,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 0,
+          "nonce": 31,
+          "hash": "6d2597a8ed88a60209de3b2ed103ebc9b03d31d71bc8ab5473f23916c8fe4262",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.427143,
+          "confirmation_ms": 5321.930076000001,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 1,
+          "nonce": 19,
+          "hash": "41329b422cc98344d7c0b138a6a3aa827b04da30ef74d1bd894f5af4db69dfae",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.127593,
+          "confirmation_ms": 5319.536292999999,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        },
+        {
+          "sender": 2,
+          "nonce": 19,
+          "hash": "facb630292352dd4205c15c947290484fb87e45fd988cce60ea78b9551cd00df",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.506348,
+          "confirmation_ms": 5317.442351000001,
+          "height": 5264,
+          "observed_unix_ms": 1793411502874
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "concurrency": 8,
+      "started_unix_ms": 1793411502876,
+      "finished_unix_ms": 1793411535966,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 33.089798341,
+      "confirmed_in_offer_window": 40,
+      "confirmed_total": 48,
+      "confirmed_tps_offer_window": 1.3333333333333333,
+      "confirmed_tps_including_drain": 1.4505981422233534,
+      "latency_ms_p50": 5496.67159,
+      "latency_ms_p95": 5716.966915000001,
+      "latency_ms_p99": 5723.694512,
+      "receipts": [
+        {
+          "sender": 7,
+          "nonce": 20,
+          "hash": "e08b238d9fcb0a943710669175c6c26a67438c28ed84bb2f5f4bae8e4235f695",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.232525,
+          "confirmation_ms": 5488.108121,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 0,
+          "nonce": 32,
+          "hash": "d7a3bf0e3090dcd03c914273925e099e6fd6544752ed64533c009b46a91e374c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.088483,
+          "confirmation_ms": 5502.8588819999995,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 1,
+          "nonce": 20,
+          "hash": "cb9348585fc46e74bc0e1059ed96b540f9023eb3f1d6d5b238b224ec2a890822",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.067351,
+          "confirmation_ms": 5500.80469,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 2,
+          "nonce": 20,
+          "hash": "a0fdb4fcadf7eeaa69d7f40ccd91bbfb0c5fd7aa6d00f18de7b576114cac5d05",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.228545,
+          "confirmation_ms": 5498.866223,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 3,
+          "nonce": 20,
+          "hash": "dc2ffcab30c70e8ee7b43bbaef20f9a6ee9706cd3ed2cb557c314cfd814c8d82",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.6991669999999999,
+          "confirmation_ms": 5496.67159,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 4,
+          "nonce": 20,
+          "hash": "37949791774ecd5610d71ae9ac5998928e8906a28990fb39e84ec40f35e6901a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4046290000000003,
+          "confirmation_ms": 5495.006464,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 5,
+          "nonce": 20,
+          "hash": "51c72b16554927116f429a654cc82bc36f51f363963af4fcd41feb87f8ddd87f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.483708,
+          "confirmation_ms": 5492.635545,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 6,
+          "nonce": 20,
+          "hash": "ba45f69aee638273a279dfc5b9446d6685e1aece56eef499e25c43ab757b9879",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.7404689999999998,
+          "confirmation_ms": 5490.185408,
+          "height": 5265,
+          "observed_unix_ms": 1793411508379
+        },
+        {
+          "sender": 7,
+          "nonce": 21,
+          "hash": "868c88ef9e916440cb24d9e4c6c0f8b997e84fb13caaf07360774e1c8003c415",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9316530000000003,
+          "confirmation_ms": 5284.247741,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 0,
+          "nonce": 33,
+          "hash": "6ec0b20ce718ac5af433cd4154eef9f417e80dd8401260fbdf613d6ac0bb6b43",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.061603,
+          "confirmation_ms": 5299.9305779999995,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 1,
+          "nonce": 21,
+          "hash": "53769dc4fb07577af4188d9caf0fb69a6cab0ade13aedc922e57c8477f45b06f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2247679999999996,
+          "confirmation_ms": 5297.902585,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 2,
+          "nonce": 21,
+          "hash": "dd1ea0e6b4153f30f82d80ca7c335f7c3439fb1bb387c6b21f929e2a2e77d04a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.67782,
+          "confirmation_ms": 5295.711357,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 3,
+          "nonce": 21,
+          "hash": "759d9ef5ac718aa2c9b028cf1bceaf1b8fd26018c16e404536a0a08c616ab27d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.005048,
+          "confirmation_ms": 5293.067287999999,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 4,
+          "nonce": 21,
+          "hash": "82fe80ede9cac7ba00897e18281dadf6eeb28420876e3f5a8af589527539dbf9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9371620000000003,
+          "confirmation_ms": 5291.09621,
+          "height": 5266,
+          "observed_unix_ms": 1793411513680
+        },
+        {
+          "sender": 5,
+          "nonce": 21,
+          "hash": "39125d487e7f6db924cee2778ba5fc7d698e383a0da202f01111fefa9cce5f66",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.897627,
+          "confirmation_ms": 5288.19286,
+          "height": 5266,
+          "observed_unix_ms": 1793411513681
+        },
+        {
+          "sender": 6,
+          "nonce": 21,
+          "hash": "bbdf0d2015b881af6aa06c250d00f73d45f7f9850c87ee5b955a05cf0d17ddba",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.83984,
+          "confirmation_ms": 5286.329044,
+          "height": 5266,
+          "observed_unix_ms": 1793411513681
+        },
+        {
+          "sender": 0,
+          "nonce": 34,
+          "hash": "6d0ec6e368549dc708abec382816b8d1a38dbb224a1a92b7e71cecb5ebb25a79",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.691187,
+          "confirmation_ms": 5509.24992,
+          "height": 5267,
+          "observed_unix_ms": 1793411519191
+        },
+        {
+          "sender": 1,
+          "nonce": 22,
+          "hash": "4b7f4a3529ff494789113fb3f549f46bd8cf02014d9ccc0451c46187ef9a3111",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.858187,
+          "confirmation_ms": 5504.593204,
+          "height": 5267,
+          "observed_unix_ms": 1793411519191
+        },
+        {
+          "sender": 2,
+          "nonce": 22,
+          "hash": "288f5219b6b3432b0d67ec150c17c3f37231a50df7479b5a6df555911bd3d034",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.481946,
+          "confirmation_ms": 5501.769028,
+          "height": 5267,
+          "observed_unix_ms": 1793411519191
+        },
+        {
+          "sender": 3,
+          "nonce": 22,
+          "hash": "a9a4ca817b1d0a5762f1f5674860d53545083c4c669ea76479a336958ff97419",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.769143,
+          "confirmation_ms": 5499.377097,
+          "height": 5267,
+          "observed_unix_ms": 1793411519191
+        },
+        {
+          "sender": 4,
+          "nonce": 22,
+          "hash": "d891cd8c1d30cccb7e4c93e20ecbb22b85eef10b99310b8861d9e1c6bd1bbf96",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.587705,
+          "confirmation_ms": 5497.642035,
+          "height": 5267,
+          "observed_unix_ms": 1793411519192
+        },
+        {
+          "sender": 5,
+          "nonce": 22,
+          "hash": "34a756628b020deff37eecafe04a24abe2a6c043a385e03a857ed426c5ce4d8b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.713554,
+          "confirmation_ms": 5495.088701000001,
+          "height": 5267,
+          "observed_unix_ms": 1793411519192
+        },
+        {
+          "sender": 6,
+          "nonce": 22,
+          "hash": "f0f90330653efdca6ea9597e867358c61e1421370e42aead61441f8bdbfdd83b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.638777,
+          "confirmation_ms": 5492.408728,
+          "height": 5267,
+          "observed_unix_ms": 1793411519192
+        },
+        {
+          "sender": 7,
+          "nonce": 22,
+          "hash": "51d620446ccf499c2378e6caa42e5ce59b5f593982d2a5b4c8639b5126452abd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.739534,
+          "confirmation_ms": 5489.8034210000005,
+          "height": 5267,
+          "observed_unix_ms": 1793411519192
+        },
+        {
+          "sender": 1,
+          "nonce": 23,
+          "hash": "0ab41783e6546103e8ae6684fb97eb000a39885192c8052e484b9a9960c373e5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.10248,
+          "confirmation_ms": 5716.119958,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 0,
+          "nonce": 35,
+          "hash": "0009a606dc3db6a98bc9b7e1b5aea3996cbd94d4582b07487887b4bcaa67c9a9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.139636,
+          "confirmation_ms": 5719.355799,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 2,
+          "nonce": 23,
+          "hash": "91c45297ddadf3b53ca76b6dd0b12751b2e6e524c4318075f6a88acf93ee018a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.018784,
+          "confirmation_ms": 5713.156167,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 3,
+          "nonce": 23,
+          "hash": "387a4933fe8c01c7e1bc6b78d71a6b0fadea88b6583028da4d9b979c1ae45b63",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.358615,
+          "confirmation_ms": 5709.175499999999,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 4,
+          "nonce": 23,
+          "hash": "9acb424d9a542e52ad30ac7ca4d59c81b6ad66cc8354b04ab7a832a039819977",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.402075,
+          "confirmation_ms": 5705.868432,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 5,
+          "nonce": 23,
+          "hash": "ce33ccd042df1447a9e9133d332fa8672435f0c4510f4343059d6b92b705b969",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.164834,
+          "confirmation_ms": 5703.500148,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 6,
+          "nonce": 23,
+          "hash": "044fd6d644cc1d9abe1a7d6ee18bd534255507e85707f08695fe6b697ba624e7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.37887,
+          "confirmation_ms": 5700.369255,
+          "height": 5268,
+          "observed_unix_ms": 1793411524912
+        },
+        {
+          "sender": 7,
+          "nonce": 23,
+          "hash": "63b82b8ca907e06c87f9765339fc1f32d9659a9de406a18498922309e7310756",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.412837,
+          "confirmation_ms": 5698.064616,
+          "height": 5268,
+          "observed_unix_ms": 1793411524913
+        },
+        {
+          "sender": 1,
+          "nonce": 24,
+          "hash": "821877b3e22540047e06b79f84a73af5bbb06f7ce13289265f9dc2595c390ad7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.591366,
+          "confirmation_ms": 5716.966915000001,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 0,
+          "nonce": 36,
+          "hash": "0ffc99592bedc3ec4fc063d1950a39d2ce248090e8a827c391ffa324d2cf63e0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 6.680445,
+          "confirmation_ms": 5723.694512,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 5,
+          "nonce": 24,
+          "hash": "a10ffe17f7ddb66887369261b88de4541c45370e7ced7bc6f5724c3e52ad76a5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.723669,
+          "confirmation_ms": 5706.089471,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 6,
+          "nonce": 24,
+          "hash": "d47b52369b20d065938e3d82603513c83cafdebf0fc37df30e59ad0063ea3599",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4057209999999998,
+          "confirmation_ms": 5703.399893000001,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 7,
+          "nonce": 24,
+          "hash": "1a279dad2edc4125bfc766ec8a96d6d241a721fc2ca4a2ee003f0fad803cfdf8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.651366,
+          "confirmation_ms": 5701.027762,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 2,
+          "nonce": 24,
+          "hash": "9a9be73608cecdb1acdc8a8dd5f4bfbba1fd6d56ff94c16db274c6b74998404a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.190668,
+          "confirmation_ms": 5713.559086,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 3,
+          "nonce": 24,
+          "hash": "b68054114f477ad49ca4d03d465ab4dadb99bba504977321a3aea102e171488b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.65722,
+          "confirmation_ms": 5711.401938,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 4,
+          "nonce": 24,
+          "hash": "1b9f7342fd228da8e5ba16352c4ca62843acfb451ba6d9fe076964ebb561c88e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5174,
+          "confirmation_ms": 5708.778329000001,
+          "height": 5269,
+          "observed_unix_ms": 1793411530640
+        },
+        {
+          "sender": 5,
+          "nonce": 25,
+          "hash": "89bf031c422a1f2367683ec85d540070ef3c232dc156bfef0b95b16100553d2c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.113993,
+          "confirmation_ms": 5300.69095,
+          "height": 5270,
+          "observed_unix_ms": 1793411535956
+        },
+        {
+          "sender": 6,
+          "nonce": 25,
+          "hash": "0bfd54cdf3e1761d996bf8bbae75d227fda18ee80b8684acfa2d84a87f60d8af",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.374914,
+          "confirmation_ms": 5298.3398910000005,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 7,
+          "nonce": 25,
+          "hash": "375569bae2f9620e354f1fdc11c432ef8bc08a193c1745c3fd0a7708d63bba3a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.991428,
+          "confirmation_ms": 5295.999938999999,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 0,
+          "nonce": 37,
+          "hash": "79c6e86c39ea99059372cd3ae5b35aebb09a95ae4e569d1789ac408f8793d375",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.051498,
+          "confirmation_ms": 5316.632076,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 1,
+          "nonce": 25,
+          "hash": "87309ccf2fdea0b9a25d2ca1ef3159eddb434a820954eb1d9362e3411703f458",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.94298,
+          "confirmation_ms": 5314.61498,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 2,
+          "nonce": 25,
+          "hash": "3462d9b7bf2fa1edc6f29621e387a33aa2b7bc0446c79f676d45ee7eda8dfca8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.11559,
+          "confirmation_ms": 5311.706272,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 3,
+          "nonce": 25,
+          "hash": "125cda34fc4a40c8f56fe895f1c6bbb07b3b3c5a94fcc6434c8092a05071ca41",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.391315,
+          "confirmation_ms": 5308.624443000001,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        },
+        {
+          "sender": 4,
+          "nonce": 25,
+          "hash": "1d2fb054c54406315f97d0a6516215baabdce9c1a6084b47ca9fe7e8a555e9af",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.602438,
+          "confirmation_ms": 5305.266919,
+          "height": 5270,
+          "observed_unix_ms": 1793411535958
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "concurrency": 32,
+      "started_unix_ms": 1793411535966,
+      "finished_unix_ms": 1793411574921,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 38.954452265,
+      "confirmed_in_offer_window": 80,
+      "confirmed_total": 112,
+      "confirmed_tps_offer_window": 2.6666666666666665,
+      "confirmed_tps_including_drain": 2.8751527357664926,
+      "latency_ms_p50": 11044.383160000001,
+      "latency_ms_p95": 11473.393775,
+      "latency_ms_p99": 11482.951773,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 38,
+          "hash": "e5c9b1e15a674be70b120cd76aae6697769816d6b8baa35d035f07ed3b77d64b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9308669999999999,
+          "confirmation_ms": 5377.650100000001,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 1,
+          "nonce": 26,
+          "hash": "b9771723946fe310eb2fa9bb5859d731e246e41e575f25a912024b23d0a351be",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0388450000000002,
+          "confirmation_ms": 5375.7725629999995,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 2,
+          "nonce": 26,
+          "hash": "011cd426e14ec2fb20dba52892e586625bf68e9e2d73a742e00b5d7d4d85f2b5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.1339279999999996,
+          "confirmation_ms": 5372.769733,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 3,
+          "nonce": 26,
+          "hash": "80584f92e06682172ca7c0630ebbcb11e8d3bb9cc7d44d4fbcd436cfc899564d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.359426,
+          "confirmation_ms": 5369.738389,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 4,
+          "nonce": 26,
+          "hash": "5073eda9b7ac840539588941d2aba3a64d5df5efc1c9337d787dc30835fd8489",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.171518,
+          "confirmation_ms": 5367.4148669999995,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 5,
+          "nonce": 26,
+          "hash": "26a7acec044298e9ded49590384b601a0cf552a88bc714c22307f7fb84c840bc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0565599999999997,
+          "confirmation_ms": 5365.27745,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 6,
+          "nonce": 26,
+          "hash": "1f02bb81882e99825a5c026da64ce3a9867ebaa925e6bd6c5cecedcffa40d27e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.216136,
+          "confirmation_ms": 5362.255181,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 7,
+          "nonce": 26,
+          "hash": "d066515d286f09ae83c45feb61613424250f2eae2caf9e03923ea179473aff3a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.966471,
+          "confirmation_ms": 5360.073447,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 8,
+          "nonce": 7,
+          "hash": "e09b8edc0bb52d2716592a1521e10071e4a2374180a04e7a5fff70b4fb10b74e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.501611,
+          "confirmation_ms": 5356.142028,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 9,
+          "nonce": 7,
+          "hash": "6e3cf59caf8c9435077a141a88682fe641981a4999837dfb90cadb81bcef07b4",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.173603,
+          "confirmation_ms": 5352.674609,
+          "height": 5271,
+          "observed_unix_ms": 1793411541344
+        },
+        {
+          "sender": 10,
+          "nonce": 7,
+          "hash": "8573aaa763f4ba7430baa81793c841488072abe87fa2582a4a8603cb9745089f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.114884,
+          "confirmation_ms": 5348.535288,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 11,
+          "nonce": 7,
+          "hash": "40ddec4d8f06c76dd785281b0a121b92871241d7341c4057b938ad26dc9a84fd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.917707,
+          "confirmation_ms": 5345.4544049999995,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 12,
+          "nonce": 7,
+          "hash": "390a03cc7b13b69fb771dc926ab5ecac35e400064b4b34fe1e453d4a22083e58",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.908203,
+          "confirmation_ms": 5343.570951000001,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 13,
+          "nonce": 7,
+          "hash": "81cd889f0fde681b9919e49e96d054a806c9a160cc6242644342b24e19b73b73",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.6533450000000003,
+          "confirmation_ms": 5341.701296,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 14,
+          "nonce": 7,
+          "hash": "472b18a4225a011c4784842e776b0803e9e3183273b89399f341b1f83830e817",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.3089220000000004,
+          "confirmation_ms": 5339.103916,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 15,
+          "nonce": 7,
+          "hash": "9019323eb8fae24a0abf8916836c06e458b853938462803371da7204370e1e49",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.132601,
+          "confirmation_ms": 5335.8326720000005,
+          "height": 5271,
+          "observed_unix_ms": 1793411541345
+        },
+        {
+          "sender": 16,
+          "nonce": 6,
+          "hash": "0d5235bf70ebb86b04ad13cb7178f0ddeea89dbeae06a2ca4bf70882e2d05d60",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.243567,
+          "confirmation_ms": 11070.350084,
+          "height": 5272,
+          "observed_unix_ms": 1793411547082
+        },
+        {
+          "sender": 17,
+          "nonce": 6,
+          "hash": "6db98d79b6ec564b7904f81af118d10a6b59737c22d81dff35d95d68f5c1a7bb",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.192656,
+          "confirmation_ms": 11068.14199,
+          "height": 5272,
+          "observed_unix_ms": 1793411547082
+        },
+        {
+          "sender": 30,
+          "nonce": 7,
+          "hash": "5480a046a2a3c0accae61bca56a4f7a49cc596ae828c3dbb507d678ab2704162",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.0521350000000003,
+          "confirmation_ms": 11027.560123000001,
+          "height": 5272,
+          "observed_unix_ms": 1793411547082
+        },
+        {
+          "sender": 31,
+          "nonce": 7,
+          "hash": "0ef57a8ab95c4be390e0fdc3bd1172bbd18ffe319cc831c0fd8f9ad5d15827d6",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.570635,
+          "confirmation_ms": 11024.542299,
+          "height": 5272,
+          "observed_unix_ms": 1793411547082
+        },
+        {
+          "sender": 18,
+          "nonce": 6,
+          "hash": "edcc2ca0f3efa472e0e36c275ea0b3b10defe840f07ab1037065fcac5d729420",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.359547,
+          "confirmation_ms": 11065.05265,
+          "height": 5272,
+          "observed_unix_ms": 1793411547082
+        },
+        {
+          "sender": 19,
+          "nonce": 6,
+          "hash": "f32d345a602085a971fbcc74e0516cf98f886f8dfca608657155c17b327bcdea",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.713085,
+          "confirmation_ms": 11061.726964,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 20,
+          "nonce": 6,
+          "hash": "8560e61d78fd11dec09c70104dcb4aae3adf93a8b46e5b52c72e4bd779d30d0d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.156902,
+          "confirmation_ms": 11059.04757,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 21,
+          "nonce": 6,
+          "hash": "9b04b14dc83473bb85a7a06537e4626415df630f25420714a5ff3a48996c733f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.201614,
+          "confirmation_ms": 11053.924549,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 22,
+          "nonce": 6,
+          "hash": "4d4b201344097e841e39b655a470a7bb4813ed4e8a8c3c8557a6dc715b3cb0c1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 5.001799,
+          "confirmation_ms": 11051.756776,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 23,
+          "nonce": 6,
+          "hash": "83dda23cc64fb363174c83b5524974eaa48a6b7d15a8928683e7a8de1a8f6132",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.528847,
+          "confirmation_ms": 11046.789088000001,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 24,
+          "nonce": 7,
+          "hash": "d8e94857a0a85f4aa4edefc52fbd23f1d594f4ffb6c4dfc955acc3261968d26d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9155990000000003,
+          "confirmation_ms": 11044.294032,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 25,
+          "nonce": 7,
+          "hash": "7b27d9590980159b0f958f090264ccf49dcd2c4b06a2d5d0e2bb43efea599ffd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.4808299999999996,
+          "confirmation_ms": 11041.412504,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 26,
+          "nonce": 7,
+          "hash": "08559b08e64194715f03b4215b423801d0ec07a61737dc8213dd330c2fa26c90",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.237498,
+          "confirmation_ms": 11037.965746,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 27,
+          "nonce": 7,
+          "hash": "7423808a2cb342e81a8e2bf7973ac9465fc64b22ada483f54d5f20a129c2ec67",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9473310000000001,
+          "confirmation_ms": 11035.761678,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 28,
+          "nonce": 7,
+          "hash": "eb52415fce259e5dd5447b6943728e1247284b10000467f374639ca69b11dd04",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9868910000000002,
+          "confirmation_ms": 11033.848237999999,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 29,
+          "nonce": 7,
+          "hash": "a2c21a4f71f7c018a4d959521b1ab173a34dfd75c01c9f8ffdfe2fea81a66bea",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.885558,
+          "confirmation_ms": 11031.895278,
+          "height": 5272,
+          "observed_unix_ms": 1793411547083
+        },
+        {
+          "sender": 0,
+          "nonce": 39,
+          "hash": "e00b9845a3d42781b16b538f34d889ae1266974dcdfd2718cd6cdb9b0fce4e3c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.143056,
+          "confirmation_ms": 11485.060617000001,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 1,
+          "nonce": 27,
+          "hash": "03d949a6077eb78130b959698875d0b0bef0fd11cc53229b9827cca10874d800",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.516308,
+          "confirmation_ms": 11482.951773,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 2,
+          "nonce": 27,
+          "hash": "57f43ab73026c6302f0e0afc9c05c20e718ea75cc60b49bd8ffd4c1a489a431d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9893850000000002,
+          "confirmation_ms": 11480.469356,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 3,
+          "nonce": 27,
+          "hash": "9db2e66fe810bfb19f0380e85737e7784f542db9bda10d9f7d9a9da6d5368e0e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.0758550000000002,
+          "confirmation_ms": 11478.523325999999,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 4,
+          "nonce": 27,
+          "hash": "876546a1d90ed8abda741b3f81391e69597e334aefdf75fc45e6e4a25e47e62d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.12157,
+          "confirmation_ms": 11476.481292999999,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 5,
+          "nonce": 27,
+          "hash": "8479392eb93c9c06996cf671622c14d76a0aeaf2ffe3691f22f233fd257d787e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.0139720000000003,
+          "confirmation_ms": 11473.393775,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 6,
+          "nonce": 27,
+          "hash": "8670504f08c0af663e8867b2b408a482c72eea5e477479731f891867eeafb6a2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.833465,
+          "confirmation_ms": 11471.413363,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 7,
+          "nonce": 27,
+          "hash": "d7e1e07f8fa546d5adadca61d3b415cd726308d0319001cdbf9cc55785b0c404",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.662388,
+          "confirmation_ms": 11468.613529,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 8,
+          "nonce": 8,
+          "hash": "51c99c9c622e0ab2fecb426efc87ba8b0f1efb19cb7094078515459e1c8cffb1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.468426,
+          "confirmation_ms": 11464.984311,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 9,
+          "nonce": 8,
+          "hash": "783f950c7fb2359d4d1b180db81e38a8f459ff372164a4ba4c196bd41d1fe383",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.299552,
+          "confirmation_ms": 11462.550206,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 10,
+          "nonce": 8,
+          "hash": "5a3c3180c68ed3610654197325019551dd48d25fe3c7727869af75d9070d86ab",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.7895239999999997,
+          "confirmation_ms": 11460.284475,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 11,
+          "nonce": 8,
+          "hash": "958580a8f259a0b5555903619d5243409e152c9b616c487be852cf3d5d0204df",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.32848,
+          "confirmation_ms": 11457.528652,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 12,
+          "nonce": 8,
+          "hash": "884ee16364368e850c448bb28037c4ce07a933273c51bcb21cbbe92878729d09",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.58037,
+          "confirmation_ms": 11455.233811999999,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 13,
+          "nonce": 8,
+          "hash": "6d1cb8ef8c6299269665b10805a4fd1a22241a1ea1b98efb298dad3be923e324",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.354269,
+          "confirmation_ms": 11452.687243,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 14,
+          "nonce": 8,
+          "hash": "0fdae022c6d4a1d02f773b8b1220ec3f788b4bedcb9dfe71af635c4ba9d4c31a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.559102,
+          "confirmation_ms": 11450.392744,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 15,
+          "nonce": 8,
+          "hash": "e9cc25864d8a8219704d65be93b1204820f56ab55288ad77b28c8bbda8747623",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.066371,
+          "confirmation_ms": 11447.896427,
+          "height": 5273,
+          "observed_unix_ms": 1793411552832
+        },
+        {
+          "sender": 18,
+          "nonce": 7,
+          "hash": "1e74f1b0d7d149554c655df6395b006ab36ccba14898fc62a5111ce976feab6a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.202912,
+          "confirmation_ms": 11068.571413000001,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 19,
+          "nonce": 7,
+          "hash": "3a0963bde662d21899cd37b71e7fb6e6f8903a8d58c021427d7461bfeed91867",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.1083339999999997,
+          "confirmation_ms": 11065.403563,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 20,
+          "nonce": 7,
+          "hash": "540ecd9f8163037b155d868cd4927870a0e422e3c1bb2e6ae905a27ae226471e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.166832,
+          "confirmation_ms": 11062.329099999999,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 29,
+          "nonce": 8,
+          "hash": "a737fa95d9d2a5a43831c04370cf9bc5cddf6f535644bed5fef46a2ba497d973",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.528516,
+          "confirmation_ms": 11035.256796,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 17,
+          "nonce": 7,
+          "hash": "b65498ab66ef35b25bb07365993405187f26612c88cbc57e0055f66f1b424c53",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.259001,
+          "confirmation_ms": 11070.970013,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 21,
+          "nonce": 7,
+          "hash": "e53b44537c1ed6d344a40a62547c373e4b3d90fb6bd8bb971d8c7beef5a38963",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.144178,
+          "confirmation_ms": 11059.265384,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 22,
+          "nonce": 7,
+          "hash": "e239d778f051d5e8794336ae21e9a360c9099f88aab4088c75c8af2f2b8d3807",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.7231539999999999,
+          "confirmation_ms": 11056.155077,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 23,
+          "nonce": 7,
+          "hash": "840661d985b9ce3b6903cac39c9e99434751766c93e8a2f0a416ec30dcf903c5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.551606,
+          "confirmation_ms": 11054.465943000001,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 24,
+          "nonce": 8,
+          "hash": "ab15b4370824334c08d3e6809da2116cb5ff40363be5392b8d9b5c21acdc6455",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.81972,
+          "confirmation_ms": 11051.962569000001,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 25,
+          "nonce": 8,
+          "hash": "4dd7a249d02017cfa48377358c8fc07aec386e09b734f4983c84a852c1541333",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.821702,
+          "confirmation_ms": 11047.17682,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 26,
+          "nonce": 8,
+          "hash": "6880bab92761a97b1cf16bfc0ebcc9a1f84b1857fa72d6836848123fc5c29095",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.457455,
+          "confirmation_ms": 11045.388999,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 27,
+          "nonce": 8,
+          "hash": "dcc87b07f8b1c847c3b20b104b9c43fd045c6d9dc0e98832013282ef3abfa7ff",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.034282999999999,
+          "confirmation_ms": 11041.965455,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 30,
+          "nonce": 8,
+          "hash": "64a751647e773e8c776dc466692329a55a11c2f46d27810c12a6d29e298794a8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.546719,
+          "confirmation_ms": 11032.053668999999,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 31,
+          "nonce": 8,
+          "hash": "eb8725acc6c36ac24c274b5539e8eb1ac2fa5a87b99f543a6337647e090ee9f5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.3237840000000003,
+          "confirmation_ms": 11028.540872000001,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 28,
+          "nonce": 8,
+          "hash": "497e93c8c8cf77133581caa112d20742c790317b484c30c77404b6175cddd376",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.381856,
+          "confirmation_ms": 11038.034137,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 16,
+          "nonce": 7,
+          "hash": "0851aa3bc0b7210e9e9873425f4068d78d7329f27e19665e41b08f335461357b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.8065390000000001,
+          "confirmation_ms": 11073.171447,
+          "height": 5274,
+          "observed_unix_ms": 1793411558158
+        },
+        {
+          "sender": 0,
+          "nonce": 40,
+          "hash": "bbdec30725eeb934fc6bb4eb30b15c1e206dd419891337c732423abedbcdb356",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.294048,
+          "confirmation_ms": 10648.899988000001,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 1,
+          "nonce": 28,
+          "hash": "0fd7abd82dee2dc605e4295bacaf16576094101c64770ab6ff05ca7b9deae044",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.927351,
+          "confirmation_ms": 10646.641473000001,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 2,
+          "nonce": 28,
+          "hash": "4c041d1f249b88605b96ba28e94d1236a279efb7f29d2517897fbc64f7e53522",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.617675,
+          "confirmation_ms": 10644.748093,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 3,
+          "nonce": 28,
+          "hash": "1cfa0e6de09313e1dcb8878f6216d22f59ef21f889f284407c9f126c4d364fb1",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.765277,
+          "confirmation_ms": 10643.164389000001,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 4,
+          "nonce": 28,
+          "hash": "4fe4b6b696c4fb1b926b4a7813f9567eb6d02c658659b8e5ceb8c6e997bad345",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.945168,
+          "confirmation_ms": 10640.432531,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 5,
+          "nonce": 28,
+          "hash": "ad5a657e15b3c4b33f411b078fb93137b76c73777c173e1c50c86f698abd33b9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.141413,
+          "confirmation_ms": 10638.521314,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 6,
+          "nonce": 28,
+          "hash": "39a57806591bb97366006d944d0a6ecb8905e71c3cc502bbef92c4abe6ddc12f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9976070000000001,
+          "confirmation_ms": 10636.413521999999,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 7,
+          "nonce": 28,
+          "hash": "c7ff7fef8f74ad791ffec0c23199e054916bb50103f0cf99d2b7af2ee516cb17",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.567775,
+          "confirmation_ms": 10634.449704999999,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 8,
+          "nonce": 9,
+          "hash": "7a4e792e0089915428789d7a088b33f0f1204194793751761a0d02ab91ba596d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.5890929999999999,
+          "confirmation_ms": 10631.915391,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 9,
+          "nonce": 9,
+          "hash": "8a170e18319a2769d1eeb1cd5439b4c0b2f7f7d16060c7572d2a36aca3065aad",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4273239999999996,
+          "confirmation_ms": 10630.36039,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 10,
+          "nonce": 9,
+          "hash": "66c9f7f4798a19d50383191322718039f25fdf43ff02725b8cfae2da684de9fe",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.1733719999999996,
+          "confirmation_ms": 10627.966826,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 11,
+          "nonce": 9,
+          "hash": "2921f0361b75fc503ae1893cf339f4758bf3b5039b1b9938e5f68f8620888ed2",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.8641759999999998,
+          "confirmation_ms": 10625.827584999999,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 12,
+          "nonce": 9,
+          "hash": "73179bd47f4a64befcc7a7c85e110233ec46f8880a8cee932cd9c0600031b412",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.8685080000000003,
+          "confirmation_ms": 10623.997510000001,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 13,
+          "nonce": 9,
+          "hash": "4501d0ec0820a36f51fe1705a9727d2a8e5ce5b4ea34c3ef5fec1e09642a6ca8",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.886811,
+          "confirmation_ms": 10621.162763999999,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 14,
+          "nonce": 9,
+          "hash": "e85646f758ddf010f7a482c4a1a9ba7307a6a8023f20f52dc4d0bc02a603c830",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.5164079999999998,
+          "confirmation_ms": 10619.309513,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 15,
+          "nonce": 9,
+          "hash": "7a479ebbf63221ebb81d0eba8fb63341d3ffc9d267610dc49bc0f6b6d939cfb3",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.502292,
+          "confirmation_ms": 10616.863462,
+          "height": 5275,
+          "observed_unix_ms": 1793411563484
+        },
+        {
+          "sender": 24,
+          "nonce": 9,
+          "hash": "998c219bd6fac2cb0a704d747564132480498cb2e6fea5b5ad1a35d1ed1a3565",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.146066,
+          "confirmation_ms": 11037.135339,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 25,
+          "nonce": 9,
+          "hash": "c85442f228f9379a2c4c256168c53b67506713abcb0f3294032f658f96ddbeca",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.985509,
+          "confirmation_ms": 11034.042413,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 26,
+          "nonce": 9,
+          "hash": "f04faaa91eae481cdce2a09d992ba4d86936699765450810c7741dc247d78d88",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.091228,
+          "confirmation_ms": 11032.091036,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 27,
+          "nonce": 9,
+          "hash": "47f92953b1c294445518ffd70100bbf2bddc247394f27481da4d91992e38957a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.706994,
+          "confirmation_ms": 11030.033849000001,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 28,
+          "nonce": 9,
+          "hash": "cc568b619658f4a7227ee615ac053c6f736238ac9784836a181351037d05d35f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2634869999999996,
+          "confirmation_ms": 11027.361025999999,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 29,
+          "nonce": 9,
+          "hash": "b4a772835ea4594b4fff7ceaff29660989434a2e55f01ab82d3ad876a37d4a2a",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.472211,
+          "confirmation_ms": 11025.13178,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 30,
+          "nonce": 9,
+          "hash": "66c06e7d39ac002d3fcaa08dbb5de89cf1964db93139780d896e36dfa6f839c4",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.925859,
+          "confirmation_ms": 11022.693179,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 31,
+          "nonce": 9,
+          "hash": "d3645b14e24e1d9d74038f711c72d994de725b96eb76337d15bd8e7c1f9de6f9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.8383420000000004,
+          "confirmation_ms": 11020.799989000001,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 16,
+          "nonce": 8,
+          "hash": "02ca37557abb893071eb9c8e7184943ccf212cef132777bd4b23194926d60be5",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.856464,
+          "confirmation_ms": 11058.415622,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 17,
+          "nonce": 8,
+          "hash": "140beb0fb26acf1139287c3a87c08962847df80a1fbce8c0db9c074bec0f1f6e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.718728,
+          "confirmation_ms": 11056.596223999999,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 18,
+          "nonce": 8,
+          "hash": "86f0b916f3a3d13fc9484928b51c153a2d5bb90177cad19e349ad81f6380c6af",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.698853,
+          "confirmation_ms": 11052.911237,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 19,
+          "nonce": 8,
+          "hash": "96c055a0b9b74abd2646ebccbce6117bb0416a485a98616f3f55a5e6d222f95e",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.282602,
+          "confirmation_ms": 11050.246065,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 20,
+          "nonce": 8,
+          "hash": "bd370c3ccc6aec650450423bad8ce6109af97f2db136cfaf6efb6bca54f9061d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.647576,
+          "confirmation_ms": 11046.997094,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 21,
+          "nonce": 8,
+          "hash": "f40542f7eb733acd3bb718ece379bc9b87cdf1e9578f78e4c427d3b697294a0c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3093060000000003,
+          "confirmation_ms": 11044.383160000001,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 22,
+          "nonce": 8,
+          "hash": "9e9153295c639b64a9d63b160862a1738a7fa2b153027837c5f76cdef8cbcb42",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.068123,
+          "confirmation_ms": 11042.141295000001,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 23,
+          "nonce": 8,
+          "hash": "179fb20670162b709db9fcf35b81accca446259434b60d5af3becbee5f81a4ae",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.4002429999999997,
+          "confirmation_ms": 11040.107203,
+          "height": 5276,
+          "observed_unix_ms": 1793411569218
+        },
+        {
+          "sender": 0,
+          "nonce": 41,
+          "hash": "cba9ab6606b4a28f71bc0bf13e035190fd04763b0dde5b645788ad78a78680dc",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.943055,
+          "confirmation_ms": 11427.13991,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 1,
+          "nonce": 29,
+          "hash": "002d2432dd0ae2ec4f76ec412148a906d405cb4733442e1bf92efd83c8ad34ad",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.167833,
+          "confirmation_ms": 11425.232148,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 2,
+          "nonce": 29,
+          "hash": "98db32c7a6ed0d97a8d37580e270cc27699a43e4181d5d11819d9f1ed48e3fe9",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.913107,
+          "confirmation_ms": 11423.098186000001,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 3,
+          "nonce": 29,
+          "hash": "cbdc2907dc7d02d5079004366739fd7f0818f9b319059c01f15c6f42abb18de0",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.344569,
+          "confirmation_ms": 11418.218249000001,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 4,
+          "nonce": 29,
+          "hash": "5067f433404e97757abd43124b4dc66cf104b26d2e7b06ee5c159920f9b3e7bd",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.210447,
+          "confirmation_ms": 11415.90747,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 5,
+          "nonce": 29,
+          "hash": "7c75ab9f61ea48ba512a452231312be3ba6a741556e7d4ab15d4a885a52848be",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.82715,
+          "confirmation_ms": 11413.731074,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 6,
+          "nonce": 29,
+          "hash": "0edf5ddb3851fe9b99f06d23ae19e9068a023015cf058a63f23f03e653532116",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.9215679999999997,
+          "confirmation_ms": 11411.937515,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 7,
+          "nonce": 29,
+          "hash": "0c0893dd1dcdb3e40c073e66e0ff7a86f1c80b9c07b6e478d489e4ebcce17a82",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.333849,
+          "confirmation_ms": 11409.049587,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 8,
+          "nonce": 10,
+          "hash": "a97ff13d952466154f775e9bed53fe5133078da9e40bb2a77bc31b3633850787",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.129105,
+          "confirmation_ms": 11405.748888,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 9,
+          "nonce": 10,
+          "hash": "0816c6dbbb9213c9d4e30d11ef665b8bad5017cffc5aea040b6e0a3642f80306",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.140542,
+          "confirmation_ms": 11403.653875,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 10,
+          "nonce": 10,
+          "hash": "a4c6bcaa1c76531440d0145c56c5d40e61a59e7107c249e7056c67f1608060ef",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.697565,
+          "confirmation_ms": 11401.546733,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 11,
+          "nonce": 10,
+          "hash": "a5557c4753e13bdc3160fff44c4adcdcdc45742633c30ba8029862c91b6139f7",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9678920000000002,
+          "confirmation_ms": 11399.882849000001,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 12,
+          "nonce": 10,
+          "hash": "6e37117bb51dd4a1a2b3408236d08bbf2bb448f265cee376d3e00c842d542a07",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.696109,
+          "confirmation_ms": 11397.948828,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 13,
+          "nonce": 10,
+          "hash": "aac1be976ad94b704a8c570d35bad833e26b95ab2c3e88d54113f74c7234db7f",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 4.666786,
+          "confirmation_ms": 11395.286079,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 14,
+          "nonce": 10,
+          "hash": "5b4e427ca36b46496361bb01f8a7380490426fea05f4905fb04b415c49827d7b",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.227683,
+          "confirmation_ms": 11390.651702,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        },
+        {
+          "sender": 15,
+          "nonce": 10,
+          "hash": "e9a7596d35c4b360ca419d8af43e5aeaa695c27ea1371357297a2d089f6923ae",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.220453,
+          "confirmation_ms": 11388.457309,
+          "height": 5277,
+          "observed_unix_ms": 1793411574918
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "concurrency": 1,
+      "started_unix_ms": 1793411574921,
+      "finished_unix_ms": 1793411607716,
+      "offer_seconds": 30,
+      "elapsed_including_drain_seconds": 32.79424394,
+      "confirmed_in_offer_window": 5,
+      "confirmed_total": 6,
+      "confirmed_tps_offer_window": 0.16666666666666666,
+      "confirmed_tps_including_drain": 0.18295893666515184,
+      "latency_ms_p50": 5486.063747,
+      "latency_ms_p95": 5699.7311740000005,
+      "latency_ms_p99": 5699.7311740000005,
+      "receipts": [
+        {
+          "sender": 0,
+          "nonce": 42,
+          "hash": "6032d2e966cf3ebbea458760bb90974e0b76a43074a9992eddc468410650180c",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.090452,
+          "confirmation_ms": 5494.064506,
+          "height": 5278,
+          "observed_unix_ms": 1793411580415
+        },
+        {
+          "sender": 0,
+          "nonce": 43,
+          "hash": "92e681365465601e6eda4c909f9a48e722b911d721d64c93c50e44fd0318b6a4",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.3094360000000003,
+          "confirmation_ms": 5297.306119,
+          "height": 5279,
+          "observed_unix_ms": 1793411585714
+        },
+        {
+          "sender": 0,
+          "nonce": 44,
+          "hash": "d7fb18babba6656e1b627b449782e3ea230616518a10f3f33b4aac68d17ac808",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.2645489999999997,
+          "confirmation_ms": 5505.86555,
+          "height": 5280,
+          "observed_unix_ms": 1793411591221
+        },
+        {
+          "sender": 0,
+          "nonce": 45,
+          "hash": "8881b2700b8402cabdc337c26f9b1c776550fb7898144e3c705afcafae426060",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 3.74669,
+          "confirmation_ms": 5699.7311740000005,
+          "height": 5281,
+          "observed_unix_ms": 1793411596931
+        },
+        {
+          "sender": 0,
+          "nonce": 46,
+          "hash": "4c269d001bf9cdad636fdaaf56f2612afb8b8e66e37562832016d6671453bc84",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 2.592264,
+          "confirmation_ms": 5293.999729,
+          "height": 5282,
+          "observed_unix_ms": 1793411602226
+        },
+        {
+          "sender": 0,
+          "nonce": 47,
+          "hash": "ca5b5872fb323b6d80d235c69d6b1411d518ac101f336d24463653c69d620e4d",
+          "signed_bytes": 5456,
+          "submit_ack_ms": 1.9605820000000003,
+          "confirmation_ms": 5486.063747,
+          "height": 5283,
+          "observed_unix_ms": 1793411607714
+        }
+      ]
+    }
+  ],
+  "initial_statuses": [
+    {
+      "height": 5194,
+      "pending": 0,
+      "state_root": "20940ccdec9ee4806266a8b45741acd4ad2b341037bd739f170f66df029bd804",
+      "validator": 3
+    },
+    {
+      "height": 5194,
+      "pending": 0,
+      "state_root": "20940ccdec9ee4806266a8b45741acd4ad2b341037bd739f170f66df029bd804",
+      "validator": 2
+    },
+    {
+      "height": 5194,
+      "pending": 0,
+      "state_root": "20940ccdec9ee4806266a8b45741acd4ad2b341037bd739f170f66df029bd804",
+      "validator": 0
+    },
+    {
+      "height": 5194,
+      "pending": 0,
+      "state_root": "20940ccdec9ee4806266a8b45741acd4ad2b341037bd739f170f66df029bd804",
+      "validator": 1
+    }
+  ],
+  "final_statuses": [
+    {
+      "height": 5283,
+      "pending": 0,
+      "state_root": "e441545c262e282cfcfce32083a0b6a5caafbb9be0e5a1731fa32fcd285a3001",
+      "validator": 3
+    },
+    {
+      "height": 5283,
+      "pending": 0,
+      "state_root": "e441545c262e282cfcfce32083a0b6a5caafbb9be0e5a1731fa32fcd285a3001",
+      "validator": 2
+    },
+    {
+      "height": 5283,
+      "pending": 0,
+      "state_root": "e441545c262e282cfcfce32083a0b6a5caafbb9be0e5a1731fa32fcd285a3001",
+      "validator": 0
+    },
+    {
+      "height": 5283,
+      "pending": 0,
+      "state_root": "e441545c262e282cfcfce32083a0b6a5caafbb9be0e5a1731fa32fcd285a3001",
+      "validator": 1
+    }
+  ],
+  "limitations": [
+    "Client and validators may share a host; no independent operators established",
+    "Confirmation is exact transaction-hash inclusion in verified quorum certificates; no full state replay",
+    "Latency includes client signing, transport, certificate verification and polling; quantiles are empirical",
+    "Fixed-window throughput and throughput including drain are reported separately",
+    "No admission retries: rejection or transport failure aborts the run and preserves partial evidence",
+    "Transient sender keys are not persisted; use only test NXS"
+  ],
+  "error": null
+}

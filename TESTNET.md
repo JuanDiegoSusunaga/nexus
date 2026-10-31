@@ -39,8 +39,25 @@ Sin `--key` el proceso es observador: verifica y aplica certificados, sin votar.
 
 El transporte es TCP público en claro. ML-DSA autentica consenso y respuestas a consultas, con nonce y contexto; no aporta confidencialidad. Hay límites de tramas, conexiones, solicitudes por IP, cola y bytes pendientes. No se presenta como defensa completa ante DDoS.
 
-## Antes de Internet
+## Medir carga en el laboratorio Docker existente
 
-La publicación experimental usa la pasarela/túnel de la guía Docker; separar los validadores requiere máquinas y operación adicionales. La operación sostenida requiere resolver la retención de historia en RAM y la recuperación creciente. `--listen` admite una dirección externa, pero este laboratorio escucha solo en loopback. Cuatro procesos de un mismo ordenador no prueban independencia de máquinas ni de operadores. No hay migración automática del protocolo anterior ni admisión abierta de validadores. El diario presupone almacenamiento confiable: no evita rollback por el propietario, duplicación de claves ni pérdida de metadatos ante un corte eléctrico.
+Con los cuatro validadores activos y el faucet de prueba disponible en el host:
+
+```bash
+cargo build --release -p nexus-cli --example testnet_load --locked
+python deploy/measure_testnet.py --root target/home-testnet --load-binary target/release/examples/testnet_load --out target/load-01 --phase-seconds 30 --repetitions 3
+```
+
+El directorio de salida debe ser nuevo. El ensayo financia 32 cuentas efímeras con un NXS de prueba cada una; esa preparación queda fuera de las ventanas medidas. Las claves de esas cuentas permanecen en memoria y no se guardan. Usa exclusivamente un génesis de testnet y fondos de laboratorio. Conserva el faucet y los diarios existentes.
+
+El cliente genera transferencias monetarias L1 ML-DSA-65 con concurrencias 1, 8 y 32, una operación pendiente por cuenta. Ejecuta tres repeticiones con orden rotado, sin reintentar admisiones rechazadas. Confirma el hash exacto de cada operación dentro de bloques con certificados de quórum verificados y comprueba continuidad de padres desde el tip inicial. Una respuesta `pending` no cuenta como confirmación. Al terminar consulta las cuatro identidades y exige convergencia de altura/raíz y colas vacías.
+
+`load.json` conserva recibos y ventanas; `resources.jsonl` registra CPU, RAM y bytes asignados al diario mediante Docker y `du -sk`; `metadata.json` identifica binario, fuentes, imágenes y límites; `summary.json` resume los perfiles. El informe separa TPS dentro de la ventana de oferta y TPS con el vaciado posterior incluido. Las latencias incluyen firma del cliente, transporte, verificación del certificado y sondeo de 200 ms. Los cuantiles son empíricos, con pocas muestras en concurrencia 1. El crecimiento del diario usa muestras que abarcan cada fase, incluye bloques de fondo y puede exceder su duración exacta.
+
+Estas mediciones corresponden al camino monetario L1 del laboratorio. Cliente, muestreador y validadores comparten recursos; no acreditan capacidad máxima de producción, operadores independientes, prueba general L2 ni ventaja causal de dos capas sobre una. El límite actual de 16 transacciones candidatas por bloque y el tiempo de bloque deben acompañar cualquier cifra de rendimiento.
+
+## Límites de publicación y almacenamiento
+
+La publicación experimental usa la pasarela/túnel de la guía Docker; separar los validadores requiere máquinas y operación adicionales. La operación sostenida requiere resolver la retención de historia en RAM y la recuperación creciente. `--listen` admite una dirección externa, pero este laboratorio escucha solo en loopback. Cuatro procesos de un mismo ordenador no prueban independencia de máquinas ni de operadores. No hay migración automática del protocolo anterior ni admisión abierta de validadores. El diario presupone almacenamiento confiable: no evita rollback por el propietario ni duplicación de claves. En Unix se sincronizan el archivo y el directorio antes de confirmar cada registro; al crear el diario también se sincronizan sus directorios antecesores. Si falla la sincronización posterior al renombrado, el nodo exige recuperación antes de seguir firmando. En otras plataformas se conserva la sincronización del archivo sin afirmar persistencia del directorio. Estas medidas dependen de que el sistema de archivos y el almacenamiento respeten las operaciones de sincronización; las pruebas de fallo no simulan un corte eléctrico físico.
 
 [Auditoría actual y diario incremental](../Documentos/06-Evidencia-TG2/2026-10-30/Auditoria-Actual-y-Journal/README.md) · [Evidencia TCP anterior](../Documentos/06-Evidencia-TG2/2026-10-30/Testnet-TCP/README.md) · [Documentación de arquitectura](../documentacion.md).

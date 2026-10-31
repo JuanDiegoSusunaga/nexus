@@ -1,0 +1,107 @@
+{
+  "success": true,
+  "url": "http://127.0.0.1:18080",
+  "verification_origin": "same host",
+  "genesis": "f7e411df3d6dc1bbc79c36830229668a5c53adaf572e83d960e47111de276112",
+  "witness": {
+    "schema": 1,
+    "endpoints": [
+      "127.0.0.1:38267",
+      "127.0.0.1:44855",
+      "127.0.0.1:39107",
+      "127.0.0.1:38989"
+    ],
+    "observations": [
+      {
+        "utc": "2026-10-30T18:48:02.785359+00:00",
+        "statuses": [
+          {
+            "attested_by_validator": 3,
+            "burned_raw": "27074000000000",
+            "height": 625,
+            "issued_raw": "1000625000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "d2f66abd81580bed5252ab5bed38353520a66f38f6a5d60528d057d8a4bd7aa8",
+            "supply_raw": "1000624999972926000000000"
+          },
+          {
+            "attested_by_validator": 2,
+            "burned_raw": "27074000000000",
+            "height": 625,
+            "issued_raw": "1000625000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "d2f66abd81580bed5252ab5bed38353520a66f38f6a5d60528d057d8a4bd7aa8",
+            "supply_raw": "1000624999972926000000000"
+          },
+          {
+            "attested_by_validator": 0,
+            "burned_raw": "27074000000000",
+            "height": 625,
+            "issued_raw": "1000625000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "d2f66abd81580bed5252ab5bed38353520a66f38f6a5d60528d057d8a4bd7aa8",
+            "supply_raw": "1000624999972926000000000"
+          },
+          {
+            "attested_by_validator": 1,
+            "burned_raw": "27074000000000",
+            "height": 625,
+            "issued_raw": "1000625000000000000000000",
+            "pending": 0,
+            "phase": "Propose",
+            "round": 0,
+            "state_root": "d2f66abd81580bed5252ab5bed38353520a66f38f6a5d60528d057d8a4bd7aa8",
+            "supply_raw": "1000624999972926000000000"
+          }
+        ]
+      }
+    ],
+    "common_height": 625,
+    "state_root": "d2f66abd81580bed5252ab5bed38353520a66f38f6a5d60528d057d8a4bd7aa8",
+    "scope": "Consultas autenticadas y certificados BFT verificados por CLI; no replay de toda la historia",
+    "independent_external_origin_confirmed": false
+  },
+  "transaction": "b23f611649e496ebe8713d414ed188bb70fff7796c1070c19030bbcab1188556",
+  "recipient": "089e55cc72be2aa57f0f5125f66f6256f4f3b652f3d2c781e80f2f9813f7e66d",
+  "amount_raw": "1250000000000000000",
+  "accounts": [
+    {
+      "address": "089e55cc72be2aa57f0f5125f66f6256f4f3b652f3d2c781e80f2f9813f7e66d",
+      "attested_by_validator": 3,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 626,
+      "nonce": 0
+    },
+    {
+      "address": "089e55cc72be2aa57f0f5125f66f6256f4f3b652f3d2c781e80f2f9813f7e66d",
+      "attested_by_validator": 2,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 626,
+      "nonce": 0
+    },
+    {
+      "address": "089e55cc72be2aa57f0f5125f66f6256f4f3b652f3d2c781e80f2f9813f7e66d",
+      "attested_by_validator": 0,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 626,
+      "nonce": 0
+    },
+    {
+      "address": "089e55cc72be2aa57f0f5125f66f6256f4f3b652f3d2c781e80f2f9813f7e66d",
+      "attested_by_validator": 1,
+      "balance": "1.250000000000000000 NXS",
+      "balance_raw": "1250000000000000000",
+      "height": 626,
+      "nonce": 0
+    }
+  ]
+}

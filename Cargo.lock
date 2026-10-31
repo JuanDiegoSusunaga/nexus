@@ -2598,6 +2598,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber 0.3.22",
+ "zeroize",
 ]
 
 [[package]]

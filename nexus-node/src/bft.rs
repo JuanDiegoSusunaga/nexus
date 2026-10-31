@@ -186,7 +186,12 @@ impl BftNode {
         if let Some(key) = &self.key { RecordedSigner::new(&self.committee, key.address(), &effects.output)?; }
         let root = effects.commit.as_ref().map(|commit| StateRoot(commit.block().header.state_root)).unwrap_or_else(|| self.state_root());
         let record = Entry::Change { input, output: effects.output.clone(), fingerprint: next, ledger_root: root };
-        self.store.commit(&encode(&record)?)?;
+        if let Err(error) = self.store.commit(&encode(&record)?) {
+            // A post-rename sync failure leaves a visible decision in the journal.
+            // Do not sign again from the old in-memory state; require exact replay.
+            self.poisoned = self.store.requires_recovery();
+            return Err(error);
+        }
         if let Some(commit) = effects.commit {
             if let Err(error) = self.ledger.process_block_now(commit.block().clone()) {
                 self.poisoned = true;
