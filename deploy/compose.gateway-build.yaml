@@ -1,6 +1,0 @@
-services:
-  gateway-image:
-    image: nexus-home-gateway:1
-    build:
-      context: .
-      dockerfile: Dockerfile.gateway

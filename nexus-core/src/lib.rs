@@ -11,7 +11,6 @@ pub mod transaction;
 pub mod state;
 pub mod merkle;
 pub mod checkpoint;
-pub mod journal;
 
 pub use types::*;
 pub use traits::*;
@@ -22,7 +21,7 @@ pub use state::{AccountState, StateRoot, InMemoryState, StateDiff, ValidatorStak
 pub use merkle::MerkleTree;
 
 /// NEXUS protocol version
-pub const PROTOCOL_VERSION: u32 = 4;
+pub const PROTOCOL_VERSION: u32 = 1;
 
 /// Maximum block size in bytes (1 MB)
 pub const MAX_BLOCK_SIZE: usize = 1_048_576;

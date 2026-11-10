@@ -6,7 +6,6 @@ use clap::{Parser, Subcommand};
 use nexus_core::SignatureScheme;
 use nexus_crypto::DilithiumKeypair;
 use nexus_node::{NexusNode, NodeRole};
-mod testnet;
 
 #[derive(Parser)]
 #[command(name = "nexus")]
@@ -20,11 +19,6 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Initialize, run or query the experimental TCP testnet
-    Testnet {
-        #[command(subcommand)]
-        command: testnet::Command,
-    },
     /// Start a node
     Node {
         /// Node role (validator, sequencer, full, light)
@@ -58,17 +52,8 @@ enum Commands {
     },
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // ML-DSA and the debug async state machines exceed the default Windows
-    // main-thread stack. A Rust thread creates no additional console window.
-    std::thread::Builder::new().name("nexus-main".into()).stack_size(8 * 1024 * 1024)
-        .spawn(|| run_main().map_err(|error| error.to_string()))?
-        .join().map_err(|_| "NEXUS runtime thread failed")?
-        .map_err(Into::into)
-}
-
-#[tokio::main(worker_threads = 4)]
-async fn run_main() -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize logging
     tracing_subscriber::fmt()
         .with_env_filter(
@@ -80,7 +65,6 @@ async fn run_main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Testnet { command } => testnet::execute(command).await?,
         Commands::Node { role, data_dir } => {
             run_node(&role, &data_dir).await?;
         }
@@ -122,7 +106,7 @@ async fn run_node(role: &str, _data_dir: &str) -> Result<(), Box<dyn std::error:
     println!("L2 Height: {:?}", info.l2_height);
 
     // Keep running
-    println!("\nLocal reference initialized. Use 'nexus testnet run' for TCP networking. Press Ctrl+C to stop.");
+    println!("\nNode running. Press Ctrl+C to stop.");
     tokio::signal::ctrl_c().await?;
 
     node.stop().await?;
@@ -171,13 +155,12 @@ fn show_info() {
     println!("Cryptography:");
     println!("  - Signatures: CRYSTALS-Dilithium (PQC)");
     println!("  - Hashing: SHA3-256, BLAKE3");
-    println!("  - Validity experiment: scalar AIR/FRI, finite classical ROM analysis");
-    println!("  - General transaction execution proofs and full PQ composition remain pending");
+    println!("  - Validity Proofs: hash-based STARK (FRI, post-quantum)");
     println!();
     println!("Security Features:");
-    println!("  - ML-DSA signatures; full-system quantum resilience requires further validation");
+    println!("  - Post-Quantum resistant");
     println!("  - Entropy monitoring (Sentinel-Seed)");
-    println!("  - Local key rotation and independent emergency freeze authority");
+    println!("  - Automatic key rotation");
     println!("  - NIST SP 800-90B health tests (RCT/APT)");
 }
 

@@ -1,6 +1,0 @@
-# Contexto exclusivo de la pasarela; no incluye claves ni configuraciones locales.
-**
-!Dockerfile.gateway
-!home_gateway.py
-!home_transport.py
-!home_connect.py

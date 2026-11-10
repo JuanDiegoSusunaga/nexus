@@ -8,7 +8,6 @@ use serde::{Deserialize, Serialize};
 
 pub mod peer;
 pub mod protocol;
-pub mod testnet;
 
 /// Network message types
 #[derive(Debug, Clone, Serialize, Deserialize)]
