@@ -1,0 +1,49 @@
+{
+  "fecha": "2026-11-10",
+  "motivo": "Separación del alcance: la rama principal conserva los componentes ligados a los objetivos de la tesis.",
+  "commit_fuentes": "34346207eba65b35f32e913a9aec85db316f2787",
+  "commit_anterior_conservado": {
+    "rama": "testnet-experimental",
+    "commit": "dd46a0f",
+    "pruebas_aprobadas_antes_de_separar": 436,
+    "fallidas": 0,
+    "ignoradas": 1
+  },
+  "rustc": "1.97.1",
+  "comandos": [
+    "cargo check --workspace --all-targets --locked --offline -j 4",
+    "cargo build --workspace --locked --offline -j 4",
+    "cargo test --workspace --offline -j 4"
+  ],
+  "cargo_lock": "Sin cambios respecto del 29 de octubre; la suite se ejecutó sin --locked y el archivo no se modificó.",
+  "resultado": {
+    "check": "correcto",
+    "build": "correcto",
+    "binarios_de_prueba": 57,
+    "aprobadas": 412,
+    "fallidas": 0,
+    "ignoradas": 1,
+    "todos_ok": true
+  },
+  "registro": {
+    "archivo": "cargo-test-resumen.log",
+    "bytes": 11596,
+    "sha256": "55f9954b5b1f2fdc85cfbc170ae546776a300ff3dd9b69e18915a1e2c89c8080",
+    "nota": "Salida filtrada: binarios ejecutados y líneas de resultado; no es el log completo."
+  },
+  "retirado_de_main": [
+    "perfil monetario NXS",
+    "transporte TCP y comandos nexus testnet",
+    "paquetes Docker y alojamiento",
+    "publicación mediante túnel",
+    "documento de tecnologías y comparación de criptomonedas"
+  ],
+  "versiones": {
+    "protocolo": 4,
+    "checkpoint_anchor": 4,
+    "checkpoint_active": 4,
+    "checkpoint_nodo": 5,
+    "diario_bft": 3
+  },
+  "limites": "Banco BFT local de comité fijo sin transporte de red. No se modifica manuscrito ni Lean. La evidencia del 30 de octubre identifica las fuentes de dd46a0f."
+}

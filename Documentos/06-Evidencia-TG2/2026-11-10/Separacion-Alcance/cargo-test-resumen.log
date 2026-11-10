@@ -1,0 +1,120 @@
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_active-118e9728592d914c.exe)
+test sequencer::tests::failed_execution_releases_current_nonce_and_preserves_future_dependencies ... ok
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.76s
+     Running tests\active_chain_contract.rs (C:\tmp\nexus-target\debug\deps\active_chain_contract-09e2fd263fbb2e52.exe)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests\batch_retry.rs (C:\tmp\nexus-target\debug\deps\batch_retry-0b707969a797685a.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+     Running tests\chain_policy.rs (C:\tmp\nexus-target\debug\deps\chain_policy-6126315077ed4589.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+     Running tests\emergency_freeze.rs (C:\tmp\nexus-target\debug\deps\emergency_freeze-9440d42469174d38.exe)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+     Running tests\execution_contract.rs (C:\tmp\nexus-target\debug\deps\execution_contract-7577e95bb016516c.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests\execution_safety.rs (C:\tmp\nexus-target\debug\deps\execution_safety-de8a4c51224ed5fc.exe)
+test failed_deployment_and_insufficient_balance_leave_state_and_nonce_unchanged ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests\key_authorization.rs (C:\tmp\nexus-target\debug\deps\key_authorization-9df2dff842d5f929.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+     Running tests\l1_confirmation.rs (C:\tmp\nexus-target\debug\deps\l1_confirmation-7ce4b23b875c66f8.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+     Running tests\lean_contract.rs (C:\tmp\nexus-target\debug\deps\lean_contract-936c06b60558c44e.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+     Running tests\processed_recovery.rs (C:\tmp\nexus-target\debug\deps\processed_recovery-334e17f110f6ccc5.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.56s
+     Running tests\processed_retry.rs (C:\tmp\nexus-target\debug\deps\processed_retry-5584f122df42c36d.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+     Running tests\signed_registration.rs (C:\tmp\nexus-target\debug\deps\signed_registration-c2b336f8c797f470.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+     Running tests\submission_preparation.rs (C:\tmp\nexus-target\debug\deps\submission_preparation-5499e3aae3c33cfb.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.45s
+     Running tests\tg2_verification.rs (C:\tmp\nexus-target\debug\deps\tg2_verification-98189d184cfd1524.exe)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.50s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_anchor-4bb38e6dae18bfc3.exe)
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests\bft_rounds.rs (C:\tmp\nexus-target\debug\deps\bft_rounds-425ade3e28f282ce.exe)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+     Running tests\block_policy.rs (C:\tmp\nexus-target\debug\deps\block_policy-d78b990df403e0f2.exe)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests\chain_safety.rs (C:\tmp\nexus-target\debug\deps\chain_safety-d02d6bd863e6cd05.exe)
+test failed_block_rolls_back_validator_registration_balance_and_batch_side_effects ... ok
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests\consensus_safety.rs (C:\tmp\nexus-target\debug\deps\consensus_safety-1703267ba171b77d.exe)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+     Running tests\finality_safety.rs (C:\tmp\nexus-target\debug\deps\finality_safety-833f2d3035acfe57.exe)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+     Running tests\local_da.rs (C:\tmp\nexus-target\debug\deps\local_da-00790030fb7fe5c6.exe)
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.07s
+     Running tests\local_da_chain.rs (C:\tmp\nexus-target\debug\deps\local_da_chain-3bd231312f68c35c.exe)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests\state_root_contract.rs (C:\tmp\nexus-target\debug\deps\state_root_contract-18f1152ebcfc0210.exe)
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests\validator_accounting.rs (C:\tmp\nexus-target\debug\deps\validator_accounting-1d80aeaba82565f0.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src\main.rs (C:\tmp\nexus-target\debug\deps\nexus-a9616d7604aafaa9.exe)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_core-2a9694dc6f477ec4.exe)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests\journal.rs (C:\tmp\nexus-target\debug\deps\journal-95c9de132e1f40bc.exe)
+test failed_publication_keeps_sequence_and_allows_retry ... ok
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.36s
+     Running tests\local_checkpoint.rs (C:\tmp\nexus-target\debug\deps\local_checkpoint-55fa488c84b101bd.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+     Running tests\merkle_position.rs (C:\tmp\nexus-target\debug\deps\merkle_position-db0a246500c63a5e.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests\state_safety.rs (C:\tmp\nexus-target\debug\deps\state_safety-5f2868b757d63f8c.exe)
+test r06_failed_transfer_must_not_debit_sender ... ok
+test self_transfer_preserves_balance_and_failed_unknown_sender_creates_no_accounts ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_crypto-737e60716494b233.exe)
+test keypair::tests::failed_registry_validation_does_not_install_staged_keys ... ok
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.19s
+     Running tests\recovery_policy.rs (C:\tmp\nexus-target\debug\deps\recovery_policy-2bb7708d6b062cdd.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests\tg2_correspondence.rs (C:\tmp\nexus-target\debug\deps\tg2_correspondence-c09bd7477607b4b5.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+     Running tests\tg2_residence.rs (C:\tmp\nexus-target\debug\deps\tg2_residence-779d2c25eba9a999.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+     Running tests\tg2_throughput.rs (C:\tmp\nexus-target\debug\deps\tg2_throughput-0c2e323bc1611eb3.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_network-1a2d9cac847eea1e.exe)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_node-75cc8f820e603ea6.exe)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.01s
+     Running tests\bft_durable.rs (C:\tmp\nexus-target\debug\deps\bft_durable-d49e42373fa4d16e.exe)
+test failed_commit_checkpoint_preserves_lock_and_retry_applies_the_block_once ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.61s
+     Running tests\durable_cycle.rs (C:\tmp\nexus-target\debug\deps\durable_cycle-704104e3c759f1fb.exe)
+test checkpoint_child ... ignored, Invoked only by the parent test in a separate process
+test failed_writes_roll_back_pool_state_packet_history_inclusion_and_confirmation ... ok
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.71s
+     Running tests\emergency_freeze.rs (C:\tmp\nexus-target\debug\deps\emergency_freeze-48530d3fd21dde62.exe)
+test failed_emergency_commit_restores_policy_pool_and_generation ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+     Running tests\key_authorization.rs (C:\tmp\nexus-target\debug\deps\key_authorization-f499dfff37ec5491.exe)
+test failed_policy_commit_restores_registry_pending_work_and_generation ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_sentinel-23f9a282417e26b4.exe)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src\lib.rs (C:\tmp\nexus-target\debug\deps\nexus_zk-edd25340cb306d7a.exe)
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.04s
+     Running tests\lean_contract.rs (C:\tmp\nexus-target\debug\deps\lean_contract-c1c6ff318b3a0913.exe)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.07s
+     Running tests\tg2_air_algebra.rs (C:\tmp\nexus-target\debug\deps\tg2_air_algebra-fd67a4229c431b2f.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests\tg2_linked_trace_fri.rs (C:\tmp\nexus-target\debug\deps\tg2_linked_trace_fri-32fe650cafbd5f49.exe)
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.60s
+     Running tests\tg2_soundness.rs (C:\tmp\nexus-target\debug\deps\tg2_soundness-2a451d5a43b41407.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.98s
+     Running tests\tg2_trace_proximity.rs (C:\tmp\nexus-target\debug\deps\tg2_trace_proximity-8ca878c5df2c1fbe.exe)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.56s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[exited with code 0]

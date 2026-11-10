@@ -10,7 +10,7 @@ El motor BFT dependía del génesis monetario para obtener su dominio. Se sustit
 
 Pasan `cargo check --workspace --all-targets`, `cargo build --workspace` y **412 pruebas**, con una ignorada, locked/offline y rustc 1.97.1. Cambian las versiones de checkpoint de `AnchorChain` (4) y `DurableNode` (5) y del diario BFT (3); el protocolo permanece en 4. La evidencia del 30 de octubre que se conserva identifica las fuentes de `dd46a0f` y se mantiene como registro histórico.
 
-El enlace público temporal del 30 de octubre ya no está activo. No se modifica manuscrito ni Lean. [Contrato vigente](REPRODUCIBILIDAD_TG2.md#alcance-de-la-rama-principal--10-de-noviembre-de-2026) · [Pendientes](PENDIENTES.md).
+El enlace público temporal del 30 de octubre ya no está activo. No se modifica manuscrito ni Lean. [Contrato vigente](REPRODUCIBILIDAD_TG2.md#alcance-de-la-rama-principal--10-de-noviembre-de-2026) · [Verificación](Documentos/06-Evidencia-TG2/2026-11-10/Separacion-Alcance/verification.json) · [Pendientes](PENDIENTES.md).
 
 ## Docker público y conservación exclusiva — 30 de octubre de 2026
 
