@@ -16,6 +16,8 @@ use parking_lot::RwLock;
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 
+pub const MAX_GENESIS_BALANCES: usize = 10_000;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnchorChainConfig {
     /// Expected signed transaction domain; shared by all replicas of this L1.
@@ -71,6 +73,8 @@ struct ChainData {
 /// This processor does not turn local acceptance into a consensus certificate.
 pub struct AnchorChain {
     config: AnchorChainConfig,
+    /// Present only for deployment-bound chains driven by the BFT bench.
+    network_domain: Option<Hash256>,
     data: RwLock<ChainData>,
     genesis: Block,
 }
@@ -114,15 +118,19 @@ impl AnchorChain {
     /// Trusted local snapshot, including DA, validators and pending local finality metadata.
     pub fn export_checkpoint(&self) -> Result<Vec<u8>, NexusError> {
         use nexus_core::checkpoint::encode;
+        if self.network_domain.is_some() {
+            // Deployment-bound chains are rebuilt by replaying certified blocks.
+            return Err(NexusError::NotImplemented("Checkpoint of a deployment-bound L1".into()));
+        }
         let data = self.data.read();
-        encode(&AnchorCheckpoint { version: 1, config: self.config.clone(),
+        encode(&AnchorCheckpoint { version: 4, config: self.config.clone(),
             genesis: self.genesis.clone(), data: encode(&*data)? })
     }
 
     pub fn restore_checkpoint(bytes: &[u8], expected: &AnchorChainConfig) -> Result<Self, NexusError> {
         use nexus_core::checkpoint::{decode, encode, validate_blocks};
         let snapshot: AnchorCheckpoint = decode(bytes)?;
-        if snapshot.version != 1 || encode(&snapshot.config)? != encode(expected)?
+        if snapshot.version != 4 || encode(&snapshot.config)? != encode(expected)?
             || encode(&snapshot.genesis)? != encode(&Block::genesis(Layer::Anchor))? {
             return Err(NexusError::ConfigError("Checkpoint version, genesis or L1 policy differs".into()));
         }
@@ -136,20 +144,61 @@ impl AnchorChain {
             }
             if let Some(hash) = record.l1_tx_hash { Self::processed_batch_inclusion(&data, &hash, None)?; }
         }
-        Ok(Self { config: snapshot.config, data: RwLock::new(data), genesis: snapshot.genesis })
+        Ok(Self { config: snapshot.config, network_domain: None,
+            data: RwLock::new(data), genesis: snapshot.genesis })
     }
 
     pub fn new(config: AnchorChainConfig, _keypair: DilithiumKeypair) -> Self {
+        Self::empty(config)
+    }
+
+    fn empty(config: AnchorChainConfig) -> Self {
         let genesis = Block::genesis(Layer::Anchor);
         let hash = genesis.hash();
         let execution = ExecutionState { state: InMemoryState::new(),
             validators: ValidatorRegistry::new(config.min_stake),
             da_layer: DataAvailabilityLayer::new(), l2_batches: Vec::new() };
-        Self { config, data: RwLock::new(ChainData { execution,
+        Self { config, network_domain: None, data: RwLock::new(ChainData { execution,
             blocks: HashMap::from([(hash, genesis.clone())]),
             blocks_by_height: HashMap::from([(BlockHeight::GENESIS, hash)]),
             height: BlockHeight::GENESIS, finality: FinalityGadget::new() }), genesis }
     }
+
+    /// Deployment-bound L1 for the fixed-committee BFT bench. Genesis is a pure
+    /// function of the configuration, the deployment identifier and explicit
+    /// experimental balances; no secret key or local clock takes part.
+    /// Balances are test fixtures, not an issuance or distribution policy.
+    pub fn new_deployment(config: AnchorChainConfig, deployment: Hash256,
+        balances: &[(Address, Amount)]) -> Result<Self, NexusError> {
+        let mut balances = balances.to_vec();
+        balances.sort_by_key(|entry| entry.0.0);
+        for (index, (address, amount)) in balances.iter().enumerate() {
+            if *address == Address::ZERO || *amount == Amount::ZERO
+                || (index > 0 && balances[index - 1].0 == *address) {
+                return Err(NexusError::ConfigError("Invalid or duplicate genesis balance".into()));
+            }
+        }
+        if deployment == Hash256::ZERO || balances.len() > MAX_GENESIS_BALANCES {
+            return Err(NexusError::ConfigError("Missing deployment identifier or too many genesis balances".into()));
+        }
+        let network_domain = Hash256::hash(&nexus_core::checkpoint::encode(&(b"NEXUS_DEPLOYMENT_GENESIS_V1".as_slice(),
+            nexus_core::PROTOCOL_VERSION, &config, deployment, &balances))?);
+        let mut chain = Self::empty(config);
+        chain.network_domain = Some(network_domain);
+        {
+            let mut data = chain.data.write();
+            for (address, balance) in &balances {
+                data.execution.state.set_account(*address, AccountState::with_balance(*balance));
+            }
+            chain.genesis.header.state_root = data.execution.state.compute_root().0;
+            chain.genesis.header.extra_data = network_domain.as_bytes().to_vec();
+            data.blocks = HashMap::from([(chain.genesis.hash(), chain.genesis.clone())]);
+            data.blocks_by_height = HashMap::from([(BlockHeight::GENESIS, chain.genesis.hash())]);
+        }
+        Ok(chain)
+    }
+
+    pub fn network_domain(&self) -> Option<Hash256> { self.network_domain }
 
     pub fn genesis(&self) -> &Block { &self.genesis }
     pub fn height(&self) -> BlockHeight { self.data.read().height }
@@ -182,7 +231,7 @@ impl AnchorChain {
         let parent = data.blocks.get(&parent_hash).ok_or(NexusError::BlockNotFound(parent_hash))?;
         let timestamp = Timestamp::now().max(parent.header.timestamp);
         let nonce = data.execution.state.get_account(&signer.address()).map(|account| account.nonce).unwrap_or_default();
-        let transaction = nexus_core::Transaction { chain_id: self.config.chain_id, nonce,
+        let transaction = nexus_core::Transaction { chain_id: self.config.chain_id, network_domain: self.network_domain, nonce,
             gas_limit: options.gas_limit, gas_price: options.gas_price,
             tx_type: nexus_core::TransactionType::BatchSubmit { batch_root: batch_root.0, batch_size, compressed_data: bytes },
             timestamp, expires_at: options.expires_at };
@@ -224,16 +273,31 @@ impl AnchorChain {
     /// The root includes all successful transactions and the final block reward.
     pub fn prepare_block(&self, transactions: Vec<SignedTransaction>, proposer: Address) -> Result<Block, NexusError> {
         let data = self.data.read();
+        let parent = data.blocks.get(data.blocks_by_height.get(&data.height)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?)
+            .ok_or(NexusError::BlockHeightNotFound(data.height))?;
+        self.prepare_block_with_data(transactions, proposer, Timestamp::now().max(parent.header.timestamp), &data)
+    }
+
+    /// Deterministic construction for replicas and experiments. The consensus
+    /// driver must separately enforce its live proposal clock/skew policy.
+    pub fn prepare_block_at(&self, transactions: Vec<SignedTransaction>, proposer: Address,
+        timestamp: Timestamp) -> Result<Block, NexusError> {
+        self.prepare_block_with_data(transactions, proposer, timestamp, &self.data.read())
+    }
+
+    fn prepare_block_with_data(&self, transactions: Vec<SignedTransaction>, proposer: Address,
+        timestamp: Timestamp, data: &ChainData) -> Result<Block, NexusError> {
         let height = BlockHeight(data.height.0.checked_add(1)
             .ok_or_else(|| NexusError::StateError("Block heights exhausted".into()))?);
         let parent = data.blocks.get(data.blocks_by_height.get(&data.height)
             .ok_or(NexusError::BlockHeightNotFound(data.height))?)
             .ok_or(NexusError::BlockHeightNotFound(data.height))?;
         let mut header = BlockHeader::new(height, parent.hash(), proposer, Layer::Anchor);
-        header.timestamp = Timestamp::now().max(parent.header.timestamp);
+        header.timestamp = timestamp;
         header.transactions_root = MerkleTree::from_leaves(transactions.iter().map(|tx| tx.hash()).collect()).root();
         let mut block = Block::new(header, BlockBody::new(transactions));
-        block.header.state_root = self.stage_block(&block, &data)?.state.compute_root().0;
+        block.header.state_root = self.stage_block(&block, data)?.state.compute_root().0;
         Ok(block)
     }
 
@@ -249,6 +313,11 @@ impl AnchorChain {
     }
 
     pub async fn process_block(&self, block: Block) -> Result<(), NexusError> {
+        self.process_block_now(block)
+    }
+
+    /// Aplica o reproduce un bloque de forma síncrona; no certifica finalidad BFT.
+    pub fn process_block_now(&self, block: Block) -> Result<(), NexusError> {
         let mut data = self.data.write();
         let staged = self.stage_block(&block, &data)?;
         let expected = staged.state.compute_root().0;
@@ -262,6 +331,16 @@ impl AnchorChain {
         data.blocks_by_height.insert(block.height(), block.hash());
         data.blocks.insert(block.hash(), block.clone());
         data.finality.add_block(block);
+        Ok(())
+    }
+
+    /// Application validity only. Does not process the block or certify finality.
+    pub fn validate_candidate(&self, block: &Block) -> Result<(), NexusError> {
+        let staged = self.stage_block(block, &self.data.read())?;
+        let expected = staged.state.compute_root().0;
+        if block.header.state_root != expected {
+            return Err(NexusError::InvalidStateRoot { expected, got: block.header.state_root });
+        }
         Ok(())
     }
 
@@ -309,6 +388,11 @@ impl AnchorChain {
             if !verify_signed_transaction_at(tx, block.header.timestamp)? {
                 return Err(NexusError::SignatureVerificationFailed(tx.sender));
             }
+            // A transaction is valid only in the deployment it was signed for.
+            if tx.transaction.network_domain != self.network_domain
+                || (self.network_domain.is_some() && tx.signature.scheme != nexus_core::SignatureScheme::Dilithium3) {
+                return Err(NexusError::InvalidTransaction("Wrong deployment or signature profile".into()));
+            }
             if tx.transaction.intrinsic_gas()? > tx.transaction.gas_limit {
                 return Err(NexusError::InvalidTransaction("Transaction gas limit exceeded".into()));
             }
@@ -354,6 +438,9 @@ impl AnchorChain {
 
     /// Local DA registration, distinct from verifying an L2 validity certificate.
     pub fn submit_l2_batch(&self, batch_root: StateRoot, bytes: Vec<u8>) -> Result<Hash256, NexusError> {
+        if self.network_domain.is_some() {
+            return Err(NexusError::InvalidTransaction("Deployment-bound L1 requires a signed BatchSubmit in a block".into()));
+        }
         let mut data = self.data.write();
         let mut staged = data.execution.clone();
         let da_batch_index = staged.da_layer.get_commitment(data.height).map_or(0, Vec::len);

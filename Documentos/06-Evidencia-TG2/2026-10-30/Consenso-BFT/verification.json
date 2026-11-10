@@ -1,0 +1,574 @@
+{
+  "date": "2026-10-30",
+  "scope": "Experimental four-member ML-DSA BFT with durable locks/votes and certified monetary transitions",
+  "protocol_version": 3,
+  "bft_checkpoint_version": 1,
+  "new_tests": {
+    "anchor_integration": 4,
+    "node_integration": 8,
+    "node_archive": 1
+  },
+  "results": [
+    {
+      "stage": "check",
+      "command": [
+        "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+        "check",
+        "--workspace",
+        "--all-targets",
+        "--locked",
+        "--offline",
+        "--jobs",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 4.11,
+      "log": "cargo-check.log",
+      "passed": 0,
+      "ignored": 0,
+      "sha256": "dacbd6a93aef19f67c215f485e1a07aaafb6a45fe47e45e8b0b020cfc78e3639"
+    },
+    {
+      "stage": "test",
+      "command": [
+        "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--jobs",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 72.406,
+      "log": "cargo-test.log",
+      "passed": 416,
+      "ignored": 1,
+      "sha256": "ef74a283b711e9153b64fbe98c1bed775d2974c2e8f10ceb7df4b77f8da9bafc"
+    },
+    {
+      "stage": "build",
+      "command": [
+        "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+        "build",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--jobs",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 2.406,
+      "log": "cargo-build.log",
+      "passed": 0,
+      "ignored": 0,
+      "sha256": "74cffcd40b97aa905e21892ce30bda9288848bbab24c215d15cb2eb3e58eaa63"
+    }
+  ],
+  "limits": [
+    "Fixed, equally weighted four-member committee; not open validator admission or token-stake PoS",
+    "Experimental Tendermint-inspired implementation, not a formal refinement or independent audit",
+    "In-process scheduler and one process-crash test; no TCP/public deployment yet",
+    "Liveness needs eventual timely delivery, retransmission, growing runtime timeouts and appropriate clocks",
+    "Trusted local storage and one active journal per key; malicious rollback/key cloning are not prevented",
+    "Whole-history checkpoints remain bounded to 64 MiB; sustained public storage needs further work",
+    "Existing L2 AIR/FRI remains scalar with finite classical ROM analysis; full-system PQ proof not supplied"
+  ],
+  "success": true,
+  "source_files": [
+    {
+      "path": "nexus/Cargo.lock",
+      "sha256": "876d0628c1715b0a5b338032130a2519c8e9088f9965b5cc87fef9df6f376d46"
+    },
+    {
+      "path": "nexus/Cargo.toml",
+      "sha256": "a280d907c786c7c52094b9879490c1d81b1a37dd09e703a3389452477b20bbea"
+    },
+    {
+      "path": "nexus/nexus-active/Cargo.toml",
+      "sha256": "f99f6541d228301a89fe1dd80f792fd8a6e0532acbae02b4a3480c5d4c9c58a9"
+    },
+    {
+      "path": "nexus/nexus-active/experiments/tg2_canonical_verifier.rs",
+      "sha256": "bc543ed1dca51cca940a46bf05edfdc3459b95d2075c8267035b13261609447c"
+    },
+    {
+      "path": "nexus/nexus-active/src/authorization.rs",
+      "sha256": "cb02951f676b0c2fa1cfd3c56b68fdf346753c6ad963c6cc35a5374b406ef3c2"
+    },
+    {
+      "path": "nexus/nexus-active/src/batch.rs",
+      "sha256": "2dbbba71a6f1649d49ac82e7087327752fd343d3f3a323ad9d27714fd096c8d0"
+    },
+    {
+      "path": "nexus/nexus-active/src/chain.rs",
+      "sha256": "2328cfbfe17a8afd969bba410e09e0e52b61c47b43721c37dd34797325b1633f"
+    },
+    {
+      "path": "nexus/nexus-active/src/execution.rs",
+      "sha256": "8d53fa9c517a007e2d625500d60d33f37f091b63a5c0d90b01f565869ecf3e9e"
+    },
+    {
+      "path": "nexus/nexus-active/src/lib.rs",
+      "sha256": "4a07a800dea10998e30150a59ecf04df1a13d717f7aa5ad6b72bef3790b5a3e3"
+    },
+    {
+      "path": "nexus/nexus-active/src/linked_verifier.rs",
+      "sha256": "7e329070f59e4cbfcaad3e5eaede2a76ced123b77f5a1335caa004f93b19db23"
+    },
+    {
+      "path": "nexus/nexus-active/src/pq_verifier.rs",
+      "sha256": "98fcb4fdb5738e5aef9b53a2cb0514ec4dc29eb3cb64193ae8d14610d59930f4"
+    },
+    {
+      "path": "nexus/nexus-active/src/sequencer.rs",
+      "sha256": "cfbea42dccd055cff261950c41869953897b18834e2bb5265c9864fc9b815421"
+    },
+    {
+      "path": "nexus/nexus-active/src/verifier.rs",
+      "sha256": "477b3510b809129a37db83861cadb3b6b94924d75e7ff11e7a3b8bf50349fdf7"
+    },
+    {
+      "path": "nexus/nexus-active/tests/active_chain_contract.rs",
+      "sha256": "6a3db189c218423c3f57a8f0dd060e6d4c85ccb2c699123270aa78d113a8bfe4"
+    },
+    {
+      "path": "nexus/nexus-active/tests/batch_retry.rs",
+      "sha256": "5f7838961baaf7fef1fb05579ce509f7693aa1bbc68a16f0bbb2202be59644bc"
+    },
+    {
+      "path": "nexus/nexus-active/tests/chain_policy.rs",
+      "sha256": "39919e6f8178531d1a4d85151030b523fd2bd91406db9cba63bcf296f8b40daf"
+    },
+    {
+      "path": "nexus/nexus-active/tests/emergency_freeze.rs",
+      "sha256": "2d04d197bbcb14b65766d5cf71541ebcfa83f9be04db10ecb932b2e35733292c"
+    },
+    {
+      "path": "nexus/nexus-active/tests/execution_contract.rs",
+      "sha256": "2e87f52ab7c0a383aa0a5a477f38af233808be33b1bbc03dbd000b13ec361160"
+    },
+    {
+      "path": "nexus/nexus-active/tests/execution_safety.rs",
+      "sha256": "050097fa8caf22a64863b8a8dbce989468629331c87ded08cc313db6f702f32e"
+    },
+    {
+      "path": "nexus/nexus-active/tests/key_authorization.rs",
+      "sha256": "e254f3ef00f743ca977f904105f28012afc51c399743a142f9be869b69ec83b4"
+    },
+    {
+      "path": "nexus/nexus-active/tests/l1_confirmation.rs",
+      "sha256": "328af27f811a8fcba5583ac391d27435d3a800a7cf5a2df25a2351c1135a31f0"
+    },
+    {
+      "path": "nexus/nexus-active/tests/lean_contract.rs",
+      "sha256": "2ce2fd813115e2c27f61d6da8f3d958d4ab8f4235167525a67a4485eaf131639"
+    },
+    {
+      "path": "nexus/nexus-active/tests/processed_recovery.rs",
+      "sha256": "117352d0cb9b4ff81a86a420febc1224924e889100f946592694975febd3cb75"
+    },
+    {
+      "path": "nexus/nexus-active/tests/processed_retry.rs",
+      "sha256": "e6a5cd8ed2eb0ef7c2225ba27179b562d39da0d689925a607c50aa8624e491c2"
+    },
+    {
+      "path": "nexus/nexus-active/tests/signed_registration.rs",
+      "sha256": "690f37ad89b868c1c08f00aafbec2336a603c0c5161661baf7c43a2aabaaceec"
+    },
+    {
+      "path": "nexus/nexus-active/tests/submission_preparation.rs",
+      "sha256": "e8a36db758f45f0f978982a1b57f75e72500aba9d9b22deba649989c3c17cd0b"
+    },
+    {
+      "path": "nexus/nexus-active/tests/tg2_verification.rs",
+      "sha256": "6ceeb730ab48163a9ee2a59e505e57176151bcb2375ad2430d696af788875b47"
+    },
+    {
+      "path": "nexus/nexus-anchor/Cargo.toml",
+      "sha256": "37633d55fc91da6fea733961e84f3f8db1ec1b316689630ba98cbf0619860169"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/bft.rs",
+      "sha256": "c25ed51e6e425c2d4144fe169046d24cda135ae8e89df52fa0b0ae47646416d0"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/chain.rs",
+      "sha256": "2b8f03dfb6ba96ca02c323640d1bb1c3e6a4b77653a13437afde716580904bdc"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/consensus.rs",
+      "sha256": "de14bb69efdb0432955818532b7dedd93c088214c8b4542ba7491de92a8b47a0"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/data_availability.rs",
+      "sha256": "947c6426c6975eb3e063fbc816678ec68782e26d452d7791fe0eb2a4735dc84e"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/finality.rs",
+      "sha256": "8366c72408b8a130a3d82d7913da8f660d8e151c09b9a76c8e6e608c4ff778e7"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/lib.rs",
+      "sha256": "7b018a895e0167f6466ac8a976d85a3a1ff077dcd7b4f5a4d327961d0cf6bfc3"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/monetary.rs",
+      "sha256": "fbfd78bbe94bed93266e9277cb61a184841128ad223a275d4f323c19adaaf5b2"
+    },
+    {
+      "path": "nexus/nexus-anchor/src/validator.rs",
+      "sha256": "fde899b9e7fe7b3015e0f1f8045a9d1145e530286b576c9c34482bc12e368d4e"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/bft_rounds.rs",
+      "sha256": "4b03c42ea08c1e45d6cc5414a61a3d408a855163dd72c32d7635b4e5aa967ad0"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/block_policy.rs",
+      "sha256": "e54fbd4ade3e81aeccfcd1edc4a5d3d310c19016f368dec59eeb3cc9a6c8ef34"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/chain_safety.rs",
+      "sha256": "d74d7ba32d64dfc8a9ba0dd131dee60cba16e25fa0829d6916bc69a5486c45ce"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/consensus_safety.rs",
+      "sha256": "034d9bf5a2e9e68e627be34b97edc14ba58ae4d0eb7883f0a443245876262251"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/finality_safety.rs",
+      "sha256": "a97a74f2e3d9b457111d92ba682f2a2f10572360a1d9968c8f417b2f279021b7"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/local_da.rs",
+      "sha256": "705879a315a5f1091729ac37a433de15e853fa552e5e1ab30fc687b8ea1d1f61"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/local_da_chain.rs",
+      "sha256": "3808ef7a9ef72453e0a8eaa07f7fd95e9622ac42490d712c3dfd803a21c2870b"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/monetary_profile.rs",
+      "sha256": "e78f53b1390d93b917a987884cd34a74aed1133213b97e967f957da4c7fe4cba"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/state_root_contract.rs",
+      "sha256": "6de0500cb94b615883ab0e545af3def8c47b55565444f74abc4637999ef47223"
+    },
+    {
+      "path": "nexus/nexus-anchor/tests/validator_accounting.rs",
+      "sha256": "cbdfd557326f3ee9f5cd4a64ce90a1a9e8908032ed9e65c9be0fa52235c0a9ae"
+    },
+    {
+      "path": "nexus/nexus-cli/Cargo.toml",
+      "sha256": "4f208295a18aacd24afb5b64f9b229afb782e2810d4c269029dd4a2e41372d7d"
+    },
+    {
+      "path": "nexus/nexus-cli/src/main.rs",
+      "sha256": "945dc02e86f0a50b0b6716c58d23c46e84634f05b62245b686cb106b15be9996"
+    },
+    {
+      "path": "nexus/nexus-core/Cargo.toml",
+      "sha256": "558196ee7e87423f33b976acc8a2b3114bcf5c229ff5c0699fb856acdfb12aae"
+    },
+    {
+      "path": "nexus/nexus-core/src/block.rs",
+      "sha256": "26e9eb963d1ac61a6714c0a9162dc70f6f1044a6014f690d5bd37aab892396fe"
+    },
+    {
+      "path": "nexus/nexus-core/src/checkpoint.rs",
+      "sha256": "771b158711d92806b575bb85b8f3985fba603ebd4670d0741db22bba51389567"
+    },
+    {
+      "path": "nexus/nexus-core/src/error.rs",
+      "sha256": "341ec5865031dd923fadafc84056d3e977f5863c858c379532a1a0a93ed73e71"
+    },
+    {
+      "path": "nexus/nexus-core/src/lib.rs",
+      "sha256": "eb5cb0c434c67eaaa19c3d88f279a0b6a697e6aba863090013fb77503ed2799a"
+    },
+    {
+      "path": "nexus/nexus-core/src/merkle.rs",
+      "sha256": "42301fad5a732f43be6faadabc5c9f78d28d27610a616324132c08c60531cddf"
+    },
+    {
+      "path": "nexus/nexus-core/src/state.rs",
+      "sha256": "96ea8d41c37fb64a70cfb92f80b4c5141a21d1ce9e93d306ddeda7a15959a80c"
+    },
+    {
+      "path": "nexus/nexus-core/src/traits.rs",
+      "sha256": "cf00fb6cf97654350aee9967df7a4292480b9bee64bbdc92b681f54c15e38e8d"
+    },
+    {
+      "path": "nexus/nexus-core/src/transaction.rs",
+      "sha256": "9925af406761c11529e4cbe26e25cb9030e700f5d38f9d5dce26ff90b45ae9ab"
+    },
+    {
+      "path": "nexus/nexus-core/src/types.rs",
+      "sha256": "d79165599498463a61f157b8dea11f5d6805a2395ace66f1e7fae2ee97e28492"
+    },
+    {
+      "path": "nexus/nexus-core/tests/local_checkpoint.rs",
+      "sha256": "039e4115e4851682c33858a2944c595726f24e18454350fae1bbd03ce6df5f90"
+    },
+    {
+      "path": "nexus/nexus-core/tests/state_safety.rs",
+      "sha256": "2c837790214819f295ccfd4bd0d3a8e22e9d1818640547cfc582257b38852a90"
+    },
+    {
+      "path": "nexus/nexus-crypto/Cargo.toml",
+      "sha256": "106f1fff3dd0158804e800bf562eab73359473e5f7afa21769754551aa7c0be3"
+    },
+    {
+      "path": "nexus/nexus-crypto/benches/classical_baseline.rs",
+      "sha256": "d7bc1b83ba346badf5826a974c2cbc530ec0ca86aecb519cba4c472cbceab896"
+    },
+    {
+      "path": "nexus/nexus-crypto/benches/dilithium_bench.rs",
+      "sha256": "680b8e38c02b371f78951453aa938e4bc9508dbdd1524032c6a22e1c7b691cfc"
+    },
+    {
+      "path": "nexus/nexus-crypto/benches/residencia_bench.rs",
+      "sha256": "4ff93c7794118936e310a333847fd9787a8a1bdb6e11fc0e9779602a98ca251e"
+    },
+    {
+      "path": "nexus/nexus-crypto/examples/apt_sweep.rs",
+      "sha256": "0931cdf72cace4abb3abac785682a5959737c450ca375f08a73249d476b3ace8"
+    },
+    {
+      "path": "nexus/nexus-crypto/examples/rotation_demo.rs",
+      "sha256": "20980e891511dcc252e5b628445527022798bb0d4ccc2bb3856380bc1ac16154"
+    },
+    {
+      "path": "nexus/nexus-crypto/examples/tg2_throughput.rs",
+      "sha256": "102d51806838c53c4c2db814c16d8fea723e98bc043572931202106028e97db0"
+    },
+    {
+      "path": "nexus/nexus-crypto/examples/throughput_tps.rs",
+      "sha256": "1ab4200bd4a7ee8bd085dcd9f27fd7fa39fce1396d2d227a5e0d3db483c6df71"
+    },
+    {
+      "path": "nexus/nexus-crypto/experiments/tg2_throughput.rs",
+      "sha256": "4543da19a5a21e1325a6e077b93bf39144c83bd3fc95ef1e75a2e63cc9157dcb"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/dilithium.rs",
+      "sha256": "f414f7970bdda33de52b93ffcb26ff758898697060c639173fa99a0fe4a08d4e"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/entropy.rs",
+      "sha256": "d6e684db57bb566daa221bd0e31538eb40a6342d584d3a9588ff69ebb9ee491f"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/keypair.rs",
+      "sha256": "73b097386b86c3ed8c46f01faf25d0e619fc531d854019e3591a391de53113b1"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/lib.rs",
+      "sha256": "b6d69232f38f62c9d3948ff761cd7ea1e4c3036ab09fceaae579d12348601c58"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/recovery.rs",
+      "sha256": "7b54df40d6ed245638d092ac8b3921444f03db0cd9767b2167b2d2def2922845"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/registry.rs",
+      "sha256": "e6ad58b812af6b784a78b095a148bf2a001f3301a7c396d16b9a9fbf08a96f47"
+    },
+    {
+      "path": "nexus/nexus-crypto/src/signer.rs",
+      "sha256": "34421de259691d85b90bff602b966462d1147f0625f25f1fb79b439622474d10"
+    },
+    {
+      "path": "nexus/nexus-crypto/tests/recovery_policy.rs",
+      "sha256": "460ddba2dff64e9fcda894df4a76594e385db6b401204400bb32368eb615d301"
+    },
+    {
+      "path": "nexus/nexus-crypto/tests/tg2_correspondence.rs",
+      "sha256": "74a65eeaa08044f4c5103756648e7cdad85ce67fc988f30f6424643d58d851c1"
+    },
+    {
+      "path": "nexus/nexus-crypto/tests/tg2_residence.rs",
+      "sha256": "9d280cc114eee3da61d446d4d69e1b5697e7d1a442c496ed2bb5de1e24743628"
+    },
+    {
+      "path": "nexus/nexus-crypto/tests/tg2_throughput.rs",
+      "sha256": "9c241c7a2166f3bd0c7131c8f8d2dbe1bb00c7bf5c484c07c4f4bd06ee49582c"
+    },
+    {
+      "path": "nexus/nexus-network/Cargo.toml",
+      "sha256": "f8718d257e43299317d256c127bff773fc7ee225d545ed89e6bfdbfb5d2e40cf"
+    },
+    {
+      "path": "nexus/nexus-network/src/lib.rs",
+      "sha256": "3d8cd52931d4f4db93909c0d17810b209dde16340968eea2b518f457e1542423"
+    },
+    {
+      "path": "nexus/nexus-network/src/peer.rs",
+      "sha256": "84a454b4c5c5555d6812e1ac524311d1c59f0810437a1b29e60f579cf5a8713f"
+    },
+    {
+      "path": "nexus/nexus-network/src/protocol.rs",
+      "sha256": "45c58f219fd6625de8164af77b0f1d6166f3f149a01c93fe2afea352be8b097b"
+    },
+    {
+      "path": "nexus/nexus-node/Cargo.toml",
+      "sha256": "1452315e1614b65c392770e4c725c09731f943abc1ccf00521945ecb33475726"
+    },
+    {
+      "path": "nexus/nexus-node/examples/local_cycle.rs",
+      "sha256": "9eb4978268e050f7aad8dc031a365b184b91d10a8dbe00cbbd748deefc44e5fe"
+    },
+    {
+      "path": "nexus/nexus-node/src/bft.rs",
+      "sha256": "237cb6d526b9c1429ff5185fb513c64e2a4ce26b1b40fbef46e013b5cde6d8dd"
+    },
+    {
+      "path": "nexus/nexus-node/src/config.rs",
+      "sha256": "ebef163af60a07e1f8551bbe96419df67322ed8b0ff25e688dd85e8e5cd0dcfd"
+    },
+    {
+      "path": "nexus/nexus-node/src/durable.rs",
+      "sha256": "d1ff2214793693c9bccaf9c9d7e6430bc8d5e22c21d695bc095f0cd3cee7f2b3"
+    },
+    {
+      "path": "nexus/nexus-node/src/lib.rs",
+      "sha256": "15ac2ef299c7eff91614dfa18ff8d329a16a5341adfcd9a0bfa632d9ad906e95"
+    },
+    {
+      "path": "nexus/nexus-node/src/rpc.rs",
+      "sha256": "442963766bc9f30ee0ef9ca3c328b10f7ce453af810dc42bafb5280e22777b03"
+    },
+    {
+      "path": "nexus/nexus-node/tests/bft_durable.rs",
+      "sha256": "ebbc44e9af224c32002821550a85ab746061ca1faae216a25ed6bbbb6ff8016c"
+    },
+    {
+      "path": "nexus/nexus-node/tests/durable_cycle.rs",
+      "sha256": "abfca28ac660946084d3cb37139404277f71d0c45b5b5292170bee7f5aaf8022"
+    },
+    {
+      "path": "nexus/nexus-node/tests/emergency_freeze.rs",
+      "sha256": "29c74cfc505e4ea73ddf18692bee7b5106af593580f1d333c65c383429e3d7e9"
+    },
+    {
+      "path": "nexus/nexus-node/tests/key_authorization.rs",
+      "sha256": "ddf40f56ac75d7d2a93b46e29b66325058a68d972f1a33c75a2147116951303d"
+    },
+    {
+      "path": "nexus/nexus-node/tests/monetary_durable.rs",
+      "sha256": "6cdd6af3299246bfe9613f55794fdddcea047cfe1e78703e93468be3d1b1cd7e"
+    },
+    {
+      "path": "nexus/nexus-sentinel/Cargo.toml",
+      "sha256": "9a17ef57ed874e80ee572f7e02e7e4a8ebe096d3c3d621faba7638b26d9e65af"
+    },
+    {
+      "path": "nexus/nexus-sentinel/src/lib.rs",
+      "sha256": "31098331af6d890578ccc07da031aea55c8a5b83e0ba160025466904224c6702"
+    },
+    {
+      "path": "nexus/nexus-zk/Cargo.toml",
+      "sha256": "a186b13cb9292cce8c7a7501d69a90f2f5433649a1d9d361a88fa75f7e78ae2d"
+    },
+    {
+      "path": "nexus/nexus-zk/examples/stark_demo.rs",
+      "sha256": "ee5beb634ff18619f08513290e0cde91a07340c41a8c0f06e9d7e46e25352b40"
+    },
+    {
+      "path": "nexus/nexus-zk/examples/tg2_stark_measure.rs",
+      "sha256": "3399edbf42e2cfae2bc8330d499f06b2a0f6acd63a9469f8173a3c0751c69053"
+    },
+    {
+      "path": "nexus/nexus-zk/experiments/tg2_air_algebra.rs",
+      "sha256": "c899b7f9a89b00df3a3a6c0fbdfda5b2dada531127de3c74de8a46e09b3f7d55"
+    },
+    {
+      "path": "nexus/nexus-zk/experiments/tg2_linked_trace_fri.rs",
+      "sha256": "6e8a7c0209db558c674dd15dce1efe60a5ea62ca53dea3f03319096180e3f49f"
+    },
+    {
+      "path": "nexus/nexus-zk/experiments/tg2_trace_proximity.rs",
+      "sha256": "fc73af507ce1242667d47b17d37d0b4a9570bc75a1fb49eabdb469be960b2b1f"
+    },
+    {
+      "path": "nexus/nexus-zk/src/circuits.rs",
+      "sha256": "fde3f78bb5e20e6be850bbe18f730fda3d815a45d19e906728be83aeac8ab899"
+    },
+    {
+      "path": "nexus/nexus-zk/src/lib.rs",
+      "sha256": "7c1b7492c122d5bc83ca3bf3e729c1f898aaabba38dfdb49b4a6d421aa29bc63"
+    },
+    {
+      "path": "nexus/nexus-zk/src/prover.rs",
+      "sha256": "18ab5a8d19a55e554cea62062003c1d1541330d22b085b89496e5d9e49c3866d"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/air.rs",
+      "sha256": "c17a8f7b04152caf05c5361caf81ba0f886f277cbcbfb02a285b10c2621d76e7"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/channel.rs",
+      "sha256": "4c7893a480906cd61e35a0fc07bcc6397326d8fc6e28fa8c4fe00e6829d2002d"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/field.rs",
+      "sha256": "9f4826c0988cb3fb156084aa5df542c43d6210610d26d2bd59f74572a7608cd7"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/fri.rs",
+      "sha256": "5eb621ce89ebdc155443b0ff08b8ac2168f1ed6e067e867e240809a8bf6cf3d5"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/linked.rs",
+      "sha256": "0f8438b6c4d293d19888a59f53831b9873f815c55f0a2a719706ae206402fd52"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/linked_codec.rs",
+      "sha256": "8c2ade36b7d5211bc88fa78a3224f7e79d408269ec54f15078ef081998b1e013"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/merkle.rs",
+      "sha256": "04dfc76a61fbcc49c1a334831b8e093b049457da38a9464334921ea90eb79c7f"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/mod.rs",
+      "sha256": "d1b0572405fa67466258ae09f4d42c01f2ffb6d3c84a410c283bb5189b7b2b77"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/ntt.rs",
+      "sha256": "7649462a2939cbb82630ab7cabad00d80226ee55c93b73c4c840bf8752498cb3"
+    },
+    {
+      "path": "nexus/nexus-zk/src/stark/params.rs",
+      "sha256": "0366d03982279f78c8c39b759d99ee4bd0b4940a330b9216fbb2e610992d34b0"
+    },
+    {
+      "path": "nexus/nexus-zk/src/verifier.rs",
+      "sha256": "5f4c8168b6ff86e2712474e2dfc443f056a6091d46c48d662ad90b0ffb0b9a73"
+    },
+    {
+      "path": "nexus/nexus-zk/tests/lean_contract.rs",
+      "sha256": "e59186c000f56bd86d0989360437825af5a7985c07e98a63aac5c39ea5ed7e9b"
+    },
+    {
+      "path": "nexus/nexus-zk/tests/tg2_air_algebra.rs",
+      "sha256": "fd900251ca0b8363865c847976f618d66c8657993c0a24ad03cd5820eb86865e"
+    },
+    {
+      "path": "nexus/nexus-zk/tests/tg2_linked_trace_fri.rs",
+      "sha256": "1270fe7b2a8b843b038db6fa6803975a1448044df1693b86875c20942316707d"
+    },
+    {
+      "path": "nexus/nexus-zk/tests/tg2_soundness.rs",
+      "sha256": "1655b2f6e24d488329883aeec256595c8a02081419d7f0cb830c2e0435b878b7"
+    },
+    {
+      "path": "nexus/nexus-zk/tests/tg2_trace_proximity.rs",
+      "sha256": "b3041688851e554e82c2340ff1e24d57017d7c662c11c9f226679717695fbcdc"
+    }
+  ],
+  "ignored_test": "Existing checkpoint_child helper is invoked by its parent process-crash test",
+  "formatting": "rustfmt unavailable in installed stable toolchain; no automated formatting claim"
+}

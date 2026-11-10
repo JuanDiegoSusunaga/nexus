@@ -2,11 +2,13 @@
 
 **Juan Diego Susunaga Velasquez · Universidad del Rosario**
 
-Documentación organizada para revisión: **29 de octubre de 2026**.
+Documentación organizada para revisión: **29 de octubre de 2026**. Alcance de la rama principal revisado el **10 de noviembre de 2026**.
 
 Este workspace acompaña la tesis NEXUS sobre firmas poscuánticas, gestión de claves y registros verificables en una arquitectura de dos capas. Incluye las implementaciones, pruebas y experimentos del prototipo.
 
 **Acceso único para el director: [tesis, matemáticas y Rust en tesis-nexus](https://github.com/JuanDiegoSusunaga/tesis-nexus).** El workspace también está incluido allí en `nexus/`, como archivos normales. Este repositorio conserva la procedencia y el historial de la implementación.
+
+**Rama principal, 10 de noviembre:** conserva lo ligado a los objetivos de la tesis: verificación de posición Merkle, contabilidad de validadores, autorización de claves L2 por épocas, bloqueo de emergencia y un banco de pruebas BFT de cuatro validadores ML-DSA-65 con diario recuperable. Check, build y **412 pruebas** correctos. El perfil monetario NXS, el transporte TCP y la publicación desde Docker quedan fuera de esta rama, en [`testnet-experimental`](https://github.com/JuanDiegoSusunaga/nexus/tree/testnet-experimental); no forman parte de las afirmaciones de la tesis. [Contrato y límites](REPRODUCIBILIDAD_TG2.md#alcance-de-la-rama-principal--10-de-noviembre-de-2026) · [Bitácora](BITACORA_TG2.md) · [Pendientes](PENDIENTES.md).
 
 ## Por dónde empezar
 
@@ -16,6 +18,7 @@ Este workspace acompaña la tesis NEXUS sobre firmas poscuánticas, gestión de 
 | Recorrido local completo | [Ejemplo local_cycle](nexus-node/examples/local_cycle.rs) · [Pruebas del ciclo durable](nexus-node/tests/durable_cycle.rs) |
 | Ejecución y lotes L2 | [nexus-active](nexus-active/) |
 | Procesamiento y confirmación L1 | [nexus-anchor](nexus-anchor/) |
+| Banco de pruebas BFT y diario | [Motor](nexus-anchor/src/bft.rs) · [Nodo durable](nexus-node/src/bft.rs) · [Pruebas](nexus-node/tests/bft_durable.rs) |
 | Firmas y gestión de claves | [nexus-crypto](nexus-crypto/) · [nexus-sentinel](nexus-sentinel/) |
 | Verificador AIR/FRI | [nexus-zk](nexus-zk/) · [Pruebas del contrato Lean](nexus-zk/tests/lean_contract.rs) |
 | Demostraciones matemáticas | [Formalización Lean](https://github.com/JuanDiegoSusunaga/tesis-nexus/tree/main/formalizacion) |
@@ -26,11 +29,11 @@ El ciclo local permite admitir transferencias L2, ejecutarlas, construir lotes, 
 
 El [registro del 20 de octubre](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/06-Evidencia-TG2/2026-10-20/Ciclo-Local-Durable/verificacion.json), sobre el código `b16688c`, conserva 360 pruebas del workspace y 13 pruebas dirigidas en release, además de check/build. Son comprobaciones previas; la preparación de esta documentación no vuelve a ejecutarlas ni cambia las fuentes Rust.
 
-El prototipo conserva límites explícitos: el AIR escalar comprueba su relación numérica, la confirmación L1 observa procesamiento local y la persistencia usa almacenamiento local confiable. Siguen fuera de esos resultados la validez general de ejecución L2, el consenso BFT en red, la disponibilidad remota y el refinamiento universal entre Rust y Lean. Las garantías de seguridad y obligaciones matemáticas se contrastan en el [balance de la tesis](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Entrega-Final/Balance-Objetivos-TG2.md).
+El prototipo conserva límites explícitos: el AIR escalar comprueba su relación numérica, la confirmación L1 observa procesamiento local y la persistencia usa almacenamiento local confiable. Siguen fuera de esos resultados la validez general de ejecución L2, el consenso BFT entre máquinas y redes, la disponibilidad remota y el refinamiento universal entre Rust y Lean. Las garantías de seguridad y obligaciones matemáticas se contrastan en el [balance de la tesis](https://github.com/JuanDiegoSusunaga/tesis-nexus/blob/main/Documentos/04-Administrativo-TG2/Entrega-Final/Balance-Objetivos-TG2.md).
 
 ## Reproducción
 
-El acceso recomendado reúne todas las partes:
+Este repositorio incluye los veinte archivos públicos de regresión que necesitan sus pruebas, por lo que compila y se prueba desde un solo clon. El acceso recomendado para la revisión reúne además tesis y matemáticas:
 
 ```powershell
 git clone -c core.longpaths=true https://github.com/JuanDiegoSusunaga/tesis-nexus.git

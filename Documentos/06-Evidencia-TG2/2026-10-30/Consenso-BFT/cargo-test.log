@@ -1,0 +1,967 @@
+warn: could not canonicalize path C:\Users\juand
+warning: unused import: `NexusError`
+ --> nexus-core\src\merkle.rs:5:22
+  |
+5 | use crate::{Hash256, NexusError, Hashable};
+  |                      ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> nexus-core\src\merkle.rs:88:13
+   |
+88 |         let mut current_index = index;
+   |             ----^^^^^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `current_index`
+  --> nexus-core\src\merkle.rs:88:13
+   |
+88 |         let mut current_index = index;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_current_index`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-core` (lib) generated 3 warnings (run `cargo fix --lib -p nexus-core` to apply 3 suggestions)
+warning: unused import: `PQSignature`
+ --> nexus-crypto\src\signer.rs:8:35
+  |
+8 |     Address, Hash256, NexusError, PQSignature, SignatureScheme,
+  |                                   ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `created_at` is never read
+   --> nexus-crypto\src\entropy.rs:233:5
+    |
+225 | pub struct SentinelSeed {
+    |            ------------ field in this struct
+...
+233 |     created_at: Timestamp,
+    |     ^^^^^^^^^^
+    |
+    = note: `SentinelSeed` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-crypto` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-crypto` to apply 1 suggestion)
+   Compiling nexus-anchor v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-anchor)
+warning: unused import: `NexusError`
+ --> nexus-zk\src\lib.rs:9:27
+  |
+9 | use nexus_core::{Hash256, NexusError, StateRoot};
+  |                           ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-zk` (lib) generated 1 warning (run `cargo fix --lib -p nexus-zk` to apply 1 suggestion)
+warning: unused import: `NexusError`
+ --> nexus-network\src\lib.rs:6:34
+  |
+6 | use nexus_core::{Block, Hash256, NexusError, SignedTransaction};
+  |                                  ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-network` (lib) generated 1 warning (run `cargo fix --lib -p nexus-network` to apply 1 suggestion)
+warning: unused imports: `Hash256` and `NexusError`
+  --> nexus-sentinel\src\lib.rs:14:27
+   |
+14 | use nexus_core::{Address, Hash256, NexusError, Timestamp};
+   |                           ^^^^^^^  ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::HashMap`
+  --> nexus-sentinel\src\lib.rs:15:5
+   |
+15 | use std::collections::HashMap;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `nexus-sentinel` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-sentinel` to apply 2 suggestions)
+warning: `nexus-crypto` (lib test) generated 2 warnings (2 duplicates)
+warning: struct `Division` is never constructed
+ --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:9:12
+  |
+9 | pub struct Division {
+  |            ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Audit` is never constructed
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:15:12
+   |
+15 | pub struct Audit {
+   |            ^^^^^
+
+warning: struct `Composition` is never constructed
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:24:12
+   |
+24 | pub struct Composition {
+   |            ^^^^^^^^^^^
+
+warning: function `trim` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:30:4
+   |
+30 | fn trim(mut p: Vec<Felt>) -> Vec<Felt> {
+   |    ^^^^
+
+warning: function `degree` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:35:8
+   |
+35 | pub fn degree(p: &[Felt]) -> Option<usize> {
+   |        ^^^^^^
+
+warning: function `degree_ext` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:39:8
+   |
+39 | pub fn degree_ext(p: &[Fp2]) -> Option<usize> {
+   |        ^^^^^^^^^^
+
+warning: function `sub` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:43:4
+   |
+43 | fn sub(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+   |    ^^^
+
+warning: function `mul` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:50:4
+   |
+50 | fn mul(a: &[Felt], b: &[Felt]) -> Vec<Felt> {
+   |    ^^^
+
+warning: function `shifted` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:59:4
+   |
+59 | fn shifted(a: &[Felt], factor: Felt) -> Vec<Felt> {
+   |    ^^^^^^^
+
+warning: function `divide` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:68:4
+   |
+68 | fn divide(a: &[Felt], b: &[Felt]) -> Result<Division, String> {
+   |    ^^^^^^
+
+warning: function `audit` is never used
+  --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:87:8
+   |
+87 | pub fn audit(trace: &[Felt], start: Felt, output: Felt) -> Result<Audit, String> {
+   |        ^^^^^
+
+warning: function `compose` is never used
+   --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:127:8
+    |
+127 | pub fn compose(audit: &Audit, alphas: [Fp2; 3]) -> Composition {
+    |        ^^^^^^^
+
+warning: function `eval_ext` is never used
+   --> nexus-zk\tests\..\experiments\tg2_air_algebra.rs:144:8
+    |
+144 | pub fn eval_ext(coefficients: &[Fp2], x: Felt) -> Fp2 {
+    |        ^^^^^^^^
+
+warning: `nexus-network` (lib test) generated 1 warning (1 duplicate)
+warning: `nexus-zk` (test "tg2_trace_proximity") generated 13 warnings
+warning: `nexus-zk` (lib test) generated 1 warning (1 duplicate)
+warning: `nexus-sentinel` (lib test) generated 2 warnings (2 duplicates)
+warning: `nexus-core` (lib test) generated 3 warnings (3 duplicates)
+warning: unused imports: `BlockHeight` and `Hash256`
+ --> nexus-anchor\src\validator.rs:5:35
+  |
+5 | use nexus_core::{Address, Amount, BlockHeight, Hash256, NexusError, Timestamp};
+  |                                   ^^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `nexus_crypto::DilithiumPublicKey`
+ --> nexus-anchor\src\validator.rs:6:5
+  |
+6 | use nexus_crypto::DilithiumPublicKey;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   Compiling nexus-active v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-active)
+warning: unused import: `PQSignature`
+ --> nexus-active\src\batch.rs:5:39
+  |
+5 | use nexus_core::{Hash256, NexusError, PQSignature, SignedTransaction, StateRoot, BlockHeight, Timestamp};
+  |                                       ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-anchor` (lib test) generated 2 warnings (2 duplicates)
+   Compiling nexus-node v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-node)
+warning: `nexus-anchor` (lib) generated 2 warnings (run `cargo fix --lib -p nexus-anchor` to apply 2 suggestions)
+warning: `nexus-active` (lib) generated 1 warning (run `cargo fix --lib -p nexus-active` to apply 1 suggestion)
+   Compiling nexus-cli v0.1.0 (C:\Users\juand\Desktop\Tesis\nexus\nexus-cli)
+warning: unused import: `StateRoot`
+ --> nexus-anchor\tests\chain_safety.rs:3:41
+  |
+3 |     SignatureScheme, SignedTransaction, StateRoot, Transaction};
+  |                                         ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nexus-anchor` (test "chain_safety") generated 1 warning (run `cargo fix --test "chain_safety" -p nexus-anchor` to apply 1 suggestion)
+warning: `nexus-active` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.47s
+     Running unittests src\lib.rs (target\debug\deps\nexus_active-118e9728592d914c.exe)
+
+running 39 tests
+test batch::tests::bloque_completo_se_agrega_atomicamente_y_cuenta_el_tamano_serializado ... ok
+test authorization::tests::archived_freeze_remains_effective_after_submission_window_expires ... ok
+test batch::tests::test_batch_submitter ... ok
+test batch::tests::finalizar_rango_invertido_no_consume_el_contexto_del_lote ... ok
+test batch::tests::test_batch_builder ... ok
+test chain::tests::configured_transaction_domain_is_shared_by_admission_and_block_execution ... ok
+test authorization::tests::forged_duplicate_or_invalid_time_receipts_are_rejected_on_restore ... ok
+test chain::tests::certificados_truncados_o_con_sufijos_no_registran_ni_envian_el_lote ... ok
+test chain::tests::la_cadena_fija_filas_y_trabajo_antes_de_recibir_el_certificado ... ok
+test chain::tests::envios_simultaneos_del_mismo_lote_solo_registran_un_envio ... ok
+test chain::tests::local_checkpoint_preserves_an_accepted_scalar_certificate_and_verified_root ... ok
+test chain::tests::cableado_escalar_sintetico_verifica_antes_del_envio_y_no_confunde_indice_con_altura ... ok
+test chain::tests::l1_registration_failure_does_not_register_a_valid_scalar_root ... ok
+test chain::tests::preparing_a_valid_scalar_fixture_does_not_register_its_root_or_submission ... ok
+test chain::tests::test_active_chain_creation ... ok
+test chain::tests::test_chain_stats ... ok
+test chain::tests::test_produce_block ... ok
+test chain::tests::submission_retries_preserve_the_validity_certificate_and_local_context ... ok
+test chain::tests::un_certificado_valido_no_autoriza_lotes_desconocidos_ni_sobres_alterados ... ok
+test execution::tests::test_execution_engine_creation ... ok
+test pq_verifier::tests::garbage_bytes_do_not_deserialize_as_proof ... ok
+test execution::tests::test_execute_transfer ... ok
+test chain::tests::processed_recovery_checks_l1_before_registering_a_valid_scalar_root ... ok
+test pq_verifier::tests::wrong_post_root_rejected ... ok
+test pq_verifier::tests::prove_and_verify_bound ... ok
+test sequencer::tests::concurrent_duplicate_admission_has_a_single_winner ... ok
+test sequencer::tests::incomplete_batches_and_cancelled_reservations_do_not_advance_nonces ... ok
+test sequencer::tests::failed_execution_releases_current_nonce_and_preserves_future_dependencies ... ok
+test pq_verifier::tests::serialization_roundtrip ... ok
+test chain::tests::recovering_a_processed_retry_preserves_the_accepted_scalar_certificate ... ok
+test sequencer::tests::test_sequencer_creation ... ok
+test sequencer::tests::test_duplicate_transaction ... ok
+test verifier::tests::test_optimistic_verification ... ok
+test sequencer::tests::test_submit_transaction ... ok
+test verifier::tests::test_verifier_creation ... ok
+test verifier::tests::test_zk_rejects_format_only_without_context ... ok
+test sequencer::tests::test_build_batch ... ok
+test verifier::tests::test_legacy_stark_requires_linked_contract_and_context ... ok
+test verifier::tests::test_stark_pq_rejects_wrong_post_root ... ok
+
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.17s
+
+     Running tests\active_chain_contract.rs (target\debug\deps\active_chain_contract-09e2fd263fbb2e52.exe)
+
+running 6 tests
+test intervalo_cero_se_rechaza_antes_de_consumir_transacciones ... ok
+test produccion_concurrente_no_reutiliza_alturas_ni_contextos_de_estado ... ok
+test modo_optimista_permanece_provisional_y_no_admite_envios_duplicados ... ok
+test cambiar_el_lote_y_recalcular_su_hash_no_cambia_el_contexto_local ... ok
+test lote_local_sin_certificado_valido_no_se_envia_y_un_rechazo_no_muta_el_estado ... ok
+test vacios_conservan_raiz_y_la_rotacion_del_lote_no_parte_bloques ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests\batch_retry.rs (target\debug\deps\batch_retry-0b707969a797685a.exe)
+
+running 8 tests
+test concurrent_retries_with_the_same_expected_hash_have_one_winner ... ok
+test confirmation_and_retry_race_preserves_one_confirmation_and_consistent_history ... ok
+test incorrect_hash_can_be_retried_without_changing_the_local_batch ... ok
+test an_included_mismatched_attempt_does_not_hide_a_later_matching_one ... ok
+test a_delayed_original_attempt_can_confirm_after_a_retry ... ok
+test three_retries_are_allowed_and_a_fourth_leaves_the_pending_attempt_intact ... ok
+test multiple_included_attempts_choose_the_first_recorded_matching_intent ... ok
+test stale_empty_and_reserved_hashes_do_not_consume_attempts_or_reservations ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests\chain_policy.rs (target\debug\deps\chain_policy-6126315077ed4589.exe)
+
+running 7 tests
+test default_engine_rejects_foreign_signatures_before_balance_or_nonce_changes ... ok
+test active_chain_rejects_foreign_transactions_at_its_public_boundary ... ok
+test configured_sequencer_and_restored_engine_use_the_explicit_domain ... ok
+test default_sequencer_rejects_foreign_signatures_without_reserving_a_nonce ... ok
+test foreign_deployment_and_call_are_rejected_before_any_execution_effect ... ok
+test mixed_batch_rejects_foreign_entries_without_consuming_the_honest_nonce ... ok
+test relabelling_a_foreign_transaction_does_not_replace_its_signature ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests\emergency_freeze.rs (target\debug\deps\emergency_freeze-9440d42469174d38.exe)
+
+running 6 tests
+test direct_execution_and_checkpoints_keep_the_full_emergency_context ... ok
+test independent_freeze_cancels_work_and_survives_operational_rotations ... ok
+test freeze_cancels_external_reservations_and_leaves_other_senders_operational ... ok
+test concurrent_admission_and_duplicate_freezes_have_one_authorized_transition ... ok
+test invalid_freezes_do_not_cancel_pending_work_or_publish_status ... ok
+test recovery_signers_cannot_transfer_even_when_funded_and_cannot_enter_operational_registry ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests\execution_contract.rs (target\debug\deps\execution_contract-7577e95bb016516c.exe)
+
+running 3 tests
+test a_funded_call_to_existing_code_must_not_claim_a_simulated_success ... ok
+test deployment_cannot_claim_success_while_ignoring_initialization ... ok
+test unsupported_contract_work_does_not_prevent_a_real_transfer_at_the_same_nonce ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests\execution_safety.rs (target\debug\deps\execution_safety-de8a4c51224ed5fc.exe)
+
+running 8 tests
+test batch_gas_accounting_rejects_u64_max_without_overflow_or_nonce_change ... ok
+test r07_forged_pending_transaction_must_not_block_the_real_sender_nonce ... ok
+test r08_honest_transactions_from_one_sender_must_be_nonce_ordered ... ok
+test failed_deployment_and_insufficient_balance_leave_state_and_nonce_unchanged ... ok
+test timeout_cannot_promote_optimistic_proof_without_a_fraud_verification_contract ... ok
+test r11_unrelated_attacker_supplied_trace_must_not_prove_fraud ... ok
+test r09_transaction_cannot_succeed_with_less_gas_than_execution_requires ... ok
+test r12_oversized_high_priority_transaction_must_not_starve_other_senders ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests\key_authorization.rs (target\debug\deps\key_authorization-9df2dff842d5f929.exe)
+
+running 7 tests
+test direct_execution_and_serialization_preserve_revocation_without_state_changes ... ok
+test registered_envelopes_bind_identity_epoch_payload_and_key_and_require_policy ... ok
+test rejected_registry_records_do_not_change_policy_or_pending_work ... ok
+test retirement_purges_work_and_cannot_fall_back_to_a_legacy_signature ... ok
+test reserved_work_blocks_policy_update_and_v1_checkpoint_is_rejected ... ok
+test concurrent_admission_leaves_no_revoked_work_after_policy_update_returns ... ok
+test rotation_releases_pending_nonces_and_new_key_spends_the_same_account ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running tests\l1_confirmation.rs (target\debug\deps\l1_confirmation-7ce4b23b875c66f8.exe)
+
+running 8 tests
+test an_invented_submission_hash_cannot_confirm_a_local_batch ... ok
+test an_included_transfer_cannot_stand_in_for_a_batch_submission ... ok
+test concurrent_confirmations_record_exactly_one_observation ... ok
+test local_da_helper_is_not_signed_transaction_inclusion ... ok
+test confirmation_requires_processing_then_records_exact_local_l1_provenance ... ok
+test zero_submission_hash_is_rejected_without_consuming_the_local_batch ... ok
+test one_submission_hash_cannot_be_assigned_to_two_local_batches ... ok
+test processed_submission_must_match_root_count_payload_and_sequencer_identity ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+     Running tests\lean_contract.rs (target\debug\deps\lean_contract-936c06b60558c44e.exe)
+
+running 7 tests
+test contexto_tipo_altura_entradas_y_todas_las_coordenadas_se_comprueban ... ok
+test no_reinterpreta_hashes_arbitrarios_ni_alias_modulares_como_escalares ... ok
+test rechaza_basura_truncados_sufijos_y_perfiles_sin_cambiar_estado ... ok
+test modo_optimista_no_registra_raiz_antes_de_finalizar_ni_acredita_el_contrato ... ok
+test modo_hibrido_no_cae_a_aceptacion_optimista_por_tamano ... ok
+test altura_es_contexto_externo_y_no_se_anuncia_como_restriccion_air ... ok
+test solo_la_ruta_con_contexto_registra_una_raiz_tras_aceptar ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+
+     Running tests\processed_recovery.rs (target\debug\deps\processed_recovery-334e17f110f6ccc5.exe)
+
+running 8 tests
+test historical_expiry_and_consumed_nonce_do_not_erase_a_processed_inclusion ... ok
+test concurrent_recovery_commits_one_initial_observation ... ok
+test omitted_initial_registration_recovers_exact_packet_and_original_block_once ... ok
+test preparation_helpers_rejected_blocks_and_another_source_are_not_processed_inclusion ... ok
+test recovery_cannot_replace_existing_attempts_or_discard_their_history ... ok
+test processed_inclusion_cannot_bypass_validity_or_hybrid_certificate_policy ... ok
+test same_hash_does_not_authorize_an_altered_signed_envelope ... ok
+test actually_processed_different_payload_or_publisher_cannot_claim_the_local_batch ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+
+     Running tests\processed_retry.rs (target\debug\deps\processed_retry-5584f122df42c36d.exe)
+
+running 8 tests
+test a_hash_only_intent_can_recover_an_expired_but_processed_replacement ... ok
+test omitted_signed_retry_preserves_both_packets_and_original_inclusion ... ok
+test concurrent_recovery_or_normal_retry_has_only_one_winning_transition ... ok
+test recovery_targets_the_missing_packet_and_does_not_duplicate_an_already_recorded_attempt ... ok
+test a_processed_different_batch_or_publisher_cannot_replace_the_local_attempt ... ok
+test recovery_uses_the_same_three_retry_limit_and_cannot_consume_a_fourth ... ok
+test stale_absent_or_globally_reserved_attempts_cannot_change_pending_history ... ok
+test unprocessed_or_altered_packets_are_rejected_before_attempts_change ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.59s
+
+     Running tests\signed_registration.rs (target\debug\deps\signed_registration-c2b336f8c797f470.exe)
+
+running 8 tests
+test hash_only_intents_remain_distinct_and_can_retry_with_a_validated_packet ... ok
+test invalid_or_stale_retries_preserve_counter_packet_history_and_reservations ... ok
+test forged_envelopes_and_invalid_l1_policy_are_rejected_without_recording_bytes ... ok
+test concurrent_signed_registration_and_retries_each_have_one_winner ... ok
+test validated_registration_retains_exact_signed_bytes_before_and_after_confirmation ... ok
+test valid_signatures_for_different_payloads_or_publishers_do_not_reserve_an_intent ... ok
+test validated_retry_keeps_both_packets_and_confirms_the_new_nonce ... ok
+test validated_retries_remain_bounded_and_do_not_store_a_rejected_fourth_packet ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.69s
+
+     Running tests\submission_preparation.rs (target\debug\deps\submission_preparation-5499e3aae3c33cfb.exe)
+
+running 8 tests
+test l1_budget_and_payload_bounds_are_checked_by_the_preparer ... ok
+test invalid_gas_cost_expiry_and_balance_leave_both_chains_unchanged ... ok
+test a_stale_preparation_is_rejected_and_can_be_prepared_again_for_an_explicit_retry ... ok
+test unknown_or_altered_batches_and_a_different_publisher_are_rejected ... ok
+test transaction_preflight_is_separate_from_a_proposers_reward_overflow ... ok
+test preparation_derives_l1_domain_nonce_time_and_batch_fields_without_publishing_effects ... ok
+test validity_and_hybrid_preparation_require_a_valid_certificate_without_recording_a_root ... ok
+test a_payload_fitting_l2_must_also_fit_the_signed_l1_block_envelope ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.18s
+
+     Running tests\tg2_verification.rs (target\debug\deps\tg2_verification-98189d184cfd1524.exe)
+
+running 15 tests
+test active_rejects_garbage_without_marking_root_verified ... ok
+test active_rejects_legacy_stark_without_trusted_context ... ok
+test canonical_refuses_arbitrary_hash_roots ... ok
+test canonical_bounds_trace_size_before_arithmetic ... ok
+test canonical_rejects_empty_truncated_trailing_and_oversized_payloads ... ok
+test canonical_executes_stark_checks_after_structural_validation ... ok
+test canonical_rejects_missing_queries_layers_and_paths ... ok
+test canonical_rejects_wrong_type_height_and_outer_inputs ... ok
+test canonical_does_not_claim_height_is_in_the_air_statement ... ok
+test canonical_rejects_mutations_in_every_byte_of_pre_and_post ... ok
+test canonical_rejects_noncanonical_deserialized_field_elements ... ok
+test public_openings_recover_the_witness_for_the_16_row_example ... ok
+test canonical_valid_proof_accepts ... ok
+test legacy_field_reduction_also_collides_within_first_eight_bytes ... ok
+test legacy_ignores_each_of_the_last_24_bytes_of_both_roots ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.73s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_anchor-4bb38e6dae18bfc3.exe)
+
+running 20 tests
+test chain::tests::monetary_restore_rejects_forged_balances_or_counters_even_with_matching_archived_roots ... ok
+test chain::tests::test_chain_stats ... ok
+test consensus::tests::test_consensus_config_default ... ok
+test chain::tests::test_chain_creation ... ok
+test data_availability::tests::corrupt_or_missing_chunks_in_any_payload_fail_the_local_integrity_check ... ok
+test data_availability::tests::corrupted_receipt_metadata_is_rejected_without_allocating_from_it ... ok
+test data_availability::tests::test_da_proof_generation ... ok
+test data_availability::tests::test_da_sampling ... ok
+test data_availability::tests::test_da_submit_and_reconstruct ... ok
+test finality::tests::test_add_block ... ok
+test chain::tests::test_l2_batch_submission ... ok
+test finality::tests::test_finality_gadget_creation ... ok
+test finality::tests::test_fork_choice ... ok
+test validator::tests::test_slashing ... ok
+test validator::tests::test_validator_creation ... ok
+test validator::tests::test_validator_registry ... ok
+test validator::tests::test_validator_set ... ok
+test consensus::tests::test_pos_creation ... ok
+test finality::tests::test_finalization ... ok
+test chain::tests::processed_packet_validation_propagates_inconsistent_da_storage ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests\bft_rounds.rs (target\debug\deps\bft_rounds-425ade3e28f282ce.exe)
+
+running 4 tests
+test signatures_bind_phase_height_round_member_context_and_full_block_body ... ok
+test two_votes_and_retransmissions_do_not_create_a_quorum_or_timeout ... ok
+test a_single_sender_cannot_jump_rounds_or_allocate_unbounded_future_state ... ok
+test restored_lock_rejects_conflicting_proposal_and_accepts_only_a_sufficiently_new_pol ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s
+
+     Running tests\block_policy.rs (target\debug\deps\block_policy-d78b990df403e0f2.exe)
+
+running 8 tests
+test default_chain_rejects_a_valid_signature_for_another_chain ... ok
+test default_budget_rejects_aggregate_declared_gas_even_at_zero_price ... ok
+test configured_domain_accepts_its_signature_and_rejects_a_relabelled_signature ... ok
+test received_block_with_a_correct_root_still_must_match_the_local_domain ... ok
+test aggregate_gas_cannot_wrap_at_u64_maximum ... ok
+test zero_budget_accepts_empty_blocks_and_rejects_transactions ... ok
+test single_reservation_at_u64_maximum_is_representable_and_accepted ... ok
+test received_overbudget_block_is_atomic_and_exact_budget_can_be_retried ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests\chain_safety.rs (target\debug\deps\chain_safety-d02d6bd863e6cd05.exe)
+
+running 7 tests
+test r02_accepting_a_block_must_advance_l1_height ... ok
+test accepts_linked_successive_blocks_and_rejects_concurrent_duplicate_rewards ... ok
+test r03_processing_the_same_l1_block_must_not_mint_rewards_twice ... ok
+test r01_l1_must_reject_a_cryptographically_invalid_signature ... ok
+test r05_unsigned_precommit_from_a_nonvalidator_must_not_commit_or_hang ... ok
+test r04_rejected_l1_block_must_not_keep_earlier_transaction_mutations ... ok
+test failed_block_rolls_back_validator_registration_balance_and_batch_side_effects ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests\consensus_safety.rs (target\debug\deps\consensus_safety-1703267ba171b77d.exe)
+
+running 5 tests
+test malformed_conflicting_and_wrong_context_votes_do_not_replace_honest_votes ... ok
+test weaker_float_policy_is_rejected_instead_of_overriding_the_lean_quorum ... ok
+test rejects_unknown_voters_and_cross_phase_replays_without_advancing ... ok
+test quorum_uses_stake_not_validator_count_or_truncated_whole_tokens ... ok
+test exactly_two_thirds_and_repeated_votes_cannot_commit_but_full_quorum_can ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests\finality_safety.rs (target\debug\deps\finality_safety-833f2d3035acfe57.exe)
+
+running 5 tests
+test two_thirds_duplicates_and_untrusted_totals_cannot_finalize ... ok
+test rejects_forged_signatures_weights_and_target_replays ... ok
+test authority_changes_cannot_rewrite_a_pending_block_snapshot ... ok
+test quorum_cannot_finalize_a_fork_that_does_not_descend_from_the_anchor ... ok
+test zero_authority_and_missing_ancestry_never_create_a_certificate ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests\local_da.rs (target\debug\deps\local_da-00790030fb7fe5c6.exe)
+
+running 9 tests
+test empty_submission_is_rejected_without_registering_an_empty_commitment ... ok
+test honest_generated_proof_verifies_against_the_registered_commitment ... ok
+test altered_chunk_bytes_lengths_indexes_and_paths_are_rejected ... ok
+test independent_two_leaf_oracle_matches_the_receipt_and_proof_order ... ok
+test multiple_submissions_at_one_height_cannot_silently_select_overwritten_data ... ok
+test receipt_version_digest_sizes_coding_and_root_are_bound_or_validated ... ok
+test exact_chunk_lengths_and_one_two_and_odd_leaf_trees_round_trip ... ok
+test payload_indexes_keep_every_submission_and_its_proofs_separate ... ok
+test empty_oversized_and_unknown_requests_preserve_registered_payloads ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.18s
+
+     Running tests\local_da_chain.rs (target\debug\deps\local_da_chain-3bd231312f68c35c.exe)
+
+running 2 tests
+test local_registration_preserves_both_payloads_at_one_height_and_rejects_empty_data ... ok
+test signed_submissions_survive_root_rejection_retry_and_a_new_height ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests\monetary_profile.rs (target\debug\deps\monetary_profile-3ffcce4f706349cf.exe)
+
+running 11 tests
+test exhausted_cap_stays_exhausted_after_faucet_transfer_and_burning ... ok
+test checkpoint_requires_expected_genesis_and_replays_money_before_accepting_it ... ok
+test fee_split_has_exact_rounding_and_handles_the_entire_amount_range ... ok
+test deployment_domain_prevents_replay_and_cannot_be_added_after_signing ... ok
+test issuance_halves_at_exact_heights_and_burn_never_reopens_the_lifetime_cap ... ok
+test genesis_is_canonical_binds_policy_and_rejects_invalid_allocations ... ok
+test failed_batch_and_forged_root_leave_balances_supply_nonce_and_da_unchanged ... ok
+test payload_bytes_are_metered_and_unsupported_operations_cannot_create_escrow ... ok
+test transfers_charge_actual_fees_split_burn_and_replay_identically_on_four_replicas ... ok
+test signed_batch_submission_charges_bytes_and_reconstructs_payload_after_replay ... ok
+test fee_accounting_handles_sender_receiver_and_proposer_aliases ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests\state_root_contract.rs (target\debug\deps\state_root_contract-18f1152ebcfc0210.exe)
+
+running 9 tests
+test empty_block_root_includes_reward_and_preparation_has_no_effects ... ok
+test empty_or_arbitrary_claimed_root_is_rejected_without_reward_or_storage ... ok
+test header_version_receipts_and_backdated_time_are_rejected_before_publication ... ok
+test reward_overflow_rejects_even_an_empty_block_without_advancing_height ... ok
+test root_is_checked_against_local_reward_policy_and_the_current_parent ... ok
+test self_transfer_and_reward_to_the_sender_have_one_exact_balance_update ... ok
+test transfer_root_commits_nonce_balances_and_final_reward_without_inventing_gas_fees ... ok
+test block_time_controls_expiry_and_historical_replay_is_deterministic ... ok
+test wrong_root_rolls_back_valid_registry_and_da_effects_then_allows_honest_retry ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests\validator_accounting.rs (target\debug\deps\validator_accounting-1d80aeaba82565f0.exe)
+
+running 3 tests
+test maximum_stake_penalty_uses_exact_percentage_without_overflow ... ok
+test slashing_updates_total_stake_and_removal_conserves_the_remainder ... ok
+test stake_overflow_rejects_registration_without_changing_the_set ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\main.rs (target\debug\deps\nexus-a9616d7604aafaa9.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_core-2a9694dc6f477ec4.exe)
+
+running 15 tests
+test block::tests::test_block_validation ... ok
+test block::tests::test_genesis_block ... ok
+test merkle::tests::test_empty_merkle_tree ... ok
+test block::tests::test_block_hash_deterministic ... ok
+test merkle::tests::test_merkle_tree_single_leaf ... ok
+test state::tests::test_account_state ... ok
+test state::tests::test_in_memory_state_transfer ... ok
+test merkle::tests::test_merkle_tree_non_power_of_two ... ok
+test transaction::tests::test_transaction_hash_deterministic ... ok
+test transaction::tests::test_transfer_transaction ... ok
+test merkle::tests::test_merkle_tree_multiple_leaves ... ok
+test types::tests::test_amount_arithmetic ... ok
+test types::tests::test_address_from_pk ... ok
+test types::tests::test_hash256 ... ok
+test merkle::tests::test_sparse_merkle_tree ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\local_checkpoint.rs (target\debug\deps\local_checkpoint-55fa488c84b101bd.exe)
+
+running 3 tests
+test checkpoint_codec_rejects_trailing_bytes_and_unrepresentable_collection_lengths ... ok
+test only_one_writer_opens_a_store_and_partial_files_do_not_publish_a_new_generation ... ok
+test corrupt_latest_checkpoint_is_rejected_instead_of_silently_restoring_an_older_nonce ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests\state_safety.rs (target\debug\deps\state_safety-5f2868b757d63f8c.exe)
+
+running 4 tests
+test cost_overflow_is_rejected_and_legacy_estimation_saturates ... ok
+test r10_max_cost_must_not_panic_on_public_numeric_inputs ... ok
+test self_transfer_preserves_balance_and_failed_unknown_sender_creates_no_accounts ... ok
+test r06_failed_transfer_must_not_debit_sender ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_crypto-737e60716494b233.exe)
+
+running 57 tests
+test dilithium::tests::test_address_derivation ... ok
+test dilithium::tests::test_keypair_generation ... ok
+test dilithium::tests::test_deterministic_from_seed ... ok
+test entropy::tests::test_apt_counts_reference_and_fails_at_sixteen ... ok
+test entropy::tests::test_apt_cutoff_matches_conditional_binomial_tail ... ok
+test entropy::tests::test_apt_resets_reference_at_exact_window_boundary ... ok
+test dilithium::tests::test_sign_verify ... ok
+test entropy::tests::test_health_passes_on_random ... ok
+test entropy::tests::test_health_rct_detects_stuck_source ... ok
+test entropy::tests::test_failure_after_complete_batch_blocks_whole_ingestion ... ok
+test entropy::tests::test_history_zero_and_epoch_overflow_do_not_bypass_policy ... ok
+test dilithium::tests::test_serialization ... ok
+test entropy::tests::test_ingest_unhealthy_source_triggers_rotation ... ok
+test entropy::tests::test_health_recovery_requires_new_batch_then_rotation ... ok
+test entropy::tests::test_min_entropy_estimate ... ok
+test entropy::tests::test_needs_rotation_uses ... ok
+test entropy::tests::test_rct_continues_across_apt_windows ... ok
+test entropy::tests::test_low_frequency_entropy_latches_until_explicit_recovery ... ok
+test entropy::tests::test_sentinel_seed_creation ... ok
+test entropy::tests::test_sentinel_seed_derive ... ok
+test entropy::tests::test_rotation_preserves_continuous_health_and_partial_batch ... ok
+test entropy::tests::test_shannon_entropy_two_values ... ok
+test entropy::tests::test_shannon_entropy_uniform ... ok
+test entropy::tests::test_sentinel_seed_rotation_forward_secure ... ok
+test entropy::tests::test_source_evaluation_is_independent_of_chunk_sizes ... ok
+test entropy::tests::test_source_requires_complete_batch_across_calls ... ok
+test entropy::tests::test_invalid_source_parameters_fail_closed_even_after_reset ... ok
+test dilithium::tests::test_all_schemes ... ok
+test keypair::tests::failed_registry_validation_does_not_install_staged_keys ... ok
+test keypair::tests::failure_after_first_derived_key_leaves_entire_state_unchanged ... ok
+test keypair::tests::exhausted_derivation_budget_requires_capacity_for_rotation ... ok
+test keypair::tests::invalid_import_and_empty_rotation_do_not_change_registry ... ok
+test keypair::tests::health_failure_blocks_all_operation_signing_until_recovery_and_rotation ... ok
+test keypair::tests::retirement_rejects_new_signatures_but_preserves_historical_verification ... ok
+test keypair::tests::enrollment_after_rotation_and_repeated_rotations_remain_verifiable ... ok
+test keypair::tests::operation_signature_binds_epoch_identity_and_payload ... ok
+test keypair::tests::test_key_manager ... ok
+test keypair::tests::test_key_manager_sign ... ok
+test keypair::tests::rotation_changes_all_keys_preserves_identity_default_and_history ... ok
+test keypair::tests::test_keypair_generation ... ok
+test keypair::tests::test_keypair_from_sentinel ... ok
+test keypair::tests::test_key_manager_respects_source_evaluation_and_recovery ... ok
+test registry::tests::duplicate_enrollment_and_reenrollment_after_retirement_are_rejected ... ok
+test registry::tests::malformed_truncated_unknown_version_and_trailing_bytes_are_rejected ... ok
+test registry::tests::missing_reordered_or_duplicated_records_are_rejected ... ok
+test registry::tests::foreign_history_and_modified_full_hash_are_rejected ... ok
+test registry::tests::public_registry_recovers_after_file_roundtrip ... ok
+test registry::tests::rotation_missing_an_identity_or_new_proof_is_rejected_without_mutation ... ok
+test registry::tests::skipped_epochs_duplicate_identities_and_reused_keys_are_rejected ... ok
+test signer::tests::test_batch_verify ... ok
+test signer::tests::test_batch_verify_with_invalid ... ok
+test registry::tests::tampered_metadata_or_authorization_is_rejected ... ok
+test signer::tests::test_sign_transaction ... ok
+test signer::tests::test_signer_trait ... ok
+test registry::tests::trusted_checkpoint_detects_valid_prefix_rollback ... ok
+test signer::tests::test_signature_aggregator ... ok
+test keypair::tests::age_expiration_blocks_signing ... ok
+
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.24s
+
+     Running tests\recovery_policy.rs (target\debug\deps\recovery_policy-2bb7708d6b062cdd.exe)
+
+running 3 tests
+test signed_freezes_bind_all_fields_and_enforce_submission_window ... ok
+test operational_keys_and_generic_signatures_do_not_authorize_emergencies ... ok
+test configuration_requires_distinct_valid_authorities_even_when_deserialized ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests\tg2_correspondence.rs (target\debug\deps\tg2_correspondence-c09bd7477607b4b5.exe)
+
+running 3 tests
+test correspondencia_ml_dsa_44 ... ok
+test correspondencia_ml_dsa_65 ... ok
+test correspondencia_ml_dsa_87 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests\tg2_residence.rs (target\debug\deps\tg2_residence-779d2c25eba9a999.exe)
+
+running 3 tests
+test backend_object_sizes_differ_from_encoded_key_lengths ... ok
+test serialized_keypair_includes_public_material_and_headers ... ok
+test retained_seed_recreates_signing_capability_after_key_drop ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests\tg2_throughput.rs (target\debug\deps\tg2_throughput-0c2e323bc1611eb3.exe)
+
+running 3 tests
+test invalid_measurement_parameters_are_rejected ... ok
+test invalid_work_aborts_measurement ... ok
+test coordinated_trial_counts_only_successful_work_and_covers_interval ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_network-1a2d9cac847eea1e.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_node-75cc8f820e603ea6.exe)
+
+running 1 test
+test bft::tests::restore_rejects_missing_certificates_and_a_reset_of_the_signed_voting_phase ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests\bft_durable.rs (target\debug\deps\bft_durable-d49e42373fa4d16e.exe)
+
+running 8 tests
+test a_signed_proposal_survives_abrupt_process_exit_before_any_peer_receives_it ... ok
+test failed_commit_checkpoint_preserves_lock_and_retry_applies_the_reward_once ... ok
+test an_equivocating_leader_cannot_finalize_conflicting_blocks_at_honest_nodes ... ok
+test proposal_is_durable_before_return_and_reopen_cannot_sign_a_different_value ... ok
+test invalid_proposals_and_changed_committee_or_clock_policy_do_not_change_state ... ok
+test an_absent_leader_is_replaced_after_nil_quorums_and_three_nodes_make_progress ... ok
+test two_nodes_halt_without_quorum_and_resume_when_a_third_returns ... ok
+test four_validators_certify_transfers_and_an_observer_syncs_without_signing ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.17s
+
+     Running tests\durable_cycle.rs (target\debug\deps\durable_cycle-704104e3c759f1fb.exe)
+
+running 7 tests
+test checkpoint_child ... ignored, Invoked only by the parent test in a separate process
+test historical_expired_inclusion_and_da_remain_recoverable_after_restart ... ok
+test reopening_rejects_another_identity_policy_or_genesis_and_never_overwrites_existing_history ... ok
+test pending_pool_and_an_unfinished_batch_survive_restart_without_reordering_or_duplication ... ok
+test failed_writes_roll_back_pool_state_packet_history_inclusion_and_confirmation ... ok
+test execution_submission_inclusion_and_confirmation_survive_separate_abrupt_process_exits ... ok
+test signed_retries_and_their_limit_survive_restart ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.15s
+
+     Running tests\emergency_freeze.rs (target\debug\deps\emergency_freeze-48530d3fd21dde62.exe)
+
+running 3 tests
+test operational_authority_cannot_freeze_and_rejection_preserves_pending_work ... ok
+test failed_emergency_commit_restores_policy_pool_and_generation ... ok
+test emergency_policy_survives_abrupt_process_exit_and_rejects_context_replacement ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s
+
+     Running tests\key_authorization.rs (target\debug\deps\key_authorization-f499dfff37ec5491.exe)
+
+running 3 tests
+test invalid_policy_never_commits_and_managed_transactions_cannot_bypass_l1 ... ok
+test failed_policy_commit_restores_registry_pending_work_and_generation ... ok
+test rotation_and_retirement_survive_restarts_and_preserve_account_identity ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests\monetary_durable.rs (target\debug\deps\monetary_durable-60a050d21b9e2698.exe)
+
+running 4 tests
+test monetary_genesis_cannot_be_replaced_on_reopen_or_allocate_nxs_twice_across_layers ... ok
+test failed_checkpoint_rolls_back_money_and_retry_does_not_charge_twice ... ok
+test monetary_checkpoint_survives_abrupt_process_exit ... ok
+test four_stores_replay_the_same_signed_block_and_preserve_supply_after_reopen ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_sentinel-23f9a282417e26b4.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\nexus_zk-edd25340cb306d7a.exe)
+
+running 36 tests
+test stark::air::tests::adversarial_per_element_tamper_rejected ... ok
+test stark::air::tests::adversarial_transition_violation_rejected ... ok
+test stark::air::tests::adversarial_unrelated_low_degree_cp_rejected ... ok
+test stark::air::tests::tampered_output_rejects ... ok
+test stark::air::tests::pipeline_honest_is_faithful ... ok
+test stark::air::tests::tampered_start_rejects ... ok
+test stark::air::tests::tampered_trace_value_rejects ... ok
+test stark::air::tests::verifier_total_on_empty_queries ... ok
+test stark::air::tests::wrong_steps_rejects ... ok
+test stark::channel::tests::grinding_roundtrip ... ok
+test stark::channel::tests::indices_in_range ... ok
+test stark::channel::tests::tag_injectivity ... ok
+test stark::channel::tests::transcript_is_deterministic_and_order_sensitive ... ok
+test stark::field::tests::add_sub_roundtrip ... ok
+test stark::field::tests::fp2_is_field ... ok
+test stark::field::tests::legendre_seven_is_non_residue ... ok
+test stark::field::tests::mul_inv_roundtrip ... ok
+test stark::field::tests::near_modulus_arithmetic ... ok
+test stark::field::tests::root_of_unity_has_correct_order ... ok
+test stark::air::tests::valid_transition_accepts ... ok
+test stark::fri::tests::query_indices_distinct_without_replacement ... ok
+test stark::fri::tests::rejects_high_degree ... ok
+test stark::fri::tests::rejects_tampered_opening ... ok
+test stark::fri::tests::accepts_low_degree ... ok
+test stark::linked::tests::selector_cuenta_duplicados_y_rechaza_dominios_invalidos ... ok
+test stark::linked::tests::selector_respeta_limite_512_y_orden ... ok
+test stark::merkle::tests::leaf_node_domain_separation ... ok
+test stark::merkle::tests::open_and_verify_all_leaves ... ok
+test stark::merkle::tests::tampered_value_rejected ... ok
+test stark::ntt::tests::coset_ntt_matches_naive_eval ... ok
+test stark::ntt::tests::ntt_intt_roundtrip ... ok
+test stark::ntt::tests::ntt_matches_naive_eval ... ok
+test stark::params::tests::soundness_budget_print ... ok
+test stark::fri::tests::rejects_wrong_final_value ... ok
+test stark::air::tests::multiple_sizes ... ok
+test stark::air::tests::adversarial_property_valid_accept_flips_reject ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
+
+     Running tests\lean_contract.rs (target\debug\deps\lean_contract-c1c6ff318b3a0913.exe)
+
+running 4 tests
+test lector_acota_filas_version_y_perfil_antes_de_asignar_vectores ... ok
+test lector_rechaza_truncados_sufijos_cantidades_hostiles_y_campos_no_canonicos ... ok
+test verificacion_tipificada_rechaza_formas_y_enlaces_antes_de_indexar ... ok
+test los_catorce_certificados_historicos_conservan_su_resultado_y_bytes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.05s
+
+     Running tests\tg2_air_algebra.rs (target\debug\deps\tg2_air_algebra-fd67a4229c431b2f.exe)
+
+running 7 tests
+test errores_de_frontera_y_transicion_dejan_residuos ... ok
+test errores_pueden_cancelarse_con_tres_coeficientes_no_nulos ... ok
+test identidad_residual_y_cota_de_raices_en_caso_invalido ... ok
+test oraculo_rechaza_tamanos_y_polos_fuera_del_modelo ... ok
+test dos_errores_de_oraculo_afectan_como_maximo_seis_composiciones ... ok
+test trazas_validas_dividen_y_respetan_las_cotas ... ok
+test oraculo_coincide_con_las_aperturas_del_probador_heredado ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests\tg2_linked_trace_fri.rs (target\debug\deps\tg2_linked_trace_fri-32fe650cafbd5f49.exe)
+
+running 10 tests
+test fri_de_composicion_sigue_exigiendo_las_restricciones ... ok
+test enunciado_version_y_perfil_no_se_pueden_sustituir ... ok
+test rechaza_elementos_no_canonicos_antes_de_la_aritmetica ... ok
+test rechaza_formas_truncadas_excesivas_y_consultas_reordenadas ... ok
+test raiz_y_codificacion_son_comunes_al_air_y_fri_de_traza ... ok
+test transcripcion_independiente_reproduce_indices_y_distingue_fases ... ok
+test valida_limites_antes_de_multiplicar_o_indexar ... ok
+test detecta_valores_caminos_y_enlaces_alterados ... ok
+test rechaza_los_tres_contraejemplos_preservados_en_fri_de_traza ... ok
+test acepta_casos_honestos_y_serializacion_sin_lde_completo ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.54s
+
+     Running tests\tg2_soundness.rs (target\debug\deps\tg2_soundness-2a451d5a43b41407.exe)
+
+running 7 tests
+test consultas_reales_sin_reemplazo_segun_tamano ... ok
+test merkle_de_bajo_nivel_presupone_indice_en_dominio ... ok
+test presupuesto_nominal_no_depende_de_las_filas_ni_del_perfil ... ok
+test grinding_admite_varios_nonces_validos ... ok
+test retos_de_extension_reproducibles_y_canonicos ... ok
+test air_liga_enunciado_compromiso_y_valor_final ... ok
+test fri_puede_aceptar_palabra_cercana_con_grado_exacto_alto ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.21s
+
+     Running tests\tg2_trace_proximity.rs (target\debug\deps\tg2_trace_proximity-8ca878c5df2c1fbe.exe)
+
+running 7 tests
+test control_exhaustivo_valida_limites_compromiso_y_restricciones ... ok
+test control_exhaustivo_acepta_ejecucion_honesta ... ok
+test distancia_exacta_al_codigo_tiene_testigo_de_t_acuerdos ... ok
+test pruebas_reales_siguen_ligadas_al_enunciado_y_aperturas ... ok
+test familia_conserva_filas_y_composicion_dentro_de_cota ... ok
+test verificador_acepta_trazas_a_distancia_siete_octavos ... ok
+test control_exhaustivo_rechaza_el_grado_de_las_aceptaciones_heredadas ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+   Doc-tests nexus_active
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_anchor
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_crypto
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_network
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_node
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_sentinel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nexus_zk
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

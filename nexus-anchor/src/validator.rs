@@ -148,7 +148,11 @@ impl ValidatorSet {
             ));
         }
 
-        self.total_stake = self.total_stake.saturating_add(validator.stake);
+        // Saturation would accept stake that the cached total cannot represent.
+        // Reject before either the total or membership is changed.
+        let total_stake = self.total_stake.checked_add(validator.stake)
+            .ok_or_else(|| NexusError::StateError("Total validator stake overflow".into()))?;
+        self.total_stake = total_stake;
         self.validators.insert(validator.address, validator);
 
         Ok(())
@@ -169,8 +173,8 @@ impl ValidatorSet {
         self.validators.get(address)
     }
 
-    /// Get mutable validator
-    pub fn get_validator_mut(&mut self, address: &Address) -> Option<&mut Validator> {
+    /// Internal mutation only: public callers cannot bypass stake accounting.
+    fn get_validator_mut(&mut self, address: &Address) -> Option<&mut Validator> {
         self.validators.get_mut(address)
     }
 
@@ -370,25 +374,33 @@ impl ValidatorRegistry {
         address: &Address,
         slash_type: SlashType,
     ) -> Result<Amount, NexusError> {
-        let validator = self
-            .validator_set
-            .get_validator_mut(address)
-            .ok_or(NexusError::AccountNotFound(*address))?;
-
         let slash_percent = match slash_type {
             SlashType::DoubleSigning => self.slashing_params.double_sign_slash,
             SlashType::Downtime => self.slashing_params.downtime_slash,
         };
-
-        let slash_amount = Amount((validator.stake.0 * slash_percent as u128) / 100);
-        validator.stake = validator.stake.saturating_sub(slash_amount);
-
-        // Jail the validator
+        if slash_percent > 100 {
+            return Err(NexusError::ConfigError("Slash percentage exceeds 100".into()));
+        }
+        let stake = self.validator_set.get_validator(address)
+            .ok_or(NexusError::AccountNotFound(*address))?.stake;
+        let percent = u128::from(slash_percent);
+        // floor(stake * p / 100), with p <= 100, without an overflowing product.
+        let slash_amount = Amount((stake.0 / 100) * percent + ((stake.0 % 100) * percent) / 100);
+        let remaining_stake = stake.checked_sub(slash_amount)
+            .ok_or_else(|| NexusError::StateError("Slash exceeds validator stake".into()))?;
+        let total_stake = self.validator_set.total_stake.checked_sub(slash_amount)
+            .ok_or_else(|| NexusError::StateError("Inconsistent total validator stake".into()))?;
         let jail_until = Timestamp::from_millis(
-            Timestamp::now().as_millis() + self.slashing_params.jail_duration_ms,
+            Timestamp::now().as_millis().checked_add(self.slashing_params.jail_duration_ms)
+                .ok_or_else(|| NexusError::ConfigError("Jail timestamp overflow".into()))?,
         );
-        self.validator_set.jail_validator(address, jail_until)?;
-
+        // All fallible checks precede publication of stake and jail metadata.
+        let validator = self.validator_set.get_validator_mut(address)
+            .ok_or(NexusError::AccountNotFound(*address))?;
+        validator.stake = remaining_stake;
+        validator.status = ValidatorStatus::Jailed;
+        validator.jailed_until = Some(jail_until);
+        self.validator_set.total_stake = total_stake;
         Ok(slash_amount)
     }
 

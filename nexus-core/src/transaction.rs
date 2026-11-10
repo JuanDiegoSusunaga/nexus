@@ -59,6 +59,10 @@ pub enum TransactionType {
 pub struct Transaction {
     /// Chain ID for replay protection
     pub chain_id: ChainId,
+    /// Full deployment/genesis domain for public-network profiles. Signed with
+    /// the transaction; a numeric chain ID alone does not identify a reset.
+    #[serde(default)]
+    pub network_domain: Option<Hash256>,
     /// Sender's nonce
     pub nonce: Nonce,
     /// Maximum gas willing to pay
@@ -85,6 +89,7 @@ impl Transaction {
     ) -> Self {
         Self {
             chain_id,
+            network_domain: None,
             nonce,
             gas_limit,
             gas_price,
@@ -107,6 +112,7 @@ impl Transaction {
     ) -> Self {
         Self {
             chain_id,
+            network_domain: None,
             nonce,
             gas_limit,
             gas_price,
@@ -179,12 +185,15 @@ impl Hashable for Transaction {
 pub struct SignedTransaction {
     /// The unsigned transaction
     pub transaction: Transaction,
-    /// Sender's address (derived from public key)
+    /// Key-derived sender, or stable registered identity when an epoch is present.
     pub sender: Address,
     /// PQC signature
     pub signature: PQSignature,
     /// Sender's public key (for verification)
     pub public_key: Vec<u8>,
+    /// Registered L2 identity epoch. None selects the key-derived legacy signer.
+    #[serde(default)]
+    pub authorization_epoch: Option<u64>,
 }
 
 impl SignedTransaction {
@@ -200,11 +209,22 @@ impl SignedTransaction {
             sender,
             signature,
             public_key,
+            authorization_epoch: None,
         }
     }
 
     /// Get the transaction hash
     pub fn hash(&self) -> Hash256 {
+        if self.authorization_epoch.is_some() {
+            let mut data = b"NEXUS_L2_SIGNED_TRANSACTION_V1".to_vec();
+            data.extend(self.encode());
+            return Hash256::hash(&data);
+        }
+        if self.transaction.network_domain.is_some() {
+            let mut data = b"NEXUS_NETWORK_SIGNED_TRANSACTION_V1".to_vec();
+            data.extend(self.encode());
+            return Hash256::hash(&data);
+        }
         // Include signature in hash for unique identification
         let mut data = self.transaction.encode();
         data.extend_from_slice(&self.signature.bytes);
@@ -223,6 +243,19 @@ impl SignedTransaction {
 
     /// Validate against an explicit application time (e.g. the L1 block time).
     pub fn validate_structure_at(&self, at: Timestamp) -> Result<(), NexusError> {
+        if self.authorization_epoch.is_some() {
+            return Err(NexusError::InvalidTransaction("Registered transaction requires a trusted key registry".into()));
+        }
+        self.validate_registered_structure_at(at)?;
+        if Address::from_public_key(&self.public_key) != self.sender {
+            return Err(NexusError::InvalidTransaction("Public key does not match sender address".into()));
+        }
+        Ok(())
+    }
+
+    /// Envelope checks only. The caller must authenticate sender, key and epoch
+    /// against its trusted registry before accepting a registered transaction.
+    pub fn validate_registered_structure_at(&self, at: Timestamp) -> Result<(), NexusError> {
         self.transaction.checked_max_cost()?;
         if self.transaction.nonce.0 == u64::MAX {
             return Err(NexusError::InvalidTransaction("Transaction nonce exhausted".into()));
@@ -235,14 +268,6 @@ impl SignedTransaction {
         // Check gas limit
         if self.transaction.gas_limit == 0 {
             return Err(NexusError::InvalidTransaction("Gas limit cannot be zero".into()));
-        }
-
-        // Validate public key matches sender
-        let derived_address = Address::from_public_key(&self.public_key);
-        if derived_address != self.sender {
-            return Err(NexusError::InvalidTransaction(
-                "Public key does not match sender address".into(),
-            ));
         }
 
         // Validate signature scheme matches public key size

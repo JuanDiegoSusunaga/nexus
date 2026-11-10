@@ -52,6 +52,9 @@ struct KnownBatch {
 /// Active Chain configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ActiveChainConfig {
+    /// Immutable local authorities and deployment domain for emergency freezes.
+    #[serde(default)]
+    pub recovery: nexus_crypto::RecoveryPolicy,
     /// Sequencer configuration; its chain_id also fixes the execution domain.
     pub sequencer: SequencerConfig,
     /// Verification mode
@@ -67,6 +70,7 @@ pub struct ActiveChainConfig {
 impl Default for ActiveChainConfig {
     fn default() -> Self {
         Self {
+            recovery: Default::default(),
             sequencer: SequencerConfig::default(),
             verification_mode: VerificationMode::Optimistic,
             block_time_ms: 2000, // 2 seconds
@@ -151,7 +155,7 @@ impl ActiveChain {
         let verifier = self.verifier.read();
         let builder = self.batch_builder.read();
         let submitter = self.batch_submitter.read();
-        let snapshot = ActiveCheckpoint { version: 1, publisher: self.sequencer.address(), config: self.config.clone(),
+        let snapshot = ActiveCheckpoint { version: 4, publisher: self.sequencer.address(), config: self.config.clone(),
             execution: encode(&*execution)?, sequencer: self.sequencer.checkpoint()?, verifier: encode(&*verifier)?,
             builder: encode(&*builder)?, submitter: encode(&*submitter)?, known: known.clone(),
             blocks: self.blocks.read().clone(), heights: self.blocks_by_height.read().clone(),
@@ -163,13 +167,14 @@ impl ActiveChain {
         expected: &ActiveChainConfig) -> Result<Self, NexusError> {
         use nexus_core::checkpoint::{decode, encode};
         let snapshot: ActiveCheckpoint = decode(bytes)?;
-        if snapshot.version != 1 || snapshot.publisher != keypair.address() || encode(&snapshot.config)? != encode(expected)? {
+        if snapshot.version != 4 || snapshot.publisher != keypair.address() || encode(&snapshot.config)? != encode(expected)? {
             return Err(NexusError::ConfigError("Checkpoint identity, version or L2 policy differs".into()));
         }
         LinkedValidityProfile::new(expected.validity_profile.steps, expected.validity_profile.pow_bits)?;
         if expected.batch_interval_blocks == 0 { return Err(NexusError::ConfigError("Invalid checkpoint batch interval".into())); }
-        let execution = ExecutionEngine::restore_checkpoint(&snapshot.execution, expected.sequencer.chain_id)?;
-        let sequencer = NexusSequencer::restore_checkpoint(&snapshot.sequencer, expected.sequencer.clone(), keypair, execution.state())?;
+        let execution = ExecutionEngine::restore_checkpoint(&snapshot.execution, expected.sequencer.chain_id, &expected.recovery)?;
+        let sequencer = NexusSequencer::restore_checkpoint(&snapshot.sequencer, expected.sequencer.clone(),
+            keypair, execution.state(), execution.authorization.clone())?;
         nexus_core::checkpoint::validate_blocks(&snapshot.blocks, &snapshot.heights, snapshot.height,
             &snapshot.genesis, Layer::Active, execution.state_root())?;
         Ok(Self { production: Mutex::new(()), known_batches: RwLock::new(snapshot.known), config: snapshot.config,
@@ -184,8 +189,10 @@ impl ActiveChain {
 
     /// Create a new Active Chain
     pub fn new(config: ActiveChainConfig, keypair: DilithiumKeypair) -> Self {
-        let sequencer = Arc::new(NexusSequencer::new(config.sequencer.clone(), keypair));
-        let execution = Arc::new(RwLock::new(ExecutionEngine::for_chain(config.sequencer.chain_id)));
+        let engine = ExecutionEngine::empty_with_recovery(InMemoryState::new(), config.sequencer.chain_id, config.recovery.clone());
+        let sequencer = Arc::new(NexusSequencer::with_registry(config.sequencer.clone(), keypair,
+            engine.authorization.clone()));
+        let execution = Arc::new(RwLock::new(engine));
         let verifier = Arc::new(RwLock::new(NitroVerifier::new(config.verification_mode)));
 
         let genesis = Block::genesis(Layer::Active);
@@ -234,6 +241,29 @@ impl ActiveChain {
     /// Submit transaction
     pub fn submit_transaction(&self, tx: SignedTransaction) -> Result<Hash256, NexusError> {
         self.sequencer.submit_transaction(tx)
+    }
+
+    /// Trusted local administrative input, never a transaction-supplied registry.
+    /// Authenticated records extend policy atomically between produced blocks.
+    pub fn apply_key_record(&self, record: nexus_crypto::registry::RotationRecord)
+        -> Result<nexus_crypto::RegistryCheckpoint, NexusError> {
+        let _production = self.production.lock();
+        self.sequencer.apply_key_record(record)
+    }
+
+    pub fn key_registry_checkpoint(&self) -> nexus_crypto::RegistryCheckpoint {
+        self.sequencer.key_registry_checkpoint()
+    }
+
+    /// Independent freeze authority; no operational signature is required.
+    pub fn apply_emergency_freeze(&self, request: nexus_crypto::EmergencyFreezeRequest)
+        -> Result<nexus_crypto::EmergencyFreezeReceipt, NexusError> {
+        let _production = self.production.lock();
+        self.sequencer.apply_emergency_freeze(request)
+    }
+
+    pub fn emergency_freeze_status(&self, identity: &Address) -> Option<nexus_crypto::EmergencyFreezeReceipt> {
+        self.sequencer.emergency_freeze_status(identity)
     }
 
     /// Get block by hash

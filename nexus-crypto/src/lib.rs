@@ -16,13 +16,15 @@ pub mod dilithium;
 pub mod entropy;
 pub mod keypair;
 pub mod registry;
+pub mod recovery;
 pub mod signer;
 
 pub use dilithium::{DilithiumKeypair, DilithiumPublicKey, DilithiumSecretKey, DilithiumSignature};
 pub use entropy::{EntropyMonitor, SentinelSeed};
 pub use keypair::{NexusKeypair, KeyManager};
 pub use registry::{EpochSignature, KeyRegistry, RegistryCheckpoint};
-pub use signer::{Signer, Verifier, verify_signed_transaction};
+pub use recovery::{RecoveryAuthority, RecoveryPolicy, EmergencyFreezeRequest, EmergencyFreezeReceipt};
+pub use signer::{Signer, Verifier, verify_signed_transaction, verify_registered_transaction};
 
 /// Minimum acceptable entropy level (Shannon entropy)
 pub const MIN_ENTROPY_THRESHOLD: f64 = 7.5;

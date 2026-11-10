@@ -5,7 +5,7 @@ use std::path::PathBuf;
 
 fn corpus(profile: &str, name: &str) -> Vec<u8> {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado")
+        .join("../Documentos/06-Evidencia-TG2/2026-09-22/R4-FRI-vinculado")
         .join(format!("corpus-{profile}/{name}.bin"));
     std::fs::read(path).expect("El corpus público conservado debe estar disponible")
 }

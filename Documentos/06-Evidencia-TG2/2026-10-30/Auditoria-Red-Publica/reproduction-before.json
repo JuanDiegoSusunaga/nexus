@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\Users\\juand\\.cargo\\bin\\cargo.exe",
+    "test",
+    "-p",
+    "nexus-anchor",
+    "--test",
+    "validator_accounting",
+    "--locked",
+    "--offline",
+    "--jobs",
+    "4"
+  ],
+  "exit_code": 101,
+  "seconds": 4.718,
+  "expected": "Three failures before correcting stake accounting"
+}

@@ -59,7 +59,7 @@ impl DurableNode {
     }
 
     fn check_context(snapshot: &NodeCheckpoint, config: &DurableNodeConfig, keypair: &DilithiumKeypair) -> Result<(), NexusError> {
-        if snapshot.version != 1 || snapshot.publisher != keypair.address()
+        if snapshot.version != 5 || snapshot.publisher != keypair.address()
             || checkpoint::encode(&snapshot.config)? != checkpoint::encode(config)? {
             return Err(NexusError::ConfigError("Checkpoint identity, version or node policy differs".into()));
         }
@@ -68,7 +68,7 @@ impl DurableNode {
 
     fn snapshot(&self) -> Result<Vec<u8>, NexusError> {
         if self.poisoned { return Err(NexusError::StateError("Durable node must be reopened".into())); }
-        checkpoint::encode(&NodeCheckpoint { version: 1, publisher: self.keypair.address(), config: self.config.clone(),
+        checkpoint::encode(&NodeCheckpoint { version: 5, publisher: self.keypair.address(), config: self.config.clone(),
             anchor: self.anchor.export_checkpoint()?, active: self.active.export_checkpoint()? })
     }
 
@@ -105,6 +105,26 @@ impl DurableNode {
 
     pub fn submit_transaction(&mut self, tx: SignedTransaction) -> Result<Hash256, NexusError> {
         self.update(|active, _, _| active.submit_transaction(tx))
+    }
+
+    /// Commit both the authenticated policy and removal of obsolete pending work.
+    pub fn apply_key_record(&mut self, record: nexus_crypto::registry::RotationRecord)
+        -> Result<nexus_crypto::RegistryCheckpoint, NexusError> {
+        self.update(|active, _, _| active.apply_key_record(record))
+    }
+
+    pub fn key_registry_checkpoint(&self) -> nexus_crypto::RegistryCheckpoint {
+        self.active.key_registry_checkpoint()
+    }
+
+    /// Return success only after the freeze and pool cancellation are committed together.
+    pub fn apply_emergency_freeze(&mut self, request: nexus_crypto::EmergencyFreezeRequest)
+        -> Result<nexus_crypto::EmergencyFreezeReceipt, NexusError> {
+        self.update(|active, _, _| active.apply_emergency_freeze(request))
+    }
+
+    pub fn emergency_freeze_status(&self, identity: &Address) -> Option<nexus_crypto::EmergencyFreezeReceipt> {
+        self.active.emergency_freeze_status(identity)
     }
 
     pub fn produce_block(&mut self) -> Result<Block, NexusError> { self.update(|active, _, _| active.produce_block()) }

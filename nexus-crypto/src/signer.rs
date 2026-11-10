@@ -125,6 +125,37 @@ pub fn verify_signed_transaction_at(tx: &SignedTransaction, at: nexus_core::Time
     public_key.verify(signing_hash.as_bytes(), &signature)
 }
 
+/// Separate L2 transactions from other application messages signed by KeyManager.
+pub(crate) fn registered_transaction_message(tx: &Transaction) -> Vec<u8> {
+    let mut bytes = b"NEXUS_L2_TRANSACTION_V1".to_vec();
+    bytes.extend(tx.signing_hash().as_bytes());
+    bytes
+}
+
+/// Authenticate using locally trusted current policy, including retired identities.
+pub fn verify_registered_transaction(tx: &SignedTransaction, registry: &crate::KeyRegistry)
+    -> Result<bool, NexusError> {
+    verify_registered_transaction_at(tx, registry, nexus_core::Timestamp::now())
+}
+
+/// Explicit time is used when checking trusted local checkpoint envelopes.
+pub fn verify_registered_transaction_at(tx: &SignedTransaction, registry: &crate::KeyRegistry,
+    at: nexus_core::Timestamp) -> Result<bool, NexusError> {
+    let Some(epoch) = tx.authorization_epoch else {
+        if registry.is_enrolled(&tx.sender) { return Ok(false); }
+        return verify_signed_transaction_at(tx, at);
+    };
+    tx.validate_registered_structure_at(at)?;
+    let Some(key) = registry.current(&tx.sender) else { return Ok(false); };
+    if key.material.epoch != epoch || key.material.public_key.scheme() != tx.signature.scheme
+        || key.material.public_key.as_bytes() != tx.public_key.as_slice() {
+        return Ok(false);
+    }
+    let signed = crate::EpochSignature { identity: tx.sender, epoch,
+        signature: DilithiumSignature::from_bytes(tx.signature.bytes.clone(), tx.signature.scheme)? };
+    registry.verify_current(&registered_transaction_message(&tx.transaction), &signed)
+}
+
 /// Batch verify multiple signatures (for block validation)
 /// Returns indices of invalid signatures
 pub fn batch_verify(

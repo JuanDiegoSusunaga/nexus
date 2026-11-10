@@ -29,6 +29,7 @@ pub mod validator;
 pub mod data_availability;
 pub mod finality;
 pub mod chain;
+pub mod bft;
 
 pub use consensus::{ConsensusEngine, ProofOfStake, ConsensusConfig};
 pub use validator::{Validator, ValidatorSet, ValidatorRegistry};

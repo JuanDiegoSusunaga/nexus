@@ -1,0 +1,64 @@
+{
+  "command": "python scripts/run_testnet_lab.py --seconds 6",
+  "runs": 2,
+  "exit_codes": [
+    0,
+    0
+  ],
+  "nodes": [
+    {
+      "node": 0,
+      "first_start": {
+        "height": 0,
+        "listening": "127.0.0.1:19001",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      },
+      "second_start": {
+        "height": 3,
+        "listening": "127.0.0.1:19001",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      }
+    },
+    {
+      "node": 1,
+      "first_start": {
+        "height": 0,
+        "listening": "127.0.0.1:19002",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      },
+      "second_start": {
+        "height": 3,
+        "listening": "127.0.0.1:19002",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      }
+    },
+    {
+      "node": 2,
+      "first_start": {
+        "height": 0,
+        "listening": "127.0.0.1:19003",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      },
+      "second_start": {
+        "height": 3,
+        "listening": "127.0.0.1:19003",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      }
+    },
+    {
+      "node": 3,
+      "first_start": {
+        "height": 0,
+        "listening": "127.0.0.1:19004",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      },
+      "second_start": {
+        "height": 3,
+        "listening": "127.0.0.1:19004",
+        "network_domain": "771bd4eb9de065d79e3c7d951be77e52038c0c0726b625a37f5edf75b65ad00d"
+      }
+    }
+  ],
+  "all_listeners_closed_after_exit": true,
+  "scope": "Mismo génesis, claves y diarios; procesos ocultos y cierre de sus propios hijos"
+}

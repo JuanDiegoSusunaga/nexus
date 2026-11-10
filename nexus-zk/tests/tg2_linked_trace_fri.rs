@@ -37,7 +37,7 @@ fn honest() -> &'static Vec<(TransitionStatement, Vec<Felt>, LinkedProof)> {
 fn corpus(t: usize) -> (TransitionStatement, StarkProof, Vec<Felt>) {
     let profile = if cfg!(debug_assertions) { "debug" } else { "release" };
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad")
+        .join("../Documentos/06-Evidencia-TG2/2026-09-22/R4-proximidad")
         .join(format!("corpus-{profile}/traza-lejana-{t}.bin"));
     bincode::deserialize(&std::fs::read(path).unwrap()).unwrap()
 }
