@@ -1,10 +1,9 @@
 //! # NEXUS ZK
 //!
-//! Zero-Knowledge proof system for the NEXUS blockchain.
-//! Provides ZK-SNARK based proofs for:
-//! - State transition validity
-//! - Privacy-preserving transactions
-//! - Biometric proof of possession
+//! Experimental proof components for NEXUS.
+//! The generic Groth16 prover/verifier return `NotImplemented`.
+//! The separate AIR/FRI implementation checks a scalar illustrative relation,
+//! not general L2 execution, transaction privacy, or biometric possession.
 
 use nexus_core::{Hash256, NexusError, StateRoot};
 use serde::{Deserialize, Serialize};

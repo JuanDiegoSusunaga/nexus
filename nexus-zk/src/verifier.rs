@@ -16,22 +16,11 @@ impl Verifier {
         }
     }
 
-    /// Verify a ZK proof
-    pub fn verify(&self, proof: &ZKProof) -> Result<VerificationResult, NexusError> {
-        // Check if we have the verification key
-        if !self.verification_keys.contains_key(&proof.proof_type) {
-            return Ok(VerificationResult::invalid(
-                "Verification key not found".into(),
-            ));
-        }
-
-        // Placeholder verification
-        // In production, would use arkworks Groth16 verifier
-        if proof.proof_bytes.is_empty() {
-            return Ok(VerificationResult::invalid("Empty proof".into()));
-        }
-
-        Ok(VerificationResult::valid())
+    /// The generic Groth16 API is scaffolding, not a cryptographic verifier.
+    /// Loading a key or supplying nonempty bytes must never authorize a proof.
+    /// The scalar AIR/FRI verifier is a separate, explicitly bounded API.
+    pub fn verify(&self, _proof: &ZKProof) -> Result<VerificationResult, NexusError> {
+        Err(NexusError::NotImplemented("Generic Groth16 proof verification".into()))
     }
 
     /// Load verification key

@@ -2,7 +2,9 @@
 //! La recuperación ignora temporales incompletos que nunca se confirmaron.
 //! Un hueco o registro publicado corrupto impide abrir el diario; nunca se trunca.
 //! Requiere directorio y sistema de archivos confiables. No garantiza resistencia
-//! a retrocesos maliciosos ni persistencia del directorio ante pérdida eléctrica.
+//! a retrocesos maliciosos. En Unix sincroniza archivo y directorio antes de
+//! confirmar; un fallo después del renombrado exige reabrir y reproducir.
+//! Otros sistemas conservan la garantía previa de sincronización del archivo.
 use crate::{Hash256, NexusError};
 use std::{fs::{self, File, OpenOptions}, io::{Read, Write}, path::{Path, PathBuf}};
 
@@ -11,10 +13,19 @@ const MAGIC: &[u8; 8] = b"NXSJNL02";
 const HEADER: usize = 88;
 fn error(message: impl std::fmt::Display) -> NexusError { NexusError::StateError(message.to_string()) }
 
+fn sync_directory(directory: &Path) -> Result<(), NexusError> {
+    #[cfg(unix)]
+    File::open(directory).and_then(|file| file.sync_all()).map_err(error)?;
+    #[cfg(not(unix))]
+    let _ = directory;
+    Ok(())
+}
+
 pub struct JournalStore {
     directory: PathBuf,
     sequence: u64,
     digest: Hash256,
+    requires_recovery: bool,
     _writer: File,
 }
 impl JournalStore {
@@ -33,7 +44,7 @@ impl JournalStore {
         let writer = OpenOptions::new().read(true).write(true).create(true).truncate(false)
             .open(directory.join("writer.lock")).map_err(error)?;
         writer.try_lock().map_err(|e| error(format!("Journal writer is locked: {e}")))?;
-        Ok(Self { directory, sequence: 0, digest: Hash256::ZERO, _writer: writer })
+        Ok(Self { directory, sequence: 0, digest: Hash256::ZERO, requires_recovery: false, _writer: writer })
     }
     fn records(&self) -> Result<Vec<(u64, PathBuf)>, NexusError> {
         let mut records = Vec::new();
@@ -61,6 +72,8 @@ impl JournalStore {
         fs::create_dir_all(directory).map_err(error)?;
         let store = Self::lock(directory)?;
         if !store.records()?.is_empty() { return Err(error("A journal already exists; open it instead")); }
+        // Persist new directory entries too, including ancestors created by create_dir_all.
+        for ancestor in store.directory.ancestors() { sync_directory(ancestor)?; }
         Ok(store)
     }
     pub fn open(directory: &Path, mut visit: impl FnMut(u64, &[u8]) -> Result<(), NexusError>) -> Result<Self, NexusError> {
@@ -87,10 +100,19 @@ impl JournalStore {
             visit(sequence, &payload)?;
             store.sequence = sequence; store.digest = digest;
         }
+        // A prior writer may have published a record but failed its directory sync.
+        sync_directory(&store.directory)?;
         Ok(store)
     }
     pub fn sequence(&self) -> u64 { self.sequence }
+    /// A published record could not be confirmed durable; replay before continuing.
+    pub fn requires_recovery(&self) -> bool { self.requires_recovery }
     pub fn commit(&mut self, payload: &[u8]) -> Result<(), NexusError> {
+        self.commit_with_directory_sync(payload, sync_directory)
+    }
+    fn commit_with_directory_sync(&mut self, payload: &[u8],
+        sync: impl FnOnce(&Path) -> Result<(), NexusError>) -> Result<(), NexusError> {
+        if self.requires_recovery { return Err(error("Journal publication is uncertain; reopen for recovery")); }
         if payload.is_empty() || payload.len() > MAX_RECORD_BYTES { return Err(error("Journal record exceeds byte limit")); }
         let sequence = self.sequence.checked_add(1).ok_or_else(|| error("Journal sequence exhausted"))?;
         let target = self.directory.join(Self::record_name(sequence));
@@ -114,9 +136,45 @@ impl JournalStore {
         })();
         if result.is_err() { let _ = fs::remove_file(&temporary); }
         result?;
-        // Publicar es la última operación falible: una vez visible el archivo,
-        // no puede retornarse un error con otra secuencia en memoria.
+        // Rename made this record visible. Never roll it back or reuse its sequence,
+        // even if syncing the directory fails. The caller must replay before signing.
         self.sequence = sequence; self.digest = digest;
+        self.requires_recovery = true;
+        sync(&self.directory)?;
+        self.requires_recovery = false;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn failed_directory_sync_keeps_published_record_and_requires_replay() {
+        let stamp = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos();
+        let directory = std::env::temp_dir().join(format!("nexus-sync-{}-{stamp}", std::process::id()));
+        let mut writer = JournalStore::create(&directory).unwrap();
+        writer.commit(b"genesis").unwrap();
+        let result = writer.commit_with_directory_sync(b"signed vote", |_| Err(error("injected fsync failure")));
+        assert!(result.is_err());
+        assert!(writer.requires_recovery());
+        assert_eq!(writer.sequence(), 2);
+        let published = directory.join(JournalStore::record_name(2));
+        let exact = fs::read(&published).unwrap();
+        assert!(writer.commit(b"conflicting vote").is_err());
+        assert_eq!(fs::read(&published).unwrap(), exact);
+        assert!(!directory.join(JournalStore::record_name(3)).exists());
+        drop(writer);
+        let mut replayed = Vec::new();
+        let mut recovered = JournalStore::open(&directory, |_, bytes| {
+            replayed.push(bytes.to_vec()); Ok(())
+        }).unwrap();
+        assert_eq!(replayed, vec![b"genesis".to_vec(), b"signed vote".to_vec()]);
+        assert!(!recovered.requires_recovery());
+        recovered.commit(b"next vote").unwrap();
+        assert_eq!(recovered.sequence(), 3);
+        drop(recovered);
+        fs::remove_dir_all(directory).unwrap();
     }
 }

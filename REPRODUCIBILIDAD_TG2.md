@@ -16,6 +16,8 @@ El BFT queda como banco de pruebas local, sin transporte de red. `BftNodeConfig`
 
 **Verificación del 10 de noviembre**, con rustc 1.97.1 y dependencias locked/offline: `cargo check --workspace --all-targets`, `cargo build --workspace` y `cargo test --workspace` correctos, con **412 pruebas** aprobadas, ninguna fallida y una ignorada. Antes de separar, el commit `dd46a0f` volvió a pasar sus 436 pruebas; la diferencia corresponde a las pruebas del perfil monetario y del transporte retirados.
 
+**Correcciones posteriores del mismo día:** `Prover::prove_state_transition` y `Verifier::verify` del andamiaje Groth16 devuelven `NotImplemented` en lugar de fabricar o aceptar pruebas; el verificador AIR/FRI es una API distinta y no cambia. `JournalStore` sincroniza el directorio en Unix y expone `requires_recovery()` cuando un registro publicado no pudo confirmarse; `BftNode` queda bloqueado hasta reabrir. Con ellas pasan **415 pruebas**, tres nuevas. [Verificación](Documentos/06-Evidencia-TG2/2026-11-10/Correcciones-Verificador-Diario/verification.json).
+
 Las secciones del 30 de octubre son registros históricos. Sus conteos y sus menciones a TCP, CLI de testnet o dominio monetario describen `dd46a0f`; las huellas de fuentes de la [evidencia de esa fecha](Documentos/06-Evidencia-TG2/2026-10-30/) identifican ese commit y no esta rama. Persisten los límites ya declarados: comité fijo, claves de laboratorio sin cifrar, historia en memoria, almacenamiento local confiable y ausencia de refinamiento universal Rust/Lean.
 
 ## Auditoría actual y diario incremental — 30 de octubre de 2026

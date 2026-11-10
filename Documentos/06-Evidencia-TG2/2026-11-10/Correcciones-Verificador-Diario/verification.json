@@ -1,0 +1,41 @@
+{
+  "fecha": "2026-11-10",
+  "motivo": "Incorporar a la rama principal dos correcciones del pull request 1, sin su medición de carga.",
+  "commit_base": "34789ac0986da134727f17f3034aae517638e20b",
+  "origen": {
+    "rama": "fix/verifier-journal-load-evidence-20261030",
+    "commit": "3ea7856"
+  },
+  "correcciones": [
+    "Las APIs Groth16 genéricas devuelven NotImplemented: el verificador aceptaba cualquier prueba no vacía con una clave cargada y el probador fabricaba 256 bytes nulos.",
+    "El diario sincroniza el directorio en Unix; si esa sincronización falla tras publicar un registro, exige reabrir y reproducir antes de firmar de nuevo."
+  ],
+  "no_incorporado": [
+    "medición de carga de la testnet",
+    "ejemplo testnet_load",
+    "dependencia zeroize del CLI"
+  ],
+  "uso_previo_de_la_api_groth16": "Ningún otro crate del workspace la invoca; NitroVerifier y AIR/FRI son rutas distintas.",
+  "comandos": [
+    "cargo check --workspace --all-targets --locked --offline -j 4",
+    "cargo build --workspace --locked --offline -j 4",
+    "cargo test --workspace --locked --offline -j 4"
+  ],
+  "rustc": "1.97.1",
+  "resultado": {
+    "check": "correcto",
+    "build": "correcto",
+    "binarios_de_prueba": 58,
+    "aprobadas": 415,
+    "fallidas": 0,
+    "ignoradas": 1,
+    "pruebas_nuevas": 3
+  },
+  "registro": {
+    "archivo": "cargo-test-resumen.log",
+    "bytes": 10901,
+    "sha256": "1a3d903ce49e45307d286bc79aa3b2eabaa82c5e21398a8b4daab9c442da76fc",
+    "nota": "Salida filtrada: binarios ejecutados y líneas de resultado."
+  },
+  "limites": "La sincronización de directorio solo actúa en Unix y se probó en Windows mediante un fallo inyectado; no se ensayó pérdida eléctrica real. Rechazar Groth16 no añade un probador: la validez general L2 sigue pendiente."
+}
